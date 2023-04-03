@@ -1,0 +1,7 @@
+/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/cb_loan_acctloandisb_20150128.text,ODS_CDP_CCB_CB_LOAN_ACCTLOANDISB,,,acctloannbr|rtxnnbr,,START_DT='2023-02-17'
+/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/cb_loan_acctloanpmt_20150128.text,ODS_CDP_CCB_CB_LOAN_ACCTLOANPMT,,,acctloannbr|rtxnnbr,,START_DT='2023-02-17'
+/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/cb_loan_acctloantermhist_20150128.text,ODS_CDP_CCB_CB_LOAN_ACCTLOANTERMHIST,,,acctnbr|currterm,,START_DT='2023-02-17'
+/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/cb_loan_acctrcvb_20150128.text,ODS_CDP_CCB_CB_LOAN_ACCTRCVB,,,acctnbr|balcatcd|baltypcd|rcvbnbr,,START_DT='2023-02-17'
+/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/ci_main_inf_20150128.text,ODS_CDP_CCB_CI_MAIN_INF,,,seqnbr|customerid,,START_DT='2023-02-17'
+/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/ln_account_inf_20150128.text,ODS_CDP_CCB_LN_ACCOUNT_INF,,,org|customer_id|product_cd|contract_id,,START_DT='2023-02-17'
+/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/ln_loan_inf_20150128.text,ODS_CDP_CCB_LN_LOAN_INF,,,branch_nbr|iou_id|contract_id,,START_DT='2023-02-17'

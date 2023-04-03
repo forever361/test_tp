@@ -1,0 +1,60 @@
+
+class DepositPricingPage(object):
+    DepositPricingPage_link = 'a[id="appselect:_idJsp36"]'
+
+    Single_Case = '//*[@id="tpaSingleSearchForm:_idJsp12"]'
+    Customer_No = '//*[@id="cusbra"]'
+    Customer_No1 = '//*[@id="tpaSingleSearchForm:_idJsp22"]'
+    TPA_Currency_Tenor = '//*[@id="tpaSingleSearchForm:currency"]'
+    TPA_Currency_Tenor1 = '//*[@id="tpaSingleSearchForm:_idJsp29"]'
+    New_Fund = '//*[@id="tpaSingleSearchForm:_idJsp33"]'
+    TPA_Amount = '//*[@id="tpaSingleSearchForm:_idJsp37"]'
+    Funds_not_arrived = '//*[@id="tpaSingleSearchForm:_idJsp40"]'
+    Calculate = '//*[@id="search"]'
+    Reset = '//*[@id="reset"]'
+
+    TMD_Recommendation = '//*[@id="id_goto"]'
+    TMD_img1 = '//*[@id="tpaSingleSearchForm:_idJsp124"]'
+    TMD_img2 = '//*[@id="tpaSingleSearchForm:_idJsp125"]'
+    TMD_img3 = '//*[@id="tpaSingleSearchForm:_idJsp127"]'
+    TMD_img4 = '//*[@id="tpaSingleSearchForm:_idJsp129"]'
+    TMD_img5 = '//*[@id="tpaSingleSearchForm:_idJsp131"]'
+    TMD_Text1 = 'Highly Recommend'
+    TMD_Text2 = 'Positive View'
+    TMD_Text3 = 'Negative View'
+    TMD_Text4 = 'Not Preferred'
+
+    CUR_TENOR = '//*[@id="tpaSingleSearchForm:_idJsp133:tbody_element"]'
+    Tb1 = 'AUD'
+    Tb2 = 'CAD'
+    Tb3 = 'CNY'
+    Tb4 = 'EUR'
+    Tb5 = 'GBP'
+    Tb6 = 'HKD'
+    Tb7 = 'JPY'
+    Tb8 = 'NZD'
+    Tb9 = 'SGD'
+    Tb10 = 'USD'
+
+    Scope1 = '7D'
+    Scope2 = '3M'
+    Scope4 = '6M'
+    Scope5 = '12M'
+    Scope6 = '24M'
+    Scope7 = '36M'
+    Scope8 = '60M'
+
+    Bulletin_Board = '公告栏'
+    Bulletin_Board_Text1 = '申请 TPA需10万以上人民币或等值外币。 TPA的提前支取同一般定期，无须特别审批流程。'
+    Bulletin_Board_Text2 = "大连、上海、沈阳、唐山、郑州所能申请的TPA最高利率,请严格参照 'PBOC Cap Rate'。"
+
+    TPA_application_process = 'Step1：充分了解客户需求和市场竞争情况，与客户协商确定申请利率。'
+    TPA_application_process1 = 'Step2：使用 Web-based TPA 计算器查询此单申请的审批权限。'
+    TPA_application_process2 = 'Step3：按照审批权限要求，把申请理由和 Web-based TPA 计算器截屏通过邮件发给相关方，取得相应的 Approval。'
+    TPA_application_process3 = 'Step4：Counter/CCSS同事按照 Treasury Reporting Guideline 的要求，quote rate 并在系统中完成定存的开立。'
+    TPA_application_process4 = 'TPA申请流程'
+    TPA_application_process5 = '//*[@id="tpaSingleSearchForm:link1"]'
+
+    Useful_Info = '//*[@id="tpaSingleSearchForm:_idJsp224"]'
+
+    Back_HomePage = '//*[@id="tpaSingleSearchForm:_idJsp226"]'

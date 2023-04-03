@@ -1,0 +1,8 @@
+|||||||||||||||||||||||||||||||||||||||Start checking|||||||||||||||||||||||||||||||||||||||
+Prepare data...
+2023-02-25 16:07:35,104-INFO: [['testdata', 'testdata_dif', '', 'test1', 'id']]
+2023-02-25 16:07:35,125-INFO: S:pg,T:pg
+2023-02-25 16:07:35,991-INFO: different columns between Source and Target are: None
+2023-02-25 16:07:36,402-ERROR: value check failed
+2023-02-25 16:07:36,648-INFO: |total_count   check|source:1000 target:1000
+2023-02-25 16:07:36,761-INFO: count check successfully

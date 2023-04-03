@@ -1,0 +1,100 @@
+
+/* -- heading ---------------------------------------------------------------------- */
+<style type="text/css" >
+
+body { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%;}
+table { font-size: 100%;}
+h1 {
+    font-size: 16pt;
+    color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    margin: 1em 0;
+    width: 100%;
+    overflow: hidden;
+    background:  #FFF;
+    color:  #024457;
+    border-radius:   10px;
+    border: 1px solid #167F92;
+}
+#result_table th {
+      border: 1px solid #FFFFFF;
+      background-color: #167F92;
+      color: #FFF;
+      padding: 0.5em;
+      &:first-child {
+        display: table-cell;
+        text-align: center;
+      }
+      &:nth-child(2) {
+        display: table-cell;
+        span {display:none;}
+        &:after {content:attr(data-th);}
+      }
+      @media (min-width: 480px) {
+        &:nth-child(2) {
+          span {display: block;}
+          &:after {display: none;}
+        }
+      }
+    }
+#result_table td {
+       word-wrap: break-word;
+      max-width: 7em;
+      padding: 0.3em;
+      &:first-child {
+        display: table-cell;
+        text-align: center;
+      }
+      @media (min-width: 400px) {
+        border: 1px solid #D9E4E6;
+      }
+    }
+#result_table  th, td {
+      margin: .5em 1em;
+      @media (min-width: 400px) {
+        display: table-cell;
+        padding: 1em;
+      }
+    }
+#total_row  { font-weight: bold; }
+.TD_CountClass  { background-color: #6c6;  !important ;}
+.MX_CountClass  { background-color: #c60;  !important ;}
+.Count_PassClass { background-color: #c00; !important ; }
+.Count_failClass { background-color: #c00; !important ; }
+.Value_PassClass { background-color: #c00; !important ; }
+.Value_failClass { background-color: #c00; !important ; }
+.Count_PassCase   { color: #6c6; }
+.Count_failCase   { color: #c60; font-weight: bold; }
+.Value_PassCase  { color: #c00; font-weight: bold; }
+.Value_failCase  { color: #c00; font-weight: bold; }
+tr[id^=ct]  td { background-color: rgba(73,204,144,.3) !important ; }
+tr[id^=vt]  td { background-color: rgba(73,204,144,.3) !important; }
+tr[id^=pt]  td { background-color: rgba(73,62,62,.3) !important ; }
+tr[id^=ft]  td { background-color: rgba(252,62,62,.3) !important ; }
+tr[id^=et]  td { background-color: rgba(249,62,62,.3) !important ; }
+tr[id^=st]  td { background-color: #6f6f6fa1 !important ; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+/* -- ending ---------------------------------------------------------------------- */
+
+</style>

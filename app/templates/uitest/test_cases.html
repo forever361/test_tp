@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}UI自动化 测试平台 - test suite{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block js %}
+<script src="/static/scripts/util/init.js"></script>
+<script src="/static/scripts/util/util.js"></script>
+<script src="/static/scripts/core/test_case2.js"></script>
+<script src="/static/bootstrap-table-develop/dist/bootstrap-table.js"></script>
+<link href="/static/bootstrap-table-develop/dist/bootstrap-table.css" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <div class="panel-body" style="padding-bottom:0px;">
+        <h1 style="text-align:center">Test Case</h1>
+        <div class="panel panel-default">
+            <div class="panel-heading">Query conditions</div>
+            <div class="panel-body">
+                <form id="formSearch" class="form-horizontal">
+                    <div class="form-group" style="margin-top:15px">
+                        <label class="conftrol-label col-sm-1" for="name">Name</label>
+                        <div class="col-sm-3">
+                        <input type="text" class="form-control" id="name">
+                        </div>
+<!--                        <label class="control-label col-sm-1" for="name">Name</label>-->
+<!--                        <div class="col-sm-3">-->
+<!--                            <input type="text" class="form-control" id="name">-->
+<!--                        </div>-->
+
+                        <div class="col-sm-4" style="text-align:left;">
+                            <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary" onclick="searchTestCase()">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+<!--        <div id="toolbar" class="btn-group">-->
+<!--            <button id="btn_add" type="button" class="btn btn-default" onclick="window.location.href=('/add_test_case')">-->
+<!--                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add-->
+<!--            </button>-->
+<!--        </div>-->
+
+        <table id="tb_test_cases"></table>
+
+    </div>
+
+
+
+{% endblock %}

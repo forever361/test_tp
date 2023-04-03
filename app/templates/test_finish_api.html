@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block content %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>APITestReport</title>
+        <meta name="generator" content="%(generator)"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="../static/test_finish.css">
+    </head>
+
+    <div class="container">
+    <div class="page-header">
+        <h1>API Report Page</h1>
+    </div>
+    </div>
+    <table>
+    <colgroup id="result_table">
+        <col align="left" />
+        <col align="right" />
+        <col align="right" />
+        <col align="right" />
+    </colgroup>
+    <tr>
+        <th>ReportName</th>
+        <th>Report_Link</th>
+        <th>All_log</th>
+        <th>Fail_log</th>
+        <th>Status</th>
+    </tr>
+    <tr id="Oracel_row">
+        <th>Oracle&MaxCompute </th>
+        <th>
+            <a href="or_mx_check_report" target="_blank" style="color:white">Click:OracleLink >>> OracleReport.html</a>
+        </th>
+        <th>
+            <a href="{{ buildUrl('/userinfo') }}/{{user_id}}/ID.csv" target="_blank" style="color:white">Click:Download >>> All_log</a>
+        </th>
+        <th>
+            <a href="{{ buildUrl('/userinfo') }}/{{user_id}}/ID.xls" target="_blank" style="color:white">Click:Download >>> Failure_log</a>
+        </th>
+        <th>Success</th>
+    </tr>
+    </table>
+</html>
+
+{% endblock %}

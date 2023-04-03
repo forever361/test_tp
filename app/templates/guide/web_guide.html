@@ -1,0 +1,429 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+    .form-bg{
+        background: #00b4ef;
+    }
+    .form-horizontal{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #fff;
+        padding-bottom: 40px;
+        border-radius: 15px;
+        text-align: center;
+    }
+
+    .form-horizontal .heading{
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 30px;
+    }
+
+    .form-horizontal .heading2{
+        display: block;
+        font-size: 15px;
+        font-weight: 900;
+    }
+
+    .form-horizontal .heading3{
+        display: block;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 6px;
+    }
+
+    .form-horizontal .form-group{
+        padding: 0 20px;
+        margin: 0 0 10px 0;
+        position: relative;
+    }
+
+    .form-horizontal .form-control{
+        background: #f0f0f0;
+        border: none;
+        border-radius: 10px;
+        box-shadow: none;
+        padding:0 20px 0 45px;
+        height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+    .form-horizontal .form-control:focus{
+        background: #e0e0e0;
+        box-shadow: none;
+        outline: 0 none;
+    }
+    .form-horizontal .form-group i{
+        position: absolute;
+        top: 12px;
+        left: 60px;
+        font-size: 17px;
+        color: #c8c8c8;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .form-control:focus + i{
+        color: #00b4ef;
+    }
+    .form-horizontal .fa-question-circle{
+        display: inline-block;
+        position: absolute;
+        top: 12px;
+        right: 60px;
+        font-size: 20px;
+        color: #808080;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .fa-question-circle{
+        color: #000;
+    }
+    .form-horizontal .main-checkbox{
+        float: left;
+        width: 20px;
+        height: 20px;
+        background: #11a3fc;
+        border-radius: 50%;
+        position: relative;
+        margin: 5px 0 0 5px;
+        border: 1px solid #11a3fc;
+    }
+    .form-horizontal .main-checkbox label{
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+    .form-horizontal .main-checkbox label:after{
+        content:"";
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        border: 3px solid #fff;
+        border-top: none;
+        border-right:none;
+        background: transparent;
+        opacity: 0;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]{
+        visibility: hidden;
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]:checked + label:after{
+        opacity: 1;
+    }
+    .form-horizontal .text{
+        float: left;
+        margin-left: 7px;
+        line-height: 20px;
+        padding-top: 5px;
+        text-transform: capitalize;
+    }
+    .form-horizontal .btn1{
+        width: 80px;
+        margin-top: 30px;
+        //float: left; 
+        font-size: 14px;
+        color: #777;
+        background: #222222;
+        border-radius: 10px;
+        padding: 10px 25px;
+        border: none;
+        text-transform: capitalize;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .btn2{
+        font-size: 14px;
+        //width: 270px;
+        color: #fff;
+        background: #00b4ef;
+        border: none;
+        border-radius: 30px;
+        box-shadow: none;
+        //height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+
+    .form-horizontal .border{
+        width: 500px;
+        border: 2px dashed #808080;
+        padding: 10px 10px 0 20px;
+    }
+
+    @media only screen and (max-width: 479px){
+        .form-horizontal .form-group{
+            padding: 0 25px;
+        }
+        .form-horizontal .form-group i{
+            left: 45px;
+        }
+        .form-horizontal .btn{
+            padding: 10px 20px;
+        }
+    }
+
+    </style>
+
+<style>
+    #loading {
+        position: absolute;
+        width: 300px;
+        height: 250px;
+        top: 50%;
+        left: 50%;
+        margin: -25px -150px;
+        background-color: #FFFFFF;
+        border: 1PX solid #CCCCCC;
+        text-align: center;
+        padding: 20px;
+    }
+</style>
+
+
+
+<!--下面两个是使用Code Mirror必须引入的-->
+<link rel="stylesheet" href="./static/codemirror/lib/codemirror.css"/>
+<script src="./static/codemirror/lib/codemirror.js"></script>
+<!--Java代码高亮必须引入-->
+<!--<script src="./static/codemirror/mode/clike/clike.js"></script>-->
+<!--<script src="./static/codemirror/mode/python/python.js"></script>-->
+<script src="./static/codemirror/addon/edit/matchbrackets.js"></script>
+<script src=./static/codemirror/mode/shell/shell.js></script>
+
+<!--引入css文件，用以支持主题-->
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/3024-night.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+
+
+<div class="container" style="margin-top: 10px">
+    <div >
+         <span style="text-align: center;display:block; font-weight:bold; font-size:17px">User Guide</span>
+       </div>
+
+
+
+  <form  method="POST" style="margin-top: 10px">
+    <!-- begin code -->
+    <textarea id="code" name="code">
+
+		This is a Python test framework FOR the Selenium/WebDriver browser automation library. This framework incorporates test-runners
+        such as pytest, nosetests, and behave to provide organized structure, test discovery, test execution, test state. After you finish
+        running the test case, you will receive an easy read report.
+
+        1. Click 'Add new test case' to create a new testcase
+        2. You can give the testcase a unique name, The default name is the current time. such as 'casename2022_6_27_11_8'
+        3. And you can edit the testcase with the methods that can operate web pages.
+
+            self.open(url)  # Navigate the browser window to the URL.
+            self.type(selector, text)  # Update the field with the text.
+            self.click(selector)  # Click the element with the selector.
+            self.click_link(link_text)  # Click the link containing text.
+            self.go_back()  # Navigate back to the previous URL.
+            self.select_option_by_text(dropdown_selector, option)
+            self.hover_and_click(hover_selector, click_selector)
+            self.drag_and_drop(drag_selector, drop_selector)
+            self.get_text(selector)  # Get the text from the element.
+            self.get_current_url()  # Get the URL of the current page.
+            self.get_page_source()  # Get the HTML of the current page.
+            self.get_attribute(selector, attribute)  # Get element attribute.
+            self.get_title()  # Get the title of the current page.
+            self.switch_to_frame(frame)  # Switch into the iframe container.
+            self.switch_to_default_content()  # Leave the iframe container.
+            self.open_new_window()  # Open a new window in the same browser.
+            self.wait_for_element(selector)  # Wait until element is visible.
+            self.is_element_visible(selector)  # Return element visibility.
+            self.is_text_visible(text, selector)  # Return text visibility.
+            self.sleep(seconds)  # Do nothing for the given amount of time.
+            self.assert_element(selector)  # Verify the element is visible.
+            self.assert_text(text, selector)  # Verify text in the element.
+            self.assert_title(title)  # Verify the title of the web page.
+            self.assert_downloaded_file(file)  # Verify file was downloaded.
+            self.assert_no_404_errors()  # Verify there are no broken links.
+            self.assert_no_js_errors()  # Verify there are no JS errors.
+
+        Here is same samples:
+
+            self.open("https://www.saucedemo.com")
+            self.type("#user-name", "standard_user")
+            self.type("#password", "secret_sauce\n")
+            self.assert_element("#inventory_container")
+            self.assert_text("PRODUCTS", "span.title")
+            self.click('button[name*="backpack"]')
+            self.click("#shopping_cart_container a")
+            self.assert_text("YOUR CART", "span.title")
+            self.assert_text("Backpack", "div.cart_item")
+            self.click("button#checkout")
+            self.type("#first-name", "SeleniumBase")
+            self.type("#last-name", "Automation")
+            self.type("#postal-code", "77123")
+            self.click("input#continue")
+            self.assert_text("CHECKOUT: OVERVIEW")
+            self.assert_text("Backpack", "div.cart_item")
+            self.click("button#finish")
+            self.assert_exact_text("THANK YOU FOR YOUR ORDER", "h2")
+            self.assert_element('img[alt="Pony Express"]')
+            self.js_click("a#logout_sidebar_link")
+
+        Some additional notes:
+            💡 The tool is a Python test framework for the Selenium/WebDriver browser automation library. This framework incorporates test-runners
+        such as pytest, nosetests, and behave to provide organized structure, test discovery, test execution, test state (eg. passed, failed, or skipped),
+        and command-line options for changing default settings (such as choosing the browser to use). With raw Selenium, you would need to set up your own
+        options-parser for configuring tests from the command-line.
+
+            💡 With raw Selenium, commands that use selectors need to specify the type of selector (eg. "css selector", "button#myButton"). With This tool,
+        there's auto-detection between CSS Selectors and XPath, which means you don't need to specify the type of selector in your commands (but optionally you could).
+
+            💡 Methods often perform multiple actions in a single method call. For example, self.type(selector,text) does the following:
+            1. Waits for the element to be visible.
+            2. Waits for the element to be interactive.
+            3. Clears the text field.
+            4. Types in the new text.
+            5. Presses Enter/Submit if the text ends in "\n".
+            With raw Selenium, those actions require multiple method calls.
+
+            💡 Uses default timeout values when not set, which means that methods automatically wait for elements to appear (up to the timeout limit) before failing:
+            ✅self.click("button")
+            With raw Selenium, methods would fail instantly (by default) if an element needed more time to load:
+            ❌self.driver.find_element(by="css selector", value="button").click()
+            (Reliable code is better than unreliable code.)
+
+            💡 Lets you change the explicit timeout values of methods:
+            ✅self.click("button",timeout=10)
+            With raw Selenium, that requires more code:
+            ❌WebDriverWait(driver,10).until(EC.element_to_be_clickable("css selector", "button")).click()
+            (Simple code is better than complex code.)
+
+            💡 Give you clean error output when a test fails.
+
+            💡 Give  you the option to generate a dashboard and reports for tests.
+
+    </textarea>
+    <!-- end code-->
+
+</form>
+
+
+</div>
+
+
+<script>
+
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        var now_time = year + '_' + month + '_' +day + '_' + hour + '_' + minute;
+
+
+      var r0 = "#----------------EDIT MODE------------\n\n";
+      var r1 = "#----Case_name: you must define a unique casename------------\n";
+      var r2 = "Case_name = case" + now_time +"\n\n";
+      var r3 = "#-----------------------------------------------------------------;\n"
+      var r4 = "# SOURCE CONFIGURATION\n";
+      var r5 = "#-----------------------------------------------------------------;\n\n";
+      var r6 = "#----DB type: TD,Ora,MC,PG,DB2,GCP------------\n";
+      var r7 = "s_dbtype = TD\n\n";
+      var r8 = "#----TD server connection----------------------\n";
+      var r9 = "s_host = test\n";
+      var r91 = "s_username = test\n";
+      var r92 = "s_pwd = test\n\n";
+      var r10 = "#------Compare SQL----------------------------\n";
+      var r11 = "#### s_count_SQL : SELECT count(*) FROM 123 ###\n";
+      var r12 = "#### s_value_SQL : SELECT * FROM 123 WHERE arr_id='4' ###\n";
+      var r13 = "#---------------------------------------------\n";
+      var r131 = "s_count_SQL : SELECT count(*) FROM 123\n"
+      var r132 = "s_value_SQL : SELECT * FROM 123 WHERE arr_id='4'\n\n"
+
+      var r14 = "#-----------------------------------------------------------------;\n"
+      var r15 = "# TARGET CONFIGURATION\n";
+      var r16 = "#-----------------------------------------------------------------;\n\n";
+      var r17 = "#----DB type: TD,Ora,MC,PG,DB2,GCP------------\n";
+      var r18 = "t_dbtype = TD\n\n";
+      var r19 = "#----TD server connection----------------------\n";
+      var r20 = "t_host = test\n";
+      var r21 = "t_username = test\n";
+      var r22 = "t_pwd = test\n\n";
+      var r23 = "#------Compare SQL----------------------------\n";
+      var r24 = "#### t_count_SQL : SELECT count(*) FROM 123 ###\n";
+      var r25 = "#### t_value_SQL : SELECT * FROM 123 WHERE arr_id='4' ###\n";
+      var r26 = "#---------------------------------------------\n";
+      var r27 = "t_count_SQL : SELECT count(*) FROM 123\n"
+      var r28 = "t_value_SQL : SELECT * FROM 123 WHERE arr_id='4'\n\n"
+
+      var initValue = r1 + r2 + r3 + r4 + r5 + r6+ r7+ r8+ r9+ r91+ r92+ r10+ r11+ r12+ r13+ r131+r132+ r14+ r15+ r16+ r17+ r18+ r19+ r20
+      + r21+ r22+ r23+ r24+ r25+ r26+ r27+ r28;
+
+
+
+    //根据DOM元素的id构造出一个编辑器
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: 'shell',
+        //lineNumbers: true,
+        matchBrackets: true,
+        theme: "abbott",	//设置主题
+        //mode: "python", // 语言模式
+        //smartIndent: true, // 智能缩进
+        //indentUnit: 4, // 智能缩进单位为4个空格长度
+        //mode: "text/groovy",    //实现groovy代码高亮
+        //mode: "text/x-java", //实现Java代码高亮
+        //lineWrapping: true,	//代码折叠
+        //foldGutter: true,
+        //gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        //matchBrackets: true,	//括号匹配
+        readOnly: true,        //只读
+    });
+
+
+
+      editor.setSize('1200px', '1950px');     //设置代码框的长宽
+            //取得文本框的值
+     function quzhi(){
+      var value = editor.getValue();
+      console.log(value)
+      //editor.setValue(value)
+
+      }
+
+     // 设置初始文本，这个选项也可以在fromTextArea中配置
+      //editor.setOption("value", initValue);
+     // 编辑器按键监听
+//    editor.on("keypress", function() {
+//    // 显示智能提示
+//    editor.showHint(); // 注意，注释了CodeMirror库中show-hint.js第131行的代码（阻止了代码补全，同时提供智能提示）
+//    });
+
+//    editor.setValue("");    //先代码框的值清空
+//    editor.setValue(obj.scriptCode);    //给代码框赋值
+
+    // editor.setOption("readOnly", true);
+      var test = document.getElementById("test");
+      test.onclick = function() {
+          var value = editor.getValue();
+          console.log(value);
+            }
+
+
+
+
+</script>
+
+
+
+    {% endblock %}

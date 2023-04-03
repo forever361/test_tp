@@ -1,0 +1,664 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+    .form-bg{
+        background: #00b4ef;
+    }
+    .form-horizontal{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #fff;
+        padding-bottom: 40px;
+        border-radius: 15px;
+        text-align: center;
+    }
+
+    .form-horizontal .heading{
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 30px;
+    }
+
+    .form-horizontal .heading2{
+        display: block;
+        font-size: 15px;
+        font-weight: 900;
+    }
+
+    .form-horizontal .heading3{
+        display: block;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 6px;
+    }
+
+    .form-horizontal .form-group{
+        padding: 0 20px;
+        margin: 0 0 10px 0;
+        position: relative;
+    }
+
+    .form-horizontal .form-control{
+        background: #f0f0f0;
+        border: none;
+        border-radius: 10px;
+        box-shadow: none;
+        padding:0 20px 0 45px;
+        height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+    .form-horizontal .form-control:focus{
+        background: #e0e0e0;
+        box-shadow: none;
+        outline: 0 none;
+    }
+    .form-horizontal .form-group i{
+        position: absolute;
+        top: 12px;
+        left: 60px;
+        font-size: 17px;
+        color: #c8c8c8;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .form-control:focus + i{
+        color: #00b4ef;
+    }
+    .form-horizontal .fa-question-circle{
+        display: inline-block;
+        position: absolute;
+        top: 12px;
+        right: 60px;
+        font-size: 20px;
+        color: #808080;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .fa-question-circle{
+        color: #000;
+    }
+    .form-horizontal .main-checkbox{
+        float: left;
+        width: 20px;
+        height: 20px;
+        background: #11a3fc;
+        border-radius: 50%;
+        position: relative;
+        margin: 5px 0 0 5px;
+        border: 1px solid #11a3fc;
+    }
+    .form-horizontal .main-checkbox label{
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+    .form-horizontal .main-checkbox label:after{
+        content:"";
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        border: 3px solid #fff;
+        border-top: none;
+        border-right:none;
+        background: transparent;
+        opacity: 0;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]{
+        visibility: hidden;
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]:checked + label:after{
+        opacity: 1;
+    }
+    .form-horizontal .text{
+        float: left;
+        margin-left: 7px;
+        line-height: 20px;
+        padding-top: 5px;
+        text-transform: capitalize;
+    }
+    .form-horizontal .btn1{
+        width: 80px;
+        margin-top: 30px;
+        //float: left;
+        font-size: 14px;
+        color: #777;
+        background: #222222;
+        border-radius: 10px;
+        padding: 10px 25px;
+        border: none;
+        text-transform: capitalize;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .btn2{
+        font-size: 14px;
+        //width: 270px;
+        color: #fff;
+        background: #00b4ef;
+        border: none;
+        border-radius: 30px;
+        box-shadow: none;
+        //height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+
+    .form-horizontal .border{
+        width: 550px;
+        border: 2px dashed #808080;
+        padding: 10px 10px 0 20px;
+    }
+
+    @media only screen and (max-width: 479px){
+        .form-horizontal .form-group{
+            padding: 0 25px;
+        }
+        .form-horizontal .form-group i{
+            left: 45px;
+        }
+        .form-horizontal .btn{
+            padding: 10px 20px;
+        }
+    }
+
+
+
+</style>
+
+<style>
+    #loading {
+        position: absolute;
+        width: 300px;
+        height: 250px;
+        top: 50%;
+        left: 50%;
+        margin: -25px -150px;
+        background-color: #FFFFFF;
+        border: 1PX solid #CCCCCC;
+        text-align: center;
+        padding: 20px;
+    }
+
+
+</style>
+
+<style>
+        body{
+            margin: auto;
+            background-color: #f5f5f5;
+        }
+        .button{width: 200px;height: 50px;color:#FFFFFF;background-color: #1da1f2}
+        .log{
+            width: 90%;
+            height: 542px;
+            background-color: #0a0202;
+            margin: 0 auto;
+<!--            margin-top: 10px;-->
+            padding-top: 30px;
+            padding-bottom: 40px;
+        }
+        .log_text{
+            height: 542px;
+            margin-left: 10px;
+            font-size: 10px;
+            color: #FFFFFF;
+            overflow-x: hidden;
+            overflow-y: auto;
+            word-wrap:break-word
+        }
+
+      .lay-msg-bg{
+            background-color:#ff5722;
+            border:1px solid #ff5722;
+            color:#fff;
+            text-align: center;
+        }
+
+    .lay-msg-bg-gr{
+            background-color:#5fb878;
+            border:0px solid #5fb878;
+            color:#fff;
+            padding:5px;
+            text-align: center;
+            vertical-align:middle;
+            display:table-cell
+        }
+    </style>
+
+
+<!--下面两个是使用Code Mirror必须引入的-->
+<link rel="stylesheet" href="./static/codemirror/lib/codemirror.css"/>
+<script src="./static/codemirror/lib/codemirror.js"></script>
+<!--Java代码高亮必须引入-->
+<!--<script src="./static/codemirror/mode/clike/clike.js"></script>-->
+<!--<script src="./static/codemirror/mode/python/python.js"></script>-->
+<script src="./static/codemirror/addon/edit/matchbrackets.js"></script>
+<script src=./static/codemirror/mode/shell/shell.js></script>
+
+<!--引入css文件，用以支持主题-->
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/3024-night.css"/>
+
+    <div class="row">
+        <form method="POST">
+        <div class="col-md-8" style="margin-left: 50px;margin-top: 20px;">
+
+            <div>
+                <span style="text-align: center;display:block; font-weight:bold; font-size:17px">Connection information configuration</span>
+            </div>
+            <br/>
+
+                <!-- begin code -->
+                <textarea id="code" name="code"></textarea>
+                <br/><br/>
+                <!-- end code-->
+                <div>
+                    <span style="text-align: center;display:block; font-weight:bold; font-size:17px">DB information configuration</span>
+                </div>
+                <br/>
+                <!-- begin code -->
+                <textarea id="code1" name="code1"></textarea>
+
+                  <div style="width:400px; margin: auto; text-align: center"  >
+<!--                    <span style="color:#FF0000" id="msg3"></span>-->
+                    <button type="button" name="Back" value="Back" class="btn btn-primary" style="margin-top: 20px;float:left; width:80px"
+                            onclick="window.location.href=('/api_data_test_cases_f2t')">Back
+                    </button>
+
+<!--                    <span style="color:#FF0000" id="msg"></span>-->
+                    <button type="submit" name="Save" value="Save" class="btn btn-primary" style="margin-top: 20px; width:80px ">Save</button>
+
+<!--                    <span style="color:#FF0000" id="msg2"></span>-->
+<!--                    <button type="submit" name="Run" value="Run" class="btn btn-primary" style="margin-top: 10px"-->
+<!--                            onclick="document.getElementById('loading').style.display='';">Run-->
+<!--                    </button>-->
+<!--                    <button type="submit" id="Run" name="Run" value="Run" class="btn btn-primary" style="margin-top: 20px;float:right;width:80px">Run</button>-->
+                    <button  type="button" disabled="disabled" id="Run" class="btn btn-primary" style="margin-top: 20px;float:right;width:80px;" onclick="getPublicFunctions2()">Run</button>
+
+<!--                    <button type="submit" id="Report" name="Report" value="Report" class="btn btn-primary" style="margin-top: 20px;float:right; width:80px">Check report</button>-->
+
+                </div>
+
+                <!--        <div id="loading" style="display:none" align="middle">-->
+                <!--            <img src="./static/loading.gif" height="150" align="middle">-->
+                <!--            <div style="color:#00b4ef">Testing...please wait a moment.</div>-->
+                <!--        </div>-->
+
+
+
+        </div>
+
+        <div class="col-md-3" style="margin-left: 10px;margin-top: 20px;">
+
+            <div>
+                <span style="text-align: center;display:block; font-weight:bold; font-size:17px">Test Log</span>
+            </div>
+            <br/>
+                <!-- begin code -->
+
+        <div class="log">
+            <div class="log_text" id='log_list' style="padding-right:10px">
+                <div id="log_text"></div>
+            </div>
+
+            <div style="width:200px; margin: auto; text-align: center"  >
+
+            <button type="submit" id="Report" name="Report" value="Report" class="btn btn-primary" style="margin-top: 20px; width:100px;display:none;">Check report</button>
+            <div>
+        </div>
+
+            <!-- end code-->
+        </div>
+    </div>
+    </form>
+
+
+<script>
+
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth()+ 1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        var now_time = year + '_' + month + '_' +day + '_' + hour + '_' + minute;
+
+      var r = "Case_name = casename2023_test_" + now_time +"\n";
+      var t0 = "####### you can chooes target db type:ali, orl, pg #######\n";
+      var t1 = "Source TYPE = landingserver_file\n";
+      var t2 = "Target TYPE = ali\n";
+      var r0 = "Landingserver conn = hkl20147074,cst01adm,ZV1RXyYjJW3uAyTfdF2CAw==\n";
+      var r1 = "Target conn = n4vLUicfSG7Gnxiu,a3md3UO3Cq4gNxgHYo3WwOk3WKuefogl2GdPd/XNWsM=,cn_cds_dev,https://service.cn-hk-hsbc-d01.odps.ali-ops.cloud.cn.hsbc:443/api";
+
+      var initValue = r+ t0+ t1 + t2+ r0 + r1
+
+    //根据DOM元素的id构造出一个编辑器
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: 'shell',
+        lineNumbers: true,
+        matchBrackets: true,
+        theme: "3024-night",	//设置主题
+        //mode: "python", // 语言模式
+        //smartIndent: true, // 智能缩进
+        //indentUnit: 4, // 智能缩进单位为4个空格长度
+        //mode: "text/groovy",    //实现groovy代码高亮
+        //mode: "text/x-java", //实现Java代码高亮
+        lineWrapping: true,	//代码折叠
+        //foldGutter: true,
+        //gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        //matchBrackets: true,	//括号匹配
+        //readOnly: true,        //只读
+    });
+
+
+
+      editor.setSize('auto', '160px');     //设置代码框的长宽
+            //取得文本框的值
+     function quzhi(){
+      var value = editor.getValue();
+      console.log(value)
+      //editor.setValue(value)
+
+      }
+
+     // 设置初始文本，这个选项也可以在fromTextArea中配置
+      editor.setOption("value", initValue);
+     // 编辑器按键监听
+//    editor.on("keypress", function() {
+//    // 显示智能提示
+//    editor.showHint(); // 注意，注释了CodeMirror库中show-hint.js第131行的代码（阻止了代码补全，同时提供智能提示）
+//    });
+
+//    editor.setValue("");    //先代码框的值清空
+//    editor.setValue(obj.scriptCode);    //给代码框赋值
+
+    // editor.setOption("readOnly", true);
+      var test = document.getElementById("test");
+      test.onclick = function() {
+          var value = editor.getValue();
+          console.log(value);
+            }
+
+
+
+
+</script>
+
+
+<script>
+
+      var r2 = "/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/aps/bk/ln_applycust_inf_20210617.text,ODS_CDP_CCB_LN_APPLYCUST_INF_BK,,,apply_nbr,,START_DT='2022-12-19'\n";
+      var r3 = "SD_PKG_SCORE_MEMBER,CDS_BGS_SD_PKG_SCORE_MEMBER,,,ID_,,";
+      var initValue2 = r2
+
+
+
+    //根据DOM元素的id构造出一个编辑器
+    var editor2 = CodeMirror.fromTextArea(document.getElementById("code1"), {
+        mode: 'shell',
+        lineNumbers: true,
+        matchBrackets: true,
+        theme: "3024-night",	//设置主题
+        //mode: "python", // 语言模式
+        //smartIndent: true, // 智能缩进
+        //indentUnit: 4, // 智能缩进单位为4个空格长度
+        //mode: "text/groovy",    //实现groovy代码高亮
+        //mode: "text/x-java", //实现Java代码高亮
+        lineWrapping: true,	//代码折叠
+        //foldGutter: true,
+        //gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        //matchBrackets: true,	//括号匹配
+        //readOnly: true,        //只读
+    });
+
+
+
+      editor2.setSize('auto', '300px');     //设置代码框的长宽
+            //取得文本框的值
+     function quzhi2(){
+      var value2 = editor2.getValue();
+      console.log(value2)
+      //editor.setValue(value)
+
+      }
+
+     // 设置初始文本，这个选项也可以在fromTextArea中配置
+      editor2.setOption("value", initValue2);
+     // 编辑器按键监听
+//    editor2.on("keypress", function() {
+//    // 显示智能提示
+//    editor2.showHint(); // 注意，注释了CodeMirror库中show-hint.js第131行的代码（阻止了代码补全，同时提供智能提示）
+//    });
+
+//    editor2.setValue("");    //先代码框的值清空
+//    editor2.setValue(obj.scriptCode);    //给代码框赋值
+
+    // editor.setOption("readOnly", true);
+
+
+
+
+
+
+</script>
+
+
+<script>
+
+      var r2 = "SD_PKG_SCORE_REGION,CDS_BGS_SD_PKG_SCORE_REGION,,,ID_,,\n";
+      var r3 = "SD_PKG_SCORE_MEMBER,CDS_BGS_SD_PKG_SCORE_MEMBER,,,ID_,,";
+      var initValue2 = r2 + r3
+
+
+    //根据DOM元素的id构造出一个编辑器
+    var editor2 = CodeMirror.fromTextArea(document.getElementById("log_text"), {
+        mode: 'shell',
+        lineNumbers: true,
+        matchBrackets: true,
+        theme: "abbott",	//设置主题
+        //mode: "python", // 语言模式
+        //smartIndent: true, // 智能缩进
+        //indentUnit: 4, // 智能缩进单位为4个空格长度
+        //mode: "text/groovy",    //实现groovy代码高亮
+        //mode: "text/x-java", //实现Java代码高亮
+        //lineWrapping: true,	//代码折叠
+        //foldGutter: true,
+        //gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        //matchBrackets: true,	//括号匹配
+        //readOnly: true,        //只读
+    });
+
+
+
+      editor2.setSize('auto', '545px');     //设置代码框的长宽
+            //取得文本框的值
+     function quzhi2(){
+      var value2 = editor2.getValue();
+      console.log(value2)
+      //editor.setValue(value)
+
+      }
+
+     // 设置初始文本，这个选项也可以在fromTextArea中配置
+      editor2.setOption("value", initValue2);
+     // 编辑器按键监听
+//    editor2.on("keypress", function() {
+//    // 显示智能提示
+//    editor2.showHint(); // 注意，注释了CodeMirror库中show-hint.js第131行的代码（阻止了代码补全，同时提供智能提示）
+//    });
+
+//    editor2.setValue("");    //先代码框的值清空
+//    editor2.setValue(obj.scriptCode);    //给代码框赋值
+
+    // editor.setOption("readOnly", true);
+
+
+
+</script>
+
+
+<script>
+
+    var time
+      // 创建一个元素节点
+    function insertAfter( newElement, targetElement ){ // newElement是要追加的元素targetElement 是指定元素的位置
+        var parent = targetElement.parentNode; // 找到指定元素的父节点
+        parent.appendChild( newElement, targetElement );
+    };
+
+    function log(){
+        clearTimeout(time) // 清空定时器
+        var log_null = 0 //存放空日志次数
+        var div = document.getElementById('log_list') //找到存放日志的块
+        div.innerHTML = "<div id='log_text'></div>" // 每次跑清空div内内容
+
+<!--        {},function (){-->
+<!--        }) //请求生成日志接口-->
+        // 生成定时器
+        time = setInterval(function (){
+            $.get('/data_f2t_get_log',{},function (data){ //请求获取日志接口获取日志
+                if (data.log_type == 3){ //如果获取的是空日志log_null次数加1
+                    log_null ++
+                    if (log_null >= 2000    ){
+                        clearTimeout(time) //如果连续10次获取的都是空日志清除定时任务
+                    }
+                    return
+                }
+                if (data.log_type == 2){ //如果获取到新日志
+                    for (i=0;i<data.log_list.length;i++){ //遍历日志
+                        var p = document.createElement("p") //生成一个p标签
+                        p.innerHTML = data.log_list[i] //日志存放到P标签内
+                        var header = document.getElementById('log_text')
+                        insertAfter(p,header) //将p标签添加到log_text div中
+                        div.scrollTop = div.scrollHeight //滚动条实时显示到底部
+                    }
+                    log_null = 0 //日志为空次数清0
+                }
+
+            })
+        },1500) //每1秒钟执行一次
+    }
+    document.getElementById('Run').addEventListener("click",log) //点击开始按钮开始执行
+
+    function stoptimer(){
+        clearInterval(time)
+    }
+
+</script>
+
+
+<script>
+
+<!--        function getrequest(){-->
+<!--             $.get('/data_f2t_get_log')-->
+<!--        }-->
+
+        function getPublicFunctions2(){
+            var cases = []
+            var pre_code = document.getElementById('code');
+            var code = pre_code.innerHTML;
+
+            var pre_code1 = document.getElementById('code1');
+            var code1 = pre_code1.innerHTML;
+
+             $.ajax(
+                {
+                  url: "/runtest_f2t.json",
+                  type: "post",
+                  dataType:"json",
+                  data:{"code":code, "code1":code1},
+                  async : true,
+                  beforeSend:function()
+                  {
+                    $('#Report').hide();
+                    return true;
+                  },
+                  success:function(data)
+                  {
+                    if (data.msg == "run success!"){
+                        layer.msg(data.msg,{time:2000,
+                                area:['380px','66px'],
+                                offset:'rt',
+                                anim:1,
+                                skin:'lay-msg-bg-gr'
+                                         });
+                    } else {
+                            layer.msg(data.msg,{time:2000,
+                                area:['380px','66px'],
+                                offset:'rt',
+                                anim:1,
+                                skin:'lay-msg-bg'
+                                         });
+                    }
+                    if(data.returncode==0){
+                        $('#Report').show();
+                    }
+                    cases= data.msg;
+
+                  },
+                  error:function()
+                  {
+                   layer.msg(data.msg,{time:2000,
+                            area:['380px','66px'],
+                            offset:'rt',
+                            anim:1,
+                            skin:'lay-msg-bg'
+                                     });
+
+                  },
+                  complete:function()
+                  {
+                    // $('#tips').hide();
+<!--                    setTimeout(getrequest(),1500);-->
+<!--                    setTimeout(getrequest(),1500);-->
+<!--                    setTimeout(getrequest(),1500);-->
+                    setTimeout(stoptimer(),5000);
+<!--                    $.post('/clear_log',{},function(){})-->
+                  }
+            });
+
+            return cases;
+
+
+            }
+
+</script>
+
+
+
+     {% if message %}
+    <script>
+    var msg = "{{ message }}";
+    if (msg == "Save success!"){
+        layer.msg(msg,{time:2000,
+                area:['380px','66px'],
+                offset:'rt',
+                anim:1,
+                skin:'lay-msg-bg-gr'
+                         });
+    } else {
+            layer.msg(msg,{time:2000,
+                area:['380px','66px'],
+                offset:'rt',
+                anim:1,
+                skin:'lay-msg-bg'
+                         });
+    }
+
+    </script>
+
+    {% endif %}
+
+{% endblock %}

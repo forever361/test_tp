@@ -1,0 +1,73 @@
+|||||||||||||||||||||||||Start checking|||||||||||||||||||||||||
+Prepare data...
+[['/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/aps/bk/ln_applycust_inf_20210617.text', 'ODS_CDP_CCB_LN_APPLYCUST_INF_BK', '', '', 'apply_nbr', '', "START_DT='2022-12-19'\n"]]
+S:file,T:ali
+====================:start check====================
+different columns between Source and Target are: {'PURGE_DT', 'TAG_COUNTRY', 'REC_UPDT_DT_TM', 'TAG_ENTITY', 'TAG_BRANCH', 'TAG_RESERVE', 'END_DT', 'START_DT', 'REC_CREAT_DT_TM', 'TAG_GBGF'}
+value check failed
+|total_count   check|source:110 target:110
+count check successfully
+[['/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/aps/bk/ln_applycust_inf_20210617.text', 'ODS_CDP_CCB_LN_APPLYCUST_INF_BK', '', '', 'apply_nbr', '', "START_DT='2022-12-19'\n"]]
+S:file,T:ali
+====================:start check====================
+different columns between Source and Target are: {'PURGE_DT', 'TAG_COUNTRY', 'REC_UPDT_DT_TM', 'TAG_ENTITY', 'TAG_BRANCH', 'TAG_RESERVE', 'END_DT', 'START_DT', 'REC_CREAT_DT_TM', 'TAG_GBGF'}
+value check failed
+Traceback (most recent call last):
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/view/data_batch_new_f2t.py", line 168, in runtest3
+    method_main()
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/run_or_mx.py", line 602, in method_main
+    s_count_sql, t_count_sql, v_status, c_status, tablename = configure_validator(*parameter)
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/run_or_mx.py", line 559, in configure_validator
+    s_count_sql, t_count_sql, v_satuts, c_status = c.check()
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/checker.py", line 426, in check
+    v_statuts = self.value_check()
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/checker.py", line 336, in value_check
+    Excel_write.get_value_result_pass2(batch_valueflag, int(times))
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/commom/write_excel_data.py", line 138, in get_value_result_pass2
+    excel_data_all.write_value_report(0, times, 6, self.value_success)
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/commom/write_excel_data.py", line 92, in write_value_report
+    wb = self.load_excel()
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/commom/write_excel_data.py", line 51, in load_excel
+    open_excel = openpyxl.load_workbook(userPath + "/verification_result.xlsx")
+  File "/hsbc/tac/app/anaconda3/lib/python3.6/site-packages/openpyxl/reader/excel.py", line 314, in load_workbook
+    data_only, keep_links)
+  File "/hsbc/tac/app/anaconda3/lib/python3.6/site-packages/openpyxl/reader/excel.py", line 124, in __init__
+    self.archive = _validate_archive(fn)
+  File "/hsbc/tac/app/anaconda3/lib/python3.6/site-packages/openpyxl/reader/excel.py", line 96, in _validate_archive
+    archive = ZipFile(filename, 'r')
+  File "/hsbc/tac/app/anaconda3/lib/python3.6/zipfile.py", line 1090, in __init__
+    self.fp = io.open(file, filemode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/cmc01exe/testplatform/Flask_tp_v8.1/app/userinfo/714075/verification_result.xlsx'
+
+[['/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/aps/bk/ln_applycust_inf_20210617.text', 'ODS_CDP_CCB_LN_APPLYCUST_INF_BK', '', '', 'apply_nbr', '', "START_DT='2022-12-19'\n"]]
+S:file,T:ali
+====================:start check====================
+different columns between Source and Target are: {'PURGE_DT', 'TAG_COUNTRY', 'REC_UPDT_DT_TM', 'TAG_ENTITY', 'TAG_BRANCH', 'TAG_RESERVE', 'END_DT', 'START_DT', 'REC_CREAT_DT_TM', 'TAG_GBGF'}
+value check failed
+Traceback (most recent call last):
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/view/data_testcase_f2t.py", line 175, in runtest2
+    method_main()
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/run_or_mx.py", line 602, in method_main
+    s_count_sql, t_count_sql, v_status, c_status, tablename = configure_validator(*parameter)
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/run_or_mx.py", line 559, in configure_validator
+    s_count_sql, t_count_sql, v_satuts, c_status = c.check()
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/checker.py", line 426, in check
+    v_statuts = self.value_check()
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/checker.py", line 336, in value_check
+    Excel_write.get_value_result_pass2(batch_valueflag, int(times))
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/commom/write_excel_data.py", line 138, in get_value_result_pass2
+    excel_data_all.write_value_report(0, times, 6, self.value_success)
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/commom/write_excel_data.py", line 92, in write_value_report
+    wb = self.load_excel()
+  File "/home/cmc01exe/testplatform/Flask_tp_v8.1/app/data2_check/commom/write_excel_data.py", line 51, in load_excel
+    open_excel = openpyxl.load_workbook(userPath + "/verification_result.xlsx")
+  File "/hsbc/tac/app/anaconda3/lib/python3.6/site-packages/openpyxl/reader/excel.py", line 314, in load_workbook
+    data_only, keep_links)
+  File "/hsbc/tac/app/anaconda3/lib/python3.6/site-packages/openpyxl/reader/excel.py", line 124, in __init__
+    self.archive = _validate_archive(fn)
+  File "/hsbc/tac/app/anaconda3/lib/python3.6/site-packages/openpyxl/reader/excel.py", line 96, in _validate_archive
+    archive = ZipFile(filename, 'r')
+  File "/hsbc/tac/app/anaconda3/lib/python3.6/zipfile.py", line 1090, in __init__
+    self.fp = io.open(file, filemode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/cmc01exe/testplatform/Flask_tp_v8.1/app/userinfo/714075/verification_result.xlsx'
+

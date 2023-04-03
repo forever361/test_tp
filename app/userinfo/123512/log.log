@@ -1,0 +1,9 @@
+|||||||||||||||||||||||||Start checking|||||||||||||||||||||||||
+Prepare data...
+[['/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/aps/bk/ln_applycust_inf_20210617.text', 'ODS_CDP_CCB_LN_APPLYCUST_INF_BK', '', '', 'apply_nbr', '', "START_DT='2022-12-19'\n"]]
+S:file,T:ali
+====================:start check====================
+different columns between Source and Target are: {'TAG_GBGF', 'TAG_COUNTRY', 'REC_UPDT_DT_TM', 'TAG_ENTITY', 'TAG_RESERVE', 'PURGE_DT', 'START_DT', 'REC_CREAT_DT_TM', 'TAG_BRANCH', 'END_DT'}
+value check failed
+|total_count   check|source:110 target:110
+count check successfully

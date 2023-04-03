@@ -1,0 +1,1 @@
+{'Case_name': 'test_mypg_test5', 'Source TYPE': 'pg', 'Target TYPE': 'pg', 'Source conn': 'pgm-1hl07vmgn0rd297653280.pgsql.rds.ali-ops.cloud.cn.hsbc,3433,test_frame,cdi,FdiXwYPTdNfc0Hg0leRm6A==', 'Target conn': 'pgm-1hl07vmgn0rd297653280.pgsql.rds.ali-ops.cloud.cn.hsbc,3433,test_frame,cdi,FdiXwYPTdNfc0Hg0leRm6A==', '': ''}

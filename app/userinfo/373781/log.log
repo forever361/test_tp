@@ -1,0 +1,10 @@
+|||||||||||||||||||||||||Start checking|||||||||||||||||||||||||
+Prepare data...
+2022-10-27 09:45:25,577 [] [INFO] 50 - ['pg', 'ali']
+Traceback (most recent call last):
+  File "C:\Users\45157276\PycharmProjects\Flask_Sen_v7\app/data2_check/run_or_mx.py", line 107, in <module>
+    P = Parameter_pg_ali()
+  File "C:\Users\45157276\PycharmProjects\Flask_Sen_v7\app\data2_check\parameter.py", line 84, in __init__
+    self.user = configreader[4][3]
+IndexError: list index out of range
+

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>这是统一模板</title>
+
+    <link rel="stylesheet" href="{{buildStaticUrl('/bootstrap-3.3.7-dist/dist/css/bootstrap.min.css')}}">
+
+    {% block css %} {% endblock %}
+</head>
+<body>
+
+    <div class="navbar navbar-inverse" role="navigation">
+
+        <div class="container">
+
+            <div class="nav navbar-nav navbar-right">
+                {% if current_user %}
+                    <li><a href="javascript:viod(0)">{{ current_user[0][0]}}</a></li>
+                    <li><a href="{{ buildUrl('/logout') }}">logout</a></li>
+                {% else %}
+                    <li><a href="{{ buildUrl('/reg') }}">Register</a></li>
+                    <li><a href="{{ buildUrl('/login') }}">Login</a></li>
+                {% endif %}
+            </div>
+
+            <div class="navbar-header">
+                <img id="image1" name="1" src="/static/hsbc.jfif" height="50" align="middle"/>
+                <button type="button" class="navbar-toggle"
+                        data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">AUTOTEST PLATFORM</a>
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li ><a href="{{buildUrl('/')}}">HOME <span class="sr-only">(current)</span></a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            DATATEST <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/test_data">Data</a></li>
+                            <li><a href="/test_cases">Test cases</a></li>
+                            <li><a href="/test_compare">CMD mode</a></li>
+                            <li><a href="/batch_test_data">Batch_test_data</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            WEBUI <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/test_webui">Web UI</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            API <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/test_api">API</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            OTHER TOOLS <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/test_data">Tool1</a></li>
+                            <li><a href="/test_webui">Tool2</a></li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+<div class="container" style="min-height: 600px;">
+    {% block content %} {% endblock %}
+</div>
+
+<footer class="text-center">
+    边城浪子 @2022 www.baidu.com
+</footer>
+
+    <script src="{{buildStaticUrl('/jquery-1.12.4.min.js')}} "></script>
+    <script src="{{buildStaticUrl('/bootstrap-3.3.7-dist/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{buildStaticUrl('/js/common.js')}}"></script>
+    <script src="{{buildStaticUrl('/js/layui/layui.js')}}"></script>
+
+
+{% block js %} {% endblock %}
+</body>
+</html>

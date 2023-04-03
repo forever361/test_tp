@@ -1,0 +1,2 @@
+import Report.HTMLTestRunner
+from Report import HTMLTestRunner

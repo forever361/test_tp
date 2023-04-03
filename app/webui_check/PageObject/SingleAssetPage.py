@@ -1,0 +1,23 @@
+
+class SingleAsset(object):
+    SingleAsset_link = 'a[id="appselect:_idJsp50"]'
+
+    SingleAsset_title = '//*[@id="assetForm"]'
+    Customer_Number = '//*[@id="assetForm:_idJsp20"]'
+    Customer_Number1 = '//*[@id="assetForm:_idJsp23"]'
+    Certificate_Go = '//*[@id="assetForm:_idJsp25"]'
+    Customer_name = '//*[@id="assetForm:_idJsp28"]'
+    Certificate_type = '//*[@id="assetForm:_idJsp31"]'
+    Certificate_item = ''
+    Certificate_number = '//*[@id="assetForm:_idJsp36"]'
+    Asset_MP_Strategy = '//*[@id="assetForm:_idJsp43"]'
+    Asset_a_ratio = '//*[@id="assetForm:_idJsp51"]'
+    Term_years = '//*[@id="assetForm:_idJsp57"]'
+    Dividend_or_not = '//*[@id="assetForm:_idJsp62"]'
+    Downlink_wl_set = '//*[@id="assetForm:_idJsp67"]'
+    Risk_level_of_asset_management_plan = '//*[@id="assetForm:_idJsp"]'
+    Customer_risk_tolerance = '//*[@id="assetForm:_idJsp79"]'
+    Risk_level_matching_result = '//*[@id="assetForm:_idJsp87"]'
+    PDF_submit = '//*[@id="assetForm:_idJsp96"]'
+    PDF_download = '//*[@id="assetForm:_idJsp103"]'
+    Back_HomePage = '//*[@id="assetForm:_idJsp97"]'

@@ -1,0 +1,6 @@
+Case_name = casename2022_test_2022_9_27_15_53_dean
+####### you can chooes db type:ali, orl, pg #######
+Source TYPE = pg
+Target TYPE = ali
+Source conn = HTSA-UHKC0046-FE-SM.hk.hsbc:2001/UHKC0046.hk.hsbc,GPACNPDLUA,h4dd0_cks
+Target conn = v7oPUF8jxgPKYwyO,saCUZkpmpq7UIyTAmpKn33RCTqtXpS,CN_CMP_HBCN_DEV,https://service.cn-hk-hsbc-d01.odps.ali-ops.cloud.cn.hsbc:443/api

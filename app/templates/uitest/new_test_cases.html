@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}UI自动化 测试平台 - new test cases{% endblock %}
+
+{% block head %}
+
+<meta name="viewport" content="width=device-width" />
+    <script src="../static/jquery-1.12.4.js"></script>
+    <script src="../static/scripts/util/init.js"></script>
+    <script src="../static/scripts/util/util.js"></script>
+    <script src="../static/scripts/core/test_case.js"></script>
+
+    <script src="../static/bootstrap-3.3.7-dist/dist/js/bootstrap.js"></script>
+    <link href="../static/bootstrap-3.3.7-dist/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="../static/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+
+    <script src="../static/bootstrap-table-develop/dist/bootstrap-table.js"></script>
+    <link href="../static/bootstrap-table-develop/dist/bootstrap-table.css" rel="stylesheet" />
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+
+{% endblock %}
+{% block content %}
+<div class="panel-body" style="padding-bottom:0px;">
+    <h1 style="text-align:center">Modify test case</h1>
+    <form class="form-horizontal" id="new_test_case" action="/add_test_case" method="post">
+<!--        <div class="form-group">-->
+<!--            <label for="type" class="col-sm-2 control-label">用例类型</label>-->
+<!--            <div class="col-sm-10">-->
+<!--                <select class="form-control required" name="type" id="type" onchange="if(this.value != '') setModule(this.option[this.selectedIndex].value);">-->
+<!--                    <option value="">&#45;&#45;Option&#45;&#45;</option>-->
+<!--                    <option value="普通用例">普通用例</option>-->
+<!--                    <option value="公共用例">公共用例</option>-->
+<!--                    <option>pg-max</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <div class="form-group">
+            <label for="module" class="col-sm-2 control-label">Module</label>
+            <div class="col-sm-10">
+                <select class="form-control required" name="module" id="module">
+                    <option value="All">ALL</option>
+                    <option>td-max</option>
+                    <option>ora-max</option>
+                    <option>pg-max</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control required" id="name" name="name" maxlength="20"
+                       placeholder="please input name">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description" class="col-sm-2 control-label">Description</label>
+            <div class="col-sm-10">
+                <input type="longtext" class="form-control" id="description" name="description" maxlength="50" placeholder="input description ">
+            </div>
+            <div class="white_content">
+                <a href="javascript:void(0)" onclick="SaveAndCloseEditStepWindow()">保存</a>
+                <a href="javascript:void(0)" onclick="closeEditStepWindow()">关闭</a>
+                <a></a>
+            </div>
+            <div id="fade" class="black_overlay"></div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button id="submitButton" class="btn btn-default" onclick="submitAddForm()">Save</button>
+                <button id="btn_add" type="button" class="btn btn-default" onclick="window.location.href=('/test_cases')">Back</button>
+            </div>
+        </div>
+
+
+<style>
+    .error{
+        color:red;
+    }
+    .black_overlay{ display: none; position: absolute; top: 0%; left: 20%; width: 70%; height:90%; background-color: black; z-index:1001; -moz-opacity: 0.6; opacity:0.60; filter: alpha(opacity=60); }
+    .white_content{ display: none; position: absolute; top: 0%; left: 20%; width: 70%; height:90%; padding: 16px; border: 6px solid orange; background-color: white; z-index:1002; overflow: auto; }
+</style>
+    </form>
+
+</div>
+{% endblock %}

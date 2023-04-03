@@ -1,0 +1,6 @@
+Case_name = test_mul45
+####### TYPE you can chooes:ali, orl, pg #######
+Source TYPE = orl
+Target TYPE = ali
+Source conn = cnl25042413.cn.hsbc:2001/UCN_00001_CRFTM.cn.hsbc,HSBC_SDM_UAT,HSBC#mgr2021
+Target conn = AOSGFZAKwLDBy0zL,rgCSnbJ8Gcj7Z8vWvTryNeamH2lKUs,cn_cds_dev,https://service.cn-hk-hsbc-d01.odps.ali-ops.cloud.cn.hsbc:443/api

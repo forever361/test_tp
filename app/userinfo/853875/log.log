@@ -1,0 +1,11 @@
+|||||||||||||||||||||||||Start checking|||||||||||||||||||||||||
+Prepare data...
+2023-02-06 16:47:55,995 [] [INFO] 52 - ['landingserver_file', 'ali']
+2023-02-06 16:47:56,137 [] [INFO] 572 - [['/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/temp/simple_test/Test_view_pega_dwd_cust_master.csv', 'CDS_TACLAB_PEGA_DWD_CUST_MASTER', '', '', 'cust_sr', '', "END_DT='9999-12-31'\n"]]
+2023-02-06 16:47:56,151 [] [INFO] 486 - S:file,T:ali
+2023-02-06 16:47:57,078 [] [INFO] 402 - ====================:start check====================
+2023-02-06 16:47:57,080 [] [INFO] 427 - different columns between Source and Target are: {'REC_CREAT_DT_TM', 'PURGE_DT', 'END_DT', 'REC_UPDT_DT_TM', 'START_DT'}
+2023-02-06 16:48:04,432 [] [INFO] 321 - value check sucessfully
+2023-02-06 16:48:07,853 [] [INFO] 102 - |total_count   check|source:10 target:10
+2023-02-06 16:48:07,920 [] [INFO] 122 - count check successfully
+

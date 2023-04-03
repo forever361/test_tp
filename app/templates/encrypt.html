@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}UI自动化 测试平台 - new test cases{% endblock %}
+
+{% block content %}
+
+<div class="panel-body" style="padding-bottom:0px;">
+    <h3 style="text-align:center">Encrypt Password</h3>
+    <form class="form-horizontal" id="encrypt password"  method="post">
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Input</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control required" id="name" name="name" maxlength="100"
+                       placeholder="please input password">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                <button id="submitButton" type="button"  class="btn btn-default" onclick="getPublicFunctions()">Encrypt</button>
+<!--                <button id="btn_add" type="button" class="btn btn-default" onclick="window.location.href=('/')">Back</button>-->
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Output</label>
+            <div class="col-sm-8">
+                <input type="text"  class="form-control required" id="name2" name="name2" maxlength="300"
+                       placeholder="encryption result">
+
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+
+<script>
+
+        function getPublicFunctions(){
+            var cases = []
+
+             $.ajax(
+                {
+                  url: "/encrypt.json",
+                  type: "post",
+                  dataType:"json",
+                  data:{"name":document.getElementById('name').value},
+                  async : true,
+                  beforeSend:function()
+                  {
+                    $('#Report').hide();
+                    return true;
+                  },
+                  success:function(data)
+                  {
+                    document.getElementById('name2').value = data.encr_name
+<!--                    alert(data.encr_name)-->
+                  },
+                  error:function()
+                  {
+                   layer.msg(data.code,{time:2000,
+                            area:['380px','66px'],
+                            offset:'rt',
+                            anim:1,
+                            skin:'lay-msg-bg'
+                                     });
+
+                  },
+                  complete:function()
+                  {
+                    // $('#tips').hide();
+                  }
+            });
+
+            return cases;
+
+
+            }
+
+</script>
+
+{% endblock %}

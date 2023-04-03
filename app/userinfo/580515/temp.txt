@@ -1,0 +1,1 @@
+{'select1': 'pg-point1', 'select2': 'pg-point2', 'select_rule': 'Check-the-first-200-rows', 'field': ''}

@@ -1,0 +1,1 @@
+{'Case_name': 'casename2023_test_2023_2_21_18_41', 'Source TYPE': 'landingserver_file', 'Target TYPE': 'ali', 'Landingserver conn': 'hkl20147074,cst01adm,ZV1RXyYjJW3uAyTfdF2CAw==', 'Target conn': 'n4vLUicfSG7Gnxiu,a3md3UO3Cq4gNxgHYo3WwOk3WKuefogl2GdPd/XNWsM=,cn_cds_dev,https://service.cn-hk-hsbc-d01.odps.ali-ops.cloud.cn.hsbc:443/api'}

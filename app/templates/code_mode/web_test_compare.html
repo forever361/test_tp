@@ -1,0 +1,342 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+    .form-bg{
+        background: #00b4ef;
+    }
+    .form-horizontal{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #fff;
+        padding-bottom: 40px;
+        border-radius: 15px;
+        text-align: center;
+    }
+
+    .form-horizontal .heading{
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 30px;
+    }
+
+    .form-horizontal .heading2{
+        display: block;
+        font-size: 15px;
+        font-weight: 900;
+    }
+
+    .form-horizontal .heading3{
+        display: block;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 6px;
+    }
+
+    .form-horizontal .form-group{
+        padding: 0 20px;
+        margin: 0 0 10px 0;
+        position: relative;
+    }
+
+    .form-horizontal .form-control{
+        background: #f0f0f0;
+        border: none;
+        border-radius: 10px;
+        box-shadow: none;
+        padding:0 20px 0 45px;
+        height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+    .form-horizontal .form-control:focus{
+        background: #e0e0e0;
+        box-shadow: none;
+        outline: 0 none;
+    }
+    .form-horizontal .form-group i{
+        position: absolute;
+        top: 12px;
+        left: 60px;
+        font-size: 17px;
+        color: #c8c8c8;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .form-control:focus + i{
+        color: #00b4ef;
+    }
+    .form-horizontal .fa-question-circle{
+        display: inline-block;
+        position: absolute;
+        top: 12px;
+        right: 60px;
+        font-size: 20px;
+        color: #808080;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .fa-question-circle{
+        color: #000;
+    }
+    .form-horizontal .main-checkbox{
+        float: left;
+        width: 20px;
+        height: 20px;
+        background: #11a3fc;
+        border-radius: 50%;
+        position: relative;
+        margin: 5px 0 0 5px;
+        border: 1px solid #11a3fc;
+    }
+    .form-horizontal .main-checkbox label{
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+    .form-horizontal .main-checkbox label:after{
+        content:"";
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        border: 3px solid #fff;
+        border-top: none;
+        border-right:none;
+        background: transparent;
+        opacity: 0;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]{
+        visibility: hidden;
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]:checked + label:after{
+        opacity: 1;
+    }
+    .form-horizontal .text{
+        float: left;
+        margin-left: 7px;
+        line-height: 20px;
+        padding-top: 5px;
+        text-transform: capitalize;
+    }
+    .form-horizontal .btn1{
+        width: 80px;
+        margin-top: 30px;
+        //float: left;
+        font-size: 14px;
+        color: #777;
+        background: #222222;
+        border-radius: 10px;
+        padding: 10px 25px;
+        border: none;
+        text-transform: capitalize;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .btn2{
+        font-size: 14px;
+        //width: 270px;
+        color: #fff;
+        background: #00b4ef;
+        border: none;
+        border-radius: 30px;
+        box-shadow: none;
+        //height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+
+    .form-horizontal .border{
+        width: 500px;
+        border: 2px dashed #808080;
+        padding: 10px 10px 0 20px;
+    }
+
+    @media only screen and (max-width: 479px){
+        .form-horizontal .form-group{
+            padding: 0 25px;
+        }
+        .form-horizontal .form-group i{
+            left: 45px;
+        }
+        .form-horizontal .btn{
+            padding: 10px 20px;
+        }
+    }
+
+    </style>
+
+<style>
+    #loading {
+        position: absolute;
+        width: 300px;
+        height: 250px;
+        top: 50%;
+        left: 50%;
+        margin: -25px -150px;
+        background-color: #FFFFFF;
+        border: 1PX solid #CCCCCC;
+        text-align: center;
+        padding: 20px;
+    }
+</style>
+
+
+
+<!--下面两个是使用Code Mirror必须引入的-->
+<link rel="stylesheet" href="./static/codemirror/lib/codemirror.css"/>
+<script src="./static/codemirror/lib/codemirror.js"></script>
+<!--Java代码高亮必须引入-->
+<!--<script src="./static/codemirror/mode/clike/clike.js"></script>-->
+<!--<script src="./static/codemirror/mode/python/python.js"></script>-->
+<script src="./static/codemirror/addon/edit/matchbrackets.js"></script>
+<!--<script src=./static/codemirror/mode/shell/shell.js></script>-->
+<script src=./static/codemirror/mode/python/python.js></script>
+
+<!--引入css文件，用以支持主题-->
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/3024-night.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/3024-day.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+
+
+<div class="container">
+    <div >
+         <span style="text-align: center;display:block; font-weight:bold; font-size:17px">EDIT MODE</span>
+       </div>
+  <form  method="POST">
+    <!-- begin code -->
+    <textarea id="code" name="code">
+
+    </textarea>
+    <!-- end code-->
+
+     <div class="form-horizontal" class="form-group">
+         <span style="color:#FF0000" id="msg3"></span>
+        <button type="button" name="Back" value="Back" class="btn1 btn-default" onclick="window.location.href=('/web_test_cases')">Back</button>
+
+        <span style="color:#FF0000" id="msg"></span>
+        <button type="submit" name="Save" value="Save" class="btn1 btn-default">Save</button>
+
+        <span style="color:#FF0000" id="msg2"></span>
+        <button type="submit" name="Run" value="Run" class="btn1 btn-default" >Run</button>
+    </div>
+
+    <div id="loading" style="display:none" align="middle">
+        <img src="./static/loading.gif" height="150" align="middle">
+        <div style="color:#00b4ef">Testing...please wait a moment.</div>
+    </div>
+
+</form>
+
+
+</div>
+
+
+<script>
+
+
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        var now_time = year + '_' + month + '_' +day + '_' + hour + '_' + minute;
+
+        var r1 = "#----Case_name: you must define a unique casename------------\n";
+        var case_name = "#Case_name= casename" + now_time + "\n\n";
+<!--        var version ="# version: Python3\n";-->
+<!--        var codeAreaTip ="# please edit your code here:\n";-->
+<!--        var codeStart ="# code start\n\n";-->
+<!--        var codeEnd = "# code end\n\n";-->
+        var codeTip ="'''\nThis function is used to edit test cases\n'''\n";
+        var code1 = "from seleniumbase import BaseCase\n\n";
+        var code2 = "class MyTestSuite(BaseCase):\n\t";
+        var code3 = "def test_case1(self):\n\t";
+        var codeAreaTip ="#----please edit your code here:----\n\t" + "#####################################\n\t\t";
+        var code4 = 'self.open("http://hkl20081427.hk.hsbc:20101/RBTools/pages/points/search.jsf")\n\t\t';
+        var code5 = 'self.type("#login\\:usr", "43917800")\n\t\t';
+        var code6 = 'self.type("#login\\:pwd", "********")\n\t\t';
+        var code7 = 'self.click("#login\\:rb")\n\t\t';
+
+        var test = 'self.assert_exact_text("RBWM Web Tools", "h2")\n';
+        var initValue = r1 +case_name + codeTip +code1+ code2+  code3 + codeAreaTip+code4 +code5 + code6 + code7 +test ;
+
+
+
+
+
+    //根据DOM元素的id构造出一个编辑器
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        //mode: 'shell',
+        lineNumbers: true,
+        matchBrackets: true,    //括号匹配
+        theme: "3024-night",	//设置主题
+        mode: {name: "python",
+               version: 3,
+               singleLineStringErrors: false},
+        smartIndent: true, // 智能缩进
+        indentUnit: 4, // 智能缩进单位为4个空格长度
+        indentWithTabs: true,
+        //mode: "text/groovy",    //实现groovy代码高亮
+        //mode: "text/x-java", //实现Java代码高亮
+        //lineWrapping: true,	//代码折叠
+        //foldGutter: true,
+        //gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        //readOnly: true,        //只读
+    });
+
+
+
+      editor.setSize('1100px', '500px');     //设置代码框的长宽
+            //取得文本框的值
+     function quzhi(){
+      var value = editor.getValue();
+      console.log(value)
+      //editor.setValue(value)
+
+      }
+
+     // 设置初始文本，这个选项也可以在fromTextArea中配置
+      editor.setOption("value", initValue);
+     // 编辑器按键监听
+//    editor.on("keypress", function() {
+//    // 显示智能提示
+//    editor.showHint(); // 注意，注释了CodeMirror库中show-hint.js第131行的代码（阻止了代码补全，同时提供智能提示）
+//    });
+
+//    editor.setValue("");    //先代码框的值清空
+//    editor.setValue(obj.scriptCode);    //给代码框赋值
+
+    // editor.setOption("readOnly", true);
+      var test = document.getElementById("test");
+      test.onclick = function() {
+          var value = editor.getValue();
+          console.log(value);
+            }
+
+
+
+
+</script>
+
+    {% if message %}
+    <script>
+    var msg = "{{ message }}"
+    layer.msg(msg,{time:2000});
+    </script>
+    {% endif %}
+
+    {% endblock %}

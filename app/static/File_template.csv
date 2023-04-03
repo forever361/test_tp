@@ -1,0 +1,6 @@
+HOST,USER,PASSWORD,,,
+hkdwhdev2-systems.hk.hsbc,CN_GISU_BATCH_CST00001,nxl29_mb,,,
+access_id,secret_access_key,project,endpoint,,
+FYBlngS1UDOUAqNO,YOsAjo6f0pgyKGrnUoDaQG7gCllToQ,CN_CDS_DEV,https://service.cn-hk-hsbc-d01.odps.ali.cloud.cn.hsbc:443/api,,
+source_tablename,target_tablename,source_db,target_db,pi,source_where_condition
+CST_FHC_ARR,CDS_FHC_FIN_HCK_ARR,CN_GISU_CST_DB01,CN_GISU_CST_DLWORK,ARR_ID_FIN_HCK,

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<style type="text/css">
+    .form-bg{
+        background: #00b4ef;
+    }
+    .form-horizontal{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #fff;
+        padding-bottom: 40px;
+        border-radius: 15px;
+        text-align: center;
+    }
+
+    .form-horizontal .heading{
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+ls
+        tpmargin-bottom: 30px;
+    }
+
+    .form-horizontal .heading2{
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .form-horizontal .heading3{
+        display: block;
+        font-size: 10px;
+        font-weight: 500;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 6px;
+    }
+
+    .form-horizontal .form-group{
+        padding: 0 20px;
+        margin: 0 0 10px 0;
+        position: relative;
+    }
+
+    .form-horizontal .form-control{
+        width: 500px;
+        text-align: center;
+        background: #f0f0f0;
+        border: none;
+        border-radius: 10px;
+        box-shadow: none;
+        height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+    .form-horizontal .form-control:focus{
+        background: #e0e0e0;
+        box-shadow: none;
+        outline: 0 none;
+    }
+    .form-horizontal .form-group i{
+        position: absolute;
+        top: 12px;
+        left: 60px;
+        font-size: 17px;
+        color: #c8c8c8;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .form-control:focus + i{
+        color: #00b4ef;
+    }
+    .form-horizontal .fa-question-circle{
+        display: inline-block;
+        position: absolute;
+        top: 12px;
+        right: 60px;
+        font-size: 20px;
+        color: #808080;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .fa-question-circle{
+        color: #000;
+    }
+    .form-horizontal .main-checkbox{
+        float: left;
+        width: 20px;
+        height: 20px;
+        background: #11a3fc;
+        border-radius: 50%;
+        position: relative;
+        margin: 5px 0 0 5px;
+        border: 1px solid #11a3fc;
+    }
+    .form-horizontal .main-checkbox label{
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+    .form-horizontal .main-checkbox label:after{
+        content:"";
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        border: 3px solid #fff;
+        border-top: none;
+        border-right:none;
+        background: transparent;
+        opacity: 0;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]{
+        visibility: hidden;
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]:checked + label:after{
+        opacity: 1;
+    }
+    .form-horizontal .text{
+        float: left;
+        margin-left: 7px;
+        line-height: 20px;
+        padding-top: 5px;
+        text-transform: capitalize;
+    }
+    .form-horizontal .btn1{
+        float: left;
+        font-size: 14px;
+        color: #fff;
+        background: #00b4ef;
+        border-radius: 30px;
+        padding: 10px 25px;
+        border: none;
+        text-transform: capitalize;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .btn2{
+        width: 500px;
+        color: #fff;
+        background: #00b4ef;
+        border: none;
+        border-radius: 10px;
+        box-shadow: none;
+        height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+
+    .form-horizontal .border{
+        width: 500px;
+        border: 2px dashed #808080;
+        padding: 10px 10px 0 20px;
+    }
+
+    @media only screen and (max-width: 479px){
+        .form-horizontal .form-group{
+            padding: 0 25px;
+        }
+        .form-horizontal .form-group i{
+            left: 45px;
+        }
+        .form-horizontal .btn{
+            padding: 10px 20px;
+        }
+    }
+
+    </style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <title>User login</title>
+     <script src="{{buildStaticUrl('/js/layui/layui.js')}}"></script>
+</head>
+<body onload="SubmitCheck()">
+
+    <form class="form-horizontal" style="margin:auto;font-size:14px" name="register-user" action="/register" method="POST" onsubmit="return check()">
+        <div class="heading">User Register
+            <div class="form-group" style="color:red">
+            <br/><br/>Please register with your staff ID or email account</div>
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" onmouseout="usernameCheck()" id="username" type="text" name="username" placeholder="username">
+            <i class="fa fa-user"></i>
+        </div>
+        <div class="form-group">
+            <input class="form-control" onmouseout="passwordCheck()" id="password" type="password" name="password" placeholder="password">
+            <i class="fa fa-user"></i>
+        </div>
+        <div class="form-group">
+            <input class="form-control" onmouseout="PassTwoCheck()" id="PassTwo" type="password" name="PassTwo" placeholder="password">
+            <i class="fa fa-user"></i>
+        </div>
+
+        <div class="form-group">
+            <input id="register" name="register" type="submit" value="Sign up now" class="btn2 btn-default">
+        </div>
+
+        <div class="form-group">
+            <br/><br/>If you already have an account,<a href="/login">log in directly-Go!</a>
+        </div>
+
+        <div class="form-group">
+            <h5 style="color:red">{{ message }}</h5>
+            <script>
+            var msg = "{{ message }}"
+            if (msg!=''){
+                layer.msg(msg,{time:2000});
+            }
+            </script>
+        </div>
+
+    </form>
+
+</body>
+</html>

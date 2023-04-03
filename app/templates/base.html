@@ -1,0 +1,185 @@
+{% extends "base0.html" %}
+
+{% block title %}Flasky{% endblock %}
+{% block head %}
+
+{% endblock %}
+
+{% block navbar %}
+
+<style>
+
+    .dropdown-submenu {
+            position: relative;
+        }
+        .dropdown-submenu > .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -6px;
+            margin-left: -1px;
+            -webkit-border-radius: 0 6px 6px 6px;
+            -moz-border-radius: 0 6px 6px;
+            border-radius: 0 6px 6px 6px;
+        }
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+        .dropdown-submenu > a:after {
+            display: block;
+            content: " ";
+            float: right;
+            width: 0;
+            height: 0;
+            border-color: transparent;
+            border-style: solid;
+            border-width: 5px 0 5px 5px;
+            border-left-color: #ccc;
+            margin-top: 5px;
+            margin-right: -10px;
+        }
+        .dropdown-submenu:hover > a:after {
+            border-left-color: #fff;
+        }
+        .dropdown-submenu.pull-left {
+            float: none;
+        }
+        .dropdown-submenu.pull-left > .dropdown-menu {
+            left: -100%;
+            margin-left: 10px;
+            -webkit-border-radius: 6px 0 6px 6px;
+            -moz-border-radius: 6px 0 6px 6px;
+            border-radius: 6px 0 6px 6px;
+        }
+
+</style>
+
+
+<style type="text/css">
+
+        /* ============ desktop view ============ */
+        @media all and (min-width: 992px) {
+
+            .dropdown-menu li {
+                position: relative;
+            }
+
+            .dropdown-menu .submenu {
+                display: none;
+                position: absolute;
+                left: 100%;
+                top: -7px;
+            }
+
+            .dropdown-menu .submenu-left {
+                right: 100%;
+                left: auto;
+            }
+
+            .dropdown-menu > li:hover {
+                background-color: #f1f1f1
+            }
+
+            .dropdown-menu > li:hover > .submenu {
+                display: block;
+            }
+        }
+
+        /* ============ desktop view .end// ============ */
+
+        /* ============ small devices ============ */
+        @media (max-width: 991px) {
+
+            .dropdown-menu .dropdown-menu {
+                margin-left: 0.7rem;
+                margin-right: 0.7rem;
+                margin-bottom: .5rem;
+            }
+
+        }
+
+        /* ============ small devices .end// ============ */
+
+</style>
+
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary navbar-dark" style="background-color: #000000;">
+    <div class="container-fluid">
+        <svg style="margin-left: 30px;" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50"
+             height="25"
+             viewBox="0 0 64 32"
+             xml:space="preserve" focusable="false" class="mr-4 navbar-header">
+                <path fill="#fff"
+                      d="M47.245-0c0 0 0 0 0 0 0 18.738 0 29.145 0 31.227 0 0 0 0 0 0-18.738 0-29.145 0-31.227 0 0 0 0 0 0 0 0-18.738 0-29.145 0-31.227 0 0 0 0 0 0 18.734 0 29.145 0 31.227 0z"></path>
+            <path fill="#db0011" d="M47.245 31.263l15.613-15.613-15.613-15.65v31.264z"></path>
+            <path fill="#db0011" d="M16.019-0l15.613 15.65 15.613-15.65h-31.227z"></path>
+            <path fill="#db0011" d="M16.019-0l-15.65 15.65 15.65 15.613v-31.264z"></path>
+            <path fill="#db0011" d="M47.245 31.263l-15.613-15.613-15.613 15.613h31.227z"></path>
+            </svg>
+        <a class="navbar-brand " style="margin-left: 10px;font-size:1rem" href="{{buildUrl('/')}}">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
+
+        <div class="collapse navbar-collapse" id="navbarNav1">
+            <ul class="navbar-nav ms-auto" style="margin-right:50px">
+                <li class="nav-item"><a class="nav-link active" href="{{buildUrl('/')}}"> Home </a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Data Test </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="dropdown-item" href="/data_connect_management">Data Connection Management</a></li>
+                        <li class="divider"></li>
+                        <li><a class="dropdown-item" href="/data_point_management">Data Point Management</a></li>
+                        <li class="divider"></li>
+                        <li><a class="dropdown-item" href="#"> Data Validation Management &raquo; </a>
+                            <ul class="submenu submenu-left dropdown-menu">
+                                <li><a class="dropdown-item" href="/api_batch_test_data">Add New Test Case</a></li>
+                                <li class="divider"></li>
+                                <li><a class="dropdown-item" href="/api_data_test_cases">Data Test Cases</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="dropdown-item" href="/data_guide">Data Quality Checker Guide</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Web Test </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="dropdown-item" href="/web_test_compare">Add new test case</a></li>
+                        <li><a class="dropdown-item" href="/web_test_cases">Web Test Cases</a></li>
+                        <li><a class="dropdown-item" href="/web_guide">Web Test Guide</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> API Test </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="dropdown-item" href="/test_api">API</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown">OtherTools </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows Scan</a></li>
+                        <li><a class="dropdown-item" href="/encrypt">Encrypt Password</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+
+            <ul class="navbar-nav">
+                {% if request.cookies.get('Name') and session.get('username',None)%}
+                <li class="nav-item"><a class="nav-link" href="javascript:viod(0)">{{ request.cookies.get('Name')}}</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ buildUrl('/logout') }}">logout</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{{ buildUrl('/register') }}">Register</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ buildUrl('/login') }}">Login</a></li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+{% endblock %}
+
+

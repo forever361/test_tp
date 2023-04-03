@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block content %}
+
+
+<script language="javascript" xmlns:border="http://www.w3.org/1999/xhtml">
+    function exec1(command) {
+    var ws = new ActiveXObject("WScript.Shell");
+    ws.run(command)
+    }
+</script>
+
+
+
+<style type="text/css">
+    .form-bg{
+        background: #00b4ef;
+    }
+    .form-horizontal{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #fff;
+        padding-bottom: 40px;
+        border-radius: 15px;
+        text-align: center;
+    }
+
+    .form-horizontal .heading{
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 30px;
+    }
+
+    .form-horizontal .heading2{
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .form-horizontal .heading3{
+        display: block;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 35px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 6px;
+    }
+
+    .form-horizontal .form-group{
+        padding: 0 20px;
+        margin: 0 0 10px 0;
+        position: relative;
+    }
+
+    .form-horizontal .form-control{
+        width: 256px;
+        text-align: center;
+        background: #f0f0f0;
+        border: none;
+        border-radius: 10px;
+        box-shadow: none;
+        height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+    .form-horizontal .form-control:focus{
+        background: #e0e0e0;
+        box-shadow: none;
+        outline: 0 none;
+    }
+    .form-horizontal .form-group i{
+        position: absolute;
+        top: 12px;
+        left: 60px;
+        font-size: 17px;
+        color: #c8c8c8;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .form-control:focus + i{
+        color: #00b4ef;
+    }
+    .form-horizontal .fa-question-circle{
+        display: inline-block;
+        position: absolute;
+        top: 12px;
+        right: 60px;
+        font-size: 20px;
+        color: #808080;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .fa-question-circle{
+        color: #000;
+    }
+    .form-horizontal .main-checkbox{
+        float: left;
+        width: 20px;
+        height: 20px;
+        background: #11a3fc;
+        border-radius: 50%;
+        position: relative;
+        margin: 5px 0 0 5px;
+        border: 1px solid #11a3fc;
+    }
+    .form-horizontal .main-checkbox label{
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+    .form-horizontal .main-checkbox label:after{
+        content:"";
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        border: 3px solid #fff;
+        border-top: none;
+        border-right:none;
+        background: transparent;
+        opacity: 0;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]{
+        visibility: hidden;
+    }
+    .from-horizontal .main-checkbox input[type=checkbox]:checked + label:after{
+        opacity: 1;
+    }
+    .form-horizontal .text{
+        float: left;
+        margin-left: 7px;
+        line-height: 20px;
+        padding-top: 5px;
+        text-transform: capitalize;
+    }
+    .form-horizontal .btn1{
+        float: left;
+        font-size: 14px;
+        color: #fff;
+        background: #00b4ef;
+        border-radius: 30px;
+        padding: 10px 25px;
+        border: none;
+        text-transform: capitalize;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .btn2{
+        width: 270px;
+        color: #fff;
+        background: #00b4ef;
+        border: none;
+        border-radius: 10px;
+        box-shadow: none;
+        height: 30px;
+        transition: all 0.3s ease 0s;
+    }
+
+    .form-horizontal .border{
+        width: 500px;
+        border: 2px dashed #808080;
+        padding: 10px 10px 0 20px;
+    }
+
+    @media only screen and (max-width: 479px){
+        .form-horizontal .form-group{
+            padding: 0 25px;
+        }
+        .form-horizontal .form-group i{
+            left: 45px;
+        }
+        .form-horizontal .btn{
+            padding: 10px 20px;
+        }
+    }
+
+    </style>
+
+<style>
+    #loading {
+        position: absolute;
+        width: 300px;
+        height: 250px;
+        top: 50%;
+        left: 50%;
+        margin: -25px -150px;
+        background-color: #FFFFFF;
+        border: 1PX solid #CCCCCC;
+        text-align: center;
+        padding: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="page-header">
+        <div style="padding: 20px 0;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-6">
+
+                        <form class="form-horizontal" enctype="multipart/form-data" method="POST">
+                            <span class="heading">API Test
+<!--                                <div style="width:150px; float:left;">-->
+<!--                                    &lt;!&ndash;下拉框&ndash;&gt;-->
+<!--                                    <select name="db1">-->
+<!--                                        <option value="td">Teradata</option>-->
+<!--                                        <option value="ora">Oracle></option>-->
+<!--                                    </select>-->
+<!--                                </div>-->
+
+<!--                                <div style="width:150px; float:right;">-->
+<!--                                    <select name="db2">-->
+<!--                                        <option value="max">MaxCompute</option>-->
+<!--                                    </select>-->
+<!--                                </div>-->
+                            </span>
+                            <span class="heading2">Source Configuration & Target Configuration
+
+<!--                            <span class="heading2">Source DB Connection Configuration</span>-->
+<!--                                <div class="form-group">-->
+<!--                                    <input type="text" class="form-control" name="config1_1" placeholder="host">-->
+<!--                                    <i class="fa fa-user"></i>-->
+<!--                                </div>-->
+<!--                                <div class="form-group">-->
+<!--                                    <input type="text" class="form-control" name="config1_2" placeholder="username">-->
+<!--                                    <i class="fa fa-user"></i>-->
+<!--                                </div>-->
+<!--                                <div class="form-group">-->
+<!--                                    <input type="password" class="form-control" name="config1_3" placeholder="password">-->
+<!--                                    <i class="fa fa-user"></i>-->
+<!--                                </div>-->
+<!--                            <span class="heading2">Target DB Connection Configuration</span>-->
+<!--                                <div class="form-group">-->
+<!--                                    <input type="password" class="form-control" name="config2_1" placeholder="access_id">-->
+<!--                                    <i class="fa fa-user"></i>-->
+<!--                                </div>-->
+<!--                                <div class="form-group">-->
+<!--                                    <input type="password" class="form-control" name="config2_2" placeholder="secret_access_key">-->
+<!--                                    <i class="fa fa-user"></i>-->
+<!--                                </div>-->
+<!--                                <div class="form-group">-->
+<!--                                    <input type="text" class="form-control" name="config2_3" placeholder="project">-->
+<!--                                    <i class="fa fa-user"></i>-->
+<!--                                </div>-->
+<!--                                <div class="form-group">-->
+<!--                                    <input type="text" class="form-control" name="config2_5" placeholder="endpoint">-->
+<!--                                    <i class="fa fa-user"></i>-->
+<!--                                </div>-->
+<!--                            <span class="heading2">Combination Configuration(Ora&Max)</span>-->
+                                <div class="modal-body" align="center">
+                                    <a class="btn btn-info btn-link" href="buildStaticUrl{{ '/File_template.csv' }}">Download Template</a>
+                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#uploadPopup">Upload Configuration File</button>
+                                </div>
+                                </span>
+                                <div>
+<!--                                    <span style="color:#FF0000" id="msg"></span>-->
+<!--                                        <button type="submit" name="Save" value="Save" class="btn1 btn-default" onclick="alert('save success')">Save</button>-->
+                                    <span style="color:#FF0000" id="msg2"></span>
+                                        <button type="submit" name="Run" value="Run" class="btn1 btn-info" onclick="document.getElementById('loading').style.display='';">Run</button>
+                                </div>
+
+                        <!--状态框(modal)-->
+                            <div class="modal fade" id="uploadPopup" tabindex="-1" role="dialog" aria-labelledby="uploadLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="uploadLabel">
+                                                Upload Configuration File
+                                            </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form enctype="multipart/form-data" method="POST">
+                                                <input style="height:35px" type="file" name="file" id="file" accept=".csv">
+<!--                                                        [Upload the configuration file according to the "Downloaded template"]-->
+<!--                                                        <input type="submit" value="Uploadfile">-->
+                                                    <div align="left" style="height:25px;font-family:arial;color:red;font-size:15px;">
+                                                        Only ".csv" format files are allowed
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-info">Upload</button>
+                                                    </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+<!--                            <div class="form-group">-->
+<!--                                <span>-->
+<!--                                    <input type="text" class="filetext"/>-->
+<!--                                    <button class="change_btn" id="sfile" name="sfile">Choose file</button>-->
+
+<!--                                    <input type="file" class="file" name="file" id="file" accept=".csv">-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                            <input type="submit" value="Uploadfile">-->
+<!--                            </div>-->
+                            <div id="loading" style="display:none" align="middle">
+                                <img src="./static/loading.gif" height="150" align="middle">
+                                <div style="color:#00b4ef">
+                                    Testing...please wait a moment.
+                                </div>
+                            </div>
+
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if message %}
+    <p class="form-horizontal" style="color:blue">{{ message }}</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+
+class MRFLUT(object):
+    ML_link = 'a[id="appselect:_idJsp43"]'
+
+    mrfForm_div = '//*[@id="csMain"]'
+    mrfForm_type = '//*[@id="mrfForm:_idJsp17"]'
+    mrfForm_type1 = '//*[@id="mrfForm:_idJsp17_1"]'
+    branch_code = '//*[@id="mrfForm:_idJsp23"]'
+    Salesperson_name = '//*[@id="mrfForm:_idJsp27"]'
+    Salesperson_num = '//*[@id="mrfForm:_idJsp30"]'
+    Fundsales_oh = '//*[@id="mrfForm:_idJsp33"]'
+    MRFF_submit = '//*[@id="mrfForm:_idJsp36"]'
+    MRFF_download = '//*[@id="mrfForm:_idJsp43"]'
+    Back_HomePage = '//*[@id="mrfForm:_idJsp37"]'
+
+    '''
+    mrfForm_type = '#mrfForm\\:_idJsp17'
+    mrfForm_type1 = '#mrfForm\\:_idJsp17_1'
+    branch_code = '#mrfForm\\:_idJsp23'
+    Salesperson_name = '#mrfForm\\:_idJsp27'
+    Salesperson_num = '#mrfForm\\:_idJsp30'
+    Fundsales_oh = '#mrfForm\\:_idJsp33'
+    MRFF_submit = '#mrfForm\\:_idJsp36'
+    MRFF_download = '#mrfForm\\:_idJsp43'
+    '''

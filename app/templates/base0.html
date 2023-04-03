@@ -1,0 +1,67 @@
+{% block doc -%}
+<!DOCTYPE html>
+<html{% block html_attribs %}{% endblock html_attribs %}>
+{%- block html %}
+<head>
+    {%- block head %}
+    <title>{% block title %}{{title|default}}{% endblock title %}</title>
+
+    {%- block metas %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- endblock metas %}
+
+    {%- block styles %}
+    <!-- Bootstrap -->
+    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+    {%- endblock styles %}
+    {%- endblock head %}
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="viewport" content="width=device-width"/>
+    <script src="{{buildStaticUrl('/jquery-3.6.4.min.js')}} "></script>
+    <link href="{{ buildStaticUrl('/bootstrap-5.2.3/css/bootstrap.min.css') }}" rel="stylesheet"/>
+    <script src="{{buildStaticUrl('/bootstrap-5.2.3/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{buildStaticUrl('/js/common.js')}}"></script>
+    <script src="{{buildStaticUrl('/js/layui/layui.js')}}"></script>
+
+    <!--    <link href="{{ buildStaticUrl('/bootstrap-5.2.3/css/bootstrap.min.css') }}" rel="stylesheet"/>-->
+    <!--    <script src="{{buildStaticUrl('/bootstrap-5.2.3/js/bootstrap.min.js') }}"></script>-->
+
+
+    <style>
+      html,body{
+      height:100%;
+      margin:0;
+      padding:0;
+      overflow: hidden;
+      }
+
+      .body_content{
+      overflow-y:auto;
+      overflow-x:auto;
+      height:calc(100% - 56px);
+      }
+
+    </style>
+
+
+    {% block js %}
+    {% endblock %}
+
+</head>
+<body
+        {% block body_attribs %}{% endblock body_attribs %}>
+{% block body -%}
+{% block navbar %}
+{%- endblock navbar %}
+<div class="body_content">
+    {% block content -%}
+    {%- endblock content %}
+    {%- endblock body %}
+</div>
+
+
+</body>
+{%- endblock html %}
+</html>
+{% endblock doc -%}
