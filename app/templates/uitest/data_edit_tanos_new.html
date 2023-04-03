@@ -24,19 +24,231 @@
     .pagination {
         display: none !important;
     }
+
 </style>
 
 
 {% block content %}
 
 
-<div style="background-color: #eee;  ">
-    <div class="row" id="card-group" style="justify-content: center; display:flex; padding-top: 15px;">
+<div style="background-color: #eee; display: flex; flex-direction: column;">
+
+    <div style="display: flex; justify-content: flex-end; padding-top: 15px;">
+        <button id='add-new-row' type="button" class="btn btn-primary" style="margin-left:
+        auto; margin-right: 20px;margin-bottom: 5px; width: 65px;"><i class="bi bi-plus"></i></button>
     </div>
+
+    <div class="row" id="card-group" style="justify-content: center;"></div>
+
     <nav>
         <ul class="pagination justify-content-center"></ul>
     </nav>
+
 </div>
+
+<!--下拉窗口-->
+<div class="offcanvas offcanvas-top" tabindex="-1" id="add-row-top-canvas"
+     aria-labelledby="offcanvasRightLabel" style="height: 600px">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasTopLabel">Add new connection</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form class="card  mb-3" method="POST">
+
+            <div class="card-body " style="text-align: center;">
+                <div class="card-title ">
+                    <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:68px; padding-top:10px">
+                        <div style="width:13.8%; display:flex; align-items:center; ">
+                            <p>Job name</p>
+                        </div>
+                        <input style="width:80.5%; " type="text" class="form-control"
+                               aria-describedby="basic-addon1" id="new-row-name">
+                    </div>
+                </div>
+                <div class="card-text" style="text-align: left;">
+
+                    <div class="container text-center ">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="row">
+                                    <label class="col-md-12 control-label">Source</label>
+                                    <div class="col-md-3" style="padding-top: 10px;">
+                                        <b style="color:red">*</b> Data point
+                                    </div>
+
+                                    <div class="col-md-9" style="padding-top: 10px;">
+                                        <select id="source_point_select_top_s" class="form-select ">
+
+                                        </select>
+                                    </div>
+
+                                    <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
+                                    <div class="col-md-9" style="padding-top: 10px;">
+                                        <input type="text" class="form-control" placeholder="source where condition"
+                                               aria-describedby="basic-addon1" id="new-s-condition-name">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+
+                                    <label class="col-md-12 control-label">Target</label>
+                                    <div class="col-md-3" style="padding-top: 10px;">
+                                        <b style="color:red">*</b> Data point
+                                    </div>
+
+                                    <div class="col-md-9" style="padding-top: 10px;">
+                                        <select class="form-select" id="source_point_select_top_t"
+                                                name="source_point_select_top_t" data-live-search="true">
+
+                                        </select>
+                                    </div>
+
+                                    <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
+                                    <div class="col-md-9" style="padding-top: 10px;">
+                                        <input type="text" class="form-control" placeholder="target where condition"
+                                               aria-describedby="basic-addon1" id="new-t-condition-name">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%"
+                                    color="#6f5499" size="3">
+                                <label class="col-md-12" style="padding-bottom:5px">Rules</label>
+                            </div>
+
+                            <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px">
+                                <p style="width:13.8% ">Select rules</p>
+                                <select class="form-select" name="select_rule_top" id="select_rule_top"
+                                        style="width:85.5%">
+                                    <option selected>Default</option>
+                                    <option>Check-table-header</option>
+                                    <option>Check-count</option>
+                                    <option>Check-the-first-200-rows</option>
+                                    <option>Check-the-first-500-rows</option>
+                                    <option>Check-the-first-1000-rows</option>
+                                </select>
+                            </div>
+
+
+                            <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                <div style="width:13.8%; display:flex; align-items:center; padding-left:40px">
+                                    <p>Custom rules</p>
+                                </div>
+                                <input style="width:85.5%; " type="text" class="form-control"
+                                       placeholder="undefined" aria-describedby="basic-addon1"
+                                       id="new-customrules-name">
+                            </div>
+
+
+                            <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
+                                    <span style="color:red; ">*&nbsp</span> <span>By fields </span></div>
+                                <input style="width:85.5%; " type="text" class=" form-control "
+                                       placeholder="the columns used as the checking basis"
+                                       aria-describedby="basic-addon1" id="new-field-name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div style="margin-top:20px">
+            <div style="width:80%; margin:auto; text-align:center">
+                <button style="float:left" type="button" class="btn btn-danger"
+                        data-bs-dismiss="offcanvas">Close
+                </button>
+                <button style="float:right" type="button" class="btn btn-success" id="save-new-row">
+                    Save
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    ////Add row function
+    $('#add-new-row').click(function () {
+        $('#add-row-top-canvas').offcanvas('show');
+
+
+        $.ajax({
+            url: "/getMyPoint",
+            type: "GET",
+            success: function (data) {
+                var options = "";
+                for (let i = 0; i < data.length; i++) {
+                    const option = data[i];
+                    options += `<option value="${option.value}" >${option.text}</option>`;
+                }
+                console.info(options)
+                $('#source_point_select_top_s').empty().append(options)
+                $('#source_point_select_top_t').empty().append(options)
+            }
+        })
+
+    })
+
+    $('#save-new-row').click(function () {
+        // Get the values of the new row from the form fields
+        const job_name = $('#new-row-name').val();
+        const source_point = $('#source_point_select_top_s').val();
+        const target_point = $('#source_point_select_top_t').val();
+        const source_condition = $('#new-s-condition-name').val();
+        const target_condition = $('#new-t-condition-name').val();
+        const select_rules = $('#select_rule_top').val();
+        const custom_rules = $('#new-customrules-name').val();
+        const fields = $('#new-field-name').val();
+
+
+        // Hide the modal dialog
+        $('#add-row-top-canvas').offcanvas('hide');
+
+        // addRow function
+        $.ajax({
+            url: '/add_job',
+            type: 'POST',
+            data: JSON.stringify({
+                'job_name': job_name,
+                'job': {
+                    "source_point": source_point,
+                    "target_point": target_point,
+                    "source_condition": source_condition,
+                    "target_condition": target_condition,
+                    "select_rules": select_rules,
+                    "custom_rules": custom_rules,
+                    "fields": fields,
+                }
+
+            }),
+            contentType: 'application/json',
+            success: function () {
+                $('#add-row-top-canvas').modal('hide');
+                location.reload()
+                toastr.success('new row added successfully!');
+            },
+            error: function () {
+                toastr.error('failed to add new row!');
+                $('#add-row-top-canvas').modal('hide');
+            }
+        });
+
+    });
+
+
+</script>
+
 
 <script>
 
@@ -139,9 +351,11 @@
                                                                     <label class="col-md-12" style="padding-bottom:5px">Rules</label>
                                                                 </div>
 
-                                                                <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px">
-                                                                    <p style="width:13.8% ">Select rules</p>
-                                                                    <select class="form-select" name="select_rule" id="select_rule" style="width:85.5%">
+                                                                <div style="display:flex; width:100%; justify-content: start; align-items: center; margin-right: 50px ">
+                                                                    <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
+                                                                        <p>Select rules</p>
+                                                                    </div>
+                                                                    <select class="form-select" name="select_rule" id="select_rule" style="width:90.5%">
                                                                         <option ${selectRule === "Default" ? "selected" : ""}>Default</option>
                                                                         <option ${selectRule === "Check-table-header" ? "selected" : ""}>Check-table-header</option>
                                                                         <option ${selectRule === "Check-count" ? "selected" : ""}>Check-count</option>

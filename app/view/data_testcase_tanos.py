@@ -253,3 +253,13 @@ def getMyConnect():
     print(result_list)
     result = [{'value':item,'text':item} for item in result_list]
     return jsonify(result)
+
+@web.route('/add_job', methods=['POST'])
+def addJob():
+    data = request.json
+    data_str = json.dumps(data['job'])
+
+    # TODO: Update data in the database
+    tanos_manage().new_job(data['job_name'],data_str)
+
+    return jsonify(success=True, message='add connection successfully')

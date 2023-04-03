@@ -123,7 +123,7 @@ class tanos_manage():
 
     def show_jobs(self):
         user_id = session.get('userid', None)
-        sql = """select job_id,job_name,job from xcheck.job_management where user_id= '{}' order by job_name """ \
+        sql = """select job_id,job_name,job from xcheck.job_management where user_id= '{}' order by create_date DESC""" \
             .format(user_id)
         # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
         result = useDB.useDB().executesql_fetch(sql)
@@ -137,6 +137,14 @@ class tanos_manage():
         # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
         result = useDB.useDB().executesql_fetch(sql)
         return result
+
+    def new_job(self, job_name, job):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        user_id = session.get('userid', None)
+        sql = """INSERT INTO xcheck.job_management (job_name,job,user_id,create_date)\
+          VALUES ('{}','{}','{}','{}')""" \
+            .format(job_name.strip(), job,user_id, create_date)
+        useDB.useDB().executesql(sql)
 
 
 if __name__ == '__main__':
