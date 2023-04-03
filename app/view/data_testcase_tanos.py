@@ -7,6 +7,7 @@ from time import sleep
 from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, session
 # from app import log
 from app.db import test_case_manage
+from app.db.tanos_manage import tanos_manage
 from app.util import global_manager
 from app.util.log import logg
 
@@ -189,7 +190,7 @@ def web_search_report():
 
 
 
-@web.route('/job_search.json', methods=['GET'])
+@web.route('/job_search2.json', methods=['GET'])
 def data1():
     data2 = [{
         "job_id": 1,
@@ -220,96 +221,35 @@ def data1():
             "job_id": 4,
             "job_name": 'job 4',
             "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },        {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
     },
-       {
-            "job_id": 4,
-            "job_name": 'job 4',
-            "job": {"source": "a3", "target": "b3"},
-    },
+
     ]
 
     return jsonify(data2)
+
+
+@web.route('/job_search.json', methods=['GET'])
+def show_data():
+    rows = tanos_manage().show_jobs()
+    keys=('job_id','job_name','job')
+    result_list=[]
+    for row in rows:
+        values = [value.strip() if isinstance(value,str) else value for value in row]
+        result_dict =dict(zip(keys,values))
+        result_list.append(result_dict)
+    print (result_list)
+    return jsonify(result_list)
+
+
+@web.route('/getMyPoint', methods=['GET'])
+def getMyConnect():
+    rows = tanos_manage().get_myPoints()
+    # TODO: get data from the database
+    print(rows)
+    result_list = []
+    for row in rows:
+        values = [value.strip() if isinstance(value, str) else value for value in row]
+        result_list.append(values[0])
+    print(result_list)
+    result = [{'value':item,'text':item} for item in result_list]
+    return jsonify(result)

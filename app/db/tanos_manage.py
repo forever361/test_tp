@@ -121,6 +121,23 @@ class tanos_manage():
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
+    def show_jobs(self):
+        user_id = session.get('userid', None)
+        sql = """select job_id,job_name,job from xcheck.job_management where user_id= '{}' order by job_name """ \
+            .format(user_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        return result
+
+
+    def get_myPoints(self):
+        user_id = session.get('userid', None)
+        sql = """select point_name from xcheck.point_management where user_id ={}   """ \
+            .format(user_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        return result
+
 
 if __name__ == '__main__':
     testcase = tanos_manage()
