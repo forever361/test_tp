@@ -147,6 +147,17 @@ class tanos_manage():
         useDB.useDB().executesql(sql)
 
 
+    def delete_job(self, id):
+        sql = "DELETE FROM xcheck.job_management WHERE job_id = {};".format(id)
+        useDB.useDB().executesql(sql)
+
+
+    def update_job(self, job_id, job_name, job):
+        sql = "UPDATE xcheck.job_management set job_name='{}',job='{}' WHERE job_id = {};".format(
+            job_name.strip(), job, job_id)
+        useDB.useDB().executesql(sql)
+
+
 if __name__ == '__main__':
     testcase = tanos_manage()
     # a= testcase.search_by_connect_id(10002)

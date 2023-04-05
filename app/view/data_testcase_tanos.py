@@ -262,4 +262,28 @@ def addJob():
     # TODO: Update data in the database
     tanos_manage().new_job(data['job_name'],data_str)
 
-    return jsonify(success=True, message='add connection successfully')
+    return jsonify(success=True, message='add job successfully')
+
+
+@web.route('/deleteJob/<int:job_id>', methods=['POST'])
+def deleteJob(job_id):
+    # TODO: Update data in the database
+    tanos_manage().delete_job(job_id)
+    return jsonify(success=True, message='delete job successfully')
+
+
+@web.route('/saveJob', methods=['POST'])
+def saveJob():
+    # TODO: Update data in the database
+    data = request.json
+    data_str = json.dumps(data['job'])
+    tanos_manage().update_job(data['job_id'],data['job_name'],data_str)
+    return jsonify(success=True, message='save job successfully')
+
+
+@web.route('/runJob/<int:job_id>', methods=['POST'])
+def runJob(job_id):
+    # TODO: Update data in the database
+    data = request.json
+    print(job_id)
+    return jsonify(success=True, message='run job successfully')

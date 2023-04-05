@@ -143,7 +143,7 @@
                                     <p>Custom rules</p>
                                 </div>
                                 <input style="width:85.5%; " type="text" class="form-control"
-                                       placeholder="undefined" aria-describedby="basic-addon1"
+                                       aria-describedby="basic-addon1"
                                        id="new-customrules-name">
                             </div>
 
@@ -290,12 +290,13 @@
 
                             const selectRule = item.job.select_rules || "Default";
 
-                            return `
-                                    <div class="col-md-12"  ">
-                                          <form class="card  mb-3" method="POST">
 
+                            return `
+                                     <form class="card  mb-3"  method="POST"  >
+                                          <div class="row g-0" >
+                                             <div class="col-md-11">
                                                 <div class="card-body " style="text-align: center;" >
-                                                    <h5 class='card-title'> ${item.job_name} </h5>
+                                                    <h5 class='card-title' > ${item.job_name} </h5>
                                                     <div class="card-text" style="text-align: left;">
 
                                                         <div class="container text-center ">
@@ -309,14 +310,14 @@
                                                                         </div>
 
                                                                         <div class="col-md-9" style="padding-top: 10px;">
-                                                                            <select id="source_point_select" class="form-select " >
+                                                                            <select id="source_point_select" class="form-select source_point " >
                                                                                 ${optionsHtml_source}
                                                                             </select>
                                                                         </div>
 
                                                                         <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
                                                                         <div class="col-md-9" style="padding-top: 10px;">
-                                                                            <input type="text" class="form-control" placeholder="source where condition"
+                                                                            <input type="text" class="form-control source_condition" placeholder="source where condition" id="source_condition"
                                                                             aria-describedby="basic-addon1" value=${item.job.source_condition}>
                                                                         </div>
                                                                     </div>
@@ -331,14 +332,14 @@
                                                                         </div>
 
                                                                         <div class="col-md-9" style="padding-top: 10px;">
-                                                                            <select class="form-select" name="select_t" data-live-search="true">
+                                                                            <select class="form-select target_point"  id="target_point_select" name="select_t" data-live-search="true">
                                                                                 ${optionsHtml_target}
                                                                             </select>
                                                                         </div>
 
                                                                         <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
                                                                         <div class="col-md-9" style="padding-top: 10px;">
-                                                                            <input type="text" class="form-control" placeholder="target where condition"
+                                                                            <input type="text" class="form-control target_condition" id="target_condition" placeholder="target where condition"
                                                                             aria-describedby="basic-addon1" value=${item.job.target_condition}>
                                                                         </div>
                                                                     </div>
@@ -355,7 +356,7 @@
                                                                     <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
                                                                         <p>Select rules</p>
                                                                     </div>
-                                                                    <select class="form-select" name="select_rule" id="select_rule" style="width:90.5%">
+                                                                    <select class="form-select select_rules" name="select_rules" id="select_rules" style="width:90.5%">
                                                                         <option ${selectRule === "Default" ? "selected" : ""}>Default</option>
                                                                         <option ${selectRule === "Check-table-header" ? "selected" : ""}>Check-table-header</option>
                                                                         <option ${selectRule === "Check-count" ? "selected" : ""}>Check-count</option>
@@ -370,7 +371,7 @@
                                                                     <div style="width:13.8%; display:flex; align-items:center; padding-left:40px">
                                                                         <p>Custom rules</p>
                                                                     </div>
-                                                                    <input style="width:85.5%; " type="text" class="form-control"
+                                                                    <input style="width:85.5%; " type="text" class="form-control custom_rules" id="custom_rules"
                                                                     placeholder="undefined" aria-describedby="basic-addon1" value=${item.job.custom_rules}>
                                                                 </div>
 
@@ -378,21 +379,169 @@
                                                                 <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
                                                                     <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
                                                                         <span style="color:red; ">*&nbsp</span> <span>By fields </span></div>
-                                                                        <input name="field" style="width:85.5%; " type="text" class=" form-control "
+                                                                        <input name="field" style="width:85.5%; " type="text" class=" form-control fields" id="fields"
                                                                              placeholder="the columns used as the checking basis" aria-describedby="basic-addon1" value=${item.job.fields}>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                </div>
-                                          </form>
-                                    </div>
-                `
+                                             </div>
 
+                                             <div class="col-md-1">
+                                                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                                                  <button type="button" class="btn btn-primary card-edit" style="width: 100px;margin-top: 15px" id="card-edit" > Sava</button>
+                                                  <button type="button" class="btn btn-danger card-delete" style="width: 100px;margin-top: 15px" id="card-delete" > Delete</button>
+                                                  <button type="button" class="btn btn-success card-run" style="width: 100px;margin-top: 15px" id="card-run"> Run </button>
+                                                </div>
+                                                <div class="card-id" style="display: none">${item.job_id}</div>
+
+                                             </div>
+                                          </div>
+                                     </form>
+
+                            `
                         });
                         totalPages = Math.ceil(cardsData.length / pageSize);
                         renderPage(currentPage);
                         renderPagination();
+
+
+                        // 绑定点击事件
+                        $(document).on('click', '.card-delete', function () {
+
+                            var form = $(this).closest('form');
+                            var cardId = form.find('.card-id').text();
+                            var job_name = form.find('.card-title').text();
+
+                            let dialog = bootbox.dialog({
+                                title: 'Delete item!',
+                                message: "<p>Please confirm if you want to delete " + job_name + "? </p>",
+                                centerVertical: true,
+                                buttons:
+                                    {
+                                        cancel: {
+                                            label: "No",
+                                            className: 'btn-danger',
+                                            callback:
+                                                function () {
+                                                    console.log('Custom cancel clicked');
+                                                }
+                                        },
+
+                                        ok: {
+                                            label: "Yes",
+                                            className: 'btn-success',
+                                            callback:
+                                                function () {
+                                                    //发送请求删除
+                                                    $.ajax({
+                                                        url: `/deleteJob/${cardId}`,
+                                                        type: "POST",
+                                                        success: function () {
+                                                            // 删除成功后从页面移除card
+                                                            toastr.success('delete job successfully!');
+                                                            form.closest('.card').remove();
+
+                                                        }
+                                                    });
+                                                }
+                                        }
+                                    }
+                            });
+
+                        });
+
+                        $(document).on('click', '.card-edit', function () {
+                            // 2.获取表单数据
+
+                            var form = $(this).closest('form');
+                            var cardId = form.find('.card-id').text();
+                            var job_name = form.find('.card-title').text();
+
+                            let sourcePoint = form.find('.source_point').val();
+                            let sourceCondition = form.find('.source_condition').val();
+                            let targetPoint = form.find('.target_point').val();
+                            let targetCondition = form.find('.target_condition').val();
+                            let selectRule = form.find('.select_rules').val();
+                            let customRules = form.find('.custom_rules').val();
+                            let fields = form.find('.fields').val();
+
+
+                            // 3.将数据转换为JSON格式
+                            let formData = {
+                                'job_name': job_name,
+                                'job_id': cardId,
+                                'job': {
+                                    "source_point": sourcePoint,
+                                    "target_point": targetPoint,
+                                    "source_condition": sourceCondition,
+                                    "target_condition": targetCondition,
+                                    "select_rules": selectRule,
+                                    "custom_rules": customRules,
+                                    "fields": fields,
+                                }
+                            };
+                            let jsonData = JSON.stringify(formData);
+                            $.ajax({
+                                url: "/saveJob",
+                                type: "POST",
+                                data: jsonData,
+                                contentType: "application/json",
+                                success: function (response) {
+                                    // do something
+                                    toastr.success('save job successfully!');
+                                },
+                                error: function (xhr, status, error) {
+                                    // handle error
+                                }
+                            });
+
+
+                        });
+
+                        $(document).on('click', '.card-run', function () {
+                            var form = $(this).closest('form');
+                            var cardId = form.find('.card-id').text();
+                            var job_name = form.find('.card-title').text();
+
+                            let dialog = bootbox.dialog({
+                                title: 'Run job!',
+                                message: "<p>Please confirm if you want to run " + job_name + "? </p>",
+                                centerVertical: true,
+                                buttons:
+                                    {
+                                        cancel: {
+                                            label: "No",
+                                            className: 'btn-danger',
+                                            callback:
+                                                function () {
+                                                    console.log('Custom cancel clicked');
+                                                }
+                                        },
+
+                                        ok: {
+                                            label: "Yes",
+                                            className: 'btn-success',
+                                            callback:
+                                                function () {
+                                                    //发送请求删除
+                                                    $.ajax({
+                                                        url: `/runJob/${cardId}`,
+                                                        type: "POST",
+                                                        success: function () {
+                                                            // 删除成功后从页面移除card
+                                                            toastr.success('run job successfully!');
+
+                                                        }
+                                                    });
+                                                }
+                                        }
+                                    }
+                            });
+
+                        });
+
 
                     },
                     error: function (error) {
@@ -439,7 +588,8 @@
             renderPage(currentPage);
             renderPagination();
         }
-    });
+    })
+    ;
 
 
 </script>
