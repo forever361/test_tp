@@ -7,3 +7,107 @@ Prepare data...
 2023-03-17 10:30:13,487-ERROR: value check failed
 2023-03-17 10:30:14,130-INFO: |total_count   check|source:1000 target:1000
 2023-03-17 10:30:14,648-INFO: count check successfully
+2023-04-06 11:59:56,680-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 11:59:56,680-INFO:  check rule is : Check-the-first-200-rows
+Traceback (most recent call last):
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/run_or_mx.py", line 154, in <module>
+    P = Parameter_pg_pg()
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/parameter.py", line 246, in __init__
+    self.pwd_s = AEScoder().decrypt(list_s[4] )
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/util/crypto_ECB.py", line 26, in decrypt
+    text_decrypted = unpad(cipher.decrypt(data))
+  File "/Users/kun/miniconda3/envs/myenv/lib/python3.6/site-packages/Crypto/Cipher/_mode_ecb.py", line 196, in decrypt
+    raise ValueError("Data must be aligned to block boundary in ECB mode")
+ValueError: Data must be aligned to block boundary in ECB mode
+
+2023-04-06 12:03:31,725-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:03:31,903-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:03:31,922-INFO: S:pg,T:pg
+2023-04-06 12:03:32,163-INFO: different columns between Source and Target are: None
+2023-04-06 12:03:32,283-INFO: value check sucessfully
+2023-04-06 12:03:32,469-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:03:32,538-INFO: count check successfully
+2023-04-06 12:06:05,451-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:06:05,619-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:06:05,630-INFO: S:pg,T:pg
+2023-04-06 12:06:05,897-INFO: different columns between Source and Target are: None
+2023-04-06 12:06:06,023-INFO: value check sucessfully
+2023-04-06 12:06:06,166-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:06:06,222-INFO: count check successfully
+2023-04-06 12:12:14,720-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:12:14,886-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:12:14,903-INFO: S:pg,T:pg
+2023-04-06 12:12:15,160-INFO: different columns between Source and Target are: None
+2023-04-06 12:12:15,288-INFO: value check sucessfully
+2023-04-06 12:12:15,420-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:12:15,473-INFO: count check successfully
+2023-04-06 12:15:24,361-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:15:24,533-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:15:24,543-INFO: S:pg,T:pg
+2023-04-06 12:15:24,794-INFO: different columns between Source and Target are: None
+2023-04-06 12:15:24,919-INFO: value check sucessfully
+2023-04-06 12:15:25,070-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:15:25,117-INFO: count check successfully
+2023-04-06 12:38:43,780-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:38:43,941-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:38:43,952-INFO: S:pg,T:pg
+2023-04-06 12:38:44,188-INFO: different columns between Source and Target are: None
+2023-04-06 12:38:44,301-INFO: value check sucessfully
+2023-04-06 12:38:44,442-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:38:44,500-INFO: count check successfully
+2023-04-06 12:40:04,610-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:40:04,768-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:40:04,779-INFO: S:pg,T:pg
+2023-04-06 12:40:06,053-INFO: different columns between Source and Target are: None
+2023-04-06 12:40:06,191-INFO: value check sucessfully
+2023-04-06 12:40:06,328-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:40:06,380-INFO: count check successfully
+2023-04-06 12:42:12,630-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:42:12,781-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:42:12,791-INFO: S:pg,T:pg
+2023-04-06 12:42:13,044-INFO: different columns between Source and Target are: None
+2023-04-06 12:42:13,160-INFO: value check sucessfully
+2023-04-06 12:42:13,300-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:42:13,353-INFO: count check successfully
+2023-04-06 12:44:49,827-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:44:49,999-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:44:50,011-INFO: S:pg,T:pg
+2023-04-06 12:44:50,243-INFO: different columns between Source and Target are: None
+2023-04-06 12:44:50,360-INFO: value check sucessfully
+2023-04-06 12:44:50,492-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:44:50,554-INFO: count check successfully
+2023-04-06 12:48:34,786-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:48:34,941-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:48:34,955-INFO: S:pg,T:pg
+2023-04-06 12:48:35,188-INFO: different columns between Source and Target are: None
+2023-04-06 12:48:35,307-INFO: value check sucessfully
+2023-04-06 12:48:35,437-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:48:35,491-INFO: count check successfully
+2023-04-06 12:50:35,513-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:50:35,676-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:50:35,688-INFO: S:pg,T:pg
+2023-04-06 12:50:35,923-INFO: different columns between Source and Target are: None
+2023-04-06 12:50:36,037-INFO: value check sucessfully
+2023-04-06 12:50:36,175-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:50:36,238-INFO: count check successfully
+2023-04-06 12:51:58,256-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:51:58,412-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:51:58,424-INFO: S:pg,T:pg
+2023-04-06 12:51:58,648-INFO: different columns between Source and Target are: None
+2023-04-06 12:51:58,759-INFO: value check sucessfully
+2023-04-06 12:51:58,894-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:51:58,947-INFO: count check successfully
+2023-04-06 12:52:31,738-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 12:52:31,905-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 12:52:31,918-INFO: S:pg,T:pg
+2023-04-06 12:52:32,192-INFO: different columns between Source and Target are: None
+2023-04-06 12:52:32,324-INFO: value check sucessfully
+2023-04-06 12:52:32,472-INFO: |total_count   check|source:200 target:200
+2023-04-06 12:52:32,520-INFO: count check successfully
+2023-04-06 13:04:01,060-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 13:04:01,224-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 13:04:01,240-INFO: S:pg,T:pg
+2023-04-06 13:04:01,482-INFO: different columns between Source and Target are: None
+2023-04-06 13:04:01,639-INFO: value check sucessfully
+2023-04-06 13:04:01,779-INFO: |total_count   check|source:200 target:200
+2023-04-06 13:04:01,830-INFO: count check successfully

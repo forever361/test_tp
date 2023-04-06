@@ -203,7 +203,7 @@ class Parameter_pg_pg():
                     host = j['host'].strip()
                     username = j['username'].strip()
                     port = j['port'].strip()
-                    password = AEScoder().decrypt(j['password'].strip())
+                    password = j['password'].strip()
                     exec_command_account = j['exec_command_account'].strip()
                     exec_command_pwd = j['exec_command_pwd'].strip()
 
@@ -233,7 +233,7 @@ class Parameter_pg_pg():
                     self.port_t = list_t[1]
                     self.db_t = list_t[2]
                     self.user_t = list_t[3]
-                    self.pwd_t = AEScoder().decrypt(list_t[4])
+                    self.pwd_t = list_t[4]
 
             elif self.Target_conn == "remote":
                 pass
@@ -243,13 +243,13 @@ class Parameter_pg_pg():
                 self.port_s = list_s[1]
                 self.db_s = list_s[2]
                 self.user_s = list_s[3]
-                self.pwd_s = AEScoder().decrypt(list_s[4] )
+                self.pwd_s =  list_t[4]
 
                 self.host_t = list_t[0]
                 self.port_t = list_t[1]
                 self.db_t = list_t[2]
                 self.user_t = list_t[3]
-                self.pwd_t = AEScoder().decrypt(list_t[4] )
+                self.pwd_t =  list_t[4]
 
 class Parameter_file_ali():
     def __init__(self):

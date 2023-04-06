@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = "nerver guess"
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=1200)
 
 DOMAIN = {
-    "WWW":"http://127.0.0.1:8888",
+    "WWW":"http://127.0.0.1:8889",
     "WWW2":"http://10.189.164.6:8899",
 }
 

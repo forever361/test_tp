@@ -78,8 +78,8 @@ class tanos_manage():
         id = int(str(result[0][0]).strip())
         return id
 
-    def search_by_connect_id(self, connect_name):
-        sql = """select connect_name from xcheck.connection_management where connect_id ={}  """.format(connect_name)
+    def search_by_connect_id(self, connect_id):
+        sql = """select connect_name from xcheck.connection_management where connect_id ={}  """.format(connect_id)
         result = useDB.useDB().executesql_fetch(sql)
         name = result[0][0].strip()
         return name
@@ -156,6 +156,21 @@ class tanos_manage():
         sql = "UPDATE xcheck.job_management set job_name='{}',job='{}' WHERE job_id = {};".format(
             job_name.strip(), job, job_id)
         useDB.useDB().executesql(sql)
+
+
+    def get_connectid_by_point_name(self, point_name):
+        sql = """select connect_id from xcheck.point_management where point_name ='{}'  """.format(point_name)
+        result = useDB.useDB().executesql_fetch(sql)
+        connect_id = int(str(result[0][0]).strip())
+        return connect_id
+
+    def get_tablename_by_point_name(self, point_name):
+        sql = """select _table_name from xcheck.point_management where point_name ='{}'  """.format(point_name)
+        result = useDB.useDB().executesql_fetch(sql)
+        table_name = str(result[0][0]).strip()
+        return table_name
+
+
 
 
 if __name__ == '__main__':
