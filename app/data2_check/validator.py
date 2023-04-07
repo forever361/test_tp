@@ -24,7 +24,7 @@ from typing import List
 import cx_Oracle
 
 from app.data2_check.commom.Constant_t import Constant_id
-from app.data2_check.parameter import Parameter_tmp
+from app.data2_check.parameter import Parameter_tmp, Parameter_common
 from app.useDB import ConnectSQL
 from app.util.SSH import mySSH
 import app.util.global_manager as glob
@@ -611,8 +611,8 @@ class PgValidator(Validator):
             return f"select {pi_str},'{self.pi_split}',{col_str} from {verifydb}.{verify_tablename}  {self.where_condition} order by {pi}   \n"
 
     def get_batch_count_check_sql(self, verify_tablename, verifydb):
-        P_tmp = Parameter_tmp()
-        rule = P_tmp.select_rule
+        P_common = Parameter_common()
+        rule = P_common.select_rules
         if verifydb == '':
             sql = f"select cast('{verify_tablename}' as varchar(100)) tablename, cast('total_count' as varchar(20)) as count_type, count(1) as c from {verify_tablename} {self.where_condition}\n"
         elif rule == "Check-the-first-200-rows":

@@ -72,12 +72,13 @@ print("source: " + S_TYPE)
 T_TYPE = P_common.target_type.strip().split('=')[-1].strip()  # orl,ali,pg
 print("target: " + T_TYPE)
 
+rule = P_common.select_rules
+logger.info(" check rule is : {}".format(rule))
+
+
 # db config
 P_db = Parameter_db()
 
-P_tmp = Parameter_tmp()
-rule = P_tmp.select_rule
-logger.info(" check rule is : {}".format(rule))
 
 if S_TYPE == 'orl' and T_TYPE == 'ali':
 
@@ -580,7 +581,7 @@ def method_main():
     c_flag = True
     # p_list = parse_parameter_file(PARAMETER_FILE_PATH)
     p_list = P_db.parse_parameter_file()
-    logger.info(p_list)
+    # logger.info(p_list)
     # p_lists = p_list
     # print(p_list)
     j = 0

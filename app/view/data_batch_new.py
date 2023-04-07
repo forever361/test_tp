@@ -1,4 +1,5 @@
 import configparser
+import json
 import traceback
 from datetime import timedelta
 from time import sleep
@@ -10,6 +11,7 @@ import os
 import sys
 from werkzeug.utils import secure_filename
 
+from app.db.tanos_manage import tanos_manage
 from app.useDB import ConnectSQL
 from app.util.Constant_setting import Constant_cmd
 from app.util.IP_PORT import Constant
@@ -30,7 +32,7 @@ web = Blueprint("batch_new", __name__)
 @web.route('/api_batch_test_data',methods=['GET'])
 @user.authorize
 def batch_test_compare():
-    return render_template("/code_mode/batch_data_new.html" )
+    return render_template("/code_mode/batch_tanos_data_new.html" )
 
 
 @web.route('/api_batch_test_data',methods=['POST'])
@@ -44,8 +46,6 @@ def batch_test_compare1():
     # case_name = 'testcase_'+str_time
 
     if 'Save' in request.form:
-
-
 
         info = request.values
         code_str = viewutil.getInfoAttribute(info, 'code')
@@ -321,3 +321,25 @@ def clear_log():
     return ''
 
 
+@web.route('/saveCase', methods=['POST'])
+def saveCase():
+    # TODO: Update data in the database
+    data = request.json
+    print(data)
+    # 新建case
+    user_id = session.get('userid', None)
+    case_name = data['case_name']
+    code=""
+    code1=""
+    ConnectSQL().data_write_config_value_all(user_id, case_name, code, code1)
+
+    case_id = ConnectSQL().data_get_case_id(case_name)[0][0]
+
+    # 新建job
+    data_str = json.dumps(data['job'])
+    print(data_str)
+    # TODO: Update data in the database
+    tanos_manage().new_job(data['job_name'],data_str,case_id)
+    #查询case#查询job，跳转到http://127.0.0.1:8889/data_edit_test_case_tanos?id=10074，前端实现
+
+    return jsonify(success=True, message='run job successfully',case_id=case_id)

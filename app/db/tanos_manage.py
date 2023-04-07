@@ -121,10 +121,10 @@ class tanos_manage():
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
-    def show_jobs(self):
+    def show_jobs(self,case_id):
         user_id = session.get('userid', None)
-        sql = """select job_id,job_name,job from xcheck.job_management where user_id= '{}' order by create_date DESC""" \
-            .format(user_id)
+        sql = """select case_id,job_id,job_name,job from xcheck.job_management where user_id= '{}' and case_id={} order by create_date DESC""" \
+            .format(user_id,case_id)
         # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
         result = useDB.useDB().executesql_fetch(sql)
         return result
@@ -138,12 +138,12 @@ class tanos_manage():
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
-    def new_job(self, job_name, job):
+    def new_job(self, job_name, job, case_id):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         user_id = session.get('userid', None)
-        sql = """INSERT INTO xcheck.job_management (job_name,job,user_id,create_date)\
-          VALUES ('{}','{}','{}','{}')""" \
-            .format(job_name.strip(), job,user_id, create_date)
+        sql = """INSERT INTO xcheck.job_management (job_name,job,user_id,create_date,case_id)\
+          VALUES ('{}','{}','{}','{}',{})""" \
+            .format(job_name.strip(), job,user_id, create_date,case_id)
         useDB.useDB().executesql(sql)
 
 

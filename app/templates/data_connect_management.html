@@ -104,8 +104,8 @@
                             <div class="form-group">
                                 <label for="new-row-type" class="col-form-label">Type:</label>
                                 <select class="form-select" id="new-row-type">
-                                    <option>My connection</option>
-                                    <option>External connection</option>
+                                    <option>private</option>
+                                    <option>public</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -161,10 +161,10 @@
                     </div>
                 </div>
 
-                <!--      <input type="text" class="form-control form-control-input" id="exampleFormControlInput1" placeholder="输入内容">-->
-                <!--                <button id='add-new-row' type="button" data-bs-toggle="modal" data-bs-target="#add-row-modal"-->
-                <!--                        class="btn btn-primary">Add-->
-                <!--                </button>-->
+<!--                <input type="text" class="form-control form-control-input" id="exampleFormControlInput1"-->
+<!--                       placeholder="输入内容">-->
+                <button id='next' type="button" class="btn btn-primary"> NEXT>>
+                </button>
 
                 <table class="table table-striped"
                        id="table"
@@ -186,7 +186,7 @@
                         <th data-field="connect_name" data-formatter="nameFormatter" data-align="center">
                             Connection Name
                         </th>
-                        <th data-field="connect_type" data-formatter="typeFormatter" data-align="center">Type
+                        <th data-field="connect_type" data-formatter="typeFormatter" data-align="center" data-width="4" data-width-unit="%>Type
                         </th>
                         <th data-field="dbtype" data-formatter="typeFormatter_db" data-width="12"
                             data-width-unit="%"
@@ -213,6 +213,18 @@
         </div>
     </div>
 </div>
+
+<script>
+  // 获取按钮元素
+  var button = document.getElementById("next");
+
+  // 给按钮添加点击事件的监听器
+  button.addEventListener("click", function() {
+    // 跳转到指定页面
+    window.location.href = "/data_point_management";
+  });
+</script>
+
 
 
 <script>
@@ -265,8 +277,8 @@
 
     // Define options for select input
     const typeOptions = [
-        {value: "My connection", text: "My connection"},
-        {value: "External connection", text: "External connection"}
+        {value: "private", text: "private"},
+        {value: "public", text: "public"}
     ];
 
     // Formatter for "type" column

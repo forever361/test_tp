@@ -30,6 +30,7 @@ class Parameter_common():
             # print(111,configreader_dict)
             self.source_type = configreader_dict['Source TYPE']
             self.target_type = configreader_dict['Target TYPE']
+            self.select_rules = configreader_dict['select_rules']
 
 
 

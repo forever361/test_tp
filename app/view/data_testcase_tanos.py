@@ -176,10 +176,13 @@ def data1():
     return jsonify(data2)
 
 
-@web.route('/job_search.json', methods=['GET'])
+@web.route('/job_search.json', methods=['POST'])
 def show_data():
-    rows = tanos_manage().show_jobs()
-    keys=('job_id','job_name','job')
+    data = request.json
+    print(data)
+    case_id = data['case_id']
+    rows = tanos_manage().show_jobs(case_id)
+    keys=('case_id','job_id','job_name','job')
     result_list=[]
     for row in rows:
         values = [value.strip() if isinstance(value,str) else value for value in row]
@@ -206,9 +209,8 @@ def getMyConnect():
 def addJob():
     data = request.json
     data_str = json.dumps(data['job'])
-
     # TODO: Update data in the database
-    tanos_manage().new_job(data['job_name'],data_str)
+    tanos_manage().new_job(data['job_name'],data_str,data['case_id'])
 
     return jsonify(success=True, message='add job successfully')
 
@@ -298,6 +300,7 @@ def runJob(job_id):
         'Target TYPE': t_type,
         'Source conn': '{},{},{},{},{}'.format(r_dict_conn_s['host'],r_dict_conn_s['port'],r_dict_conn_s['dblibrary'],r_dict_conn_s['username'],r_dict_conn_s['pwd']),
         'Target conn': '{},{},{},{},{}'.format(r_dict_conn_t['host'],r_dict_conn_t['port'],r_dict_conn_t['dblibrary'],r_dict_conn_t['username'],r_dict_conn_t['pwd']),
+        'select_rules': data['job']['select_rules']
     }
 
     # testdata, testdata_dif,, test1, id

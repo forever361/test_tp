@@ -111,3 +111,103 @@ ValueError: Data must be aligned to block boundary in ECB mode
 2023-04-06 13:04:01,639-INFO: value check sucessfully
 2023-04-06 13:04:01,779-INFO: |total_count   check|source:200 target:200
 2023-04-06 13:04:01,830-INFO: count check successfully
+2023-04-06 16:06:34,593-INFO:  check rule is : Default
+2023-04-06 16:06:34,757-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 16:06:34,845-INFO: S:pg,T:pg
+2023-04-06 16:06:35,112-INFO: different columns between Source and Target are: None
+2023-04-06 16:06:35,250-INFO: value check sucessfully
+2023-04-06 16:06:35,509-INFO: |total_count   check|source:200 target:200
+2023-04-06 16:06:35,612-INFO: count check successfully
+2023-04-06 16:07:03,095-INFO:  check rule is : Check-the-first-200-rows
+2023-04-06 16:07:03,748-INFO: [['target_table', 'target_table2', '', 'datatest', 'user_id']]
+2023-04-06 16:07:03,759-INFO: S:pg,T:pg
+2023-04-06 16:07:04,147-INFO: different columns between Source and Target are: None
+2023-04-06 16:07:04,270-INFO: value check sucessfully
+2023-04-06 16:07:04,434-INFO: |total_count   check|source:200 target:200
+2023-04-06 16:07:04,508-INFO: count check successfully
+2023-04-07 08:55:05,601-INFO:  check rule is : Check-the-first-200-rows
+2023-04-07 08:55:05,784-INFO: S:pg,T:pg
+2023-04-07 08:55:06,014-INFO: different columns between Source and Target are: None
+2023-04-07 08:55:06,126-INFO: value check sucessfully
+2023-04-07 08:55:06,260-INFO: |total_count   check|source:200 target:200
+2023-04-07 08:55:06,312-INFO: count check successfully
+2023-04-07 09:00:14,305-INFO:  check rule is : Check-the-first-200-rows
+2023-04-07 09:00:15,483-INFO: S:pg,T:pg
+2023-04-07 09:00:15,758-INFO: different columns between Source and Target are: None
+2023-04-07 09:00:15,902-INFO: value check sucessfully
+2023-04-07 09:00:16,052-INFO: |total_count   check|source:200 target:200
+2023-04-07 09:00:16,133-INFO: count check successfully
+2023-04-07 09:33:24,189-INFO:  check rule is : Check-the-first-200-rows
+2023-04-07 09:33:24,365-INFO: S:pg,T:pg
+2023-04-07 09:33:24,589-INFO: different columns between Source and Target are: None
+2023-04-07 09:33:24,702-INFO: value check sucessfully
+2023-04-07 09:33:24,841-INFO: |total_count   check|source:200 target:200
+2023-04-07 09:33:24,892-INFO: count check successfully
+2023-04-07 12:59:02,243-INFO:  check rule is : Default
+2023-04-07 12:59:03,424-INFO: S:pg,T:pg
+2023-04-07 12:59:02,243-INFO:  check rule is : Default
+2023-04-07 12:59:03,424-INFO: S:pg,T:pg
+Traceback (most recent call last):
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/run_or_mx.py", line 661, in <module>
+    method_main()
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/run_or_mx.py", line 619, in method_main
+    s_count_sql, t_count_sql, v_status, c_status, tablename = configure_validator(*parameter)
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/run_or_mx.py", line 570, in configure_validator
+    c = checker.BatchChecker1(job_configure, True, True)
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/checker.py", line 346, in __init__
+    super().__init__(job_configure)
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/checker.py", line 82, in __init__
+    super().__init__(job_configure)
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/checker.py", line 67, in __init__
+    job_configure["source_validator"])
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/checker.py", line 77, in load_validator
+    return getattr(v, configure["name"], None)(**configure)
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/validator.py", line 523, in __init__
+    self.pi = pi or self._getpi()
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/validator.py", line 570, in _getpi
+    pis = self.execute(runsql)
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/validator.py", line 540, in execute
+    cur.execute(sql)
+psycopg2.errors.UndefinedTable: relation "dbc.indicesv" does not exist
+LINE 1: select columnName from dbc.indicesv where tablename = 'TARGE...
+                               ^
+
+
+2023-04-07 13:01:02,172-INFO:  check rule is : Default
+2023-04-07 13:01:02,328-INFO: S:pg,T:pg
+2023-04-07 13:01:02,584-INFO: different columns between Source and Target are: None
+2023-04-07 13:01:02,172-INFO:  check rule is : Default
+2023-04-07 13:01:02,328-INFO: S:pg,T:pg
+2023-04-07 13:01:02,584-INFO: different columns between Source and Target are: None
+Traceback (most recent call last):
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/run_or_mx.py", line 661, in <module>
+    method_main()
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/run_or_mx.py", line 619, in method_main
+    s_count_sql, t_count_sql, v_status, c_status, tablename = configure_validator(*parameter)
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/run_or_mx.py", line 572, in configure_validator
+    s_count_sql, t_count_sql, v_satuts, c_status = c.check()
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/checker.py", line 392, in check
+    v_statuts = self.value_check()
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/checker.py", line 144, in value_check
+    self.s_validator.shipping_value_container()
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/validator.py", line 172, in shipping_value_container
+    records = self.execute(runsql)
+  File "/Users/kun/PycharmProjects/Flask_tp_v8.2.1/app/data2_check/validator.py", line 540, in execute
+    cur.execute(sql)
+psycopg2.errors.UndefinedColumn: column "test_id" does not exist
+LINE 1: select test_id,'@@@',CREATE_TIME,CREATOR,EDITOR,EDIT_TIME,EN...
+               ^
+
+
+2023-04-07 13:01:22,485-INFO:  check rule is : Default
+2023-04-07 13:01:22,647-INFO: S:pg,T:pg
+2023-04-07 13:01:22,884-INFO: different columns between Source and Target are: None
+2023-04-07 13:01:23,015-INFO: value check sucessfully
+2023-04-07 13:01:23,177-INFO: |total_count   check|source:200 target:200
+2023-04-07 13:01:23,294-INFO: count check successfully
+2023-04-07 13:02:13,304-INFO:  check rule is : Check-the-first-200-rows
+2023-04-07 13:02:13,489-INFO: S:pg,T:pg
+2023-04-07 13:02:13,749-INFO: different columns between Source and Target are: None
+2023-04-07 13:02:13,878-INFO: value check sucessfully
+2023-04-07 13:02:14,014-INFO: |total_count   check|source:200 target:200
+2023-04-07 13:02:14,066-INFO: count check successfully

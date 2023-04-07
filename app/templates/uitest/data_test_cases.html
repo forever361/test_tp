@@ -31,6 +31,7 @@
             <div class="card-title">Data Test Case</div>
             <div class="card-text">
 
+
                 <table class="table table-striped"
                        id="table"
                        data-toggle="table"
@@ -65,6 +66,25 @@
 
 </div>
 
+<script>
+
+    function buttons() {
+        return {
+            btnAdd: {
+                text: 'Add new row',
+                icon: 'bi bi-plus',
+                render: true,
+                event: function () {
+                    // 跳转到指定页面
+                    window.location.href = "/api_batch_test_data";
+                },
+                attributes: {
+                    class: 'Add a new row to the table'
+                }
+            }
+        }
+    }
+</script>
 
 
 <script>
@@ -74,9 +94,9 @@
 
     // Formatter for "action" column
     function actionFormatter(value, row, index) {
-        return '<button class="btn btn-sm btn-primary edit-row" onclick="window.location.href=(\'/data_edit_test_case_tanos?id=' + row.id + '\')"><i class="bi bi-pencil-square"></i></button> '+
-                   '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="bi bi-trash"></i></button>' +
-        '<button class="btn btn-sm btn-success report-row" style="margin-left: 10px;" onclick="window.location.href=(\'/data_search_report?id=' + row.id + '\')"><i class="bi bi-eye"></i></button> '
+        return '<button class="btn btn-sm btn-primary edit-row" onclick="window.location.href=(\'/data_edit_test_case_tanos?id=' + row.id + '\')"><i class="bi bi-pencil-square"></i></button> ' +
+            '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="bi bi-trash"></i></button>' +
+            '<button class="btn btn-sm btn-success report-row" style="margin-left: 10px;" onclick="window.location.href=(\'/data_search_report?id=' + row.id + '\')"><i class="bi bi-eye"></i></button> '
 
     }
 

@@ -178,6 +178,7 @@
 
 <script>
 
+
     ////Add row function
     $('#add-new-row').click(function () {
         $('#add-row-top-canvas').offcanvas('show');
@@ -220,6 +221,7 @@
             url: '/add_job',
             type: 'POST',
             data: JSON.stringify({
+                'case_id':case_id,
                 'job_name': job_name,
                 'job': {
                     "source_point": source_point,
@@ -252,6 +254,9 @@
 
 <script>
 
+    var urlParams = new URLSearchParams(window.location.search);
+    var case_id = urlParams.get('id');
+
 
     $(document).ready(function () {
         const pageSize = 3;
@@ -264,12 +269,16 @@
             url: "/getMyPoint",
             type: "GET",
             success: function (data) {
-                var options = "";
-                options = data;
+
+                var options = data;
+
+
                 $.ajax({
                     url: "/job_search.json",
-                    type: "GET",
+                    type: "POST",
                     dataType: "json",
+                    data: JSON.stringify({case_id: case_id}),
+                    contentType: 'application/json',
                     success: function (data) {
                         cardsData = data.map(item => {
 
@@ -375,10 +384,10 @@
                                              </div>
                                              <div class="col-md-1">
                                                 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
-                                                  <button type="button" class="btn btn-primary card-edit" style="width: 100px;margin-top: 15px" id="card-edit" > Sava</button>
+                                                  <button type="button" class="btn btn-primary card-edit" style="width: 100px;margin-top: 15px" id="card-edit" > Save</button>
                                                   <button type="button" class="btn btn-danger card-delete" style="width: 100px;margin-top: 15px" id="card-delete" > Delete</button>
                                                   <button type="button" class="btn btn-success card-run" style="width: 100px;margin-top: 15px" id="card-run"> Run </button>
-                                                  <button type="submit" class="btn btn-success report" style="width: 100px;margin-top: 15px;display:none;" id="Report" > Report </button>
+                                                  <button type="submit" class="btn btn-warning report" style="width: 100px;margin-top: 15px;display:none;" id="Report" > Report </button>
                                                 </div>
                                                 <div class="card-id" style="display: none">${item.job_id}</div>
                                              </div>
@@ -552,6 +561,7 @@
                                                                 $loadingBtn.replaceWith($reportBtn.show());
                                                                 toastr.success('run job successfully!');
                                                             } else {
+                                                                $loadingBtn.replaceWith($btn);
                                                                 toastr.error('Fail to run job!');
                                                             }
 
@@ -570,7 +580,7 @@
                             var form = $(this).closest('form');
                             var cardId = form.find('.card-id').text();
 
-                            jsonData={"123":"123"}
+                            jsonData = {"123": "123"}
 
                             $.ajax({
                                 url: "/data_edit_test_case_tanos",
