@@ -4,7 +4,7 @@ import subprocess
 import traceback
 from time import sleep
 
-from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, session
+from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, session, redirect, url_for
 # from app import log
 from app.db import test_case_manage
 from app.db.tanos_manage import tanos_manage
@@ -58,15 +58,18 @@ def edit_test_case():
         infor_value = ConnectSQL().data_get_infor_value_id(id)
         print(infor_value)
 
-        return render_template("uitest/data_edit_tanos_new.html")
+    return render_template("uitest/data_edit_tanos.html")
 
     # SAVE保存的过程,点save就相当于提交了表单走post
-    elif request.method == 'POST':
-        case_id = request.args.get('id')
-        print(case_id)
+    # elif request.method == 'POST':
+    #     case_id = request.args.get('id')
+    #     print(case_id)
+    #
+    #     # 重定向到目标页面
+    #     return redirect(url_for('data_testcase.data_search_report', id=case_id))
 
-        return render_template('data_test_finish.html', user_id=user_id,
-                                   case_id=case_id)
+        # return render_template('data_test_finish.html', user_id=user_id,
+        #                            case_id=case_id)
 
 
 @web.route('/runtest_tanos.json', methods=['POST', 'GET'])

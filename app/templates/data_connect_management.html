@@ -22,55 +22,49 @@
 {% block content %}
 
 <style>
-.panel-info {
-  border-color: #eee;
-}
-.panel-info > .panel-heading {
-  color: #000;
-  background-color: #fff;
-  border-color: #eee;
-}
-.panel-info > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: #000;
-}
-.panel-info > .panel-heading .badge {
-  color: #d9edf7;
-  background-color: #31708f;
-}
-.panel-info > .panel-footer + .panel-collapse > .panel-body {
-  border-bottom-color: #000;
-}
+    .panel-info {
+        border-color: #eee;
+    }
+
+    .panel-info > .panel-heading {
+        color: #000;
+        background-color: #fff;
+        border-color: #eee;
+    }
+
+    .panel-info > .panel-heading + .panel-collapse > .panel-body {
+        border-top-color: #000;
+    }
+
+    .panel-info > .panel-heading .badge {
+        color: #d9edf7;
+        background-color: #31708f;
+    }
+
+    .panel-info > .panel-footer + .panel-collapse > .panel-body {
+        border-bottom-color: #000;
+    }
 
 
-.table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: #fff;
-}
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: #fff;
+    }
 
-.form-control-input.has-value {
-  background-color: #eee; /* 填入内容后的背景色 */
-}
-
-
-
-
-
-
-
-
-
-
+    .form-control-input.has-value {
+        background-color: #eee; /* 填入内容后的背景色 */
+    }
 
 
 </style>
 
 
-<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex ">
+<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex; ">
 
     <div style=" height:91%; width:100%; margin-left: 30px;  margin-right: 30px; margin-top: 10px; margin-bottom: 10px; "
          class="card">
         <div class="card-body">
             <!-- Default panel contents -->
-            <div class="card-title">Data Connection Management</div>
+            <h4 class="card-title">Data Connection Management</h4>
             <div class="card-text">
                 <p>On this page, you can configure the connection server information,
                     and of course you can directly obtain the server information of the
@@ -87,16 +81,16 @@
                         <form>
                             <div class="form-group">
                                 <label for="new-row-name" class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" id="new-row-name">
+                                <input type="text" class="form-control" id="new-row-name" placeholder="example:pg-servcer1-example">
                             </div>
                             <div class="form-group">
                                 <label for="new-row-dbtype" class="col-form-label">Connection Type:</label>
                                 <select class="form-select" id="new-row-dbtype">
-                                    <option>PostgreSQL</option>
-                                    <option>AliCloud</option>
-                                    <option>Oracle</option>
-                                    <option>DB2</option>
-                                    <option>GCP</option>
+                                    <option>AliCloud-PostgreSQL</option>
+                                    <option>AliCloud-Maxcompute</option>
+                                    <option>DB-Oracle</option>
+                                    <option>DB-DB2</option>
+                                    <option>GCP-BigQuery</option>
                                     <option>API</option>
                                     <option>Fileserver</option>
                                 </select>
@@ -161,15 +155,14 @@
                     </div>
                 </div>
 
-<!--                <input type="text" class="form-control form-control-input" id="exampleFormControlInput1"-->
-<!--                       placeholder="输入内容">-->
-                <button id='next' type="button" class="btn btn-primary"> NEXT>>
-                </button>
+                <!--                <input type="text" class="form-control form-control-input" id="exampleFormControlInput1"-->
+                <!--                       placeholder="输入内容">-->
+
 
                 <table class="table table-striped"
                        id="table"
                        data-toggle="table"
-                       data-height="570"
+                       data-height="480"
                        data-url="connect_search.json"
                        data-pagination="true"
                        data-search="true"
@@ -186,7 +179,8 @@
                         <th data-field="connect_name" data-formatter="nameFormatter" data-align="center">
                             Connection Name
                         </th>
-                        <th data-field="connect_type" data-formatter="typeFormatter" data-align="center" data-width="4" data-width-unit="%>Type
+                        <th data-field="connect_type" data-formatter="typeFormatter" data-align="center" data-width="8"
+                            data-width-unit="%">Type
                         </th>
                         <th data-field="dbtype" data-formatter="typeFormatter_db" data-width="12"
                             data-width-unit="%"
@@ -211,37 +205,43 @@
 
             </div>
         </div>
+
+        <div style="position: absolute; right: 15px;bottom: 15px;">
+            <button id='next' type="button" class="btn btn-secondary" style="width: 120px;"> NEXT>>
+            </button>
+        </div>
+
     </div>
 </div>
 
 <script>
-  // 获取按钮元素
-  var button = document.getElementById("next");
+    // 获取按钮元素
+    var button = document.getElementById("next");
 
-  // 给按钮添加点击事件的监听器
-  button.addEventListener("click", function() {
-    // 跳转到指定页面
-    window.location.href = "/data_point_management";
-  });
+    // 给按钮添加点击事件的监听器
+    button.addEventListener("click", function () {
+        // 跳转到指定页面
+        window.location.href = "/data_point_management";
+    });
 </script>
-
 
 
 <script>
 
-    function buttons () {
+    function buttons() {
         return {
-          btnAdd: {
-            text: 'Add new row',
-            icon: 'bi bi-plus',
-            render: true,
-            event: function () {
-              $('#add-row-modal').offcanvas('show');
-            },
-            attributes: {
-              class: 'Add a new row to the table'
+            btnAdd: {
+                text: 'Add new row',
+                icon: 'bi bi-plus',
+                render: true,
+                event: function () {
+                    $('#add-row-modal').offcanvas('show');
+                },
+                attributes: {
+                    class: 'Add a new row to the table',
+                    style: 'width: 120px; margin-left:40px'
+                }
             }
-          }
         }
     }
 
@@ -252,11 +252,11 @@
 
     // Define options for select input
     const typeOptions_db = [
-        {value: "PostgreSQL", text: "PostgreSQL"},
-        {value: "AliCloud", text: "AliCloud"},
-        {value: "Oracle", text: "Oracle"},
-        {value: "DB2", text: "DB2"},
-        {value: "GCP", text: "GCP"},
+        {value: "PostgreSQL", text: "AliCloud-PostgreSQL"},
+        {value: "AliCloud", text: "AliCloud-Maxcompute"},
+        {value: "Oracle", text: "DB-Oracle"},
+        {value: "DB2", text: "DB-DB2"},
+        {value: "GCP", text: "GCP-BigQuery"},
         {value: "API", text: "API"},
         {value: "Fileserver", text: "Fileserver"},
     ];
@@ -317,22 +317,22 @@
         return '<input type="password" id="pwdinput"  type="text" class="form-control" value="' + value + '" disabled>';
     }
 
-       // Formatter for "action" column
+    // Formatter for "action" column
     function actionFormatter(value, row, index) {
-        return ' <div class="btn-group" role="group" aria-label="...">'+
-        '<button  class="btn btn-sm btn-primary edit-row" > <i class="bi bi-pencil-square"></i> </button>'+
-        '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="bi bi-trash"></i></button>'+
-      '</div>'
+        return ' <div class="btn-group" role="group" aria-label="...">' +
+            '<button  class="btn btn-sm btn-primary edit-row" > <i class="bi bi-pencil-square"></i> </button>' +
+            '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="bi bi-trash"></i></button>' +
+            '</div>'
     }
 
     function testFormatter(value, row, index) {
-        return '<button  class="btn btn-sm btn-success test-connect" > Test Connection </button>'
+        return '<button  class="btn btn-sm btn-success test-connect" > Connect </button>'
     }
 
 
     const $table = $('#table');
 
-     $table.on('click', '.test-connect', function () {
+    $table.on('click', '.test-connect', function () {
         const $btn = $(this);
         const $tr = $(this).closest('tr');
         const id = $tr.find('td:eq(0)').text();
@@ -379,13 +379,13 @@
             },
             error: function (error) {
                 console.log(error);
-                toastr.error('failed to delete the data. Please try again.');
+                toastr.error('failed to delete the connection. Please try again.');
             }
         });
     }
 
 
-     $table.on('click', '.delete-row', function () {
+    $table.on('click', '.delete-row', function () {
         const $tr = $(this).closest('tr');
 
         let dialog = bootbox.dialog({
@@ -415,7 +415,6 @@
         });
 
     });
-
 
 
     /////edit function
@@ -460,7 +459,7 @@
             },
             error: function (error) {
                 console.log(error);
-                toastr.error('failed to save the data. Please try again.');
+                toastr.error('failed to save. Please try again.');
             }
         });
     }
@@ -489,12 +488,11 @@
     });
 
 
-
     ////Add row function
 
-<!--    $('#add-new-row').click(function () {-->
-       // $('#add-row-modal').modal('show'); // 显示弹窗
-<!--    })-->
+    <!--    $('#add-new-row').click(function () {-->
+    // $('#add-row-modal').modal('show'); // 显示弹窗
+    <!--    })-->
 
 
     $('#save-new-row').click(function () {
@@ -541,30 +539,21 @@
                 'db_library': db_library,
                 'username': username,
                 'pwd': pwd,
-                'port':port,
+                'port': port,
             }),
             contentType: 'application/json',
             success: function () {
-                toastr.success('new row added successfully!');
-                 $('#add-row-modal').offcanvas('hide');
+                toastr.success('new connection added successfully!');
+                $('#add-row-modal').offcanvas('hide');
                 $('#table').bootstrapTable('refresh');
             },
             error: function () {
                 $('#add-row-modal').offcanvas('hide');
-                toastr.error('failed to add new row!');
+                toastr.error('failed to add new connection!');
             }
         });
 
     });
-
-
-
-
-
-
-
-
-
 
 
 </script>

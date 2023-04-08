@@ -429,7 +429,7 @@ def delete_test_case():
 
 @web.route('/data_search_report', methods=['POST', 'GET'])
 @user.authorize
-def web_search_report():
+def data_search_report():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
         info = request.values

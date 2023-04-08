@@ -26,6 +26,8 @@ class Parser(object):
     def deal_excel(self, title='Test Report'):
 
         STYLESHEET_TMPL = """
+            <link href="{{ buildStaticUrl('/bootstrap-5.2.3/css/bootstrap.min.css') }}" rel="stylesheet"/>
+            <script src="{{buildStaticUrl('/bootstrap-5.2.3/js/bootstrap.bundle.min.js') }}"></script>
             <style type="text/css" media="screen">
             body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
             table       { font-size: 100%; }
@@ -192,8 +194,7 @@ class Parser(object):
                 overflow: hidden;
                 background:  #FFF;
                 color:  #024457;
-                border-radius:   8px;
-                border: 1px solid #167F92;
+            
             }
             #result_table th {
                   border: 1px solid #FFFFFF;
@@ -288,12 +289,12 @@ class Parser(object):
             }
 
             </style>
+            
             """
         startTime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         HEADING_TMPL = """<div class='heading'>
-         <h1>Test Report</h1>
          <p class='attribute'><strong>Test Time: </strong> {}</p>
-         <p class='description'>Checking count and value of database Result:</p>
+         <p class='attribute'><strong>Test Details: </strong></p>
          </div>
          """.format(startTime)
 
@@ -310,11 +311,17 @@ class Parser(object):
                      '\t<style>.topBtn{position: fixed;top: 5rem;right: 0.8rem;width: 3.2rem;height: 2.2rem;background-size: 100% auto;z-index: 9999;-webkit-transition:  opacity .3s ease;}</style>\n' \
                      '</head>\n' \
                      '<body>\n' \
-                     f'{HEADING_TMPL}\n' \
-                     '\t<table id=result_table>\n'
-
-
-
+                     '<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex;">\n'\
+                     '<div style=" height:91%; width:100%;  margin-left: 30px;  margin-right: 30px; margin-top: 10px; margin-bottom: 10px; "class="card">\n'\
+                    '<div class="card-body">\n'\
+                    '<h4 class="card-title">Test Report</h4>\n'\
+                    '<div class="card-text">\n'\
+                    f'{HEADING_TMPL}\n' \
+                    '\t<table id=result_table>\n'\
+                    '</div>\n'\
+                    '</div>\n'\
+                    '</div>\n' \
+                    '</div>\n' \
 
         for row in range(1, ws.max_row+1):
             self._html += '\t\t<tr>\n'

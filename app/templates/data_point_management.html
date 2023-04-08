@@ -67,9 +67,10 @@
          class="card">
         <div class="card-body">
             <!-- Default panel contents -->
-            <div class="card-title">Data Point Management</div>
+            <h4 class="card-title">Data Point Management</h4>
             <div class="card-text">
-                <p>On this page, you can configure the Data Point information.</p>
+                <p>On this page, you can configure the "Points", which refers to the specific view, table or filename
+                    after connecting.</p>
 
 
                 <!-- New Row Modal -->
@@ -86,7 +87,7 @@
                                 <form>
                                     <div class="form-group">
                                         <label for="new-row-name" class="col-form-label">Point name</label>
-                                        <input type="text" class="form-control" id="new-row-name">
+                                        <input type="text" class="form-control" id="new-row-name" placeholder="example:name-point-example">
                                     </div>
                                     <div class="form-group">
                                         <label for="new-row-id" class="col-form-label">Connection name</label>
@@ -128,13 +129,12 @@
                 <!--                <button id='add-new-row' type="button" data-bs-toggle="modal" data-bs-target="#add-row-modal"-->
                 <!--                        class="btn btn-primary">Add-->
                 <!--                </button>-->
-                <button id='next' type="button" class="btn btn-primary"> NEXT>>
-                </button>
+
 
                 <table class="table table-striped"
                        id="table"
                        data-toggle="table"
-                       data-height="570"
+                       data-height="500"
                        data-url="point_search.json"
                        data-pagination="true"
                        data-search="true"
@@ -164,21 +164,25 @@
 
         </div>
 
+        <div style="position: absolute; right: 15px;bottom: 15px;">
+            <button id='next' type="button" class="btn btn-secondary" style="width: 120px;"> NEXT>>
+            </button>
+        </div>
+
     </div>
 
 </div>
 
 <script>
-  // 获取按钮元素
-  var button = document.getElementById("next");
+    // 获取按钮元素
+    var button = document.getElementById("next");
 
-  // 给按钮添加点击事件的监听器
-  button.addEventListener("click", function() {
-    // 跳转到指定页面
-    window.location.href = "/api_data_test_cases";
-  });
+    // 给按钮添加点击事件的监听器
+    button.addEventListener("click", function () {
+        // 跳转到指定页面
+        window.location.href = "/api_data_test_cases";
+    });
 </script>
-
 
 
 <script>
@@ -206,7 +210,8 @@
                     });
                 },
                 attributes: {
-                    class: 'Add a new row to the table'
+                    class: 'Add a new row to the table',
+                    style: 'width: 120px; margin-left:40px'
                 }
             }
         }
@@ -288,7 +293,7 @@
     }
 
     function testFormatter(value, row, index) {
-        return '<button  class="btn btn-sm btn-success test-connect" > Table Validation </button>'
+        return '<button  class="btn btn-sm btn-success test-connect" > Validate </button>'
     }
 
 
@@ -342,7 +347,7 @@
             },
             error: function (error) {
                 console.log(error);
-                toastr.error('failed to delete the data. Please try again.');
+                toastr.error('failed to delete the point. Please try again.');
             }
         });
     }
@@ -412,7 +417,7 @@
             },
             error: function (error) {
                 console.log(error);
-                toastr.error('failed to save the data. Please try again.');
+                toastr.error('failed to save the point. Please try again.');
             }
         });
     }
@@ -481,12 +486,12 @@
             }),
             contentType: 'application/json',
             success: function () {
-                toastr.success('new row added successfully!');
+                toastr.success('new point added successfully!');
                 $('#add-row-modal').modal('hide');
                 $('#table').bootstrapTable('refresh');
             },
             error: function () {
-                toastr.error('failed to add new row!');
+                toastr.error('failed to add new point!');
             }
         });
 

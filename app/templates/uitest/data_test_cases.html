@@ -28,8 +28,10 @@
          class="card">
         <div class="card-body">
             <!-- Default panel contents -->
-            <div class="card-title">Data Test Case</div>
+            <h4 class="card-title">Data Test Case</h4>
             <div class="card-text">
+
+                <p>On this page, you can configure the information of the "Test Cases", which can include one validation job or multiple jobs in batch for validation.</p>
 
 
                 <table class="table table-striped"
@@ -79,7 +81,8 @@
                     window.location.href = "/api_batch_test_data";
                 },
                 attributes: {
-                    class: 'Add a new row to the table'
+                    class: 'Add a new row to the table',
+                    style: 'width: 120px; margin-left:40px'
                 }
             }
         }
@@ -116,7 +119,7 @@
             },
             error: function (error) {
                 console.log(error);
-                toastr.error('failed to delete the data. Please try again.');
+                toastr.error('failed to delete the case. Please try again.');
             }
         });
     }
