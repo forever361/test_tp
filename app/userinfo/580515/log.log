@@ -391,3 +391,240 @@ LINE 1: select test_id,'@@@',CREATE_TIME,CREATOR,EDITOR,EDIT_TIME,EN...
 2023-04-08 12:12:42,317-INFO: value check sucessfully
 2023-04-08 12:12:42,449-INFO: |total_count   check|source:200 target:200
 2023-04-08 12:12:42,502-INFO: count check successfully
+2023-04-11 17:58:09,827-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 17:58:09,999-INFO: S:pg,T:pg
+2023-04-11 17:58:10,243-INFO: different columns between Source and Target are: None
+2023-04-11 17:58:10,358-INFO: value check sucessfully
+2023-04-11 17:58:10,492-INFO: |total_count   check|source:200 target:200
+2023-04-11 17:58:10,548-INFO: count check successfully
+2023-04-11 18:09:53,984-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:09:54,132-INFO: S:pg,T:pg
+2023-04-11 18:09:54,378-INFO: different columns between Source and Target are: None
+2023-04-11 18:09:54,506-INFO: value check sucessfully
+2023-04-11 18:09:54,638-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:09:54,692-INFO: count check successfully
+2023-04-11 18:10:51,655-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:10:51,799-INFO: S:pg,T:pg
+2023-04-11 18:10:52,017-INFO: different columns between Source and Target are: None
+2023-04-11 18:10:52,130-INFO: value check sucessfully
+2023-04-11 18:10:52,307-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:10:52,362-INFO: count check successfully
+2023-04-11 18:13:15,032-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:13:15,175-INFO: S:pg,T:pg
+2023-04-11 18:13:15,403-INFO: different columns between Source and Target are: None
+2023-04-11 18:13:15,528-INFO: value check sucessfully
+2023-04-11 18:13:15,725-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:13:15,836-INFO: count check successfully
+2023-04-11 18:14:18,976-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:14:19,139-INFO: S:pg,T:pg
+2023-04-11 18:14:19,353-INFO: different columns between Source and Target are: None
+2023-04-11 18:14:19,455-INFO: value check sucessfully
+2023-04-11 18:14:19,583-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:14:19,648-INFO: count check successfully
+2023-04-11 18:15:04,011-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:15:04,172-INFO: S:pg,T:pg
+2023-04-11 18:15:04,408-INFO: different columns between Source and Target are: None
+2023-04-11 18:15:04,526-INFO: value check sucessfully
+2023-04-11 18:15:04,665-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:15:04,718-INFO: count check successfully
+2023-04-11 18:17:38,871-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:17:39,022-INFO: S:pg,T:pg
+2023-04-11 18:17:39,235-INFO: different columns between Source and Target are: None
+2023-04-11 18:17:39,351-INFO: value check sucessfully
+2023-04-11 18:17:39,483-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:17:39,531-INFO: count check successfully
+2023-04-11 18:18:57,136-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:18:57,278-INFO: S:pg,T:pg
+2023-04-11 18:18:57,510-INFO: different columns between Source and Target are: None
+2023-04-11 18:18:57,628-INFO: value check sucessfully
+2023-04-11 18:18:57,876-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:18:58,038-INFO: count check successfully
+2023-04-11 18:22:20,257-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:22:20,866-INFO: S:pg,T:pg
+2023-04-11 18:22:21,478-INFO: different columns between Source and Target are: None
+2023-04-11 18:22:21,597-INFO: value check sucessfully
+2023-04-11 18:22:21,733-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:22:21,786-INFO: count check successfully
+2023-04-11 18:47:48,512-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:47:48,758-INFO: S:pg,T:pg
+2023-04-11 18:47:48,988-INFO: different columns between Source and Target are: None
+2023-04-11 18:47:49,110-INFO: value check sucessfully
+2023-04-11 18:47:49,316-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:47:49,381-INFO: count check successfully
+2023-04-11 18:48:50,614-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:48:50,771-INFO: S:pg,T:pg
+2023-04-11 18:48:51,018-INFO: different columns between Source and Target are: None
+2023-04-11 18:48:51,132-INFO: value check sucessfully
+2023-04-11 18:48:51,270-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:48:51,321-INFO: count check successfully
+2023-04-11 18:52:32,399-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:52:32,615-INFO: S:pg,T:pg
+2023-04-11 18:52:32,868-INFO: different columns between Source and Target are: None
+2023-04-11 18:52:32,985-INFO: value check sucessfully
+2023-04-11 18:52:33,123-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:52:33,172-INFO: count check successfully
+2023-04-11 18:56:37,118-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 18:56:37,270-INFO: S:pg,T:pg
+2023-04-11 18:56:37,532-INFO: different columns between Source and Target are: None
+2023-04-11 18:56:37,664-INFO: value check sucessfully
+2023-04-11 18:56:37,800-INFO: |total_count   check|source:200 target:200
+2023-04-11 18:56:37,856-INFO: count check successfully
+2023-04-11 19:23:18,880-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 19:23:19,024-INFO: S:pg,T:pg
+2023-04-11 19:23:19,239-INFO: different columns between Source and Target are: None
+2023-04-11 19:23:19,360-INFO: value check sucessfully
+2023-04-11 19:23:19,510-INFO: |total_count   check|source:200 target:200
+2023-04-11 19:23:19,569-INFO: count check successfully
+2023-04-11 19:24:23,386-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 19:24:23,590-INFO: S:pg,T:pg
+2023-04-11 19:24:23,838-INFO: different columns between Source and Target are: None
+2023-04-11 19:24:23,957-INFO: value check sucessfully
+2023-04-11 19:24:24,102-INFO: |total_count   check|source:200 target:200
+2023-04-11 19:24:24,172-INFO: count check successfully
+2023-04-11 19:26:18,464-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 19:26:18,604-INFO: S:pg,T:pg
+2023-04-11 19:26:18,830-INFO: different columns between Source and Target are: None
+2023-04-11 19:26:18,937-INFO: value check sucessfully
+2023-04-11 19:26:19,071-INFO: |total_count   check|source:200 target:200
+2023-04-11 19:26:19,123-INFO: count check successfully
+2023-04-11 19:27:30,369-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 19:27:30,541-INFO: S:pg,T:pg
+2023-04-11 19:27:30,795-INFO: different columns between Source and Target are: None
+2023-04-11 19:27:30,901-INFO: value check sucessfully
+2023-04-11 19:27:31,040-INFO: |total_count   check|source:200 target:200
+2023-04-11 19:27:31,094-INFO: count check successfully
+2023-04-11 19:28:09,984-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 19:28:10,137-INFO: S:pg,T:pg
+2023-04-11 19:28:10,390-INFO: different columns between Source and Target are: None
+2023-04-11 19:28:10,531-INFO: value check sucessfully
+2023-04-11 19:28:10,671-INFO: |total_count   check|source:200 target:200
+2023-04-11 19:28:10,735-INFO: count check successfully
+2023-04-11 19:30:44,791-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 19:30:45,373-INFO: S:pg,T:pg
+2023-04-11 19:30:45,981-INFO: different columns between Source and Target are: None
+2023-04-11 19:30:46,102-INFO: value check sucessfully
+2023-04-11 19:30:46,252-INFO: |total_count   check|source:200 target:200
+2023-04-11 19:30:46,304-INFO: count check successfully
+2023-04-11 19:35:07,181-INFO:  check rule is : Check-the-first-200-rows
+2023-04-11 19:35:07,346-INFO: S:pg,T:pg
+2023-04-11 19:35:07,609-INFO: different columns between Source and Target are: None
+2023-04-11 19:35:07,725-INFO: value check sucessfully
+2023-04-11 19:35:07,898-INFO: |total_count   check|source:200 target:200
+2023-04-11 19:35:07,969-INFO: count check successfully
+2023-04-12 07:32:05,793-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 07:32:05,951-INFO: S:pg,T:pg
+2023-04-12 07:32:06,182-INFO: different columns between Source and Target are: None
+2023-04-12 07:32:06,296-INFO: value check sucessfully
+2023-04-12 07:32:06,436-INFO: |total_count   check|source:200 target:200
+2023-04-12 07:32:06,491-INFO: count check successfully
+2023-04-12 07:42:02,015-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 07:42:02,164-INFO: S:pg,T:pg
+2023-04-12 07:42:02,379-INFO: different columns between Source and Target are: None
+2023-04-12 07:42:02,493-INFO: value check sucessfully
+2023-04-12 07:42:02,637-INFO: |total_count   check|source:200 target:200
+2023-04-12 07:42:02,691-INFO: count check successfully
+2023-04-12 07:42:22,452-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 07:42:22,592-INFO: S:pg,T:pg
+2023-04-12 07:42:22,816-INFO: different columns between Source and Target are: None
+2023-04-12 07:42:22,927-INFO: value check sucessfully
+2023-04-12 07:42:23,074-INFO: |total_count   check|source:200 target:200
+2023-04-12 07:42:23,129-INFO: count check successfully
+2023-04-12 08:21:58,781-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:21:58,927-INFO: S:pg,T:pg
+2023-04-12 08:21:59,155-INFO: different columns between Source and Target are: None
+2023-04-12 08:21:59,274-INFO: value check sucessfully
+2023-04-12 08:21:59,400-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:21:59,454-INFO: count check successfully
+2023-04-12 08:23:13,279-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:23:13,435-INFO: S:pg,T:pg
+2023-04-12 08:23:13,721-INFO: different columns between Source and Target are: None
+2023-04-12 08:23:13,852-INFO: value check sucessfully
+2023-04-12 08:23:13,999-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:23:14,053-INFO: count check successfully
+2023-04-12 08:26:11,331-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:26:11,498-INFO: S:pg,T:pg
+2023-04-12 08:26:11,767-INFO: different columns between Source and Target are: None
+2023-04-12 08:26:11,895-INFO: value check sucessfully
+2023-04-12 08:26:12,037-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:26:12,086-INFO: count check successfully
+2023-04-12 08:29:35,473-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:29:35,647-INFO: S:pg,T:pg
+2023-04-12 08:29:35,857-INFO: different columns between Source and Target are: None
+2023-04-12 08:29:35,963-INFO: value check sucessfully
+2023-04-12 08:29:36,095-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:29:36,157-INFO: count check successfully
+2023-04-12 08:30:51,692-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:30:51,843-INFO: S:pg,T:pg
+2023-04-12 08:30:52,057-INFO: different columns between Source and Target are: None
+2023-04-12 08:30:52,161-INFO: value check sucessfully
+2023-04-12 08:30:52,298-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:30:52,352-INFO: count check successfully
+2023-04-12 08:31:08,135-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:31:08,301-INFO: S:pg,T:pg
+2023-04-12 08:31:08,527-INFO: different columns between Source and Target are: None
+2023-04-12 08:31:08,642-INFO: value check sucessfully
+2023-04-12 08:31:08,775-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:31:08,832-INFO: count check successfully
+2023-04-12 08:34:25,719-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:36:02,136-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:36:02,137-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:37:30,666-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:37:57,277-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:37:57,277-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:40:40,423-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:40:40,424-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:40:55,189-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:40:55,190-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:41:33,890-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:41:33,891-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:41:34,045-INFO: S:pg,T:pg
+2023-04-12 08:41:34,287-INFO: different columns between Source and Target are: None
+2023-04-12 08:41:34,414-INFO: value check sucessfully
+2023-04-12 08:41:34,550-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:41:34,608-INFO: count check successfully
+2023-04-12 08:42:30,952-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:42:30,953-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:42:31,103-INFO: S:pg,T:pg
+2023-04-12 08:42:31,328-INFO: different columns between Source and Target are: None
+2023-04-12 08:42:31,447-INFO: value check sucessfully
+2023-04-12 08:42:31,578-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:42:31,632-INFO: count check successfully
+2023-04-12 08:44:51,496-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:44:51,497-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:44:51,643-INFO: S:pg,T:pg
+2023-04-12 08:44:51,909-INFO: different columns between Source and Target are: None
+2023-04-12 08:44:52,039-INFO: value check sucessfully
+2023-04-12 08:44:52,191-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:44:52,247-INFO: count check successfully
+2023-04-12 08:53:04,212-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:53:04,213-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:54:36,044-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:54:36,045-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:55:21,321-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:55:21,322-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:55:21,464-INFO: S:pg,T:pg
+2023-04-12 08:55:21,662-INFO: different columns between Source and Target are: None
+2023-04-12 08:55:21,759-INFO: value check sucessfully
+2023-04-12 08:55:21,890-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:55:21,951-INFO: count check successfully
+2023-04-12 08:58:03,727-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:58:03,728-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:58:03,878-INFO: S:pg,T:pg
+2023-04-12 08:58:04,063-INFO: different columns between Source and Target are: None
+2023-04-12 08:58:04,166-INFO: value check sucessfully
+2023-04-12 08:58:04,311-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:58:04,369-INFO: count check successfully
+2023-04-12 08:59:05,375-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 08:59:05,376-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 08:59:05,527-INFO: S:pg,T:pg
+2023-04-12 08:59:05,757-INFO: different columns between Source and Target are: None
+2023-04-12 08:59:05,874-INFO: value check sucessfully
+2023-04-12 08:59:06,012-INFO: |total_count   check|source:200 target:200
+2023-04-12 08:59:06,070-INFO: count check successfully
+2023-04-12 09:15:34,678-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 09:15:34,679-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 09:15:34,846-INFO: S:pg,T:pg
+2023-04-12 09:15:35,092-INFO: different columns between Source and Target are: None
+2023-04-12 09:15:35,213-INFO: value check sucessfully
+2023-04-12 09:15:35,365-INFO: |total_count   check|source:200 target:200
+2023-04-12 09:15:35,423-INFO: count check successfully

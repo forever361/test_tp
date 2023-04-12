@@ -64,6 +64,7 @@ configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 Excel_write = ExcelUtilAll()
 userid = Constant_id().cookie_id
 
+logger.info("||||||||||||||||||Start checking||||||||||||||||||")
 
 P_common = Parameter_common()
 # print(P_common)
@@ -71,6 +72,7 @@ S_TYPE = P_common.source_type.strip().split('=')[-1].strip()  # orl,ali,pg
 print("source: " + S_TYPE)
 T_TYPE = P_common.target_type.strip().split('=')[-1].strip()  # orl,ali,pg
 print("target: " + T_TYPE)
+
 
 rule = P_common.select_rules
 logger.info(" check rule is : {}".format(rule))
@@ -655,8 +657,6 @@ def method_main():
 
 
 if __name__ == "__main__":
-
-    # logger.info("||||||||||||||||||Start checking||||||||||||||||||")
 
     method_main()
 #

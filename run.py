@@ -1,4 +1,4 @@
-from app.application import app
+from app.application import app, socketio
 from app.www import *
 
 
@@ -8,4 +8,4 @@ if __name__ == '__main__':
     ip = config_domain.split('//')[1].split(':')[0]
     port = config_domain.split('//')[1].split(':')[1]
 
-    app.run(host=ip, port=port)
+    socketio.run(app,host=ip, port=port,allow_unsafe_werkzeug=True)

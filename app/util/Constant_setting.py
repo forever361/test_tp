@@ -21,4 +21,4 @@ class Constant_cmd():
     def __init__(self,userid):
         self.userid = userid
         self.cmd_td = '/Users/kun/miniconda3/envs/myenv/bin/python3.6 {}/data2_check/run_or_mx.py {}'.format(configPath, self.userid)
-        self.retcode = subprocess.Popen(self.cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.retcode = subprocess.Popen(self.cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

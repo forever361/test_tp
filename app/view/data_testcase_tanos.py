@@ -6,6 +6,9 @@ from time import sleep
 
 from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, session, redirect, url_for
 # from app import log
+from flask_socketio import emit
+
+from app.application import socketio
 from app.db import test_case_manage
 from app.db.tanos_manage import tanos_manage
 from app.util import global_manager
@@ -242,23 +245,18 @@ def runJob2(job_id):
     return jsonify(success=True, message='run job successfully')
 
 
-
-@web.route('/runJob/<int:job_id>', methods=['POST'])
-def runJob(job_id):
+@socketio.on('run_task')
+# @web.route('/runJob/<int:job_id>', methods=['POST'])
+def runJob(jsonData):
     # TODO: Update data in the database
-    data = request.json
+
+    data = json.loads(jsonData)
     source_point_name = (data['job']['source_point'])
     target_point_name = (data['job']['target_point'])
 
     source_connect_id =  tanos_manage().get_connectid_by_point_name(source_point_name)
     target_connect_id = tanos_manage().get_connectid_by_point_name(target_point_name)
 
-    # {'job_name': ' demo ', 'job_id': '515',
-    #  'job': {'source_point': 'table_datatest_target_table', 'target_point': 'table_datatest_target_table2',
-    #          'source_condition': '', 'target_condition': '', 'select_rules': 'Default', 'custom_rules': '',
-    #          'fields': 'user_id'}}
-
-    # 准备数据
 
     connect_info_s= tanos_manage().search_all_by_connect_id(source_connect_id)
     keys_s=('connect_id','connect_name','dbtype','connect_type','host','dblibrary','username','pwd',"port")
@@ -283,14 +281,6 @@ def runJob(job_id):
     print(r_dict_conn_t)
 
 
-    #连接信息
-    # {'connect_id': 10000, 'connect_name': 'pg_server1', 'dbtype': 'PostgreSQL', 'connect_type': 'My connection',
-    #  'host': '47.113.185.98', 'dblibrary': 'test_frame', 'username': 'postgres', 'pwd': 'postgres', 'port': 5353}
-
-    # {'Case_name': 'test_mypg_test12_ssh', 'Source TYPE': 'pg', 'Target TYPE': 'pg',
-    #  'Source conn': 'pgm-1hl07vmgn0rd297653280.pgsql.rds.ali-ops.cloud.cn.hsbc,3433,test_frame,[remote]',
-    #  'Target conn': 'pgm-1hl07vmgn0rd297653280.pgsql.rds.ali-ops.cloud.cn.hsbc,3433,test_frame,cdi,FdiXwYPTdNfc0Hg0leRm6A=='}
-
     if r_dict_conn_s['dbtype']=='PostgreSQL':
         s_type='pg'
     elif  r_dict_conn_s['dbtype']=='123':
@@ -306,7 +296,6 @@ def runJob(job_id):
         'select_rules': data['job']['select_rules']
     }
 
-    # testdata, testdata_dif,, test1, id
 
     s_tablename= tanos_manage().get_tablename_by_point_name(source_point_name)
     t_tablename = tanos_manage().get_tablename_by_point_name(target_point_name)
@@ -332,28 +321,24 @@ def runJob(job_id):
     file.write(table)
     file.close()
 
-    retcode = Constant_cmd(user_id).retcode
-    stdout, stderr = retcode.communicate()
+    try:
+        # 创建子进程并异步捕捉其输出
+        retcode = Constant_cmd(user_id).retcode
 
-    if stderr:
-        print(str(stderr, "utf-8") + '111111')
-    else:
-        print(str(stdout, "utf-8") + '222222')
+        # 实时读取子进程的输出并发送至前端
+        while True:
+            output = retcode.stdout.readline().decode()
+            if not output:
+                break
+            emit('task_log', {'data': output})
 
-
-    if retcode.returncode == 0:
-        print("Run 按钮执行成功！！")
-        sleep(1.6)
-        result = jsonify({'code': 200, 'msg': 'run success!', 'returncode': 0})
-        print(result)
-        return result
-
-    else:
-        print("执行失败！！")
-        file = open(user_path + 'log.log', 'a')
-        file.writelines(str(stderr, "utf-8") + '\n')
-        file.close()
-        sleep(1.6)
-        result = jsonify({'code': 400, 'msg': 'run failed', 'returncode': 1})
-        print(result)
-        return result, {'Content-Type': 'application/json'}
+        # 等待子进程执行完毕，并根据其状态发送事件
+        retcode.wait()
+        if retcode.returncode == 0:
+            emit('task_complete', {'data': '||||||||||||||||||Job completed successfully!!||||||||||||||||||'})
+            return 'run success!'
+        else:
+            emit('task_error', {'data': '||||||||||||||||||Job execution failed!!||||||||||||||||||'})
+            return 'run failed'
+    except subprocess.CalledProcessError as e:
+        emit('task_error', {'data': '||||||||||||||||||Job execution failed!!||||||||||||||||||'})

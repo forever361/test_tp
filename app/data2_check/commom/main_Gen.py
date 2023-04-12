@@ -385,7 +385,7 @@ class Parser(object):
         userPath_tmp = os.path.join(basepath + "/templates/userinfo/{}/".format(userid))
 
         html_dir = userPath_tmp + '{}_data_test.html'.format(caseid)
-        print('111save report',html_dir )
+        # print('111save report',html_dir )
         with open(html_dir, 'w', encoding='utf-8') as f:
             f.write(self.html)
 
