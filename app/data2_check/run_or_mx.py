@@ -64,7 +64,6 @@ configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 Excel_write = ExcelUtilAll()
 userid = Constant_id().cookie_id
 
-logger.info("||||||||||||||||||Start checking||||||||||||||||||")
 
 P_common = Parameter_common()
 # print(P_common)

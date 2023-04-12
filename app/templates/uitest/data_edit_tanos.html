@@ -258,6 +258,11 @@
 
     const socket = io();  // 连接到SocketIO服务器
 
+    socket.on('task_start', data => {
+        term.writeln(data.data);
+    });
+
+
     // 监听 "task_log" 事件，将输出显示在xterm.js终端控制台上
     socket.on('task_log', data => {
         term.writeln(data.data);

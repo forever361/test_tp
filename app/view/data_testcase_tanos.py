@@ -325,6 +325,8 @@ def runJob(jsonData):
         # 创建子进程并异步捕捉其输出
         retcode = Constant_cmd(user_id).retcode
 
+        emit('task_start', {'data': "||||||||||||||||||Start checking||||||||||||||||||"})
+
         # 实时读取子进程的输出并发送至前端
         while True:
             output = retcode.stdout.readline().decode()

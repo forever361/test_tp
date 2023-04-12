@@ -628,3 +628,16 @@ LINE 1: select test_id,'@@@',CREATE_TIME,CREATOR,EDITOR,EDIT_TIME,EN...
 2023-04-12 09:15:35,213-INFO: value check sucessfully
 2023-04-12 09:15:35,365-INFO: |total_count   check|source:200 target:200
 2023-04-12 09:15:35,423-INFO: count check successfully
+2023-04-12 14:40:23,449-INFO: ||||||||||||||||||Start checking||||||||||||||||||
+2023-04-12 14:40:23,450-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 14:40:23,616-INFO: S:pg,T:pg
+2023-04-12 14:40:23,873-INFO: different columns between Source and Target are: None
+2023-04-12 14:40:23,995-INFO: value check sucessfully
+2023-04-12 14:40:24,142-INFO: |total_count   check|source:200 target:200
+2023-04-12 14:40:24,204-INFO: count check successfully
+2023-04-12 14:59:18,505-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 14:59:18,656-INFO: S:pg,T:pg
+2023-04-12 14:59:18,854-INFO: different columns between Source and Target are: None
+2023-04-12 14:59:18,950-INFO: value check sucessfully
+2023-04-12 14:59:19,123-INFO: |total_count   check|source:200 target:200
+2023-04-12 14:59:19,176-INFO: count check successfully
