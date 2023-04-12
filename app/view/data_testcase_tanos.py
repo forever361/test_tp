@@ -249,6 +249,7 @@ def runJob2(job_id):
 # @web.route('/runJob/<int:job_id>', methods=['POST'])
 def runJob(jsonData):
     # TODO: Update data in the database
+    emit('task_start', {'data': "||||||||||||||||||Start checking||||||||||||||||||"})
 
     data = json.loads(jsonData)
     source_point_name = (data['job']['source_point'])
@@ -324,8 +325,6 @@ def runJob(jsonData):
     try:
         # 创建子进程并异步捕捉其输出
         retcode = Constant_cmd(user_id).retcode
-
-        emit('task_start', {'data': "||||||||||||||||||Start checking||||||||||||||||||"})
 
         # 实时读取子进程的输出并发送至前端
         while True:

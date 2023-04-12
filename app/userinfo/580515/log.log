@@ -641,3 +641,15 @@ LINE 1: select test_id,'@@@',CREATE_TIME,CREATOR,EDITOR,EDIT_TIME,EN...
 2023-04-12 14:59:18,950-INFO: value check sucessfully
 2023-04-12 14:59:19,123-INFO: |total_count   check|source:200 target:200
 2023-04-12 14:59:19,176-INFO: count check successfully
+2023-04-12 15:20:08,748-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 15:20:08,901-INFO: S:pg,T:pg
+2023-04-12 15:20:09,135-INFO: different columns between Source and Target are: None
+2023-04-12 15:20:09,248-INFO: value check sucessfully
+2023-04-12 15:20:09,398-INFO: |total_count   check|source:200 target:200
+2023-04-12 15:20:09,466-INFO: count check successfully
+2023-04-12 17:43:38,295-INFO:  check rule is : Check-the-first-200-rows
+2023-04-12 17:43:38,453-INFO: S:pg,T:pg
+2023-04-12 17:43:38,707-INFO: different columns between Source and Target are: None
+2023-04-12 17:43:38,825-INFO: value check sucessfully
+2023-04-12 17:43:38,980-INFO: |total_count   check|source:200 target:200
+2023-04-12 17:43:39,040-INFO: count check successfully
