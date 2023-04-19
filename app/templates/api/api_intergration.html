@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-    <div style="background-color: #eee; height:200vh; width:100%; overflow-y:auto; ">
+    <div style="background-color: #eee; height:230vh; width:100%; overflow-y:auto; ">
         <div class="row" style="margin: 0 auto; width:96%; ">
             <div class="row" style="margin: 0 auto; margin-top: 10px">
                 <div class="card" id="card_getname">
@@ -28,7 +28,6 @@
                         <form class="d-flex align-items-center" style="display: flex;">
 
                             <input style="width: 400px" type="text" class="form-control" id="appkey"
-                                   placeholder="Enter your app key"
                                    value={{ api_name }}>
                             <button type="submit" class="btn btn-primary h-100" style="margin-left: 10px">Get API
                                 information
@@ -38,144 +37,156 @@
                 </div>
             </div>
 
+            <div class="row" style="margin: 0 auto; margin-top: 10px">
+                <div class="card" id="card_getname">
+                    <div class="card-body">
+                        <form class="d-flex align-items-center" style="display: flex;">
+                            <select style="width: 100px; margin-right: 10px" class="form-select" id="new-row-dbtype">
+                                <option>GET</option>
+                                <option>POST</option>
+                            </select>
+                            <input type="text" class="form-control" id="apiurl" placeholder="Enter your Request URL"
+                            >
+                            <button type="submit" class="btn btn-success h-100" style="margin-left: 10px">Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <div class="row" style="margin: 0 auto; ">
 
-                <div id=1 style=" margin-top: 10px; height: 750px"
+                <div id=1 style=" margin-top: 10px; height: 350px"
                      class="card col-4">
                     <div class="card-body">
                         <form>
-                            <div class="mb-3">
-                                <label for="appkey" class="form-label">App Key</label>
-                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
-                                       value={{ api_name }}>
+                            <div class="mb-3" style="display: flex;">
+                                <label for="appkey" class="form-label">Token:</label>
+                                <div style="margin-left: 20px; width: 100%">
+                                    <input type="text" class="form-control" id="appkey" placeholder="Enter your token">
+                                </div>
+
                             </div>
-                            <div class="mb-3">
-                                <label for="session" class="form-label">Session</label>
-                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
+                            <div class="mb-3" style="display: flex;">
+                                <label for="session" class="form-label">Response Format:</label>
+                                <div style="display: flex; margin-left: 20px">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                               id="flexRadioDefault1" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            JSON
+                                        </label>
+                                    </div>
+                                    <div class="form-check" style="margin-left: 20px">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                               id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            XML
+                                        </label>
+                                    </div>
+                                </div>
+
+
                             </div>
-                            <div class="mb-3">
-                                <label for="timestamp" class="form-label">Timestamp</label>
-                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
-                            </div>
-                            <button type="submit" class="btn btn-primary h-100">Submit</button>
+
+                            <button type="submit" class="btn btn-primary h-100">Reset</button>
                         </form>
                     </div>
 
-                    <hr/>
-
-                    <div class="card-body" style="margin-top: 10px">
-                        <form>
-                            <div class="mb-3">
-                                <label for="appkey" class="form-label">App Key</label>
-                                <input type="text" class="form-control" id="appkey" placeholder="222Enter your app key"
-                                       value={{ api_name }}>
-                            </div>
-                            <div class="mb-3">
-                                <label for="session" class="form-label">Session</label>
-                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
-                            </div>
-                            <div class="mb-3">
-                                <label for="timestamp" class="form-label">Timestamp</label>
-                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
-                            </div>
-                            <button type="submit" class="btn btn-primary h-100">Submit</button>
-                        </form>
-                    </div>
 
                 </div>
 
-                <div id=2 style=" margin-top: 10px; margin-bottom: 10px"
-                     class="card col-8">
-                    <div class="card-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="appkey" class="form-label">App Key</label>
-                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
-                                       value={{ api_name }}>
-                            </div>
-                            <div class="mb-3">
-                                <label for="session" class="form-label">Session</label>
-                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
-                            </div>
-                            <div class="mb-3">
-                                <label for="timestamp" class="form-label">Timestamp</label>
-                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
-                            </div>
-                            <button type="submit" class="btn btn-primary h-100">Submit</button>
-                        </form>
+                <div class="col-8">
+
+                    <div id=2 style=" margin-top: 10px; margin-bottom: 10px"
+                         class="card ">
+                        <div class="card-body">
+                            <h4>Headers</h4>
+                            <hr/>
+                            <form>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover align-middle">
+                                        <thead class="table-dark">
+                                        <tr>
+                                            <th scope="col">Header Name</th>
+                                            <th scope="col">Header Value</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td><input type="text" class="form-control" placeholder="Header Name"></td>
+                                            <td><input type="text" class="form-control" placeholder="Header Value"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" class="form-control" placeholder="Header Name"></td>
+                                            <td><input type="text" class="form-control" placeholder="Header Value"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <!-- add more rows here as needed -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </form>
+                        </div>
+
                     </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="appkey" class="form-label">App Key</label>
-                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
-                                       value={{ api_name }}>
-                            </div>
-                            <div class="mb-3">
-                                <label for="session" class="form-label">Session</label>
-                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
-                            </div>
-                            <div class="mb-3">
-                                <label for="timestamp" class="form-label">Timestamp</label>
-                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
-                            </div>
-                            <button type="submit" class="btn btn-primary h-100">Submit</button>
-                        </form>
+
+
+                    <div id=3 style=" margin-top: 10px; margin-bottom: 10px"
+                         class="card ">
+                        <div class="card-body">
+                            <h4>Request Parameters</h4>
+                            <hr/>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="request-body-type">Body Type</label>
+                                        <div class="form-check form-check-inline" style="margin-left: 20px">
+                                            <input class="form-check-input" type="radio" name="request-body-type"
+                                                   id="json" value="json" checked>
+                                            <label class="form-check-label" for="json">JSON</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="request-body-type"
+                                                   id="xml" value="xml">
+                                            <label class="form-check-label" for="xml">XML</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="request-body-type"
+                                                   id="form-data" value="form-data">
+                                            <label class="form-check-label" for="form-data">Form Data</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="request-body-type"
+                                                   id="text" value="text">
+                                            <label class="form-check-label" for="text">Text</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-top: 10px">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="request-body-content">Body Content</label>
+                                            <textarea class="form-control" id="request-body-content"
+                                                      rows="10"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
                     </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="appkey" class="form-label">App Key</label>
-                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
-                                       value={{ api_name }}>
-                            </div>
-                            <div class="mb-3">
-                                <label for="session" class="form-label">Session</label>
-                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
-                            </div>
-                            <div class="mb-3">
-                                <label for="timestamp" class="form-label">Timestamp</label>
-                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
-                            </div>
-                            <button type="submit" class="btn btn-primary h-100">Submit</button>
-                        </form>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="appkey" class="form-label">App Key</label>
-                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
-                                       value={{ api_name }}>
-                            </div>
-                            <div class="mb-3">
-                                <label for="session" class="form-label">Session</label>
-                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
-                            </div>
-                            <div class="mb-3">
-                                <label for="timestamp" class="form-label">Timestamp</label>
-                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
-                            </div>
-                            <button type="submit" class="btn btn-primary h-100">Submit</button>
-                        </form>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="appkey" class="form-label">App Key</label>
-                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
-                                       value={{ api_name }}>
-                            </div>
-                            <div class="mb-3">
-                                <label for="session" class="form-label">Session</label>
-                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
-                            </div>
-                            <div class="mb-3">
-                                <label for="timestamp" class="form-label">Timestamp</label>
-                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
-                            </div>
-                            <button type="submit" class="btn btn-primary h-100">Submit</button>
-                        </form>
-                    </div>
+
+
                 </div>
 
 
