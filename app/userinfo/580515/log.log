@@ -653,3 +653,27 @@ LINE 1: select test_id,'@@@',CREATE_TIME,CREATOR,EDITOR,EDIT_TIME,EN...
 2023-04-12 17:43:38,825-INFO: value check sucessfully
 2023-04-12 17:43:38,980-INFO: |total_count   check|source:200 target:200
 2023-04-12 17:43:39,040-INFO: count check successfully
+2023-04-17 15:38:36,701-INFO:  check rule is : Check-the-first-200-rows
+2023-04-17 15:38:36,882-INFO: S:pg,T:pg
+2023-04-17 15:38:37,106-INFO: different columns between Source and Target are: None
+2023-04-17 15:39:51,700-INFO:  check rule is : Check-the-first-200-rows
+2023-04-17 15:39:51,914-INFO: S:pg,T:pg
+2023-04-17 15:39:52,149-INFO: different columns between Source and Target are: None
+2023-04-17 15:40:15,722-INFO:  check rule is : Check-the-first-200-rows
+2023-04-17 15:40:15,872-INFO: S:pg,T:pg
+2023-04-17 15:40:16,084-INFO: different columns between Source and Target are: None
+2023-04-17 15:40:16,183-INFO: value check sucessfully
+2023-04-17 15:40:16,308-INFO: |total_count   check|source:200 target:200
+2023-04-17 15:40:16,367-INFO: count check successfully
+2023-04-17 15:41:11,484-INFO:  check rule is : Check-the-first-200-rows
+2023-04-17 15:41:11,647-INFO: S:pg,T:pg
+2023-04-17 15:41:11,886-INFO: different columns between Source and Target are: None
+2023-04-17 15:41:12,265-INFO: value check sucessfully
+2023-04-17 15:41:12,398-INFO: |total_count   check|source:200 target:200
+2023-04-17 15:41:12,453-INFO: count check successfully
+2023-04-17 15:53:56,066-INFO:  check rule is : Check-the-first-200-rows
+2023-04-17 15:53:56,222-INFO: S:pg,T:pg
+2023-04-17 15:53:56,441-INFO: different columns between Source and Target are: None
+2023-04-17 15:53:56,583-INFO: value check sucessfully
+2023-04-17 15:53:56,708-INFO: |total_count   check|source:200 target:200
+2023-04-17 15:53:56,769-INFO: count check successfully

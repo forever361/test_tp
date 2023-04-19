@@ -115,11 +115,11 @@
             <path fill="#db0011" d="M16.019-0l-15.65 15.65 15.65 15.613v-31.264z"></path>
             <path fill="#db0011" d="M47.245 31.263l-15.613-15.613-15.613 15.613h31.227z"></path>
             </svg>
-        <a class="navbar-brand " style="margin-left: 10px;font-size:1rem" href="{{buildUrl('/')}}">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
+        <a class="navbar-brand " style="margin-left: 10px;font-size:1rem" href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
 
         <div class="collapse navbar-collapse" id="navbarNav1">
             <ul class="navbar-nav ms-auto" style="margin-right:50px">
-                <li class="nav-item"><a class="nav-link active" href="{{buildUrl('/')}}"> Home </a></li>
+                <li class="nav-item"><a class="nav-link active" href="/"> Home </a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Data Test </a>
                     <ul class="dropdown-menu dropdown-menu-right">
@@ -144,7 +144,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> API Test </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="/test_api">System Integration Test</a></li>
+                        <li><a class="dropdown-item" href="/api_intergration">System Integration Test</a></li>
                         <li><a class="dropdown-item" href="/test_api">Smoke Test</a></li>
                         <li><a class="dropdown-item" href="/test_api">Regular Sanity Test</a></li>
                         <li><a class="dropdown-item" href="/test_api">Hourly Health Check</a></li>
@@ -166,10 +166,10 @@
                 {% if request.cookies.get('Name') and session.get('username',None)%}
                 <li class="nav-item"><a class="nav-link" href="javascript:viod(0)">{{ request.cookies.get('Name')}}</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{{ buildUrl('/logout') }}">logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="/logout">logout</a></li>
                 {% else %}
-                <li class="nav-item"><a class="nav-link" href="{{ buildUrl('/register') }}">Register</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ buildUrl('/login') }}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
                 {% endif %}
             </ul>
 

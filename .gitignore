@@ -9,6 +9,9 @@
 /app/templates/report
 /app/static/userinfo
 /app/templates/userinfo
+/app/userinfo/
+/app/templates/personal
+
 
 
 

@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block js %}
+    <script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+    <link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+
+    <script src="/static/tanos/bootbox.all.min.js"></script>
+    <script src="/static/tanos/popper.js"></script>
+    <script src="/static/tanos/toastr.min.js"></script>
+    <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+
+    <!-- Bootstrap Font Icon CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <!--<script src="/static/tanos/data_connect.js"></script>-->
+
+
+{% endblock %}
+
+{% block content %}
+    <div style="background-color: #eee; height:200vh; width:100%; overflow-y:auto; ">
+        <div class="row" style="margin: 0 auto; width:96%; ">
+            <div class="row" style="margin: 0 auto; margin-top: 10px">
+                <div class="card" id="card_getname">
+                    <div class="card-body">
+                        <form class="d-flex align-items-center" style="display: flex;">
+
+                            <input style="width: 400px" type="text" class="form-control" id="appkey"
+                                   placeholder="Enter your app key"
+                                   value={{ api_name }}>
+                            <button type="submit" class="btn btn-primary h-100" style="margin-left: 10px">Get API
+                                information
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin: 0 auto; ">
+
+                <div id=1 style=" margin-top: 10px; height: 750px"
+                     class="card col-4">
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="appkey" class="form-label">App Key</label>
+                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
+                                       value={{ api_name }}>
+                            </div>
+                            <div class="mb-3">
+                                <label for="session" class="form-label">Session</label>
+                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
+                            </div>
+                            <div class="mb-3">
+                                <label for="timestamp" class="form-label">Timestamp</label>
+                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
+                            </div>
+                            <button type="submit" class="btn btn-primary h-100">Submit</button>
+                        </form>
+                    </div>
+
+                    <hr/>
+
+                    <div class="card-body" style="margin-top: 10px">
+                        <form>
+                            <div class="mb-3">
+                                <label for="appkey" class="form-label">App Key</label>
+                                <input type="text" class="form-control" id="appkey" placeholder="222Enter your app key"
+                                       value={{ api_name }}>
+                            </div>
+                            <div class="mb-3">
+                                <label for="session" class="form-label">Session</label>
+                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
+                            </div>
+                            <div class="mb-3">
+                                <label for="timestamp" class="form-label">Timestamp</label>
+                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
+                            </div>
+                            <button type="submit" class="btn btn-primary h-100">Submit</button>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div id=2 style=" margin-top: 10px; margin-bottom: 10px"
+                     class="card col-8">
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="appkey" class="form-label">App Key</label>
+                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
+                                       value={{ api_name }}>
+                            </div>
+                            <div class="mb-3">
+                                <label for="session" class="form-label">Session</label>
+                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
+                            </div>
+                            <div class="mb-3">
+                                <label for="timestamp" class="form-label">Timestamp</label>
+                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
+                            </div>
+                            <button type="submit" class="btn btn-primary h-100">Submit</button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="appkey" class="form-label">App Key</label>
+                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
+                                       value={{ api_name }}>
+                            </div>
+                            <div class="mb-3">
+                                <label for="session" class="form-label">Session</label>
+                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
+                            </div>
+                            <div class="mb-3">
+                                <label for="timestamp" class="form-label">Timestamp</label>
+                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
+                            </div>
+                            <button type="submit" class="btn btn-primary h-100">Submit</button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="appkey" class="form-label">App Key</label>
+                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
+                                       value={{ api_name }}>
+                            </div>
+                            <div class="mb-3">
+                                <label for="session" class="form-label">Session</label>
+                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
+                            </div>
+                            <div class="mb-3">
+                                <label for="timestamp" class="form-label">Timestamp</label>
+                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
+                            </div>
+                            <button type="submit" class="btn btn-primary h-100">Submit</button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="appkey" class="form-label">App Key</label>
+                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
+                                       value={{ api_name }}>
+                            </div>
+                            <div class="mb-3">
+                                <label for="session" class="form-label">Session</label>
+                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
+                            </div>
+                            <div class="mb-3">
+                                <label for="timestamp" class="form-label">Timestamp</label>
+                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
+                            </div>
+                            <button type="submit" class="btn btn-primary h-100">Submit</button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="appkey" class="form-label">App Key</label>
+                                <input type="text" class="form-control" id="appkey" placeholder="Enter your app key"
+                                       value={{ api_name }}>
+                            </div>
+                            <div class="mb-3">
+                                <label for="session" class="form-label">Session</label>
+                                <input type="text" class="form-control" id="session" placeholder="Enter your session">
+                            </div>
+                            <div class="mb-3">
+                                <label for="timestamp" class="form-label">Timestamp</label>
+                                <input type="text" class="form-control" id="timestamp" placeholder="Enter timestamp">
+                            </div>
+                            <button type="submit" class="btn btn-primary h-100">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        const form = document.querySelector("form");
+        const appKeyInput = document.getElementById("app_key");
+        const appSecretInput = document.getElementById("app_secret");
+        const responseCard = document.getElementById("response_card");
+        const responseBody = document.getElementById("response_body");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const appKey = appKeyInput.value;
+            const appSecret = appSecretInput.value;
+
+            // Call the Taobao Appstore Subscription API
+            const response = await fetch(
+                `https://eco.taobao.com/router/rest?method=taobao.appstore.subscribe.get&app_key=${appKey}&app_secret=${appSecret}&timestamp=${Date.now()}&v=2.0&format=json`
+            );
+
+            // Display the API response
+            responseCard.style.display = "block";
+            responseBody.textContent = await response.text();
+        });
+    </script>
+
+
+    {% if message %}
+
+    {% endif %}
+
+{% endblock %}

@@ -1,7 +1,7 @@
 from app.application import app
 from app.view import user, data_test, batch, testcase, compare, normal_compare, web_testcase, web_test_compare, \
     data_batch_new, data_testcase, othertools,data_batch_new_f2t,data_testcase_f2t,data_point_management,\
-    data_connect_management,data_testcase_tanos
+    data_connect_management,data_testcase_tanos,api_new
 
 app.register_blueprint(user.web)
 app.register_blueprint(data_test.web)
@@ -19,6 +19,7 @@ app.register_blueprint(data_testcase_f2t.web)
 app.register_blueprint(data_point_management.web)
 app.register_blueprint(data_connect_management.web)
 app.register_blueprint(data_testcase_tanos.web)
+app.register_blueprint(api_new.web)
 
 from common.libs.UrlManager import UrlManager
 app.add_template_global(UrlManager.buildStaticUrl, 'buildStaticUrl')
