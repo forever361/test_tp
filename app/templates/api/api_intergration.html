@@ -101,12 +101,15 @@
                     <div id=2 style=" margin-top: 10px; margin-bottom: 10px"
                          class="card ">
                         <div class="card-body">
-                            <h4>Headers</h4>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4>Headers</h4>
+                                <button type="button" class="btn btn-primary" id="add-header-row">Add</button>
+                            </div>
                             <hr/>
                             <form>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-hover align-middle">
-                                        <thead class="table-dark">
+                                        <thead style="background-color: rgba(33,150,243,0.5)">
                                         <tr>
                                             <th scope="col">Header Name</th>
                                             <th scope="col">Header Value</th>
@@ -118,14 +121,14 @@
                                             <td><input type="text" class="form-control" placeholder="Header Name"></td>
                                             <td><input type="text" class="form-control" placeholder="Header Value"></td>
                                             <td>
-                                                <button type="button" class="btn btn-danger">Delete</button>
+                                                <button type="button" class="btn btn-primary">Delete</button>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td><input type="text" class="form-control" placeholder="Header Name"></td>
                                             <td><input type="text" class="form-control" placeholder="Header Value"></td>
                                             <td>
-                                                <button type="button" class="btn btn-danger">Delete</button>
+                                                <button type="button" class="btn btn-primary">Delete</button>
                                             </td>
                                         </tr>
                                         <!-- add more rows here as needed -->
