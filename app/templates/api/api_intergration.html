@@ -98,97 +98,136 @@
 
                 <div class="col-8">
 
-                    <div id=2 style=" margin-top: 10px; margin-bottom: 10px"
-                         class="card ">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h4>Headers</h4>
-                                <button type="button" class="btn btn-primary" id="add-header-row">Add</button>
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#input"
+                                    type="button" role="tab" aria-controls="input" aria-selected="true">Input
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output"
+                                    type="button" role="tab" aria-controls="output" aria-selected="false">Output
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="input" role="tabpanel" aria-labelledby="input-tab">
+                            <div id="2" style=" margin-top: 10px; margin-bottom: 10px" class="card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h4>Headers</h4>
+                                        <button type="button" class="btn btn-primary" id="add-header-row">Add</button>
+                                    </div>
+                                    <hr/>
+                                    <form>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover align-middle">
+                                                <thead style="background-color: #b0bec5">
+                                                <tr>
+                                                    <th scope="col">Header Name</th>
+                                                    <th scope="col">Header Value</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td><input type="text" class="form-control"
+                                                               placeholder="Header Name"></td>
+                                                    <td><input type="text" class="form-control"
+                                                               placeholder="Header Value"></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-primary">Delete</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input type="text" class="form-control"
+                                                               placeholder="Header Name"></td>
+                                                    <td><input type="text" class="form-control"
+                                                               placeholder="Header Value"></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-primary">Delete</button>
+                                                    </td>
+                                                </tr>
+                                                <!-- add more rows here as needed -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </form>
+                                </div>
                             </div>
-                            <hr/>
-                            <form>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover align-middle">
-                                        <thead style="background-color: rgba(33,150,243,0.5)">
-                                        <tr>
-                                            <th scope="col">Header Name</th>
-                                            <th scope="col">Header Value</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td><input type="text" class="form-control" placeholder="Header Name"></td>
-                                            <td><input type="text" class="form-control" placeholder="Header Value"></td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary">Delete</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="text" class="form-control" placeholder="Header Name"></td>
-                                            <td><input type="text" class="form-control" placeholder="Header Value"></td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary">Delete</button>
-                                            </td>
-                                        </tr>
-                                        <!-- add more rows here as needed -->
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div id="3" style=" margin-top: 10px; margin-bottom: 10px" class="card">
+                                <div class="card-body">
+                                    <h4>Request Parameters</h4>
+                                    <hr/>
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="request-body-type">Body Type</label>
+                                                <div class="form-check form-check-inline" style="margin-left: 20px">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="request-body-type"
+                                                           id="json" value="json" checked>
+                                                    <label class="form-check-label" for="json">JSON</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="request-body-type"
+                                                           id="xml" value="xml">
+                                                    <label class="form-check-label" for="xml">XML</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="request-body-type"
+                                                           id="form-data" value="form-data">
+                                                    <label class="form-check-label" for="form-data">Form Data</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="request-body-type"
+                                                           id="text" value="text">
+                                                    <label class="form-check-label" for="text">Text</label>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                            </form>
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="request-body-content" style="margin-bottom: 10px">Body
+                                                        Content:</label>
+                                                    <textarea class="form-control" id="request-body-content"
+                                                              rows="10"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
                         </div>
 
-                    </div>
-
-
-                    <div id=3 style=" margin-top: 10px; margin-bottom: 10px"
-                         class="card ">
-                        <div class="card-body">
-                            <h4>Request Parameters</h4>
-                            <hr/>
-                            <form>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="request-body-type">Body Type</label>
-                                        <div class="form-check form-check-inline" style="margin-left: 20px">
-                                            <input class="form-check-input" type="radio" name="request-body-type"
-                                                   id="json" value="json" checked>
-                                            <label class="form-check-label" for="json">JSON</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="request-body-type"
-                                                   id="xml" value="xml">
-                                            <label class="form-check-label" for="xml">XML</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="request-body-type"
-                                                   id="form-data" value="form-data">
-                                            <label class="form-check-label" for="form-data">Form Data</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="request-body-type"
-                                                   id="text" value="text">
-                                            <label class="form-check-label" for="text">Text</label>
-                                        </div>
+                        <div class="tab-pane fade" id="output" role="tabpanel" aria-labelledby="output-tab">
+                            <div id="4" style=" margin-top: 10px; margin-bottom: 10px" class="card">
+                                <div class="card-body">
+                                    <h4>Response</h4>
+                                    <hr/>
+                                    <div class="form-group" style="margin-bottom: 20px; display: flex;">
+                                        <label for="response-code" style="width: 150px">Response Code:</label>
+                                        <input type="text" class="form-control" id="response-code"
+                                               placeholder="Response code">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="response-body" style="margin-bottom: 10px">Response Body:</label>
+                                        <textarea class="form-control" id="response-body" rows="5"></textarea>
+                                        <button class="btn btn-outline-secondary" type="button" id="copyButton">Copy
+                                        </button>
                                     </div>
                                 </div>
-
-                                <div class="row" style="margin-top: 10px">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="request-body-content">Body Content</label>
-                                            <textarea class="form-control" id="request-body-content"
-                                                      rows="10"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </form>
+                            </div>
                         </div>
-
                     </div>
-
 
                 </div>
 
@@ -197,6 +236,16 @@
         </div>
 
     </div>
+
+    <script>
+
+        document.getElementById('copyButton').addEventListener('click', function () {
+            var textarea = document.getElementById('exampleTextarea');
+            textarea.select();
+            document.execCommand('copy');
+        });
+
+    </script>
 
 
     <script>
