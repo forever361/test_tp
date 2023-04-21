@@ -3,84 +3,111 @@
 {% block title %}UI自动化 测试平台 - new test cases{% endblock %}
 
 {% block content %}
+    <div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex; ">
+        <div style=" height:91%; width:100%; margin-left: 30px;  margin-right: 30px; margin-top: 10px; margin-bottom: 10px; "
+             class="card">
+            <div class="card-body" style="padding-bottom:0px;">
+                <div class="container mt-3">
+                    <h2 style="text-align:center">Encrypt Password</h2>
+                    <hr/>
 
-<div class="panel-body" style="padding-bottom:0px;">
-    <h3 style="text-align:center">Encrypt Password</h3>
-    <form class="form-horizontal" id="encrypt password"  method="post">
+                    <form class="form-horizontal" id="encrypt password" method="post">
 
-        <div class="form-group">
-            <label for="name" class="col-sm-2 control-label">Input</label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control required" id="name" name="name" maxlength="100"
-                       placeholder="please input password">
+                        <div class="mb-3">
+                            <label for="name" class="col-sm-2 control-label">Input</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control required" id="name" name="name" maxlength="100"
+                                       placeholder="please input password">
 
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <div class="col-sm-offset-2 col-sm-8">
+                                <button id="submitButton" type="button" class="btn btn-primary"
+                                        onclick="getPublicFunctions()">
+                                    Encrypt
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="name" class="col-sm-2 control-label">Output</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control required" id="name2" name="name2" maxlength="300"
+                                       placeholder="encryption result">
+
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <div class="col-sm-offset-2 col-sm-8">
+                                <button id="testButton" type="button" class="btn btn-primary"
+                                        onclick="redirectToAPI()">
+                                    API test
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
         </div>
+    </div>
+    <script>
 
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-8">
-                <button id="submitButton" type="button"  class="btn btn-default" onclick="getPublicFunctions()">Encrypt</button>
-<!--                <button id="btn_add" type="button" class="btn btn-default" onclick="window.location.href=('/')">Back</button>-->
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="name" class="col-sm-2 control-label">Output</label>
-            <div class="col-sm-8">
-                <input type="text"  class="form-control required" id="name2" name="name2" maxlength="300"
-                       placeholder="encryption result">
-
-            </div>
-        </div>
-
-    </form>
-
-</div>
-
-
-<script>
-
-        function getPublicFunctions(){
+        function getPublicFunctions() {
             var cases = []
 
-             $.ajax(
+            $.ajax(
                 {
-                  url: "/encrypt.json",
-                  type: "post",
-                  dataType:"json",
-                  data:{"name":document.getElementById('name').value},
-                  async : true,
-                  beforeSend:function()
-                  {
-                    $('#Report').hide();
-                    return true;
-                  },
-                  success:function(data)
-                  {
-                    document.getElementById('name2').value = data.encr_name
-<!--                    alert(data.encr_name)-->
-                  },
-                  error:function()
-                  {
-                   layer.msg(data.code,{time:2000,
-                            area:['380px','66px'],
-                            offset:'rt',
-                            anim:1,
-                            skin:'lay-msg-bg'
-                                     });
+                    url: "/encrypt.json",
+                    type: "post",
+                    dataType: "json",
+                    data: {"name": document.getElementById('name').value},
+                    async: true,
+                    beforeSend: function () {
+                        $('#Report').hide();
+                        return true;
+                    },
+                    success: function (data) {
+                        document.getElementById('name2').value = data.encr_name
+                        <!--                    alert(data.encr_name)-->
+                    },
+                    error: function () {
+                        layer.msg(data.code, {
+                            time: 2000,
+                            area: ['380px', '66px'],
+                            offset: 'rt',
+                            anim: 1,
+                            skin: 'lay-msg-bg'
+                        });
 
-                  },
-                  complete:function()
-                  {
-                    // $('#tips').hide();
-                  }
-            });
+                    },
+                    complete: function () {
+                        // $('#tips').hide();
+                    }
+                });
 
             return cases;
 
 
-            }
+        }
 
-</script>
+        function redirectToAPI() {
+            // 获取用户输入的API名称
+            {#var apiName = document.getElementById('apiNameInput').value;#}
+            var apiName = 'taobao.appstore.subscribe.get';
+            // 获取当前页面的URL
+            var currentURL = window.location.href;
+            // 拼接新的URL
+            var newURL = 'http://127.0.0.1:8889/api_intergration?apiName=' + encodeURIComponent(apiName);
+            window.location.href = newURL;
+        }
+
+    </script>
 
 {% endblock %}
