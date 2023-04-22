@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
     <!--<script src="/static/tanos/data_connect.js"></script>-->
+    <link rel="stylesheet" href="./static/codemirror/lib/codemirror.css"/>
+    <script src="./static/codemirror/lib/codemirror.js"></script>
+    <script src=./static/codemirror/mode/shell/shell.js></script>
+
 
     <style>
         /* Active tab styles */
@@ -47,6 +51,7 @@
             border-top: none;
         }
 
+
     </style>
 
 {% endblock %}
@@ -61,7 +66,9 @@
 
                             <input style="width: 400px" type="text" class="form-control" id="appkey"
                                    value={{ api_name }}>
-                            <button type="submit" class="btn btn-primary h-100" style="margin-left: 10px">Get API
+                            <button id="get-api-btn" type="button" class="btn btn-primary h-100"
+                                    style="margin-left: 10px">
+                                Get API
                                 information
                             </button>
                         </form>
@@ -73,13 +80,14 @@
                 <div class="card" id="card_getname">
                     <div class="card-body">
                         <form class="d-flex align-items-center" style="display: flex;">
-                            <select style="width: 100px; margin-right: 10px" class="form-select" id="new-row-dbtype">
-                                <option>GET</option>
+                            <select style="width: 100px; margin-right: 10px" class="form-select" id="type_option">
                                 <option>POST</option>
+                                <option>GET</option>
                             </select>
                             <input type="text" class="form-control" id="apiurl" placeholder="Enter your Request URL"
                             >
-                            <button type="submit" class="btn btn-success h-100" style="margin-left: 10px">Send
+                            <button id="run_api_btn" type="button" class="btn btn-success h-100"
+                                    style="margin-left: 10px">Send
                             </button>
                         </form>
                     </div>
@@ -121,7 +129,7 @@
 
                             </div>
 
-                            <button type="submit" class="btn btn-primary h-100">Reset</button>
+                            <button type="submit" class="btn btn-primary h-100" id="resetBtn">Reset</button>
                         </form>
                     </div>
 
@@ -230,7 +238,7 @@
                                                     <label for="request-body-content" style="margin-bottom: 10px">Body
                                                         Content:</label>
                                                     <textarea class="form-control" id="request-body-content"
-                                                              rows="10"></textarea>
+                                                              rows="20"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,7 +260,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="response-body" style="margin-bottom: 10px">Response Body:</label>
-                                        <textarea class="form-control" id="response-body" rows="5"></textarea>
+                                        <textarea class="form-control" id="response-body" rows="20"></textarea>
                                         <button class="btn btn-outline-secondary" type="button" id="copyButton">Copy
                                         </button>
                                     </div>
@@ -271,37 +279,210 @@
 
     <script>
 
+        var req_CodeMirror
+        $(document).ready(function () {
+            req_CodeMirror = CodeMirror.fromTextArea(document.getElementById("request-body-content"), {
+                lineNumbers: true,
+                mode: "shell",
+                readOnly: true,
+            });
+
+        });
+
+
+        var res_CodeMirror
+        $(document).ready(function () {
+            res_CodeMirror = CodeMirror.fromTextArea(document.getElementById("response-body"), {
+                lineNumbers: true,
+                mode: "shell",
+                readOnly: true,
+            });
+        });
+
+
+    </script>
+
+    <script>
+
         document.getElementById('copyButton').addEventListener('click', function () {
             var textarea = document.getElementById('exampleTextarea');
             textarea.select();
             document.execCommand('copy');
         });
 
+
+        $(document).ready(function () {
+            // 绑定重置按钮的点击事件
+            $('#resetBtn').click(function () {
+                window.location.href = 'http://127.0.0.1:8889/api_intergration';
+            });
+        });
+
+
     </script>
 
 
     <script>
-        const form = document.querySelector("form");
-        const appKeyInput = document.getElementById("app_key");
-        const appSecretInput = document.getElementById("app_secret");
-        const responseCard = document.getElementById("response_card");
-        const responseBody = document.getElementById("response_body");
+        $(document).ready(function () {
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+            $("#get-api-btn").click(function () {
+                var data = {
+                    apiname: "taobao.appstore.subscribe.get",
+                };
 
-            const appKey = appKeyInput.value;
-            const appSecret = appSecretInput.value;
+                // 发起POST请求
+                $.ajax({
+                    url: "/get_api_detail",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        // console.info(data.headers)
+                        var response = data[0]
 
-            // Call the Taobao Appstore Subscription API
-            const response = await fetch(
-                `https://eco.taobao.com/router/rest?method=taobao.appstore.subscribe.get&app_key=${appKey}&app_secret=${appSecret}&timestamp=${Date.now()}&v=2.0&format=json`
-            );
+                        // 将响应的Headers填充到前端UI中
+                        var headersTable = $("#input #2 table tbody");
+                        headersTable.empty();
+                        $.each(response['headers'], function (key, value) {
+                            var newRow = $("<tr><td><input type='text' class='form-control' value='" + key + "'></td><td><input type='text' class='form-control' value='" + value + "'></td><td><button type='button' class='btn btn-primary'>Delete</button></td></tr>");
+                            headersTable.append(newRow);
+                        });
 
-            // Display the API response
-            responseCard.style.display = "block";
-            responseBody.textContent = await response.text();
+
+                        // 将响应的Request Parameters填充到前端UI中
+                        {#var requestBodyContent = $("#input #3 #request-body-content");#}
+                        {#requestBodyContent.val(JSON.stringify(response['request_params'], null, 2));#}
+                        req_CodeMirror.setValue(JSON.stringify(response['request_params'], null, 2));
+
+
+                        // 将响应的Request Parameters填充到前端UI中
+                        var apiurl = $("#apiurl");
+                        apiurl.val(response['apiurl']);
+
+                        // 切换到Input选项卡
+                        $("#input-tab").tab("show");
+
+                        toastr.success('get API successfully!');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                        // 将响应的Request Parameters填充到前端UI中
+                    }
+                });
+            });
         });
+
+
+        $(document).ready(function () {
+
+            $("#run_api_btn").click(function () {
+                var request_type = $('#type_option').val();
+
+                var send_url = $("#apiurl").val();
+                var send_body = $("#request-body-content").val()
+
+                if (send_body) {
+                    send_body = JSON.stringify(JSON.parse(send_body));
+                } else {
+                    send_body = '';
+                }
+
+                var send_headers = {};
+                $("tbody tr").each(function () {
+                    var headerName = $(this).find("td:first-child input").val();
+                    var headerValue = $(this).find("td:nth-child(2) input").val();
+                    send_headers[headerName] = headerValue;
+                });
+                send_headers = JSON.stringify(send_headers);
+
+
+                var data = {
+                    send_url: send_url,
+                    send_headers: send_headers === "" ? "" : JSON.parse(send_headers),
+                    send_body: send_body === "" ? "" : JSON.parse(send_body),
+                };
+
+
+                var res_code = $("#response-code");
+                var res_body = $("#response-body")
+
+                console.info(request_type)
+
+                if (request_type === "POST") {
+                    // 发起POST请求
+                    $.ajax({
+                        url: "/run_api_post",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $("#output-tab").tab("show");
+
+                            if (data['response_code'] === 200) {
+                                res_code.val(data['response_code']).css({'color': 'green', 'font-weight': 'bold'});
+                                toastr.success('test successfully!');
+                                res_CodeMirror.setValue(data['response_text'])
+                            } else {
+                                res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});
+                                toastr.error('fail to test!');
+                                res_CodeMirror.setValue(data['response_text'])
+                                res_CodeMirror.refresh();
+                            }
+
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            $("#output-tab").tab("show");
+
+                            res_code.val(data['response_code'])
+                            res_CodeMirror.setValue(data['response_text'])
+                            res_CodeMirror.refresh();
+                            toastr.error('fail to test!');
+                        }
+                    });
+
+                } else if (request_type === "GET") {
+                    // 发起POST请求
+                    $.ajax({
+                        url: "/run_api_get",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $("#output-tab").tab("show");
+
+                            if (data['response_code'] === 200) {
+                                res_code.val(data['response_code']).css({'color': 'green', 'font-weight': 'bold'});
+                                toastr.success('test successfully!');
+                                res_CodeMirror.setValue(data['response_text'])
+                            } else {
+                                res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});
+                                toastr.error('fail to test!');
+                                res_CodeMirror.setValue(data['response_text'])
+                                res_CodeMirror.refresh();
+                            }
+
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            $("#output-tab").tab("show");
+
+
+                            res_code.val(data['response_code'])
+                            res_CodeMirror.setValue(data['response_text'])
+                            res_CodeMirror.refresh();
+                            toastr.error('fail to test!');
+                        }
+                    });
+                }
+
+
+            });
+        });
+
+
     </script>
 
 
