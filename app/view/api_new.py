@@ -61,10 +61,13 @@ def run_api_post():
     url = data['send_url']
     headers = data['send_headers']
     payload = data['send_body']
-    res = requests.post(url=url, headers=headers, data=payload)
-    # print(res.text)
-    response = {'response_code': res.status_code, 'response_text': res.text}
-    return jsonify(response)
+    try:
+        res = requests.post(url=url, headers=headers, data=payload)
+        response = {'response_code': res.status_code, 'response_text': res.text}
+        return jsonify(response)
+    except Exception:
+        return jsonify({'response_code': 404,'response_text': "error!!"})
+
 
 @web.route('/run_api_get', methods=['POST'])
 def run_api_get():
@@ -73,8 +76,10 @@ def run_api_get():
     url = data['send_url']
     headers = data['send_headers']
     payload = data['send_body']
-    res = requests.get(url=url, headers=headers, data=payload)
-    # print(res.text)
-    response = {'response_code': res.status_code, 'response_text': res.text}
-    return jsonify(response)
+    try:
+        res = requests.get(url=url, headers=headers, data=payload)
+        response = {'response_code': res.status_code, 'response_text': res.text}
+        return jsonify(response)
+    except Exception:
+        return jsonify({'response_code': 404,'response_text': "error!!"})
 
