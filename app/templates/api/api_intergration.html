@@ -19,6 +19,9 @@
     <script src="./static/codemirror/lib/codemirror.js"></script>
     <script src=./static/codemirror/mode/shell/shell.js></script>
 
+    <!-- clipboard.js -->
+    <script src="/static/tanos/clipboard.min.js"></script>
+
 
     <style>
         /* Active tab styles */
@@ -27,7 +30,7 @@
             border-color: #dee2e6 #dee2e6 #fff;
             color: #007bff;
             border-bottom: 2px solid #007bff;
-            font-size: x-large;
+            font-size: large;
         }
 
         /* Tab link styles */
@@ -35,7 +38,7 @@
             border: 1px solid #dee2e6;
             border-bottom-color: transparent;
             color: #495057;
-            font-size: x-large;
+            font-size: large;
         }
 
         /* Tab link hover styles */
@@ -49,6 +52,10 @@
             padding: 1rem;
             border: 1px solid #dee2e6;
             border-top: none;
+        }
+
+        .custom-toast {
+            width: 160px;
         }
 
 
@@ -170,7 +177,7 @@
                                                     <th scope="col"></th>
                                                 </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="headers-table-body">
                                                 <tr>
                                                     <td><input type="text" class="form-control"
                                                                placeholder="Header Name"></td>
@@ -221,7 +228,7 @@
                                                     <input class="form-check-input" type="radio"
                                                            name="request-body-type"
                                                            id="form-data" value="form-data">
-                                                    <label class="form-check-label" for="form-data">Form Data</label>
+                                                    <label class="form-check-label" for="form-data">Form-Data</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio"
@@ -266,8 +273,15 @@
                                     <div class="form-group">
                                         <label for="response-body" style="margin-bottom: 10px">Response Body:</label>
                                         <textarea class="form-control" id="response-body" rows="20"></textarea>
-                                        <button class="btn btn-outline-secondary" type="button" id="copyButton">Copy
-                                        </button>
+                                        <div style="display: flex;">
+                                            <button class="btn btn-outline-secondary" style="margin-top: 15px"
+                                                    type="button" id="copyButton"
+                                                    data-clipboard-target="#response-body" data-clipboard-action="copy">
+                                                Copy
+                                            </button>
+                                            <div class="toast-container align-items-center custom-toast "
+                                                 style="z-index: 5; margin-left: 70px"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -283,6 +297,7 @@
     </div>
 
     <script>
+
 
         var req_CodeMirror
         $(document).ready(function () {
@@ -308,10 +323,29 @@
 
     <script>
 
-        document.getElementById('copyButton').addEventListener('click', function () {
-            var textarea = document.getElementById('exampleTextarea');
-            textarea.select();
-            document.execCommand('copy');
+        //复制功能
+        var copyButton = document.getElementById('copyButton');
+        var clipboard = new ClipboardJS(copyButton, {
+            text: function () {
+                return res_CodeMirror.getValue();
+            }
+        });
+
+
+        clipboard.on('success', function (e) {
+            console.info("成功")
+            const toast = document.createElement("div");
+            toast.classList.add("toast", "bg-secondary");
+            toast.setAttribute("role", "alert");
+            toast.setAttribute("aria-live", "assertive");
+            toast.setAttribute("aria-atomic", "true");
+            toast.setAttribute("data-bs-delay", "700");  // 设置 toast 弹出时长为 3 秒
+            toast.innerHTML = '<div class="toast-body text-white">Copied to clipboard</div>';
+            const toastContainer = document.querySelector(".toast-container");
+            toastContainer.appendChild(toast);
+            const bootstrapToast = new bootstrap.Toast(toast);
+            bootstrapToast.show();
+
         });
 
 
@@ -403,6 +437,7 @@
                 send_headers = JSON.stringify(send_headers);
 
 
+
                 var data = {
                     send_url: send_url,
                     send_headers: send_headers === "" ? "" : JSON.parse(send_headers),
@@ -434,15 +469,20 @@
                             if (data['response_code'] === 200) {
                                 res_code.val(data['response_code'] + " OK").css({
                                     'color': 'green',
-                                    'font-weight': 'bold'
                                 });
                                 toastr.success('test successfully!');
                                 res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
                                 res_CodeMirror.refresh();
                             } else {
-                                res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});
+                                res_code.val(data['response_code']).css({'color': 'red',});
                                 toastr.error('fail to test!');
-                                res_CodeMirror.setValue(data['response_text'])
+
+                                try {
+                                    res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
+                                } catch (error) {
+                                    res_CodeMirror.setValue(data['response_text'])
+                                }
+
                                 res_CodeMirror.refresh();
                             }
 
@@ -483,15 +523,19 @@
                             if (data['response_code'] === 200) {
                                 res_code.val(data['response_code'] + " OK").css({
                                     'color': 'green',
-                                    'font-weight': 'bold'
                                 });
                                 toastr.success('test successfully!');
                                 res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
                                 res_CodeMirror.refresh();
                             } else {
-                                res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});
+                                res_code.val(data['response_code']).css({'color': 'red'});
                                 toastr.error('fail to test!');
-                                res_CodeMirror.setValue(data['response_text'])
+
+                                try {
+                                    res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
+                                } catch (error) {
+                                    res_CodeMirror.setValue(data['response_text'])
+                                }
                                 res_CodeMirror.refresh();
                             }
 
@@ -526,6 +570,34 @@
 
 
     </script>
+
+
+    <script>
+        const addHeaderRowButton = document.querySelector('#add-header-row');
+        const headersTableBody = document.querySelector('#headers-table-body');
+
+        addHeaderRowButton.addEventListener('click', () => {
+            const newRow = `
+                          <tr>
+                            <td><input type="text" class="form-control" placeholder="Header Name"></td>
+                            <td><input type="text" class="form-control" placeholder="Header Value"></td>
+                            <td>
+                              <button type="button" class="btn btn-primary delete-header-row">Delete</button>
+                            </td>
+                          </tr>`;
+            headersTableBody.insertAdjacentHTML('beforeend', newRow);
+        });
+
+        headersTableBody.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('delete-header-row')) {
+                target.closest('tr').remove();
+            }
+        });
+    </script>
+
+
+
 
 
     {% if message %}
