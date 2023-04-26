@@ -437,7 +437,7 @@
                                     'font-weight': 'bold'
                                 });
                                 toastr.success('test successfully!');
-                                res_CodeMirror.setValue(data['response_text'])
+                                res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
                                 res_CodeMirror.refresh();
                             } else {
                                 res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});
@@ -486,7 +486,7 @@
                                     'font-weight': 'bold'
                                 });
                                 toastr.success('test successfully!');
-                                res_CodeMirror.setValue(data['response_text'])
+                                res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
                                 res_CodeMirror.refresh();
                             } else {
                                 res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});

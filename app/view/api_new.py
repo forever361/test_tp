@@ -62,7 +62,7 @@ def run_api_post():
     headers = data['send_headers']
     payload = data['send_body']
     try:
-        res = requests.post(url=url, headers=headers, data=payload)
+        res = requests.post(url=url, headers=headers, data=payload, verify=False)
         response = {'response_code': res.status_code, 'response_text': res.text}
         return jsonify(response)
     except Exception:
