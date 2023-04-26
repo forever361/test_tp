@@ -82,4 +82,3 @@ def run_api_get():
         return jsonify(response)
     except Exception:
         return jsonify({'response_code': 404,'response_text': "error!!"})
-

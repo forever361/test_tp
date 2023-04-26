@@ -378,7 +378,7 @@
 
         $(document).ready(function () {
 
-            $("#run_api_btn").click(function () {
+            $(document).on('click', '#run_api_btn', function () {
                 var request_type = $('#type_option').val();
 
                 var send_url = $("#apiurl").val();
@@ -410,6 +410,10 @@
                 var res_body = $("#response-body")
 
                 console.info(request_type)
+                const $btn = $(this);
+                const $loadingBtn = $('<button class="btn  btn-warning h-100" style="width: 70px; margin-left: 10px"><span class="spinner-border spinner-border-sm" disabled></button>');
+                $btn.replaceWith($loadingBtn);
+
 
                 if (request_type === "POST") {
                     // 发起POST请求
@@ -420,6 +424,8 @@
                         contentType: 'application/json',
                         success: function (data) {
                             $("#output-tab").tab("show");
+                            $btn.prop('disabled', false);
+                            $loadingBtn.replaceWith($btn);
 
                             if (data['response_code'] === 200) {
                                 res_code.val(data['response_code']).css({'color': 'green', 'font-weight': 'bold'});
@@ -437,6 +443,8 @@
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.log(textStatus, errorThrown);
                             $("#output-tab").tab("show");
+                            $btn.prop('disabled', false);
+                            $loadingBtn.replaceWith($btn);
 
                             res_code.val(data['response_code'])
                             res_CodeMirror.setValue(data['response_text'])
@@ -454,6 +462,8 @@
                         contentType: 'application/json',
                         success: function (data) {
                             $("#output-tab").tab("show");
+                            $btn.prop('disabled', false);
+                            $loadingBtn.replaceWith($btn);
 
                             if (data['response_code'] === 200) {
                                 res_code.val(data['response_code']).css({'color': 'green', 'font-weight': 'bold'});
@@ -471,6 +481,8 @@
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.log(textStatus, errorThrown);
                             $("#output-tab").tab("show");
+                            $btn.prop('disabled', false);
+                            $loadingBtn.replaceWith($btn);
 
 
                             res_code.val(data['response_code'])
