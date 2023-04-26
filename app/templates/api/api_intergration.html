@@ -3,369 +3,494 @@
 {% block title %}Flasky{% endblock %}
 
 {% block js %}
-<script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
-<link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+    <script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+    <link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
 
-<script src="/static/tanos/bootbox.all.min.js"></script>
-<script src="/static/tanos/popper.js"></script>
-<script src="/static/tanos/toastr.min.js"></script>
-<link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+    <script src="/static/tanos/bootbox.all.min.js"></script>
+    <script src="/static/tanos/popper.js"></script>
+    <script src="/static/tanos/toastr.min.js"></script>
+    <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
 
-<!-- Bootstrap Font Icon CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- Bootstrap Font Icon CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
-<!--<script src="/static/tanos/data_connect.js"></script>-->
+    <!--<script src="/static/tanos/data_connect.js"></script>-->
+    <link rel="stylesheet" href="./static/codemirror/lib/codemirror.css"/>
+    <script src="./static/codemirror/lib/codemirror.js"></script>
+    <script src=./static/codemirror/mode/shell/shell.js></script>
 
-<style>
-    /* Active tab styles */
-    .nav-tabs .nav-link.active {
-        background-color: #fff;
-        border-color: #dee2e6 #dee2e6 #fff;
-        color: #007bff;
-        border-bottom: 2px solid #007bff;
-        font-size: x-large;
-    }
 
-    /* Tab link styles */
-    .nav-tabs .nav-link {
-        border: 1px solid #dee2e6;
-        border-bottom-color: transparent;
-        color: #495057;
-        font-size: x-large;
-    }
+    <style>
+        /* Active tab styles */
+        .nav-tabs .nav-link.active {
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            font-size: x-large;
+        }
 
-    /* Tab link hover styles */
-    .nav-tabs .nav-link:hover {
-        border-color: #007bff #007bff #dee2e6;
-        text-decoration: none;
-    }
+        /* Tab link styles */
+        .nav-tabs .nav-link {
+            border: 1px solid #dee2e6;
+            border-bottom-color: transparent;
+            color: #495057;
+            font-size: x-large;
+        }
 
-    /* Tab content styles */
-    .tab-pane {
-        padding: 1rem;
-        border: 1px solid #dee2e6;
-        border-top: none;
-    }
+        /* Tab link hover styles */
+        .nav-tabs .nav-link:hover {
+            border-color: #007bff #007bff #dee2e6;
+            text-decoration: none;
+        }
 
-</style>
+        /* Tab content styles */
+        .tab-pane {
+            padding: 1rem;
+            border: 1px solid #dee2e6;
+            border-top: none;
+        }
+
+
+    </style>
 
 {% endblock %}
 
 {% block content %}
-<div style="background-color: #eee; height:230vh; width:100%; overflow-y:auto; ">
-    <div class="row" style="margin: 0 auto; width:96%; ">
-        <div class="row" style="margin: 0 auto; margin-top: 10px">
-            <div class="card" id="card_getname">
-                <div class="card-body">
-                    <form class="d-flex align-items-center" style="display: flex;">
+    <div style="background-color: #eee; height:230vh; width:100%; overflow-y:auto; ">
+        <div class="row" style="margin: 0 auto; width:96%; ">
+            <div class="row" style="margin: 0 auto; margin-top: 10px">
+                <div class="card" id="card_getname">
+                    <div class="card-body">
+                        <form class="d-flex align-items-center" style="display: flex;">
 
-                        <input style="width: 400px" type="text" class="form-control" id="appkey"
-                               value={{ api_name }}>
-                        <button id="get-api-btn" type="button" class="btn btn-primary h-100" style="margin-left: 10px">
-                            Get API
-                            information
-                        </button>
-                    </form>
+                            <input style="width: 400px" type="text" class="form-control" id="appkey"
+                                   value={{ api_name }}>
+                            <button id="get-api-btn" type="button" class="btn btn-primary h-100"
+                                    style="margin-left: 10px">
+                                Get API
+                                information
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row" style="margin: 0 auto; margin-top: 10px">
-            <div class="card" id="card_getname">
-                <div class="card-body">
-                    <form class="d-flex align-items-center" style="display: flex;">
-                        <select style="width: 100px; margin-right: 10px" class="form-select" id="new-row-dbtype">
-                            <option>GET</option>
-                            <option>POST</option>
-                        </select>
-                        <input type="text" class="form-control" id="apiurl" placeholder="Enter your Request URL"
-                        >
-                        <button type="button" class="btn btn-success h-100" style="margin-left: 10px">Send
-                        </button>
-                    </form>
+            <div class="row" style="margin: 0 auto; margin-top: 10px">
+                <div class="card" id="card_getname">
+                    <div class="card-body">
+                        <form class="d-flex align-items-center" style="display: flex;">
+                            <select style="width: 100px; margin-right: 10px" class="form-select" id="type_option">
+                                <option>POST</option>
+                                <option>GET</option>
+                            </select>
+                            <input type="text" class="form-control" id="apiurl" placeholder="Enter your Request URL"
+                            >
+                            <button id="run_api_btn" type="button" class="btn btn-success h-100"
+                                    style="margin-left: 10px">Send
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row" style="margin: 0 auto; ">
+            <div class="row" style="margin: 0 auto; ">
 
-            <div id=1 style=" margin-top: 10px; height: 350px"
-                 class="card col-4">
-                <div class="card-body">
-                    <form>
-                        <div class="mb-3" style="display: flex;">
-                            <label for="appkey" class="form-label">Token:</label>
-                            <div style="margin-left: 20px; width: 100%">
-                                <input type="text" class="form-control" id="appkey" placeholder="Enter your token">
+                <div id=1 style=" margin-top: 10px; height: 350px"
+                     class="card col-4">
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3" style="display: flex;">
+                                <label for="appkey" class="form-label">Token:</label>
+                                <div style="margin-left: 20px; width: 100%">
+                                    <input type="text" class="form-control" id="appkey" placeholder="Enter your token">
+                                </div>
+
                             </div>
-
-                        </div>
-                        <div class="mb-3" style="display: flex;">
-                            <label for="session" class="form-label">Response Format:</label>
-                            <div style="display: flex; margin-left: 20px">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                           id="flexRadioDefault1" checked>
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        JSON
-                                    </label>
-                                </div>
-                                <div class="form-check" style="margin-left: 20px">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                           id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        XML
-                                    </label>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <button type="submit" class="btn btn-primary h-100">Reset</button>
-                    </form>
-                </div>
-
-
-            </div>
-
-            <div class="col-8">
-
-                <ul class="nav nav-tabs mb-3" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#input"
-                                type="button" role="tab" aria-controls="input" aria-selected="true">Input
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output"
-                                type="button" role="tab" aria-controls="output" aria-selected="false">Output
-                        </button>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="input" role="tabpanel" aria-labelledby="input-tab">
-                        <div id="2" style=" margin-top: 10px; margin-bottom: 10px" class="card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5>Headers</h5>
-                                    <button type="button" class="btn btn-primary" id="add-header-row">Add</button>
-                                </div>
-                                <hr/>
-                                <form>
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-hover align-middle">
-                                            <thead style="background-color: #b0bec5">
-                                            <tr>
-                                                <th scope="col">Header Name</th>
-                                                <th scope="col">Header Value</th>
-                                                <th scope="col"></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td><input type="text" class="form-control"
-                                                           placeholder="Header Name"></td>
-                                                <td><input type="text" class="form-control"
-                                                           placeholder="Header Value"></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary">Delete</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="text" class="form-control"
-                                                           placeholder="Header Name"></td>
-                                                <td><input type="text" class="form-control"
-                                                           placeholder="Header Value"></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary">Delete</button>
-                                                </td>
-                                            </tr>
-                                            <!-- add more rows here as needed -->
-                                            </tbody>
-                                        </table>
+                            <div class="mb-3" style="display: flex;">
+                                <label for="session" class="form-label">Response Format:</label>
+                                <div style="display: flex; margin-left: 20px">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                               id="flexRadioDefault1" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            JSON
+                                        </label>
                                     </div>
+                                    <div class="form-check" style="margin-left: 20px">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                               id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            XML
+                                        </label>
+                                    </div>
+                                </div>
 
-                                </form>
+
                             </div>
-                        </div>
-                        <div id="3" style=" margin-top: 10px; margin-bottom: 10px" class="card">
-                            <div class="card-body">
-                                <h5>Request Parameters</h5>
-                                <hr/>
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="request-body-type">Body Type</label>
-                                            <div class="form-check form-check-inline" style="margin-left: 20px">
-                                                <input class="form-check-input" type="radio"
-                                                       name="request-body-type"
-                                                       id="json" value="json" checked>
-                                                <label class="form-check-label" for="json">JSON</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="request-body-type"
-                                                       id="xml" value="xml">
-                                                <label class="form-check-label" for="xml">XML</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="request-body-type"
-                                                       id="form-data" value="form-data">
-                                                <label class="form-check-label" for="form-data">Form Data</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="request-body-type"
-                                                       id="text" value="text">
-                                                <label class="form-check-label" for="text">Text</label>
+
+                            <button type="submit" class="btn btn-primary h-100" id="resetBtn">Reset</button>
+                        </form>
+                    </div>
+
+
+                </div>
+
+                <div class="col-8">
+
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#input"
+                                    type="button" role="tab" aria-controls="input" aria-selected="true">Input
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output"
+                                    type="button" role="tab" aria-controls="output" aria-selected="false">Output
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="input" role="tabpanel" aria-labelledby="input-tab">
+                            <div id="2" style=" margin-bottom: 10px" class="card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5>Headers</h5>
+                                        <button type="button" class="btn btn-primary" id="add-header-row">Add</button>
+                                    </div>
+                                    <hr/>
+                                    <form>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover align-middle">
+                                                <thead style="background-color: #b0bec5">
+                                                <tr>
+                                                    <th scope="col">Header Name</th>
+                                                    <th scope="col">Header Value</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td><input type="text" class="form-control"
+                                                               placeholder="Header Name"></td>
+                                                    <td><input type="text" class="form-control"
+                                                               placeholder="Header Value"></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-primary">Delete</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input type="text" class="form-control"
+                                                               placeholder="Header Name"></td>
+                                                    <td><input type="text" class="form-control"
+                                                               placeholder="Header Value"></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-primary">Delete</button>
+                                                    </td>
+                                                </tr>
+                                                <!-- add more rows here as needed -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="3" style=" margin-top: 10px; margin-bottom: 10px" class="card">
+                                <div class="card-body">
+                                    <h5>Request Parameters</h5>
+                                    <hr/>
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="request-body-type">Body Type</label>
+                                                <div class="form-check form-check-inline" style="margin-left: 20px">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="request-body-type"
+                                                           id="json" value="json" checked>
+                                                    <label class="form-check-label" for="json">JSON</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="request-body-type"
+                                                           id="xml" value="xml">
+                                                    <label class="form-check-label" for="xml">XML</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="request-body-type"
+                                                           id="form-data" value="form-data">
+                                                    <label class="form-check-label" for="form-data">Form Data</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                           name="request-body-type"
+                                                           id="text" value="text">
+                                                    <label class="form-check-label" for="text">Text</label>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="request-body-content" style="margin-bottom: 10px">Body
-                                                    Content:</label>
-                                                <textarea class="form-control" id="request-body-content"
-                                                          rows="20" ></textarea>
-                                                <div class="line-numbers"></div>
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="request-body-content" style="margin-bottom: 10px">Body
+                                                        Content:</label>
+                                                    <textarea class="form-control" id="request-body-content"
+                                                              rows="20"></textarea>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                </form>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="output" role="tabpanel" aria-labelledby="output-tab">
+                            <div id="4" style=" margin-bottom: 10px" class="card">
+                                <div class="card-body">
+                                    <h5>Response</h5>
+                                    <hr/>
+                                    <div class="form-group" style="margin-bottom: 20px; display: flex;">
+                                        <label for="response-code" style="width: 150px">Response Code:</label>
+                                        <input type="text" class="form-control" id="response-code"
+                                               placeholder="Response code">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="response-body" style="margin-bottom: 10px">Response Body:</label>
+                                        <textarea class="form-control" id="response-body" rows="20"></textarea>
+                                        <button class="btn btn-outline-secondary" type="button" id="copyButton">Copy
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="output" role="tabpanel" aria-labelledby="output-tab">
-                        <div id="4" style=" margin-top: 10px; margin-bottom: 10px" class="card">
-                            <div class="card-body">
-                                <h5>Response</h5>
-                                <hr/>
-                                <div class="form-group" style="margin-bottom: 20px; display: flex;">
-                                    <label for="response-code" style="width: 150px">Response Code:</label>
-                                    <input type="text" class="form-control" id="response-code"
-                                           placeholder="Response code">
-                                </div>
-                                <div class="form-group">
-                                    <label for="response-body" style="margin-bottom: 10px">Response Body:</label>
-                                    <textarea class="form-control" id="response-body" rows="5"></textarea>
-                                    <button class="btn btn-outline-secondary" type="button" id="copyButton">Copy
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
+
             </div>
-
-
         </div>
+
     </div>
 
-</div>
+    <script>
 
-<script>
+        var req_CodeMirror
+        $(document).ready(function () {
+            req_CodeMirror = CodeMirror.fromTextArea(document.getElementById("request-body-content"), {
+                lineNumbers: true,
+                mode: "shell",
+                readOnly: true,
+            });
 
-    document.getElementById('copyButton').addEventListener('click', function () {
-        var textarea = document.getElementById('exampleTextarea');
-        textarea.select();
-        document.execCommand('copy');
-    });
-
-
-    $(document).ready(function () {
-        // 动态显示行号
-        $("#request-body-content").on("input", function () {
-            var lines = $(this).val().split("\n").length;
-            var lineNumbersDiv = $(this).siblings(".line-numbers");
-            lineNumbersDiv.empty();
-            for (var i = 1; i <= lines; i++) {
-                lineNumbersDiv.append(i + "\n");
-            }
         });
-    });
-
-</script>
 
 
-<script>
-    $(document).ready(function () {
-
-        $("#get-api-btn").click(function () {
-            var data = {
-                apiname: "taobao.appstore.subscribe.get",
-            };
-
-            // 发起POST请求
-            $.ajax({
-                url: "/get_api_detail",
-                type: "POST",
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                success: function (data) {
-                    // console.info(data.headers)
-                    var response = data[0]
-
-                    // 将响应的Headers填充到前端UI中
-                    var headersTable = $("#input #2 table tbody");
-                    headersTable.empty();
-                    $.each(response['headers'], function (key, value) {
-                        var newRow = $("<tr><td><input type='text' class='form-control' value='" + key + "'></td><td><input type='text' class='form-control' value='" + value + "'></td><td><button type='button' class='btn btn-primary'>Delete</button></td></tr>");
-                        headersTable.append(newRow);
-                    });
-
-
-                    // 将响应的Request Parameters填充到前端UI中
-                    var requestBodyContent = $("#input #3 #request-body-content");
-                    requestBodyContent.val(JSON.stringify(response['request_params'], null, 2));
-
-                    // 将响应的Request Parameters填充到前端UI中
-                    var apiurl = $("#apiurl");
-                    apiurl.val(response['apiurl']);
-
-                    // 切换到Input选项卡
-                    $("#input-tab").tab("show");
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
-                }
+        var res_CodeMirror
+        $(document).ready(function () {
+            res_CodeMirror = CodeMirror.fromTextArea(document.getElementById("response-body"), {
+                lineNumbers: true,
+                mode: "shell",
+                readOnly: true,
             });
         });
-    });
 
 
-</script>
+    </script>
 
-<script>
+    <script>
 
-
-    // $(document).ready(function () {
-    //     var response = null;
-    //
-    //     $("#get-api-btn").click(function () {
-    //         var data = {
-    //             apiname: "taobao.appstore.subscribe.get",
-    //         };
-    //
-    //         // 将响应的Request Parameters填充到前端UI中
-    //         var requestBodyContent = $("#input #3 #request-body-content");
-    //         requestBodyContent.val("hahhahhaha");
-    //
-    //     });
-    // });
-
-</script>
+        document.getElementById('copyButton').addEventListener('click', function () {
+            var textarea = document.getElementById('exampleTextarea');
+            textarea.select();
+            document.execCommand('copy');
+        });
 
 
-{% if message %}
+        $(document).ready(function () {
+            // 绑定重置按钮的点击事件
+            $('#resetBtn').click(function () {
+                window.location.href = 'http://127.0.0.1:8889/api_intergration';
+            });
+        });
 
-{% endif %}
+
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+
+            $("#get-api-btn").click(function () {
+                var data = {
+                    apiname: "taobao.appstore.subscribe.get",
+                };
+
+                // 发起POST请求
+                $.ajax({
+                    url: "/get_api_detail",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        // console.info(data.headers)
+                        var response = data[0]
+
+                        // 将响应的Headers填充到前端UI中
+                        var headersTable = $("#input #2 table tbody");
+                        headersTable.empty();
+                        $.each(response['headers'], function (key, value) {
+                            var newRow = $("<tr><td><input type='text' class='form-control' value='" + key + "'></td><td><input type='text' class='form-control' value='" + value + "'></td><td><button type='button' class='btn btn-primary'>Delete</button></td></tr>");
+                            headersTable.append(newRow);
+                        });
+
+
+                        // 将响应的Request Parameters填充到前端UI中
+                        {#var requestBodyContent = $("#input #3 #request-body-content");#}
+                        {#requestBodyContent.val(JSON.stringify(response['request_params'], null, 2));#}
+
+                        // 切换到Input选项卡
+                        $("#input-tab").tab("show");
+
+                        req_CodeMirror.setValue(JSON.stringify(response['request_params'], null, 2));
+                        req_CodeMirror.refresh();
+
+
+                        // 将响应的Request Parameters填充到前端UI中
+                        var apiurl = $("#apiurl");
+                        apiurl.val(response['apiurl']);
+
+
+                        toastr.success('get API successfully!');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                        // 将响应的Request Parameters填充到前端UI中
+                    }
+                });
+            });
+        });
+
+
+        $(document).ready(function () {
+
+            $("#run_api_btn").click(function () {
+                var request_type = $('#type_option').val();
+
+                var send_url = $("#apiurl").val();
+                var send_body = $("#request-body-content").val()
+
+                if (send_body) {
+                    send_body = JSON.stringify(JSON.parse(send_body));
+                } else {
+                    send_body = '';
+                }
+
+                var send_headers = {};
+                $("tbody tr").each(function () {
+                    var headerName = $(this).find("td:first-child input").val();
+                    var headerValue = $(this).find("td:nth-child(2) input").val();
+                    send_headers[headerName] = headerValue;
+                });
+                send_headers = JSON.stringify(send_headers);
+
+
+                var data = {
+                    send_url: send_url,
+                    send_headers: send_headers === "" ? "" : JSON.parse(send_headers),
+                    send_body: send_body === "" ? "" : JSON.parse(send_body),
+                };
+
+
+                var res_code = $("#response-code");
+                var res_body = $("#response-body")
+
+                console.info(request_type)
+
+                if (request_type === "POST") {
+                    // 发起POST请求
+                    $.ajax({
+                        url: "/run_api_post",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $("#output-tab").tab("show");
+
+                            if (data['response_code'] === 200) {
+                                res_code.val(data['response_code']).css({'color': 'green', 'font-weight': 'bold'});
+                                toastr.success('test successfully!');
+                                res_CodeMirror.setValue(data['response_text'])
+                            } else {
+                                res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});
+                                toastr.error('fail to test!');
+                                res_CodeMirror.setValue(data['response_text'])
+                                res_CodeMirror.refresh();
+                            }
+
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            $("#output-tab").tab("show");
+
+                            res_code.val(data['response_code'])
+                            res_CodeMirror.setValue(data['response_text'])
+                            res_CodeMirror.refresh();
+                            toastr.error('fail to test!');
+                        }
+                    });
+
+                } else if (request_type === "GET") {
+                    // 发起POST请求
+                    $.ajax({
+                        url: "/run_api_get",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $("#output-tab").tab("show");
+
+                            if (data['response_code'] === 200) {
+                                res_code.val(data['response_code']).css({'color': 'green', 'font-weight': 'bold'});
+                                toastr.success('test successfully!');
+                                res_CodeMirror.setValue(data['response_text'])
+                            } else {
+                                res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});
+                                toastr.error('fail to test!');
+                                res_CodeMirror.setValue(data['response_text'])
+                                res_CodeMirror.refresh();
+                            }
+
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            $("#output-tab").tab("show");
+
+
+                            res_code.val(data['response_code'])
+                            res_CodeMirror.setValue(data['response_text'])
+                            res_CodeMirror.refresh();
+                            toastr.error('fail to test!');
+                        }
+                    });
+                }
+
+
+            });
+        });
+
+
+    </script>
+
+
+    {% if message %}
+
+    {% endif %}
 
 {% endblock %}
