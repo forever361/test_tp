@@ -24,7 +24,7 @@ def test_api():
 def get_api_detail():
     data = request.json
     if data["apiname"] == 'taobao.appstore.subscribe.get':
-        response_data = [{
+        response_data = {
             "apiurl": "http://127.0.0.1:8889/data3.json",
             "headers": {
                 "content-type": "application/json",
@@ -32,7 +32,7 @@ def get_api_detail():
             "request_params": {
                 "apiname": "taobao.appstore.subscribe.get"
             }
-        }]
+        }
     else:
         response_data = {
             "apiurl": "http://gw.api.taobao.com/router/rest?app_key=12129701&method=taobao.appstore.subscribe.get&v=2.0",

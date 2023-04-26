@@ -79,7 +79,7 @@ def test_connect():
 
 
 
-@web.route('/data3.json', methods=['GET'])
+@web.route('/data3.json', methods=['POST'])
 def data2():
     data2 = [{
         "connect_id": 1,

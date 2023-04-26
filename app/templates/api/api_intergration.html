@@ -258,6 +258,11 @@
                                         <input type="text" class="form-control" id="response-code"
                                                placeholder="Response code">
                                     </div>
+                                    <div class="form-group" style="margin-bottom: 15px; display: flex;">
+                                        <label for="response-time" style="width: 150px">Response Time:</label>
+                                        <input type="text" class="form-control" id="response-time"
+                                               placeholder="Response time">
+                                    </div>
                                     <div class="form-group">
                                         <label for="response-body" style="margin-bottom: 10px">Response Body:</label>
                                         <textarea class="form-control" id="response-body" rows="20"></textarea>
@@ -284,7 +289,6 @@
             req_CodeMirror = CodeMirror.fromTextArea(document.getElementById("request-body-content"), {
                 lineNumbers: true,
                 mode: "shell",
-                readOnly: true,
             });
 
         });
@@ -338,7 +342,7 @@
                     contentType: 'application/json',
                     success: function (data) {
                         // console.info(data.headers)
-                        var response = data[0]
+                        var response = data
 
                         // 将响应的Headers填充到前端UI中
                         var headersTable = $("#input #2 table tbody");
@@ -382,7 +386,7 @@
                 var request_type = $('#type_option').val();
 
                 var send_url = $("#apiurl").val();
-                var send_body = $("#request-body-content").val()
+                var send_body = req_CodeMirror.getValue();
 
                 if (send_body) {
                     send_body = JSON.stringify(JSON.parse(send_body));
@@ -414,7 +418,7 @@
                 const $loadingBtn = $('<button class="btn  btn-warning h-100" style="width: 70px; margin-left: 10px"><span class="spinner-border spinner-border-sm" disabled></button>');
                 $btn.replaceWith($loadingBtn);
 
-
+                const responseStartTime = performance.now();
                 if (request_type === "POST") {
                     // 发起POST请求
                     $.ajax({
@@ -428,9 +432,13 @@
                             $loadingBtn.replaceWith($btn);
 
                             if (data['response_code'] === 200) {
-                                res_code.val(data['response_code']).css({'color': 'green', 'font-weight': 'bold'});
+                                res_code.val(data['response_code'] + " OK").css({
+                                    'color': 'green',
+                                    'font-weight': 'bold'
+                                });
                                 toastr.success('test successfully!');
                                 res_CodeMirror.setValue(data['response_text'])
+                                res_CodeMirror.refresh();
                             } else {
                                 res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});
                                 toastr.error('fail to test!');
@@ -438,6 +446,9 @@
                                 res_CodeMirror.refresh();
                             }
 
+                            const responseTime = performance.now() - responseStartTime;
+                            const responseTimeInput = document.getElementById("response-time");
+                            responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
 
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
@@ -450,6 +461,10 @@
                             res_CodeMirror.setValue(data['response_text'])
                             res_CodeMirror.refresh();
                             toastr.error('fail to test!');
+
+                            const responseTime = performance.now() - responseStartTime;
+                            const responseTimeInput = document.getElementById("response-time");
+                            responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
                         }
                     });
 
@@ -466,15 +481,23 @@
                             $loadingBtn.replaceWith($btn);
 
                             if (data['response_code'] === 200) {
-                                res_code.val(data['response_code']).css({'color': 'green', 'font-weight': 'bold'});
+                                res_code.val(data['response_code'] + " OK").css({
+                                    'color': 'green',
+                                    'font-weight': 'bold'
+                                });
                                 toastr.success('test successfully!');
                                 res_CodeMirror.setValue(data['response_text'])
+                                res_CodeMirror.refresh();
                             } else {
                                 res_code.val(data['response_code']).css({'color': 'red', 'font-weight': 'bold'});
                                 toastr.error('fail to test!');
                                 res_CodeMirror.setValue(data['response_text'])
                                 res_CodeMirror.refresh();
                             }
+
+                            const responseTime = performance.now() - responseStartTime;
+                            const responseTimeInput = document.getElementById("response-time");
+                            responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
 
 
                         },
@@ -489,6 +512,10 @@
                             res_CodeMirror.setValue(data['response_text'])
                             res_CodeMirror.refresh();
                             toastr.error('fail to test!');
+
+                            const responseTime = performance.now() - responseStartTime;
+                            const responseTimeInput = document.getElementById("response-time");
+                            responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
                         }
                     });
                 }
