@@ -64,17 +64,16 @@
 {% endblock %}
 
 {% block content %}
-    <div style="background-color: #eee; height:230vh; width:100%; overflow-y:auto; ">
-        <div class="row" style="margin: 0 auto; width:96%; ">
+    <div style="background-color: #eee; height:100%; width:100%;   ">
+        <div class="row" style="margin: 0 auto; width:85%; transform: scale(1);">
             <div class="row" style="margin: 0 auto; margin-top: 10px">
                 <div class="card" id="card_getname">
-                    <div class="card-body">
+                    <div class="card-body" style="padding:7px">
                         <form class="d-flex align-items-center" style="display: flex;">
-
-                            <input style="width: 400px" type="text" class="form-control" id="appkey"
+                            <input style="width: 400px;height: 28px" type="text" class="form-control" id="appkey"
                                    value={{ api_name }}>
-                            <button id="get-api-btn" type="button" class="btn btn-primary h-100"
-                                    style="margin-left: 10px">
+                            <button id="get-api-btn" type="button" class="btn btn-primary "
+                                    style="margin-left: 10px; height: 30px; display: flex; align-items: center;">
                                 Get API
                                 information
                             </button>
@@ -83,18 +82,18 @@
                 </div>
             </div>
 
-            <div class="row" style="margin: 0 auto; margin-top: 10px">
+            <div class="row" style="margin: 0 auto; margin-top: 5px">
                 <div class="card" id="card_getname">
-                    <div class="card-body">
+                    <div class="card-body" style="padding:7px">
                         <form class="d-flex align-items-center" style="display: flex;">
-                            <select style="width: 100px; margin-right: 10px" class="form-select" id="type_option">
+                            <select style="width: 100px; margin-right: 10px;height: 30px;font-size: 14px;" class="form-select" id="type_option" >
                                 <option>POST</option>
                                 <option>GET</option>
                             </select>
-                            <input type="text" class="form-control" id="apiurl" placeholder="Enter your Request URL"
+                            <input style="height: 30px" type="text" class="form-control" id="apiurl" placeholder="Enter your Request URL"
                             >
-                            <button id="run_api_btn" type="button" class="btn btn-success h-100"
-                                    style="margin-left: 10px">Send
+                            <button id="run_api_btn" type="button" class="btn btn-success "
+                                    style="margin-left: 10px;height: 30px; display: flex; align-items: center;">Send
                             </button>
                         </form>
                     </div>
@@ -103,14 +102,14 @@
 
             <div class="row" style="margin: 0 auto; ">
 
-                <div id=1 style=" margin-top: 10px; height: 350px"
+                <div id=1 style=" margin-top: 5px; height: 350px"
                      class="card col-4">
                     <div class="card-body">
                         <form>
                             <div class="mb-3" style="display: flex;">
                                 <label for="appkey" class="form-label">Token:</label>
                                 <div style="margin-left: 20px; width: 100%">
-                                    <input type="text" class="form-control" id="appkey" placeholder="Enter your token">
+                                    <input style="height: 30px"  type="text" class="form-control" id="appkey" placeholder="Enter your token">
                                 </div>
 
                             </div>
@@ -136,42 +135,42 @@
 
                             </div>
 
-                            <button type="submit" class="btn btn-primary h-100" id="resetBtn">Reset</button>
+                            <button style="height: 30px; display: flex; align-items: center;" type="submit" class="btn btn-primary " id="resetBtn">Reset</button>
                         </form>
                     </div>
 
 
                 </div>
 
-                <div class="col-8">
+                <div class="col-8" style="margin-top: 5px">
 
-                    <ul class="nav nav-tabs mb-3" role="tablist">
+                    <ul class="nav nav-tabs mb-3" role="tablist" style="margin-bottom: 0.1px!important">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#input"
-                                    type="button" role="tab" aria-controls="input" aria-selected="true">Input
+                                    style="height: 30px; display: flex; align-items: center;" type="button" role="tab" aria-controls="input" aria-selected="true">Input
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output"
-                                    type="button" role="tab" aria-controls="output" aria-selected="false">Output
+                                    style="height: 30px; display: flex; align-items: center;" type="button" role="tab" aria-controls="output" aria-selected="false">Output
                             </button>
                         </li>
                     </ul>
 
-                    <div class="tab-content">
+                    <div class="tab-content" >
                         <div class="tab-pane fade show active" id="input" role="tabpanel" aria-labelledby="input-tab">
-                            <div id="2" style=" margin-bottom: 10px" class="card">
-                                <div class="card-body">
+                            <div id="2" style=" margin-bottom: 5px" class="card">
+                                <div class="card-body" style="padding:7px">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5>Headers</h5>
-                                        <button type="button" class="btn btn-primary" id="add-header-row">Add</button>
+                                        <h6>Headers</h6>
+                                        <button style="height: 30px; display: flex; align-items: center;" type="button" class="btn btn-primary" id="add-header-row">Add</button>
                                     </div>
-                                    <hr/>
+                                    <hr style="margin: 0.1px"/>
                                     <form>
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-hover align-middle">
-                                                <thead style="background-color: #b0bec5">
-                                                <tr>
+                                                <thead style="background-color: #b0bec5; ">
+                                                <tr >
                                                     <th scope="col">Header Name</th>
                                                     <th scope="col">Header Value</th>
                                                     <th scope="col"></th>
@@ -179,21 +178,21 @@
                                                 </thead>
                                                 <tbody id="headers-table-body">
                                                 <tr>
-                                                    <td><input type="text" class="form-control"
+                                                    <td><input style="height: 30px"  type="text" class="form-control"
                                                                placeholder="Header Name"></td>
-                                                    <td><input type="text" class="form-control"
+                                                    <td><input style="height: 30px"  type="text" class="form-control"
                                                                placeholder="Header Value"></td>
                                                     <td>
-                                                        <button type="button" class="btn btn-primary">Delete</button>
+                                                        <button style="height: 30px; display: flex; align-items: center;" type="button" class="btn btn-primary">Delete</button>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><input type="text" class="form-control"
+                                                    <td><input style="height: 30px"  type="text" class="form-control"
                                                                placeholder="Header Name"></td>
-                                                    <td><input type="text" class="form-control"
+                                                    <td><input style="height: 30px"  type="text" class="form-control"
                                                                placeholder="Header Value"></td>
                                                     <td>
-                                                        <button type="button" class="btn btn-primary">Delete</button>
+                                                        <button style="height: 30px; display: flex; align-items: center;" type="button" class="btn btn-primary">Delete</button>
                                                     </td>
                                                 </tr>
                                                 <!-- add more rows here as needed -->
@@ -204,13 +203,13 @@
                                     </form>
                                 </div>
                             </div>
-                            <div id="3" style=" margin-top: 10px; margin-bottom: 10px" class="card">
-                                <div class="card-body">
-                                    <h5>Request Parameters</h5>
-                                    <hr/>
+                            <div id="3" style=" margin-top: 3px; margin-bottom: 10px" class="card">
+                                <div class="card-body" style="padding: 7px">
+                                    <h7>Request Parameters</h7>
+                                    <hr style="margin: 5px"/>
                                     <form>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-7">
                                                 <label for="request-body-type">Body Type</label>
                                                 <div class="form-check form-check-inline" style="margin-left: 20px">
                                                     <input class="form-check-input" type="radio"
@@ -257,7 +256,7 @@
 
                         <div class="tab-pane fade" id="output" role="tabpanel" aria-labelledby="output-tab">
                             <div id="4" style=" margin-bottom: 10px" class="card">
-                                <div class="card-body">
+                                <div class="card-body" style="padding:7px">
                                     <h5>Response</h5>
                                     <hr/>
                                     <div class="form-group" style="margin-bottom: 20px; display: flex;">
@@ -271,7 +270,7 @@
                                                placeholder="Response time">
                                     </div>
                                     <div class="form-group">
-                                        <label for="response-body" style="margin-bottom: 10px">Response Body:</label>
+                                        <label for="response-body" style="margin-bottom: 5px">Response Body:</label>
                                         <textarea class="form-control" id="response-body" rows="20"></textarea>
                                         <div style="display: flex;">
                                             <button class="btn btn-outline-secondary" style="margin-top: 15px"
