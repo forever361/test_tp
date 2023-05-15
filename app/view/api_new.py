@@ -28,6 +28,7 @@ def get_api_detail():
             "apiurl": "http://127.0.0.1:8889/data3.json",
             "headers": {
                 "content-type": "application/json",
+                "Authorization":""
             },
             "request_params": {
                 "apiname": "taobao.appstore.subscribe.get"

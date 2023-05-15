@@ -58,6 +58,12 @@
             width: 160px;
         }
 
+        .disabled-input {
+            background-color: #dee2e6; /* 设置背景色为灰色 */
+            color: #777777; /* 设置文字颜色为灰色 */
+            pointer-events: none; /* 禁用点击事件 */
+        }
+
 
     </style>
 
@@ -86,11 +92,13 @@
                 <div class="card" id="card_getname">
                     <div class="card-body" style="padding:7px">
                         <form class="d-flex align-items-center" style="display: flex;">
-                            <select style="width: 100px; margin-right: 10px;height: 30px;font-size: 14px;" class="form-select" id="type_option" >
+                            <select style="width: 100px; margin-right: 10px;height: 30px;font-size: 14px;"
+                                    class="form-select" id="type_option">
                                 <option>POST</option>
                                 <option>GET</option>
                             </select>
-                            <input style="height: 30px" type="text" class="form-control" id="apiurl" placeholder="Enter your Request URL"
+                            <input style="height: 30px" type="text" class="form-control" id="apiurl"
+                                   placeholder="Enter your Request URL"
                             >
                             <button id="run_api_btn" type="button" class="btn btn-success "
                                     style="margin-left: 10px;height: 30px; display: flex; align-items: center;">Send
@@ -109,7 +117,8 @@
                             <div class="mb-3" style="display: flex;">
                                 <label for="appkey" class="form-label">Token:</label>
                                 <div style="margin-left: 20px; width: 100%">
-                                    <input style="height: 30px"  type="text" class="form-control" id="appkey" placeholder="Enter your token">
+                                    <input style="height: 30px" type="text" class="form-control" id="userToken"
+                                           placeholder="Enter your token">
                                 </div>
 
                             </div>
@@ -135,7 +144,9 @@
 
                             </div>
 
-                            <button style="height: 30px; display: flex; align-items: center;" type="submit" class="btn btn-primary " id="resetBtn">Reset</button>
+                            <button style="height: 30px; display: flex; align-items: center;" type="submit"
+                                    class="btn btn-primary " id="resetBtn">Reset
+                            </button>
                         </form>
                     </div>
 
@@ -147,30 +158,34 @@
                     <ul class="nav nav-tabs mb-3" role="tablist" style="margin-bottom: 0.1px!important">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#input"
-                                    style="height: 30px; display: flex; align-items: center;" type="button" role="tab" aria-controls="input" aria-selected="true">Input
+                                    style="height: 30px; display: flex; align-items: center;" type="button" role="tab"
+                                    aria-controls="input" aria-selected="true">Input
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output"
-                                    style="height: 30px; display: flex; align-items: center;" type="button" role="tab" aria-controls="output" aria-selected="false">Output
+                                    style="height: 30px; display: flex; align-items: center;" type="button" role="tab"
+                                    aria-controls="output" aria-selected="false">Output
                             </button>
                         </li>
                     </ul>
 
-                    <div class="tab-content" >
+                    <div class="tab-content">
                         <div class="tab-pane fade show active" id="input" role="tabpanel" aria-labelledby="input-tab">
                             <div id="2" style=" margin-bottom: 5px" class="card">
                                 <div class="card-body" style="padding:7px">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <h6>Headers</h6>
-                                        <button style="height: 30px; display: flex; align-items: center;" type="button" class="btn btn-primary" id="add-header-row">Add</button>
+                                        <button style="height: 30px; display: flex; align-items: center;" type="button"
+                                                class="btn btn-primary" id="add-header-row">Add
+                                        </button>
                                     </div>
                                     <hr style="margin: 0.1px"/>
                                     <form>
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-hover align-middle">
                                                 <thead style="background-color: #b0bec5; ">
-                                                <tr >
+                                                <tr>
                                                     <th scope="col">Header Name</th>
                                                     <th scope="col">Header Value</th>
                                                     <th scope="col"></th>
@@ -178,21 +193,25 @@
                                                 </thead>
                                                 <tbody id="headers-table-body">
                                                 <tr>
-                                                    <td><input style="height: 30px"  type="text" class="form-control"
+                                                    <td><input style="height: 30px" type="text" class="form-control"
                                                                placeholder="Header Name"></td>
-                                                    <td><input style="height: 30px"  type="text" class="form-control"
+                                                    <td><input style="height: 30px" type="text" class="form-control"
                                                                placeholder="Header Value"></td>
                                                     <td>
-                                                        <button style="height: 30px; display: flex; align-items: center;" type="button" class="btn btn-primary">Delete</button>
+                                                        <button style="height: 30px; display: flex; align-items: center;"
+                                                                type="button" class="btn btn-primary">Delete
+                                                        </button>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><input style="height: 30px"  type="text" class="form-control"
+                                                    <td><input style="height: 30px" type="text" class="form-control"
                                                                placeholder="Header Name"></td>
-                                                    <td><input style="height: 30px"  type="text" class="form-control"
+                                                    <td><input style="height: 30px" type="text" class="form-control"
                                                                placeholder="Header Value"></td>
                                                     <td>
-                                                        <button style="height: 30px; display: flex; align-items: center;" type="button" class="btn btn-primary">Delete</button>
+                                                        <button style="height: 30px; display: flex; align-items: center;"
+                                                                type="button" class="btn btn-primary">Delete
+                                                        </button>
                                                     </td>
                                                 </tr>
                                                 <!-- add more rows here as needed -->
@@ -402,6 +421,22 @@
                         apiurl.val(response['apiurl']);
 
 
+                        var userToken = $('#userToken').val().trim();
+                        const headersTableBody = document.querySelector('#headers-table-body');
+                        const rows = headersTableBody.querySelectorAll('tr');
+                        for (let i = 0; i < rows.length; i++) {
+                            const cells = rows[i].querySelectorAll('td');
+                            if (cells[0].querySelector('input').value === 'Authorization') {
+                                const input_token = cells[1].querySelector('input');
+                                input_token.value = userToken;
+                                input_token.classList.add('disabled-input');
+                                input_token.setAttribute('readonly', 'readonly');
+                                input_token.style.pointerEvents = 'none'; // 禁用点击事件
+                                break;
+                            }
+                        }
+
+
                         toastr.success('get API successfully!');
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -436,7 +471,6 @@
                 send_headers = JSON.stringify(send_headers);
 
 
-
                 var data = {
                     send_url: send_url,
                     send_headers: send_headers === "" ? "" : JSON.parse(send_headers),
@@ -451,6 +485,17 @@
                 const $btn = $(this);
                 const $loadingBtn = $('<button class="btn  btn-warning h-100" style="width: 70px; margin-left: 10px"><span class="spinner-border spinner-border-sm" disabled></button>');
                 $btn.replaceWith($loadingBtn);
+
+                var userToken = $('#userToken').val().trim();
+                const headersTableBody = document.querySelector('#headers-table-body');
+                const rows = headersTableBody.querySelectorAll('tr');
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].querySelectorAll('td');
+                    if (cells[0].querySelector('input').value === 'Authorization') {
+                        cells[1].querySelector('input').value = userToken;
+                        break;
+                    }
+                }
 
                 const responseStartTime = performance.now();
                 if (request_type === "POST") {
