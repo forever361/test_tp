@@ -1,6 +1,6 @@
 import logging
 import os
-
+from app.application import app
 from app.util.log_util.yaml_handler import yaml_data
 
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__)))

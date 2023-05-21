@@ -1,7 +1,7 @@
 
 class Constant():
     def __init__(self):
-        self.ip = "127.0.0.1"
+        self.ip = "www.aixint.cn"
         self.port = "8889"
 
 

@@ -162,14 +162,24 @@
             </ul>
 
 
-            <ul class="navbar-nav">
-                {% if request.cookies.get('Name') and session.get('username',None)%}
-                <li class="nav-item"><a class="nav-link" href="javascript:viod(0)">{{ request.cookies.get('Name')}}</a>
+            <!-- <ul class="navbar-nav">
+                {% if  session.get('username',None)%}
+                <li class="nav-item"><a class="nav-link" href="javascript:viod(0)">{{ session.get('username',None)}}</a>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="/logout">logout</a></li>
                 {% else %}
-                <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/login_page">Login</a></li>
+                {% endif %}
+            </ul> -->
+
+            <!-- 用户系统 -->
+            <ul class="navbar-nav">
+                {% if  session.get('user',None)%}
+                <li class="nav-item"><a class="nav-link" href="javascript:viod(0)">    {{ session.get('user', {}).get('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress', '')[0] }} </a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/logout">logout</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="/login_page">Login</a></li>
                 {% endif %}
             </ul>
 
@@ -179,5 +189,4 @@
 
 
 {% endblock %}
-
 

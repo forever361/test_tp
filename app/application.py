@@ -1,11 +1,11 @@
-from flask_socketio import SocketIO
-
 from flask import Flask
+from flask_socketio import SocketIO
 
 
 app = Flask(__name__)
 app.config.from_pyfile("config/base_setting.py")
-socketio = SocketIO(app,async_mode='threading')
+socketio = SocketIO(app, async_mode='threading')
+
 
 # app.config.from_pyfile("config/base_setting.py")
 #ops_confgi=local|production

@@ -36,7 +36,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px">
         <button id="save-case" type="button" class="btn btn-primary" style="width: 200px">Save Case</button>
         <div style="display: flex; justify-content: center; align-items: center; width: 600px">
-            <input type="text" class="form-control" placeholder="Input Test Case Name" aria-describedby="basic-addon1"
+            <input type="text" class="form-control"   aria-describedby="basic-addon1"
                    id="casename">
         </div>
         <button id="add-new-row" type="button" class="btn btn-primary"><i class="bi bi-plus"></i></button>
@@ -57,7 +57,7 @@
                                     <p>Job name</p>
                                 </div>
                                 <input style="width:80.5%; " type="text" class="form-control"
-                                       aria-describedby="basic-addon1" id="new-row-name_1">
+                                       aria-describedby="basic-addon1" id="new-row-name_1" >
                             </div>
                         </div>
                         <div class="card-text" style="text-align: left;">
@@ -314,6 +314,29 @@
 
 <script>
 
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth()+ 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    var now_time = year + '-' + month + '-' +day + '-' + hour;
+
+    var casename_example = now_time + '_example';
+    var jobname= now_time + '_job_example';
+    var casename_value = document.getElementById("casename")
+<!--    casename_placeholder.setAttribute("placeholder",casename_example)-->
+
+    casename_value.value = casename_example
+
+    var jobname_value = document.getElementById("new-row-name_1")
+    jobname_value.value = jobname
+
+
+
+
+
     ////Add row function
     $('#add-new-row').click(function () {
         $('#add-row-top-canvas').offcanvas('show');
@@ -419,9 +442,9 @@
             contentType: "application/json",
             success: function (response) {
                 // 跳转到：http://127.0.0.1:8889/data_edit_test_case_tanos?id=10074
-                case_id = response.case_id
-
-                window.location.href = `http://127.0.0.1:8889/data_edit_test_case_tanos?id=${case_id}`;
+                case_id = response.case_id;
+                var domain = '{{ domain }}'; 
+                window.location.href = `https://${domain}/data_edit_test_case_tanos?id=${case_id}`;
                 toastr.success('save test case successfully!');
 
             },

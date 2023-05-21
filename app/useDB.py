@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from app.common.libs.UrlManager import UrlManager
+from app.util.Constant_setting import Constant_db
 from app.util.log import logg
 
 import psycopg2
@@ -17,8 +18,7 @@ class useDB(object):
         # 连接一个给定的数据库
         # self.conn = psycopg2.connect(database="test_fram",user="cdi",password="Cdi2021@",
         #                              host="pgm-1hl07vmgn0rd297653280.pgsql.rds.ali-ops.cloud.cn.hsbc",port="3433")
-        self.conn = psycopg2.connect(database="test_frame", user="postgres",password="postgres",
-                                     host="47.113.185.98", port="5353")
+        self.conn = Constant_db().db
         # 建立游标，用来执行数据库操作
         self.cursor = self.conn.cursor()
 
@@ -55,8 +55,7 @@ class useDB(object):
 class ConnectSQL():
     def __init__(self):
         # 连接一个给定的数据库
-        self.conn = psycopg2.connect(database="test_frame", user="postgres",password="postgres",
-                                     host="47.113.185.98", port="5353")
+        self.conn = Constant_db().db
         # 建立游标，用来执行数据库操作
         self.cursor = self.conn.cursor()
 
@@ -116,12 +115,20 @@ class ConnectSQL():
     def write_register_sql(self, username, password):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         user_id = ''.join(map(str, np.random.randint(0, 9, 6)))
-        register_info = """INSERT INTO xcheck.user values('{}','{}','{}','{}','{}')""".format(user_id, username,
-                                                                                              password, 0, create_date)
+        register_info = """INSERT INTO xcheck.user values('{}','{}','{}','{}','{}')""".format(user_id, username,password, 0, create_date)
         self.cursor.execute(register_info)
         self.conn.commit()
         self.cursor.close()
         # self.conn.close()
+
+    def write_register_sql_new(self, username, staffid):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        # user_id = ''.join(map(str, np.random.randint(0, 9, 6)))
+        register_info = """INSERT INTO xcheck.user(username,password,status,create_date,staffid) values('{}','{}','{}','{}','{}')""".format( username,"", 0, create_date,staffid)
+        self.cursor.execute(register_info)
+        self.conn.commit()
+        self.cursor.close()
+        # self.conn.close()    
 
     def get_register_username(self, username):
         register_infos = """SELECT username FROM xcheck.user where username = '{}'""".format(username)

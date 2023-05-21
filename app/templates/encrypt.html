@@ -99,12 +99,12 @@
 
         function redirectToAPI() {
             // 获取用户输入的API名称
-            {#var apiName = document.getElementById('apiNameInput').value;#}
-            var apiName = 'taobao.appstore.subscribe.get';
+            var apiName = 'getToken';
             // 获取当前页面的URL
             var currentURL = window.location.href;
             // 拼接新的URL
-            var newURL = 'http://127.0.0.1:8889/api_intergration?apiName=' + encodeURIComponent(apiName);
+            var domain = '{{ domain }}'; // 通过 app.config 获取配置的域名
+            var newURL = `https://${domain}/api_intergration?apiName=` + encodeURIComponent(apiName);
             window.location.href = newURL;
         }
 
