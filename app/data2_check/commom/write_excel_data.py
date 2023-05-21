@@ -20,6 +20,7 @@ import xlrd
 from xlutils.copy import copy
 import time
 import pandas as pd
+from app.application import app
 
 
 class ExcelUtilAll:
@@ -45,11 +46,12 @@ class ExcelUtilAll:
 
     def load_excel(self):
         '''Load excel '''
-        userid = Constant_id().cookie_id
+        user_id = Constant_id().cookie_id
         basepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
         # print(111111,basepath + "/userinfo/{}".format(userid))
         userPath = os.path.join(basepath + "/userinfo/{}".format(userid))
-        open_excel = openpyxl.load_workbook(userPath + "/verification_result.xlsx")
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', user_id)
+        open_excel = openpyxl.load_workbook(folder_path + '/config/verification_result.xlsx')
         return open_excel
 
     def get_data(self,index=None):
@@ -87,14 +89,15 @@ class ExcelUtilAll:
 
     def write_value_report(self,key,row,col,value):
         ''' write data in the workbook '''
-        userid = Constant_id().cookie_id
+        user_id = Constant_id().cookie_id
         basepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
         userPath = os.path.join(basepath + "/userinfo/{}".format(userid))
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', user_id)
         wb = self.load_excel()
         wa = wb.sheetnames[key]
         wr = wb[wa]
         wr.cell(row,col,value)
-        wb.save(userPath+"/verification_result.xlsx")
+        wb.save(folder_path + '/config/verification_result.xlsx')
 
     def get_diference_value(self,result):
         ''' result: diference value and times write excel '''

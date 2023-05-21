@@ -1,1 +1,0 @@
-[{"host": "hkl20147074", "username": "cst01adm", "port": "22", "password": "ZV1RXyYjJW3uAyTfdF2CAw==", "exec_command_account": "/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/q_test/getuid.sh cdi.test.bcu.key cdi.test.bcu.uid", "exec_command_pwd": "/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/q_test/getpwd.sh cdi.test.bcu.key cdi.test.bcu.uid"}]

@@ -11,19 +11,22 @@ from app.util.crypto_ECB import AEScoder
 
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 sys.path.append(configPath)
+from app.application import app
+
 
 
 # user_path = '{}/userinfo/{}/'.format(configPath, user_id)
 # data_conn_path = user_path + '/' + 'data_conn.txt'
 # data_db_path = user_path + '/' + 'data_db.csv'
 # print(user_path)
+user_id = Constant_id().cookie_id
+folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
 
 class Parameter_common():
     def __init__(self):
         user_id = Constant_id().cookie_id
         user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        data_conn_path = user_path + '/' + 'data_conn.txt'
-        data_db_path = user_path + '/' + 'data_db.csv'
+        data_conn_path = folder_path + '/config/' + 'data_conn.txt'
         with open(data_conn_path, "r", encoding="utf-8") as f:
             configreader = f.readlines()
             configreader_dict = ast.literal_eval(configreader[0])
@@ -39,8 +42,7 @@ class Parameter_db():
     def parse_parameter_file(seft):
         user_id = Constant_id().cookie_id
         user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        data_conn_path = user_path + '/' + 'data_conn.txt'
-        data_db_path = user_path + '/' + 'data_db.csv'
+        data_db_path = folder_path + '/config/' + 'data_db.csv'
         with open(data_db_path, "r") as f:
             return [i.split(',') for i in f.readlines() if i[0] not in ('#', '\n','')]
 
@@ -48,7 +50,7 @@ class Parameter_or_ali():
     def __init__(self):
         user_id = Constant_id().cookie_id
         user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        data_conn_path = user_path + '/' + 'data_conn.txt'
+        data_conn_path = folder_path + '/config/' + 'data_conn.txt'
         data_db_path = user_path + '/' + 'data_db.csv'
         with open(data_conn_path, "r", encoding="utf-8") as f:
             configreader = f.readlines()
@@ -79,7 +81,7 @@ class Parameter_ali_ali():
     def __init__(self):
         user_id = Constant_id().cookie_id
         user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        data_conn_path = user_path + '/' + 'data_conn.txt'
+        data_conn_path = folder_path + '/config/' + 'data_conn.txt'
         data_db_path = user_path + '/' + 'data_db.csv'
         with open(data_conn_path, "r", encoding="utf-8") as f:
             configreader = f.readlines()
@@ -111,7 +113,7 @@ class Parameter_or_or():
     def __init__(self):
         user_id = Constant_id().cookie_id
         user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        data_conn_path = user_path + '/' + 'data_conn.txt'
+        data_conn_path = folder_path + '/config/' + 'data_conn.txt'
         data_db_path = user_path + '/' + 'data_db.csv'
         with open(data_conn_path, "r", encoding="utf-8") as f:
             configreader = f.readlines()
@@ -141,7 +143,7 @@ class Parameter_pg_ali():
     def __init__(self):
         user_id = Constant_id().cookie_id
         user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        data_conn_path = user_path + '/' + 'data_conn.txt'
+        data_conn_path = folder_path + '/config/' + 'data_conn.txt'
         data_db_path = user_path + '/' + 'data_db.csv'
         with open(data_conn_path, "r", encoding="utf-8") as f:
             configreader = f.readlines()
@@ -177,7 +179,7 @@ class Parameter_pg_pg():
     def __init__(self):
         user_id = Constant_id().cookie_id
         user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        data_conn_path = user_path + '/' + 'data_conn.txt'
+        data_conn_path = folder_path + '/config/' + 'data_conn.txt'
         data_db_path = user_path + '/' + 'data_db.csv'
         data_conn_ssh= user_path + '/' + 'data_ssh.txt'
         with open(data_conn_path, "r", encoding="utf-8") as f:
@@ -204,7 +206,7 @@ class Parameter_pg_pg():
                     host = j['host'].strip()
                     username = j['username'].strip()
                     port = j['port'].strip()
-                    password = j['password'].strip()
+                    password = AEScoder().decrypt(j['password'].strip())
                     exec_command_account = j['exec_command_account'].strip()
                     exec_command_pwd = j['exec_command_pwd'].strip()
 
@@ -244,19 +246,19 @@ class Parameter_pg_pg():
                 self.port_s = list_s[1]
                 self.db_s = list_s[2]
                 self.user_s = list_s[3]
-                self.pwd_s =  list_t[4]
+                self.pwd_s = list_t[4]
 
                 self.host_t = list_t[0]
                 self.port_t = list_t[1]
                 self.db_t = list_t[2]
                 self.user_t = list_t[3]
-                self.pwd_t =  list_t[4]
+                self.pwd_t = list_t[4]
 
 class Parameter_file_ali():
     def __init__(self):
         user_id = Constant_id().cookie_id
         user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        data_conn_path = user_path + '/' + 'data_conn.txt'
+        data_conn_path = folder_path + '/config/' + 'data_conn.txt'
         data_db_path = user_path + '/' + 'data_db.csv'
         with open(data_conn_path, "r", encoding="utf-8") as f:
             configreader = f.readlines()
@@ -286,7 +288,7 @@ class Parameter_tmp():
     def __init__(self):
         user_id = Constant_id().cookie_id
         user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        temp = user_path + '/' + 'temp.txt'
+        temp = folder_path + '/config/' + 'temp.txt'
         with open(temp, "r", encoding="utf-8") as f:
             configreader = f.readlines()
             configreader_dict = ast.literal_eval(configreader[0])

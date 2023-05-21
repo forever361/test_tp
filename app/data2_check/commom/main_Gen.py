@@ -7,18 +7,16 @@ from openpyxl.cell import MergedCell
 
 from app.data2_check.commom.Constant_t import Constant_id
 from app.useDB import ConnectSQL
-
-
-
-
+from app.application import app
 
 
 class Parser(object):
     def __init__(self):
         basepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-        userid = Constant_id().cookie_id
-        userPath = os.path.join(basepath + "/userinfo/{}/".format(userid))
-        self._file_path =  userPath + 'verification_result.xlsx'
+        user_id = Constant_id().cookie_id
+        # userPath = os.path.join(basepath + "/userinfo/{}/".format(userid))
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', user_id)
+        self._file_path = folder_path + '/config/verification_result.xlsx'
         self._merge_cells = {}
         self._html = ''
         self._data = []
@@ -194,7 +192,7 @@ class Parser(object):
                 overflow: hidden;
                 background:  #FFF;
                 color:  #024457;
-            
+
             }
             #result_table th {
                   border: 1px solid #FFFFFF;
@@ -217,8 +215,8 @@ class Parser(object):
                     }
                   }
                 }
-                
-                    
+
+
             #result_table td {
                 border: 1px solid  #D9E4E6;
                   padding: 0.5em;
@@ -289,7 +287,7 @@ class Parser(object):
             }
 
             </style>
-            
+
             """
         startTime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         HEADING_TMPL = """<div class='heading'>
@@ -303,29 +301,28 @@ class Parser(object):
         self._merge_cells = {(item.min_row, item.min_col): (item.max_row, item.max_col) for item in
                              ws.merged_cells.ranges}
 
-
         self._html = '<html lang="zh">\n' \
                      '<head>\n' \
-                     f'{STYLESHEET_TMPL}\n'  \
+                     f'{STYLESHEET_TMPL}\n' \
                      f'\t<title>{title}</title>\n' \
                      '\t<style>.topBtn{position: fixed;top: 5rem;right: 0.8rem;width: 3.2rem;height: 2.2rem;background-size: 100% auto;z-index: 9999;-webkit-transition:  opacity .3s ease;}</style>\n' \
                      '</head>\n' \
                      '<body>\n' \
-                     '<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex;">\n'\
-                     '<div style=" height:91%; width:100%;  margin-left: 30px;  margin-right: 30px; margin-top: 10px; margin-bottom: 10px; "class="card">\n'\
-                    '<div class="card-body">\n'\
-                    '<h4 class="card-title">Test Report</h4>\n'\
-                    '<div class="card-text">\n'\
-                    f'{HEADING_TMPL}\n' \
-                    '\t<table id=result_table>\n'\
-                    '</div>\n'\
-                    '</div>\n'\
-                    '</div>\n' \
-                    '</div>\n' \
+                     '<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex;">\n' \
+                     '<div style=" height:91%; width:100%;  margin-left: 30px;  margin-right: 30px; margin-top: 10px; margin-bottom: 10px; "class="card">\n' \
+                     '<div class="card-body">\n' \
+                     '<h4 class="card-title">Test Report</h4>\n' \
+                     '<div class="card-text">\n' \
+                     f'{HEADING_TMPL}\n' \
+                     '\t<table id=result_table>\n' \
+                     '</div>\n' \
+                     '</div>\n' \
+                     '</div>\n' \
+                     '</div>\n' \
 
-        for row in range(1, ws.max_row+1):
+        for row in range(1, ws.max_row + 1):
             self._html += '\t\t<tr>\n'
-            for col in range(1, ws.max_column+1):
+            for col in range(1, ws.max_column + 1):
                 cell = ws.cell(row, col)
                 if not isinstance(cell, MergedCell):
                     cell_end = self._merge_cells.get((row, col))
@@ -375,23 +372,26 @@ class Parser(object):
     def save_html(self):
 
         basepath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-        userid = Constant_id().cookie_id
+        user_id = Constant_id().cookie_id
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
+        user_path_html = folder_path + '/html/' 
+        user_path_config = folder_path + '/config/' 
 
-        iniPath = os.path.join(basepath + "/userinfo/{}/config.ini".format(userid))
+        iniPath = os.path.join(user_path_config + "config.ini")
         config = configparser.ConfigParser()
         config.read(iniPath)  # 读取 ini 文件
         caseid = config.get('default', 'caseid')
         # print(11111, caseid)
-        userPath_tmp = os.path.join(basepath + "/templates/userinfo/{}/".format(userid))
-
-        html_dir = userPath_tmp + '{}_data_test.html'.format(caseid)
-        # print('111save report',html_dir )
+        html_dir = os.path.join(user_path_html + "{}_data_test.html").format(caseid)
+      
+        # print('111save report', html_dir)
         with open(html_dir, 'w', encoding='utf-8') as f:
             f.write(self.html)
 
     def gen_html(self):
         self.deal_excel()
         self.save_html()
+
 
 if __name__ == '__main__':
     parser = Parser()

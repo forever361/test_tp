@@ -6,11 +6,13 @@ from flask import Blueprint, render_template, request, jsonify
 from app import useDB
 from app.db.tanos_manage import tanos_manage
 from app.util.crypto_ECB import AEScoder
-from app.view import viewutil
+from app.view import viewutil, user
 
 web = Blueprint("data_ponint_management", __name__)
 
+
 @web.route('/data_point_management',methods=['GET'])
+@user.authorize
 def encrypt_page():
         return render_template('/data_point_management.html')
 

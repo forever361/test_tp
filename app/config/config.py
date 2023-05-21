@@ -1,7 +1,7 @@
-import os
-currentPath = os.path.dirname(os.path.join(os.path.abspath(__file__)))
-logPath = os.path.join(currentPath,'log')
-reportPath = os.path.join(currentPath, '../templates', 'reports')
-unittestPath = os.path.join(currentPath,'test')
-screen_shot_path = os.path.join(currentPath, '../static', 'screenshot')
+#config.py
 
+class DevelopmentConfig:
+    URL = '127.0.0.1:8889' # 开发环境的域名
+
+class ProductionConfig:
+    URL = 'www.aixint.cn:8889' # 生产环境的域名

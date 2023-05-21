@@ -24,7 +24,7 @@ from typing import List
 import cx_Oracle
 
 from app.data2_check.commom.Constant_t import Constant_id
-from app.data2_check.parameter import Parameter_tmp, Parameter_common
+from app.data2_check.parameter import Parameter_common
 from app.useDB import ConnectSQL
 from app.util.SSH import mySSH
 import app.util.global_manager as glob
@@ -596,8 +596,8 @@ class PgValidator(Validator):
 
 
     def get_batch_value_check_sql(self, pi_str, col_str, pi, verifydb, verify_tablename):
-        P_tmp = Parameter_tmp()
-        rule = P_tmp.select_rule
+        P_common = Parameter_common()
+        rule = P_common.select_rules
         # print(11111,pi)
         if verifydb == '':
             return f"select {pi_str},'{self.pi_split}',{col_str} from {verify_tablename} {self.where_condition} order by {pi}  \n"

@@ -1,6 +1,0 @@
-Case_name = casename2022_test_2022_8_26_19_48
-####### TYPE you can chooes:ali, orl, pg #######
-Source TYPE = orl
-Target TYPE = ali
-Source conn = cnl25042413.cn.hsbc:2001/UCN_00001_CRFTM.cn.hsbc,HSBC_SDM_UAT,HSBC#mgr2021
-Target conn = LRwRwbIXa1UvmzAn,i9vhG0tmAeP90Aa7gsfcJZ9Qpz98UT,cn_cds_dev,https://service.cn-hk-hsbc-d01.odps.ali-ops.cloud.cn.hsbc:443/api

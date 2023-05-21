@@ -20,6 +20,8 @@ from app.view import viewutil, user
 
 from app.view.user import authorize
 
+from app.application import app
+
 basePath = os.path.join(os.path.join(os.path.dirname(__file__),"../"))
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 sys.path.append(configPath)
@@ -32,7 +34,7 @@ web = Blueprint("batch_new", __name__)
 @web.route('/api_batch_test_data',methods=['GET'])
 @user.authorize
 def batch_test_compare():
-    return render_template("/code_mode/batch_tanos_data_new.html" )
+    return render_template("/code_mode/batch_tanos_data_new.html",domain=app.config['URL'] )
 
 
 @web.route('/api_batch_test_data',methods=['POST'])

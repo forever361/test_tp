@@ -11,7 +11,7 @@ app.send_file_max_age_default = timedelta(seconds=1)
 #@user.authorize
 def index():
     list = session.get('username',None)
-    # print (list,'1111')
+    print (list,'1111')
     if list == None:
         return render_template("index.html", message='Hello,')
     else:

@@ -4,7 +4,7 @@ import subprocess
 import traceback
 from time import sleep
 
-from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, session
+from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, send_from_directory, session
 # from app import log
 from app.db import test_case_manage
 from app.util import global_manager
@@ -19,6 +19,7 @@ import os
 from app.view.data_batch_new import get_log
 
 from app.util.Constant_setting import Constant_cmd
+from app.application import app
 
 web = Blueprint('data_testcase', __name__, template_folder='templates/uitest')
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
@@ -437,8 +438,10 @@ def data_search_report():
         id = viewutil.getInfoAttribute(info, 'id')
         # print('idididiidididid', id)
         user_id = session.get('userid', None)
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
+        print(1111,folder_path)
 
-        return render_template("userinfo/{}/{}_data_test.html".format(user_id, id))
+        return send_from_directory(folder_path+'/html',"{}_data_test.html".format(id))
 
 
 # 点击search后查询库中case列表

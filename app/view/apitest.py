@@ -8,6 +8,9 @@ from werkzeug.utils import secure_filename
 from app.api_check.run_case import get_report_name
 import os
 import sys
+
+from app.view import user
+
 basePath = os.path.join(os.path.join(os.path.dirname(__file__)))
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 sys.path.append(configPath)
@@ -15,9 +18,10 @@ sys.path.append(configPath)
 web = Blueprint('apitest', __name__,template_folder='templates/apitest')
 
 
-@web.route('/test_api', methods=['GET','POST'])
-# @user.authorize
+@web.route('/test_api123', methods=['GET','POST'])
+@user.authorize
 def test_api():
+    print(111111111111111)
     if 'Run' in request.form:
         cmd_td = 'python {}/api_check/run_case.py'.format(configPath)
         print(cmd_td)

@@ -4,13 +4,14 @@ from flask import Blueprint, render_template, request, jsonify
 import json
 from app.db.tanos_manage import tanos_manage
 from app.util.crypto_ECB import AEScoder
-from app.view import viewutil
+from app.view import viewutil, user
 import psycopg2
 
 web = Blueprint("data_connect_management", __name__)
 
 
 @web.route('/data_connect_management', methods=['GET'])
+@user.authorize
 def data_connect_page():
     return render_template('/data_connect_management.html')
 
@@ -28,6 +29,7 @@ def show_data():
 @web.route('/update_connect', methods=['POST'])
 def update_data():
     data = request.json
+    print(1111,data)
     # TODO: Update data in the database
     tanos_manage().update_connection(data['connect_id'],data['connect_name'],data['dbtype'],data['connect_type'],
                                   data['host'],data['db_library'],data['username'],data['pwd'],data['port'])
@@ -153,4 +155,3 @@ def data2():
     ]
 
     return jsonify(data2)
-

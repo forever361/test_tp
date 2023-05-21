@@ -4,7 +4,7 @@ import subprocess
 import traceback
 from time import sleep
 
-from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, session, redirect, url_for
+from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, send_from_directory, session, redirect, url_for
 # from app import log
 from flask_socketio import emit
 
@@ -23,6 +23,7 @@ import os
 from app.view.data_batch_new import get_log
 
 from app.util.Constant_setting import Constant_cmd
+from app.application import app
 
 web = Blueprint('data_testcase_tanos', __name__, template_folder='templates/uitest')
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
@@ -39,13 +40,13 @@ def test_cases():
 @user.authorize
 def edit_test_case():
     user_id = session.get('userid', None)
-    user_path = '{}/userinfo/{}/'.format(configPath, user_id)
+    folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
 
     if request.method == 'GET':
         info = request.values
         id = viewutil.getInfoAttribute(info, 'id')
 
-        ini_path = user_path + '/' + 'config.ini'
+        ini_path = folder_path + '/config/' + 'config.ini'
         # 添加section
         configP.clear()
         configP.add_section("default")
@@ -138,8 +139,9 @@ def web_search_report():
         id = viewutil.getInfoAttribute(info, 'id')
         # print('idididiidididid', id)
         user_id = session.get('userid', None)
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', user_id)
 
-        return render_template("userinfo/{}/{}_data_test.html".format(user_id, id))
+        return send_from_directory(folder_path,"/html/{}_data_test.html".format(id))
 
 
 
@@ -312,7 +314,8 @@ def runJob(jsonData):
 
 
     user_id = session.get('userid', None)
-    user_path = '{}/userinfo/{}/'.format(configPath, user_id)
+    folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
+    user_path = folder_path + '/config/' 
 
     file = open(user_path + 'data_conn.txt', 'w')
     file.write(str(connt))

@@ -259,6 +259,6 @@ def test_data():
 
 
 @web.route('/web_guide',methods=['GET'])
-#@user.authorize
+@user.authorize
 def test_compare():
     return render_template("guide/web_guide.html"  )

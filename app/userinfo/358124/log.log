@@ -1,9 +1,0 @@
-|||||||||||||||||||||||||Start checking|||||||||||||||||||||||||
-Prepare data...
-[['testdata', 'testdata_dif', '', 'test1', 'id']]
-S:pg,T:pg
-====================TESTDATA:start check====================
-different columns between Source and Target are: None
-value check failed
-|total_count   check|source:1000 target:1000
-count check successfully
