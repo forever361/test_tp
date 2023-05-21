@@ -11,7 +11,8 @@
 /app/static/user_files
 /app/templates/userinfo
 /app/userinfo
-/app/templates/personalAPIshou
+/app/templates/personal/personal_center.html
+
 
 
 

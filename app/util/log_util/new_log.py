@@ -1,6 +1,6 @@
 import logging
 import os
-
+from app.application import app
 from app.util.log_util.yaml_handler import yaml_data
 
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__)))
@@ -35,8 +35,10 @@ class LoggerHandler(logging.Logger):
 
 
 from app.data2_check.commom.Constant_t import Constant_id
-userid_ = Constant_id().cookie_id
-LOG_PATH= os.path.join(LOG_PATH_NEW + "/userinfo/{}/log.log".format(userid_))
+user_id = Constant_id().cookie_id
+folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
+user_path = folder_path + '/config/' 
+LOG_PATH= os.path.join(user_path + "/log.log")
 # LOG_PATH= os.path.join(LOG_PATH_NEW + "/data2_check/Log/test.log")
 
 # print(222,LOG_PATH)
