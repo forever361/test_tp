@@ -1,0 +1,47 @@
+2023-05-21 09:18:09,493-INFO:  check rule is : Default
+2023-05-21 09:19:54,423-INFO:  check rule is : Default
+2023-05-21 09:36:51,372-INFO:  check rule is : Default
+2023-05-21 09:37:50,150-INFO:  check rule is : Default
+2023-05-21 09:37:50,168-INFO: S:pg,T:pg
+2023-05-21 09:37:50,251-INFO: different columns between Source and Target are: None
+2023-05-21 09:37:50,274-INFO: value check sucessfully
+2023-05-21 09:42:41,802-INFO:  check rule is : Default
+2023-05-21 09:42:41,819-INFO: S:pg,T:pg
+2023-05-21 09:42:41,831-INFO: different columns between Source and Target are: None
+2023-05-21 09:42:41,851-INFO: value check sucessfully
+2023-05-21 09:45:31,470-INFO:  check rule is : Default
+2023-05-21 09:45:31,485-INFO: S:pg,T:pg
+2023-05-21 09:45:31,494-INFO: different columns between Source and Target are: None
+2023-05-21 09:45:31,509-INFO: value check sucessfully
+2023-05-21 09:45:31,592-INFO: |total_count   check|source:200 target:200
+2023-05-21 09:47:14,318-INFO:  check rule is : Default
+2023-05-21 09:47:14,334-INFO: S:pg,T:pg
+2023-05-21 09:47:14,343-INFO: different columns between Source and Target are: None
+2023-05-21 09:47:14,359-INFO: value check sucessfully
+2023-05-21 09:47:14,439-INFO: |total_count   check|source:200 target:200
+2023-05-21 09:47:14,490-INFO: count check successfully
+2023-05-21 09:49:14,966-INFO:  check rule is : Default
+2023-05-21 09:49:14,981-INFO: S:pg,T:pg
+2023-05-21 09:49:14,991-INFO: different columns between Source and Target are: None
+2023-05-21 09:49:15,009-INFO: value check sucessfully
+2023-05-21 09:49:15,096-INFO: |total_count   check|source:200 target:200
+2023-05-21 09:49:15,152-INFO: count check successfully
+2023-05-21 09:49:42,305-INFO:  check rule is : Default
+2023-05-21 09:49:42,319-INFO: S:pg,T:pg
+2023-05-21 09:49:42,329-INFO: different columns between Source and Target are: None
+2023-05-21 09:49:42,344-INFO: value check sucessfully
+2023-05-21 09:49:42,426-INFO: |total_count   check|source:200 target:200
+2023-05-21 09:49:42,479-INFO: count check successfully
+2023-05-21 10:15:45,026-INFO:  check rule is : Default
+2023-05-21 10:15:45,052-INFO: S:pg,T:pg
+2023-05-21 10:15:45,156-INFO: different columns between Source and Target are: None
+2023-05-21 10:15:45,178-INFO: value check sucessfully
+2023-05-21 10:15:45,276-INFO: |total_count   check|source:200 target:200
+2023-05-21 10:15:45,327-INFO: count check successfully
+2023-05-21 19:40:35,712-INFO:  check rule is : Default
+2023-05-21 19:41:33,302-INFO:  check rule is : Default
+2023-05-21 19:41:33,499-INFO: S:pg,T:pg
+2023-05-21 19:41:33,764-INFO: different columns between Source and Target are: None
+2023-05-21 19:41:33,928-INFO: value check sucessfully
+2023-05-21 19:41:34,068-INFO: |total_count   check|source:200 target:200
+2023-05-21 19:41:34,134-INFO: count check successfully
