@@ -370,6 +370,26 @@ class ConnectSQL():
         self.cursor.execute(register_info)
         self.conn.commit()
 
+    def get_user_group(self,username):
+        group_query  = """SELECT xcheck.group.name
+                        FROM xcheck.user
+                        JOIN xcheck.team ON xcheck.team.team_id = ANY (xcheck.user.team_ids)
+                        JOIN xcheck.group ON xcheck.group.group_id = ANY (xcheck.team.group_ids)
+                        WHERE xcheck.user.username = '{}' """.format(username)
+        self.cursor.execute(group_query )
+        rows = self.cursor.fetchall()
+        group_names = [row[0].rstrip() for row in rows]
+        return group_names
+
+    def get_avatar(self,username):
+        avatar_query = """ SELECT avatar_url 
+                     from xcheck.user 
+                     where username = '{}' """.format(username)
+        self.cursor.execute(avatar_query)
+        rows = self.cursor.fetchall()
+        avatar = rows[0][0].rstrip()
+        return avatar
+
 
 if __name__ == '__main__':
     sql = 'select id,module,name,description from xcheck.test_case where status = 1 order by id desc limit 1000;'

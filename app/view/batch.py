@@ -6,7 +6,7 @@ import sys
 from werkzeug.utils import secure_filename
 
 from app.util.IP_PORT import Constant
-from app.view.user import authorize
+
 
 basePath = os.path.join(os.path.join(os.path.dirname(__file__),"../"))
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))

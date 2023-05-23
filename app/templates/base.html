@@ -10,94 +10,116 @@
 <style>
 
     .dropdown-submenu {
-            position: relative;
-        }
-        .dropdown-submenu > .dropdown-menu {
-            top: 0;
-            left: 100%;
-            margin-top: -6px;
-            margin-left: -1px;
-            -webkit-border-radius: 0 6px 6px 6px;
-            -moz-border-radius: 0 6px 6px;
-            border-radius: 0 6px 6px 6px;
-        }
-        .dropdown-submenu:hover > .dropdown-menu {
-            display: block;
-        }
-        .dropdown-submenu > a:after {
-            display: block;
-            content: " ";
-            float: right;
-            width: 0;
-            height: 0;
-            border-color: transparent;
-            border-style: solid;
-            border-width: 5px 0 5px 5px;
-            border-left-color: #ccc;
-            margin-top: 5px;
-            margin-right: -10px;
-        }
-        .dropdown-submenu:hover > a:after {
-            border-left-color: #fff;
-        }
-        .dropdown-submenu.pull-left {
-            float: none;
-        }
-        .dropdown-submenu.pull-left > .dropdown-menu {
-            left: -100%;
-            margin-left: 10px;
-            -webkit-border-radius: 6px 0 6px 6px;
-            -moz-border-radius: 6px 0 6px 6px;
-            border-radius: 6px 0 6px 6px;
-        }
+        position: relative;
+    }
+
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+    }
+
+    .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-submenu > a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover > a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left > .dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+
+
+    .avatar {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
 
 </style>
 
 
 <style type="text/css">
 
-        /* ============ desktop view ============ */
-        @media all and (min-width: 992px) {
+    /* ============ desktop view ============ */
+    @media all and (min-width: 992px) {
 
-            .dropdown-menu li {
-                position: relative;
-            }
-
-            .dropdown-menu .submenu {
-                display: none;
-                position: absolute;
-                left: 100%;
-                top: -7px;
-            }
-
-            .dropdown-menu .submenu-left {
-                right: 100%;
-                left: auto;
-            }
-
-            .dropdown-menu > li:hover {
-                background-color: #f1f1f1
-            }
-
-            .dropdown-menu > li:hover > .submenu {
-                display: block;
-            }
+        .dropdown-menu li {
+            position: relative;
         }
 
-        /* ============ desktop view .end// ============ */
-
-        /* ============ small devices ============ */
-        @media (max-width: 991px) {
-
-            .dropdown-menu .dropdown-menu {
-                margin-left: 0.7rem;
-                margin-right: 0.7rem;
-                margin-bottom: .5rem;
-            }
-
+        .dropdown-menu .submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: -7px;
         }
 
-        /* ============ small devices .end// ============ */
+        .dropdown-menu .submenu-left {
+            right: 100%;
+            left: auto;
+        }
+
+        .dropdown-menu > li:hover {
+            background-color: #f1f1f1
+        }
+
+        .dropdown-menu > li:hover > .submenu {
+            display: block;
+        }
+    }
+
+    /* ============ desktop view .end// ============ */
+
+    /* ============ small devices ============ */
+    @media (max-width: 991px) {
+
+        .dropdown-menu .dropdown-menu {
+            margin-left: 0.7rem;
+            margin-right: 0.7rem;
+            margin-bottom: .5rem;
+        }
+
+    }
+
+    /* ============ small devices .end// ============ */
 
 </style>
 
@@ -115,7 +137,8 @@
             <path fill="#db0011" d="M16.019-0l-15.65 15.65 15.65 15.613v-31.264z"></path>
             <path fill="#db0011" d="M47.245 31.263l-15.613-15.613-15.613 15.613h31.227z"></path>
             </svg>
-        <a class="navbar-brand " style="margin-left: 10px;font-size:1rem" href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
+        <a class="navbar-brand " style="margin-left: 10px;font-size:1rem"
+           href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
 
         <div class="collapse navbar-collapse" id="navbarNav1">
             <ul class="navbar-nav ms-auto" style="margin-right:50px">
@@ -128,7 +151,7 @@
                         <li><a class="dropdown-item" href="/data_point_management">Data Points</a></li>
                         <li class="divider"></li>
                         <li><a class="dropdown-item" href="/api_data_test_cases"> Data Validation Jobs </a></li>
-<!--                        <li><a class="dropdown-item" href="/data_guide">Data Quality Checker Guide</a></li>-->
+                        <!--                        <li><a class="dropdown-item" href="/data_guide">Data Quality Checker Guide</a></li>-->
                     </ul>
                 </li>
 
@@ -155,7 +178,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown">OtherTools </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows Scan</a></li>
+                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows
+                            Scan</a></li>
                         <li><a class="dropdown-item" href="/encrypt">Encrypt Password</a></li>
                     </ul>
                 </li>
@@ -173,11 +197,15 @@
             </ul> -->
 
             <!-- 用户系统 -->
-            <ul class="navbar-nav">
-                {% if  session.get('user',None)%}
-                <li class="nav-item"><a class="nav-link" href="javascript:viod(0)">    {{ session.get('user', {}).get('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress', '')[0] }} </a>
+            <ul class="navbar-nav" style="margin-right: 30px">
+                {% if session.get('user',None)%}
+                <li class="nav-item"><a class="nav-link" href="javascript:viod(0)"> {{ session.get('user',
+                    {}).get('http://schemas.microsoft.com/identity/claims/displayname', '')[0] }} </a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="/logout">logout</a></li>
+                <div class="avatar">
+                    <img src={{session.get('avatar', {})}} alt="Avatar">
+                </div>
+                 <li  style="margin-left: 10px; color: red;" class="nav-item"><a class="nav-link" href="/logout">logout</a></li>
                 {% else %}
                 <li class="nav-item"><a class="nav-link" href="/login_page">Login</a></li>
                 {% endif %}
@@ -185,6 +213,8 @@
 
         </div>
     </div>
+
+
 </nav>
 
 

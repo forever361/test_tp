@@ -13,6 +13,7 @@ from app.util.log import logg
 from app.useDB import ConnectSQL
 from app.util.crypto_ECB import AEScoder
 from app.util.log_util.all_new_log import logger_all
+from app.util.permissions import permission_required
 from app.view import user, viewutil
 import os
 
@@ -27,13 +28,15 @@ configP = configparser.ConfigParser()
 
 
 @web.route('/api_data_test_cases')
-@user.authorize
+@user.login_required
+# @permission_required(session.get('groupname'))
 def test_cases():
-    return render_template("uitest/data_test_cases.html")
+    return permission_required(session.get('groupname'))(render_template)("uitest/data_test_cases.html")
+
 
 
 @web.route('/data_edit_test_case', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def edit_test_case():
     user_id = session.get('userid', None)
     codelist = []
@@ -170,7 +173,7 @@ def edit_test_case():
 
 
 @web.route('/runtest2.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest2():
     if request.method == 'POST':
 
@@ -253,7 +256,7 @@ def runtest2():
             return result, {'Content-Type': 'application/json'}
 
 @web.route('/runtest2_ssh.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest2_ssh():
     if request.method == 'POST':
         info = request.values
@@ -405,7 +408,7 @@ def runtest2_ssh():
 
 
 @web.route('/data_delete_test_case', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def delete_test_case():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -429,7 +432,7 @@ def delete_test_case():
 
 
 @web.route('/data_search_report', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def data_search_report():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -446,7 +449,7 @@ def data_search_report():
 
 # 点击search后查询库中case列表
 @web.route('/data_test_case.json', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 def search_test_cases():
     if request.method == 'POST':
         pass
@@ -491,7 +494,7 @@ def search_test_cases():
 
 
 @web.route('/runtest.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest():
     print("enter run api...")
     if request.method == 'POST':
@@ -510,13 +513,13 @@ def runtest():
 
 
 @web.route('/test_run')
-@user.authorize
+@user.login_required
 def test_data():
     return render_template('test_error.html')
 
 
 @web.route('/data_guide', methods=['GET'])
-# @user.authorize
+# @user.login_required
 def test_compare():
     return render_template("guide/data_guide.html")
 
@@ -529,7 +532,7 @@ def error():
     return (message)
 
 # @web.route('/data_csv_report', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 # def data_csv_report():
 #     # log.log().logger.info(request.value)
 #     if request.method == 'GET':

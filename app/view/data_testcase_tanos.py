@@ -17,6 +17,7 @@ from app.util.log import logg
 from app.useDB import ConnectSQL
 from app.util.crypto_ECB import AEScoder
 from app.util.log_util.all_new_log import logger_all
+from app.util.permissions import permission_required
 from app.view import user, viewutil
 import os
 
@@ -31,13 +32,15 @@ configP = configparser.ConfigParser()
 
 
 @web.route('/api_data_test_cases_tanos')
-@user.authorize
+@user.login_required
+# @permission_required(session.get('groupname'))
 def test_cases():
-    return render_template("uitest/data_test_cases.html")
+    return permission_required(session.get('groupname'))(render_template)("uitest/data_test_cases.html")
 
 
 @web.route('/data_edit_test_case_tanos', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
+# @permission_required(session.get('groupname'))
 def edit_test_case():
     user_id = session.get('userid', None)
     folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
@@ -62,7 +65,8 @@ def edit_test_case():
         infor_value = ConnectSQL().data_get_infor_value_id(id)
         print(infor_value)
 
-    return render_template("uitest/data_edit_tanos.html")
+    return permission_required(session.get('groupname'))(render_template)("uitest/data_edit_tanos.html")
+
 
     # SAVE保存的过程,点save就相当于提交了表单走post
     # elif request.method == 'POST':
@@ -77,7 +81,7 @@ def edit_test_case():
 
 
 @web.route('/runtest_tanos.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest_tanos():
     if request.method == 'POST':
 
@@ -130,7 +134,7 @@ def runtest_tanos():
 
 
 @web.route('/data_search_report_tanos', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def web_search_report():
     # log.log().logger.info(request.value)
     if request.method == 'GET':

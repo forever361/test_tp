@@ -6,6 +6,7 @@ from flask import Blueprint, render_template, request, jsonify, session
 import os
 import sys
 
+from app.util.permissions import permission_required
 from app.view import user
 
 basePath = os.path.join(os.path.join(os.path.dirname(__file__)))
@@ -16,13 +17,14 @@ web = Blueprint('apinew', __name__, template_folder='templates/apitest')
 
 
 @web.route('/api_intergration', methods=['GET', 'POST'])
-# @user.authorize
+# @user.login_required
+# @permission_required(session.get('groupname'))
 def test_api():
     api_name = request.args.get('apiName', '')
     if 'token' in session:
-        return render_template('api/api_intergration_no.html', api_name=api_name)
+        return permission_required(session.get('groupname'))(render_template)('api/api_intergration_no.html', api_name=api_name)
     else:
-        return render_template('api/api_intergration.html', api_name=api_name)
+        return permission_required(session.get('groupname'))(render_template)('api/api_intergration_no.html', api_name=api_name)
 
 
 @web.route('/get_api_detail', methods=['POST'])
@@ -95,8 +97,6 @@ def get_api_detail2():
 
 
 
-
-
 @web.route('/run_api_post', methods=['POST'])
 def run_api_post():
     data = request.json
@@ -127,3 +127,11 @@ def run_api_get():
         return jsonify(response)
     except Exception:
         return jsonify({'response_code': 404, 'response_text': "error!!"})
+
+
+@web.route('/test_api')
+@user.login_required
+# @permission_required(session.get('groupname'))
+def test_api_other():
+    return permission_required(session.get('groupname'))(render_template)('test_api.html')
+

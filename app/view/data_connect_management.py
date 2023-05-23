@@ -1,19 +1,37 @@
 from traceback import print_exc
 
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, session, g, current_app
 import json
 from app.db.tanos_manage import tanos_manage
+from app.util import global_manager
 from app.util.crypto_ECB import AEScoder
+from app.util.permissions import permission_required
 from app.view import viewutil, user
 import psycopg2
 
 web = Blueprint("data_connect_management", __name__)
 
+# _global_dict = {}
+#
+# @web.before_request
+# def set_username():
+#     global _global_dict
+#     _global_dict['username'] = session.get('username')
+# username = global_manager.get_value("username")
+
+# @web.route('/data_connect_management', methods=['GET'])
+# @user.login_required
+# def data_connect_page():
+#     @permission_required(session.get('groupname'))
+#     def decorated_function():
+#         return render_template('/data_connect_management.html')
+#     return decorated_function()
 
 @web.route('/data_connect_management', methods=['GET'])
-@user.authorize
+@user.login_required
 def data_connect_page():
-    return render_template('/data_connect_management.html')
+    return permission_required(session.get('groupname'))(render_template)('/data_connect_management.html')
+
 
 @web.route('/connect_search.json', methods=['GET'])
 def show_data():
@@ -43,14 +61,29 @@ def delete_data():
     tanos_manage().delete_connection(data["id"])
     return jsonify(success=True, message='Data deleted successfully')
 
+
+# @web.route('/add_connetion', methods=['POST'])
+# def add_row():
+#     data = request.json
+#     # TODO: Update data in the database
+#     tanos_manage().new_connection(data['connect_name'],data['dbtype'],data['connect_type'],
+#                                   data['host'],data['db_library'],data['username'],data['pwd'],data['port'])
+#     return jsonify(success=True, message='add connection successfully')
+
 @web.route('/add_connetion', methods=['POST'])
 def add_row():
-    data = request.json
-    # TODO: Update data in the database
-    tanos_manage().new_connection(data['connect_name'],data['dbtype'],data['connect_type'],
-                                  data['host'],data['db_library'],data['username'],data['pwd'],data['port'])
+    @permission_required(session.get('groupname'))
+    def decorated_function():
+        data = request.json
+        # TODO: Update data in the database
+        tanos_manage().new_connection(data['connect_name'], data['dbtype'], data['connect_type'],
+                                      data['host'], data['db_library'], data['username'], data['pwd'], data['port'])
 
-    return jsonify(success=True, message='add connection successfully')
+        return jsonify(success=True, message='add connection successfully')
+
+    return decorated_function()
+
+
 
 
 @web.route('/test_connect', methods=['POST'])

@@ -12,7 +12,7 @@ configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 
 
 @web.route('/test_normal_compare')
-# @user.authorize
+# @user.login_required
 def test_normal_compare():
     return render_template("code_mode/test_normal_compare.html"  )
 

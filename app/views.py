@@ -3,10 +3,12 @@ from datetime import timedelta
 from flask import render_template, session, request,redirect
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
+from app.util import global_manager
 from app.view import user
 from app.application import app
 
 app.send_file_max_age_default = timedelta(seconds=1)
+from app.useDB import ConnectSQL
 
 # @app.route('/')
 # #@user.authorize
@@ -22,13 +24,18 @@ app.send_file_max_age_default = timedelta(seconds=1)
 #@user.authorize
 def index():
     list = session.get('user',None)
+
     # print (list,'1111')
+
     if list == None:
         return render_template("index.html", message='Hello,')
     else:
         user = session['user']
-        email = user.get('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress', [''])[0]
-        # print(email)
+        email = user.get('http://schemas.microsoft.com/identity/claims/displayname', [''])[0]
+        # groupname = ConnectSQL().get_user_group(email)
+        # print("user group:",groupname)
+        # session['groupname'] = groupname[0]
+
         return render_template("index.html", message='Hello %s,' % email)
 
 # @app.route('/', methods=['GET', 'POST'])
@@ -69,12 +76,6 @@ def getInfoAttribute(info,field):
 def test_webui():
     return render_template('test_webui.html')
 
-
-@app.route('/test_api')
-@user.authorize
-def test_api():
-
-    return render_template('test_api.html')
 
 
 def init_saml_auth(req):

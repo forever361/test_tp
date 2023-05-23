@@ -19,7 +19,7 @@ web = Blueprint('apitest', __name__,template_folder='templates/apitest')
 
 
 @web.route('/test_api123', methods=['GET','POST'])
-@user.authorize
+@user.login_required
 def test_api():
     print(111111111111111)
     if 'Run' in request.form:

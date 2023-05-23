@@ -18,7 +18,6 @@ from app.util.IP_PORT import Constant
 from app.util.crypto_ECB import AEScoder
 from app.view import viewutil, user
 
-from app.view.user import authorize
 
 from app.application import app
 
@@ -32,7 +31,7 @@ configP2 = configparser.ConfigParser()
 web = Blueprint("batch_new", __name__)
 
 @web.route('/api_batch_test_data',methods=['GET'])
-@user.authorize
+@user.login_required
 def batch_test_compare():
     return render_template("/code_mode/batch_tanos_data_new.html",domain=app.config['URL'] )
 
@@ -116,7 +115,7 @@ def batch_test_compare1():
 
 
 @web.route('/runtest3.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest3():
     if request.method == 'POST':
 
@@ -237,7 +236,7 @@ line_number = [0] #存放当前日志行数
 log_data = []
 # 定义接口把处理日志并返回到前端
 @web.route('/get_log',methods=['GET','POST'])
-# @user.authorize
+# @user.login_required
 def get_log(flag=False):
     if flag==False:
         log_data = red_logs() # 获取日志

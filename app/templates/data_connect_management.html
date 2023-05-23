@@ -81,7 +81,8 @@
                         <form>
                             <div class="form-group">
                                 <label for="new-row-name" class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" id="new-row-name" placeholder="example:pg-servcer1-example">
+                                <input type="text" class="form-control" id="new-row-name"
+                                       placeholder="example:pg-servcer1-example">
                             </div>
                             <div class="form-group">
                                 <label for="new-row-dbtype" class="col-form-label">Connection Type:</label>
@@ -542,14 +543,41 @@
                 'port': port,
             }),
             contentType: 'application/json',
-            success: function () {
-                toastr.success('new connection added successfully!');
-                $('#add-row-modal').offcanvas('hide');
-                $('#table').bootstrapTable('refresh');
+            success: function (data) {
+                if (data.startsWith('<!DOCTYPE permission html>')) {
+                    // data以<!DOCTYPE html>开头
+                    $('#add-row-modal').offcanvas('hide');
+                    // toastr.error('Sorry, you do not have permission to access!');
+                    $('#table').bootstrapTable('refresh');
+                    let dialog = bootbox.dialog({
+                        title: 'Permission denied!',
+                        message: "<p>Sorry, you do not have permission to operate! </p>",
+                        centerVertical: true,
+                        buttons:
+                            {
+                                ok: {
+                                    label: "Yes",
+                                    className: 'btn-danger',
+                                    callback:
+                                        function () {
+                                        }
+                                }
+                            }
+                    });
+
+
+                } else {
+                    console.info(data)
+                    toastr.success('new connection added successfully!');
+                    $('#add-row-modal').offcanvas('hide');
+                    $('#table').bootstrapTable('refresh');
+                }
             },
             error: function () {
                 $('#add-row-modal').offcanvas('hide');
                 toastr.error('failed to add new connection!');
+                $('#table').bootstrapTable('refresh');
+
             }
         });
 

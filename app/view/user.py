@@ -2,7 +2,7 @@ from functools import wraps
 
 from datetime import timedelta
 from shutil import copy
-from flask import Blueprint, render_template, request, redirect, make_response, session, url_for
+from flask import Blueprint, render_template, request, redirect, make_response, session, url_for, jsonify
 import os
 import sys
 
@@ -44,7 +44,7 @@ web.send_file_max_age_default = timedelta(seconds=1)
 #     return wrapper
 
 #设置登录认证
-def authorize(fn):
+def login_required(fn):
     @wraps(fn)
     def wrapper():
         user = session.get('userid', None)
@@ -54,6 +54,7 @@ def authorize(fn):
         else:
             return render_template("auth/login_sso.html")
     return wrapper
+
 
 # @web.route('/login',methods=['GET','POST'])
 # def login():
@@ -256,11 +257,21 @@ def login_callback():
         session['token'] = auth.get_session_index()  # Save token in session
         session['staffid'] = 580515000 
         session.permanent = True
+        print(111,auth.get_attributes())
 
         # print('user:',auth.get_attributes())
-        username = session['user']['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'][0]
+        username = session['user']['http://schemas.microsoft.com/identity/claims/displayname'][0]
+        print(222,username)
         token = session['token']
         staffid = session['staffid']
+
+        groupname = ConnectSQL().get_user_group(username)
+        print("user group:",groupname)
+        session['groupname'] = groupname[0]
+
+        avatar = ConnectSQL().get_avatar(username)
+        session['avatar'] = avatar
+        print(333,avatar)
 
         #查数据库是否有该用户
         rows = ConnectSQL().get_register_username(username)
@@ -292,6 +303,9 @@ def login_callback():
         return 'Login failed'
 
 
+
+
+
 @web.route('/login_page',methods=['GET','POST'])
 def login_page():
     if request.method == 'GET':
@@ -309,3 +323,8 @@ def login():
     auth = init_saml_auth(req)
     return redirect(auth.login())  # Redirect to SSO login page
     # return render_template('index.html')
+
+@web.route('/permission',methods=['GET','POST'])
+def permission():
+    return render_template("auth/permission.html")
+
