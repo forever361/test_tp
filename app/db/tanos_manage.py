@@ -170,7 +170,12 @@ class tanos_manage():
         table_name = str(result[0][0]).strip()
         return table_name
 
-
+    def update_team(self, username, team):
+        sql = """UPDATE xcheck.user 
+                set team_ids='{}'
+                WHERE username = '{}' """.format(
+             team,username.strip())
+        useDB.useDB().executesql(sql)
 
 
 if __name__ == '__main__':

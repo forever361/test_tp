@@ -255,12 +255,13 @@ def login_callback():
     if len(errors) == 0 and auth.is_authenticated():
         session['user'] = auth.get_attributes()  # Save user information in session
         session['token'] = auth.get_session_index()  # Save token in session
-        session['staffid'] = 580515000 
+        session['staffid'] = 580515000
+        session['username'] = session['user']['http://schemas.microsoft.com/identity/claims/displayname'][0]
         session.permanent = True
         print(111,auth.get_attributes())
 
         # print('user:',auth.get_attributes())
-        username = session['user']['http://schemas.microsoft.com/identity/claims/displayname'][0]
+        username = session['username']
         print(222,username)
         token = session['token']
         staffid = session['staffid']
@@ -269,9 +270,12 @@ def login_callback():
         print("user group:",groupname)
         session['groupname'] = groupname[0]
 
+        team = ConnectSQL().get_team(username)
+        session['team'] = team
+
         avatar = ConnectSQL().get_avatar(username)
         session['avatar'] = avatar
-        print(333,avatar)
+        # print(333,avatar)
 
         #查数据库是否有该用户
         rows = ConnectSQL().get_register_username(username)

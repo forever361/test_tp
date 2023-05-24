@@ -24,6 +24,9 @@ class UserScope(Scope):
 class AdminGroup(Scope):
     allow_module = ['data_connect_management','data_ponint_management','data_testcase']
 
+class Guest(Scope):
+    allow_module = ['data_connect_management','data_ponint_management','data_testcase']
+
 class SuperScope(Scope):
     allow_module = ['v1.user']
 

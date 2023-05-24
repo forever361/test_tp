@@ -40,16 +40,12 @@ class useDB(object):
             logger_all.error('commit error')
         self.conn.close()
 
-
-
     def executesql_fetch(self, sql):
         print(sql)
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
         self.conn.close()
         return rows
-
-
 
 
 class ConnectSQL():
@@ -115,7 +111,8 @@ class ConnectSQL():
     def write_register_sql(self, username, password):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         user_id = ''.join(map(str, np.random.randint(0, 9, 6)))
-        register_info = """INSERT INTO xcheck.user values('{}','{}','{}','{}','{}')""".format(user_id, username,password, 0, create_date)
+        register_info = """INSERT INTO xcheck.user values('{}','{}','{}','{}','{}')""".format(user_id, username,
+                                                                                              password, 0, create_date)
         self.cursor.execute(register_info)
         self.conn.commit()
         self.cursor.close()
@@ -124,7 +121,8 @@ class ConnectSQL():
     def write_register_sql_new(self, username, staffid):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         # user_id = ''.join(map(str, np.random.randint(0, 9, 6)))
-        register_info = """INSERT INTO xcheck.user(username,password,status,create_date,staffid) values('{}','{}','{}','{}','{}')""".format( username,"", 0, create_date,staffid)
+        register_info = """INSERT INTO xcheck.user(username,password,status,create_date,staffid) values('{}','{}','{}','{}','{}')""".format(
+            username, "", 0, create_date, staffid)
         self.cursor.execute(register_info)
         self.conn.commit()
         self.cursor.close()
@@ -370,18 +368,28 @@ class ConnectSQL():
         self.cursor.execute(register_info)
         self.conn.commit()
 
-    def get_user_group(self,username):
-        group_query  = """SELECT xcheck.group.name
+    def get_user_group(self, username):
+        group_query = """SELECT xcheck.group.name
                         FROM xcheck.user
                         JOIN xcheck.team ON xcheck.team.team_id = ANY (xcheck.user.team_ids)
                         JOIN xcheck.group ON xcheck.group.group_id = ANY (xcheck.team.group_ids)
                         WHERE xcheck.user.username = '{}' """.format(username)
-        self.cursor.execute(group_query )
+        self.cursor.execute(group_query)
         rows = self.cursor.fetchall()
         group_names = [row[0].rstrip() for row in rows]
         return group_names
 
-    def get_avatar(self,username):
+    def get_team(self, username):
+        team_query = """SELECT t.name
+                        FROM xcheck.team t
+                        JOIN xcheck.user u ON u.team_ids @> ARRAY[t.team_id]
+                        WHERE u.username = '{}'; """.format(username)
+        self.cursor.execute(team_query)
+        rows = self.cursor.fetchall()
+        team = rows[0][0].rstrip()
+        return team
+
+    def get_avatar(self, username):
         avatar_query = """ SELECT avatar_url 
                      from xcheck.user 
                      where username = '{}' """.format(username)
