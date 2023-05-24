@@ -10,6 +10,7 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
 from app.application import app
 from app.common.libs.Helper import ops_render, ops_rederErrJSON, ops_rederJSON
+from app.db.tanos_manage import tanos_manage
 from app.util.IP_PORT import Constant
 from app.util.log_util.all_new_log import logger_all
 
@@ -266,15 +267,9 @@ def login_callback():
         token = session['token']
         staffid = session['staffid']
 
-        groupname = ConnectSQL().get_user_group(username)
-        print("user group:",groupname)
-        session['groupname'] = groupname[0]
+        avatarUrl = 'https://www.aixint.cn:5000/static/kundwang.jpg'
+        session['avatar']=avatarUrl
 
-        team = ConnectSQL().get_team(username)
-        session['team'] = team
-
-        avatar = ConnectSQL().get_avatar(username)
-        session['avatar'] = avatar
         # print(333,avatar)
 
         #查数据库是否有该用户
@@ -294,9 +289,20 @@ def login_callback():
                 os.makedirs(os.path.join(user_folder_path, 'html'))
                 os.makedirs(os.path.join(user_folder_path, 'csv'))
 
+
         else:
             id = ConnectSQL().get_login_userid(username)
             session['userid']= id
+
+        groupname = ConnectSQL().get_user_group(username)
+        print("user group:",groupname)
+        session['groupname'] = groupname[0]
+
+        team = ConnectSQL().get_team(username)
+        session['team'] = team
+
+        # avatar = ConnectSQL().get_avatar(username)
+        # session['avatar'] = avatar
 
         if session_current_url:
             response = make_response(redirect('/' + session_current_url))

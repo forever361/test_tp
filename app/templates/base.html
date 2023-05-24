@@ -242,7 +242,7 @@
                 <h6>{{ session.get('user', {}).get('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
                     '')[0]
                     }}</h6>
-                <button style="height: 30px; display: flex; align-items: center;" class="logout-button btn btn-primary" onclick="location.href='/logout'">Logout</button>
+                <button type="button" style="height: 30px; display: flex; align-items: center;" class="logout-button btn btn-primary" onclick="location.href='/logout'">Logout</button>
             </div>
         </div>
         <div class="row" style="margin-top: 20px">
@@ -254,6 +254,8 @@
         </div>
     </div>
 </div>
+
+
 
 {% endblock %}
 

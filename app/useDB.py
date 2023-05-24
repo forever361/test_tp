@@ -121,8 +121,8 @@ class ConnectSQL():
     def write_register_sql_new(self, username, staffid):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         # user_id = ''.join(map(str, np.random.randint(0, 9, 6)))
-        register_info = """INSERT INTO xcheck.user(username,password,status,create_date,staffid) values('{}','{}','{}','{}','{}')""".format(
-            username, "", 0, create_date, staffid)
+        register_info = """INSERT INTO xcheck.user(username,password,status,create_date,staffid,team_ids) values('{}','{}','{}','{}','{}','{}')""".format(
+            username.strip(), "", 0, create_date, staffid,"{3001}")
         self.cursor.execute(register_info)
         self.conn.commit()
         self.cursor.close()
@@ -388,6 +388,15 @@ class ConnectSQL():
         rows = self.cursor.fetchall()
         team = rows[0][0].rstrip()
         return team
+
+
+    def set_team(self, team,username):
+        sql = """UPDATE xcheck.user 
+                set team_ids='{}'
+                WHERE username = '{}' """.format(
+             team,username.strip())
+        print(00000000000)
+        self.cursor.execute(sql)
 
     def get_avatar(self, username):
         avatar_query = """ SELECT avatar_url 
