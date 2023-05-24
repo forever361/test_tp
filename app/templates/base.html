@@ -183,6 +183,7 @@
                         <li><a class="dropdown-item" href="/encrypt">Encrypt Password</a></li>
                     </ul>
                 </li>
+
             </ul>
 
 
@@ -198,18 +199,24 @@
 
             <!-- 用户系统 -->
             <ul class="navbar-nav" style="margin-right: 30px">
-                {% if session.get('user',None)%}
-                <li class="nav-item"><a class="nav-link" href="javascript:viod(0)"> {{ session.get('user',
-                    {}).get('http://schemas.microsoft.com/identity/claims/displayname', '')[0] }} </a>
+                <li class="nav-item">
+                    {% if session.get('user', None) %}
+                    <a class="nav-link user-profile-link" href="#" data-bs-toggle="offcanvas"
+                       data-bs-target="#user-profile-modal">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                           <span style="margin-right: 10px" class="username">{{ session.get('user', {}).get('http://schemas.microsoft.com/identity/claims/displayname', '')[0] }}
+                           </span>
+                            <div class="avatar">
+                                <img src="{{ session.get('avatar', '') }}" alt="Avatar">
+                            </div>
+                        </div>
+                    </a>
+                    {% else %}
+                    <a class="nav-link" href="/login_page">Login</a>
+                    {% endif %}
                 </li>
-                <div class="avatar">
-                    <img src={{session.get('avatar', {})}} alt="Avatar">
-                </div>
-                 <li  style="margin-left: 10px; color: red;" class="nav-item"><a class="nav-link" href="/logout">logout</a></li>
-                {% else %}
-                <li class="nav-item"><a class="nav-link" href="/login_page">Login</a></li>
-                {% endif %}
             </ul>
+
 
         </div>
     </div>
@@ -217,6 +224,35 @@
 
 </nav>
 
+<div class="offcanvas offcanvas-end" tabindex="-1" id="user-profile-modal" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">User Profile</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="row">
+            <div class="col-4">
+                <img style="width: 75px;height: 85px; border-radius: 10%;" src="{{ session.get('avatar', '') }}"
+                     alt="Avatar">
+            </div>
+            <div class="col-8">
+                <h6>{{ session.get('user', {}).get('http://schemas.microsoft.com/identity/claims/displayname', '')[0]
+                    }}</h6>
+                <h6>{{ session.get('user', {}).get('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
+                    '')[0]
+                    }}</h6>
+                <button style="height: 30px; display: flex; align-items: center;" class="logout-button btn btn-primary" onclick="location.href='/logout'">Logout</button>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px">
+            <div class="col">
+                <div style="font-size:15px; margin-top: 5px;">Curren Team:</div>
+                <div style="font-size:10px;margin-top: 10px; padding-left: 10px; padding-right: 10px; padding-top: 4px;padding-bottom: 4px;background-color: #e1f0ff; color: #1b5fcc;  display: inline-block; border-radius: 5px;">
+                    {{ session.get('groupname', {}) }}</div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 
