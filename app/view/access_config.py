@@ -31,4 +31,7 @@ def save_permission():
     team = ConnectSQL().get_team(data['username'])
     session['team'] = team
 
+    groupname = ConnectSQL().get_user_group(data['username'])
+    session['groupname'] = groupname[0]
+
     return "OK"

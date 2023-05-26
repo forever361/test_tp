@@ -77,6 +77,24 @@
 
 
 <script>
+
+    // 获取后端传来的值
+var team = "{{team}}";
+
+console.info(team)
+
+// 勾选相应的复选框
+if (team === "Admin") {
+  document.getElementById("aPermission").checked = true;
+} else if (team === "Guest") {
+  document.getElementById("gPermission").checked = true;
+} else if (team === "DelosUsers") {
+  document.getElementById("dPermission").checked = true;
+} else if (team === "ChinaDataSolution") {
+  document.getElementById("cPermission").checked = true;
+}
+// 添加更多复选框的逻辑
+
 $(document).ready(function() {
     // 监听保存按钮的点击事件
     $('#savebtn').click(function() {
@@ -108,8 +126,10 @@ $(document).ready(function() {
             contentType: 'application/json',
             success: function(response) {
                 // 处理成功响应
-                // location.reload()
+                location.reload()
                 toastr.success('change successfully!');
+
+
             },
             error: function(xhr, status, error) {
                 // 处理错误响应
