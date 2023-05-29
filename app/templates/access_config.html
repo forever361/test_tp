@@ -20,6 +20,8 @@
 {% endblock %}
 
 
+
+
 {% block content %}
 <div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex; ">
     <div style=" height:91%; width:100%; margin-left: 30px;  margin-right: 30px; margin-top: 10px; margin-bottom: 10px; "
@@ -32,7 +34,7 @@
                 <div style="margin-top: 70px" class="row">
                     <div class="d-flex justify-content-between mb-3">
                         <h5>Team Management</h5>
-                        <button class="btn btn-primary" >
+                        <button class="btn btn-primary">
                             Add Team
                         </button>
                     </div>
@@ -87,23 +89,160 @@
     </div>
     <div class="offcanvas-body">
         <!-- Team profile information and management functionality -->
+
+        <!-- User List -->
+        <div class="user-list-table-container">
+            <h6>User List</h6>
+            <table class="table" id="user-list-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>User Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- User list will be dynamically populated using AJAX -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-end mt-3">
+            <nav id="pagination-container">
+                <ul class="pagination"></ul>
+            </nav>
+        </div>
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
+        var currentPage = 1;
+        var perPage = 6;
+
         // 监听 Edit 按钮的点击事件
         $('.edit-button').click(function () {
             // 获取团队的 ID
             var teamId = $(this).data('team-id');
 
-            console.info(teamId)
+            console.info(teamId);
 
             // 在此处执行打开抽屉和处理相关团队的逻辑
             // 可以使用 teamId 来标识要编辑的团队
             // ...
         });
+
+        // 监听 Add User 按钮的点击事件
+        $('#add-user-button').click(function () {
+            // 显示用户表格
+            $('#all-users-table').show();
+        });
+
+        // 通过 AJAX 获取用户列表
+        function getUserList(page) {
+            // 发起 AJAX 请求，从后端获取用户列表数据
+            $.ajax({
+                url: '/team/getUserList', // 替换为实际的后端接口地址
+                method: 'GET',
+                data: {
+                    page: page,
+                    per_page: perPage
+                },
+                success: function (response) {
+                    // 清空用户列表
+                    $('#user-list-table tbody').empty();
+
+                    // 动态生成用户列表
+                    response.users.forEach(function (user) {
+                        var row = '<tr>' +
+                            '<td>' + user.id + '</td>' +
+                            '<td>' + user.name + '</td>' +
+                            '<td>' +
+                            '<button style="height: 25px; display: flex; align-items: center;" class="btn btn-danger delete-user-button" data-user-id="' + user.id + '"><i class="bi bi-trash"></i></button>' +
+                            '</td>' +
+                            '</tr>';
+
+                        $('#user-list-table tbody').append(row);
+                    });
+
+                    // 更新分页器
+                    updatePagination(response.totalPages, page);
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        // 更新分页器
+        function updatePagination(totalPages, currentPage) {
+            var paginationContainer = $('#pagination-container');
+            var pagination = paginationContainer.find('.pagination');
+
+            // 清空分页器
+            pagination.empty();
+
+            // 添加上一页按钮
+            if (currentPage > 1) {
+                var previousPageButton = '<li class="page-item previous-page-button"><a class="page-link" href="#"><i class="bi bi-chevron-left"></i> Previous</a></li>';
+                pagination.append(previousPageButton);
+            }
+
+            // 添加页码按钮
+            for (var i = 1; i <= totalPages; i++) {
+                var pageButton = '<li class="page-item page-button' + (i === currentPage ? ' active' : '') + '"><a class="page-link" href="#">' + i + '</a></li>';
+                pagination.append(pageButton);
+            }
+
+            // 添加下一页按钮
+            if (currentPage < totalPages) {
+                var nextPageButton = '<li class="page-item next-page-button"><a class="page-link" href="#">Next <i class="bi bi-chevron-right"></i></a></li>';
+                pagination.append(nextPageButton);
+            }
+        }
+
+        // 监听 Delete User 按钮的点击事件
+        $(document).on('click', '.delete-user-button', function () {
+            var userId = $(this).data('user-id');
+            console.info(userId)
+
+            // 在此处执行删除用户的逻辑
+            // 使用 userId 来标识要删除的用户
+            // ...
+        });
+
+        // 监听上一页按钮的点击事件
+        $(document).on('click', '.previous-page-button', function () {
+            currentPage--;
+            getUserList(currentPage);
+        });
+
+        // 监听下一页按钮的点击事件
+        $(document).on('click', '.next-page-button', function () {
+            currentPage++;
+            getUserList(currentPage);
+        });
+
+        // 监听页码按钮的点击事件
+        $(document).on('click', '.page-button', function () {
+            var page = parseInt($(this).text());
+            if (page !== currentPage) {
+                currentPage = page;
+                getUserList(currentPage);
+            }
+        });
+
+        // 初始化页面时获取第一页的用户列表
+        getUserList(currentPage);
     });
 </script>
+
+
+
+
+
+
+
 
 {% endblock %}

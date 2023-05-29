@@ -1,6 +1,7 @@
 import json
+import math
 
-from flask import Blueprint, render_template, session, request
+from flask import Blueprint, render_template, session, request, jsonify
 
 from app.db.tanos_manage import tanos_manage
 from app.useDB import ConnectSQL
@@ -42,3 +43,53 @@ def save_permission():
     session['groupname'] = groupname[0]
 
     return "OK"
+
+# 示例用户数据
+team_users = [
+    {'id': 1, 'name': 'User 1'},
+    {'id': 2, 'name': 'User 2'},
+    {'id': 3, 'name': 'User 3'},
+{'id': 3, 'name': 'User 3'},
+{'id': 3, 'name': 'User 3'},
+{'id': 3, 'name': 'User 3'},
+{'id': 9, 'name': 'User 3'},
+{'id': 10, 'name': 'User 3'},
+]
+
+all_users = [
+    {'id': 4, 'name': 'User 4'},
+    {'id': 5, 'name': 'User 5'},
+    {'id': 6, 'name': 'User 6'}
+]
+
+@web.route('/team/getUserList', methods=['GET'])
+def getUserList():
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=6, type=int)
+
+    # 在此处可以进行相应的逻辑处理，例如从数据库获取用户列表数据
+    # 假设从数据库或其他数据源获取了 team_users 列表数据
+
+    # 获取当前页的用户数据
+    start_index = (page - 1) * per_page
+    end_index = start_index + per_page
+    users = team_users[start_index:end_index]
+
+    # 计算总页数
+    total_pages = math.ceil(len(team_users) / per_page)
+
+    response = {
+        'users': users,
+        'totalPages': total_pages
+    }
+
+    return jsonify(response)
+
+@web.route('/team/getAllUsers', methods=['GET'])
+def getAllUsers():
+    # 在此处可以进行相应的逻辑处理，例如从数据库获取所有用户列表数据
+
+    # 假设从数据库或其他数据源获取了 all_users 列表数据
+    response = {'users': all_users}
+
+    return jsonify(response)
