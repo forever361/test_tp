@@ -22,9 +22,9 @@ web = Blueprint('apinew', __name__, template_folder='templates/apitest')
 def test_api():
     api_name = request.args.get('apiName', '')
     if 'token' in session:
-        return permission_required(session.get('groupname'))(render_template)('api/api_intergration_no.html', api_name=api_name)
+        return render_template('api/api_intergration_no.html', api_name=api_name)
     else:
-        return permission_required(session.get('groupname'))(render_template)('api/api_intergration_no.html', api_name=api_name)
+        return render_template('api/api_intergration_no.html', api_name=api_name)
 
 
 @web.route('/get_api_detail', methods=['POST'])

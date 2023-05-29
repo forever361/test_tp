@@ -26,118 +26,84 @@
          class="card">
         <div class="card-body" style="padding-bottom:10px;">
             <div class="container">
-                <h4>User Permissions</h4>
-
-                <!-- User List -->
-                <div style="margin-top: 50px" class="row">
-                    <div class="col">
-                        <h6>Users:</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <div style="font-size:10px;margin-top: 10px; padding-left: 10px; padding-right: 10px; padding-top: 4px;padding-bottom: 4px;background-color: #e1f0ff; color: #1b5fcc;  display: inline-block; border-radius: 5px;">
-                                    {{username}}
-                                </div>
-                            </li>
-                            <!-- Add more user items here -->
-                        </ul>
-                    </div>
-                </div>
+                <h4>Team Management</h4>
 
                 <!-- Permission Form -->
-                <div style="margin-top: 20px" class="row">
+                <div style="margin-top: 70px" class="row">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5>Team Management</h5>
+                        <button class="btn btn-primary" >
+                            Add Team
+                        </button>
+                    </div>
                     <div class="col">
-                        <h6>Team:</h6>
-                        <form>
-                            <div class="form-group">
-                                <input type="checkbox" id="aPermission" name="aPermission" value="read">
-                                <label>Admin</label>
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" id="gPermission" name="gPermission" value="write">
-                                <label>Guest</label>
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" id="dPermission" name="dPermission" value="delete">
-                                <label>DELOS_User</label>
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" id="cPermission" name="cPermission" value="delete">
-                                <label>China_Data_Solution</label>
-                            </div>
-                            <!-- Add more permission checkboxes here -->
-                            <button id='savebtn' style="margin-top: 20px" type="button" class="btn btn-primary">Save Change
-                            </button>
-                        </form>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Team Name</th>
+                                <th>Edit</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for team in teams %}
+                            <tr>
+                                <td>{{ team.name }}</td>
+                                <td>
+                                    <button class="btn btn-primary edit-button" data-bs-toggle="offcanvas"
+                                            data-bs-target="#team-profile-modal" data-team-id="{{ team.id }}">Edit
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
+
+                <!-- Current Team Section -->
+                <div class="card" style="margin-top: 20px; padding: 10px;">
+                    <div class="row">
+                        <div class="col">
+                            <div style="font-size: 15px; margin-top: 5px;">Current Team:</div>
+                            <div style="font-size: 15px; margin-top: 10px; padding: 8px; background-color: #e1f0ff; color: #1b5fcc; display: inline-block; border-radius: 5px;">
+                                {{ session.get('team', {}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
 </div>
 
+<!-- Offcanvas for Team Profile -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="team-profile-modal" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Team Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- Team profile information and management functionality -->
+    </div>
+</div>
 
 <script>
+    $(document).ready(function () {
+        // 监听 Edit 按钮的点击事件
+        $('.edit-button').click(function () {
+            // 获取团队的 ID
+            var teamId = $(this).data('team-id');
 
-    // 获取后端传来的值
-var team = "{{team}}";
+            console.info(teamId)
 
-console.info(team)
-
-// 勾选相应的复选框
-if (team === "Admin") {
-  document.getElementById("aPermission").checked = true;
-} else if (team === "Guest") {
-  document.getElementById("gPermission").checked = true;
-} else if (team === "DelosUsers") {
-  document.getElementById("dPermission").checked = true;
-} else if (team === "ChinaDataSolution") {
-  document.getElementById("cPermission").checked = true;
-}
-// 添加更多复选框的逻辑
-
-$(document).ready(function() {
-    // 监听保存按钮的点击事件
-    $('#savebtn').click(function() {
-        // 构建请求数据对象
-        var data = {
-            username: "{{ username }}",
-            permissions: []
-        };
-
-        // 检查每个权限复选框是否被选中
-        if ($('#aPermission').is(':checked')) {
-            data.permissions.push('Admin');
-        }
-        if ($('#gPermission').is(':checked')) {
-            data.permissions.push('Guest');
-        }
-        if ($('#dPermission').is(':checked')) {
-            data.permissions.push('DELOS_User');
-        }
-        if ($('#cPermission').is(':checked')) {
-            data.permissions.push('China_Data_Solution');
-        }
-
-        // 发送Ajax请求
-        $.ajax({
-            url: '/save_permissions',  // 后端处理保存权限的路由
-            method: 'POST',
-            data: JSON.stringify(data),
-            contentType: 'application/json',
-            success: function(response) {
-                // 处理成功响应
-                location.reload()
-                toastr.success('change successfully!');
-
-
-            },
-            error: function(xhr, status, error) {
-                // 处理错误响应
-                toastr.error('failed to change.');
-            }
+            // 在此处执行打开抽屉和处理相关团队的逻辑
+            // 可以使用 teamId 来标识要编辑的团队
+            // ...
         });
     });
-});
 </script>
 
 {% endblock %}

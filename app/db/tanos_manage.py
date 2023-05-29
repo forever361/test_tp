@@ -178,6 +178,12 @@ class tanos_manage():
         useDB.useDB().executesql(sql)
 
 
+    def get_teams(self):
+        sql = """select * from xcheck.team  """
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        return result
+
 if __name__ == '__main__':
     testcase = tanos_manage()
     # a= testcase.search_by_connect_id(10002)

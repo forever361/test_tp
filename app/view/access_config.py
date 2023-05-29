@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, render_template, session, request
 
 from app.db.tanos_manage import tanos_manage
@@ -12,7 +14,12 @@ web = Blueprint("access_config", __name__)
 def access_page():
     username = session.get('username', None)
     team = session.get('team', None)
-    return render_template('access_config.html',username=username,team=team)
+    teams_list=  tanos_manage().get_teams()
+    teams = []
+    for team_data in teams_list:
+        team = {"id": team_data[0], "name": team_data[1].strip()}
+        teams.append(team)
+    return render_template('access_config.html',username=username,team=team,teams=teams)
 
 @web.route('/save_permissions', methods=[ 'POST'])
 def save_permission():
