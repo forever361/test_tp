@@ -184,6 +184,20 @@ class tanos_manage():
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
+    def get_user_from_team(self, team):
+        if team is None:
+            return []  # 返回空结果集或采取其他处理方式
+        sql = "SELECT username, staffid FROM xcheck.user WHERE '{}' = ANY (team_ids)".format(team)
+        result = useDB.useDB().executesql_fetch(sql)
+        return result
+
+    def get_all_user(self):
+        sql = "SELECT username, staffid FROM xcheck.user "
+        result = useDB.useDB().executesql_fetch(sql)
+        return result
+
+
+
 if __name__ == '__main__':
     testcase = tanos_manage()
     # a= testcase.search_by_connect_id(10002)
