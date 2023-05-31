@@ -1,0 +1,11 @@
+
+-- 创建用户团队关联表
+CREATE TABLE xcheck.user_teams (
+  userid INT NOT NULL,
+  teamid INT NOT NULL,
+  is_owner INT NOT NULL DEFAULT 0,
+  FOREIGN KEY (userid) REFERENCES xcheck."user" (user_id),
+  FOREIGN KEY (teamid) REFERENCES xcheck.team (team_id),
+  PRIMARY KEY (userid, teamid)
+);
+
