@@ -277,6 +277,25 @@ class tanos_manage():
             is_owner = rows[0][0] if rows else None
             return is_owner  # 返回添加成功的标识，可以根据需要返回其他信息
 
+    def get_team_from_user(self, username):
+        sql = "SELECT user_id FROM xcheck.user WHERE username = '{}'".format(username)
+        result = useDB.useDB().executesql_fetch(sql)
+
+        if result:
+            user_id = result[0][0]
+            sql = """
+                SELECT t.teamid
+                FROM xcheck.user_teams t
+                WHERE t.userid = {}
+            """.format(user_id)
+            result = useDB.useDB().executesql_fetch(sql)
+            if result:
+                teamid = result[0][0]
+                sql = "SELECT name FROM xcheck.team WHERE team_id = '{}'".format(teamid)
+                rows = useDB.useDB().executesql_fetch(sql)
+                team = rows[0][0].strip() if rows else None
+                return team  # 返回添加成功的标识，可以根据需要返回其他信息
+
 
 
 if __name__ == '__main__':

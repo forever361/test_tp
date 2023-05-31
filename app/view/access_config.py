@@ -16,7 +16,10 @@ web = Blueprint("access_config", __name__)
 def access_page():
     username = session.get('username', None)
     # session['team'] = "Admin"
-    team = session.get('team', None)
+    # team = session.get('team', None)
+    team = tanos_manage().get_team_from_user(username)
+    session['team'] = team
+    print(6666,team)
     teams = []
     #通过用户名获取是否为owner
 
