@@ -195,6 +195,12 @@ class tanos_manage():
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
+    def get_teams_owner(self,team):
+        sql = """select * from xcheck.team where name='{}' """.format(team)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        return result
+
     # def get_user_from_team(self, team):
     #     if team is None:
     #         return []  # 返回空结果集或采取其他处理方式
@@ -204,7 +210,7 @@ class tanos_manage():
 
     def get_users_from_team(self, team_id):
         sql = """
-            SELECT u.username, u.staffid
+            SELECT u.username, u.staffid,t.is_owner
             FROM xcheck.user u
             JOIN xcheck.user_teams t ON u.user_id = t.userid
             WHERE t.teamid = {}
@@ -216,6 +222,59 @@ class tanos_manage():
         sql = "SELECT username, staffid FROM xcheck.user "
         result = useDB.useDB().executesql_fetch(sql)
         return result
+
+    def delete_user_from_team(self,team_id, staff_id):
+        # 根据 staff_id 查询对应的 userid
+        sql = "SELECT user_id FROM xcheck.user WHERE staffid = '{}'".format(staff_id)
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            user_id = result[0][0]
+            # 在数据库中删除用户与团队的关联关系
+            delete_sql = "DELETE FROM xcheck.user_teams WHERE teamid = {} AND userid = {}".format(team_id, user_id)
+            useDB.useDB().executesql(delete_sql)
+            return True  # 返回删除成功的标识，可以根据需要返回其他信息
+        else:
+            return False  # 如果找不到对应的用户，返回删除失败的标识
+
+    def add_user_to_team(self,team_id, staff_id):
+        # 根据 staff_id 查询对应的 userid
+        sql = "SELECT user_id FROM xcheck.user WHERE staffid = '{}'".format(staff_id)
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            user_id = result[0][0]
+            # 在数据库中插入用户与团队的关联关系
+            add_sql = "INSERT INTO xcheck.user_teams (teamid, userid) VALUES ({}, {})".format(team_id, user_id)
+            useDB.useDB().executesql(add_sql)
+            return True  # 返回添加成功的标识，可以根据需要返回其他信息
+        else:
+            return False  # 如果找不到对应的用户，返回添加失败的标识
+
+
+    def get_username_from_staffid(self,staffid):
+        team_query = """
+            SELECT u.username
+            FROM xcheck.user u
+            WHERE u.staffid = '{}'
+        """.format(staffid)
+        rows = useDB.useDB().executesql_fetch(team_query)
+        user = rows[0][0].rstrip() if rows else None
+        return user
+
+
+    def if_owner(self,name):
+        # 根据 staff_id 查询对应的 userid
+        sql = "SELECT user_id FROM xcheck.user WHERE username = '{}'".format(name)
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            user_id = result[0][0]
+            # 在数据库中插入用户与团队的关联关系
+            team_sql = "SELECT is_owner from xcheck.user_teams where userid={}".format(user_id)
+            rows = useDB.useDB().executesql(team_sql)
+            is_owner = rows[0][0].rstrip() if rows else None
+            return True  # 返回添加成功的标识，可以根据需要返回其他信息
+        else:
+            return False  # 如果找不到对应的用户，返回添加失败的标识
+
 
 
 

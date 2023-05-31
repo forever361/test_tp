@@ -15,13 +15,28 @@ web = Blueprint("access_config", __name__)
 # @permission_required(session.get('groupname'))
 def access_page():
     username = session.get('username', None)
+    # session['team'] = "Admin"
     team = session.get('team', None)
-    teams_list = tanos_manage().get_teams()
     teams = []
-    for team_data in teams_list:
-        team = {"id": team_data[0], "name": team_data[1].strip()}
-        teams.append(team)
-    return render_template('access_config.html', username=username, team=team, teams=teams)
+    #通过用户名获取是否为owner
+
+    is_owner = tanos_manage().if_owner(username)
+    if team=="Admin":
+        teams_list = tanos_manage().get_teams()
+
+        for team_data in teams_list:
+            team = {"id": team_data[0], "name": team_data[1].strip()}
+            teams.append(team)
+        return render_template('access_config.html', username=username, team=team, teams=teams)
+    elif is_owner==1:
+        teams_list = tanos_manage().get_teams_owner(team)
+
+        for team_data in teams_list:
+            team = {"id": team_data[0], "name": team_data[1].strip()}
+            teams.append(team)
+        return render_template('access_config.html', username=username, team=team, teams=teams)
+    else:
+        return render_template('access_config_normal.html', username=username, team=team, teams=teams)
 
 
 @web.route('/save_permissions', methods=['POST'])
@@ -58,7 +73,9 @@ def getUserList():
     for row in userlist:
         staffid = row[1]
         name = row[0].strip()
-        user = {'staffid': staffid, 'name': name}
+        owner = row[2]
+        is_owner = 'yes' if owner == 1 else 'no'  # 根据条件设置 is_owner 的值
+        user = {'staffid': staffid, 'name': name,"is_owner":is_owner}
         team_users.append(user)
 
     return jsonify(team_users)
@@ -81,14 +98,13 @@ def getAllUsers():
 def delete_from_team():
     data = request.get_json()
     print(data)
-    # id = data['id']
-    # teamid= data['team']
-    # print(id)
-    # print(teamid)
+    staffid = data['id']
+    teamid= data['team']
+    print(staffid)
+    print(teamid)
 
     # 在这里执行删除操作，从关系表中删除指定的关联关系
-    # 例如：
-    # DELETE FROM xcheck.user_teams WHERE id = <id>
+    tanos_manage().delete_user_from_team(teamid, staffid)
 
     return jsonify({'message': 'Delete success'})
 
@@ -97,14 +113,20 @@ def delete_from_team():
 def add_to_team():
     data = request.get_json()
     print(data)
-    # id = data['id']
-    # teamid= data['team']
-    # print(id)
-    # print(teamid)
+    staffid = data['id']
+    teamid= data['team']
 
-    # 在这里执行删除操作，从关系表中删除指定的关联关系
-    # 例如：
-    # DELETE FROM xcheck.user_teams WHERE id = <id>
+    tanos_manage().add_user_to_team(teamid, staffid)
+
+    current_user = tanos_manage().get_username_from_staffid(staffid)
+    username = session.get('username', None)
+    if  username == current_user:
+        team = ConnectSQL().get_team_from_teamid(teamid)
+        print(1111,team)
+        session['team'] = team
+
+        groupname = ConnectSQL().get_user_group(current_user)
+        session['groupname'] = groupname[0]
 
     return jsonify({'message': 'Add success'})
 

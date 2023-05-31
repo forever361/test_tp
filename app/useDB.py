@@ -438,6 +438,18 @@ class ConnectSQL():
         team = rows[0][0].rstrip() if rows else None
         return team
 
+    def get_team_from_teamid(self, teamid):
+        team_query = """
+            SELECT t.name
+            FROM xcheck.team t
+            WHERE t.team_id = %s
+        """
+        self.cursor.execute(team_query, (teamid,))
+        rows = self.cursor.fetchall()
+        team = rows[0][0].rstrip() if rows else None
+        return team
+
+
     def get_avatar(self, username):
         avatar_query = """ SELECT avatar_url 
                      from xcheck.user 

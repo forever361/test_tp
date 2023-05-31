@@ -26,40 +26,8 @@
          class="card">
         <div class="card-body" style="padding-bottom:10px;">
             <div class="container">
-                <h4>Team Management</h4>
+                <h4>Team Profile</h4>
 
-                <!-- Permission Form -->
-                <div style="margin-top: 70px" class="row">
-                    <div class="d-flex justify-content-between mb-3">
-                        <h5>Team Management</h5>
-                        <button class="btn btn-primary">
-                            Add Team
-                        </button>
-                    </div>
-                    <div class="col">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Team Name</th>
-                                <th>Edit</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for team in teams %}
-                            <tr>
-                                <td>{{ team.name }}</td>
-                                <td>
-                                    <button class="btn btn-primary edit-button" data-bs-toggle="offcanvas"
-                                            data-bs-target="#team-profile-modal" data-team-id="{{ team.id }}">Edit
-                                    </button>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
 
                 <!-- Current Team Section -->
                 <div class="card" style="margin-top: 20px; padding: 10px;">
