@@ -118,15 +118,37 @@ class ConnectSQL():
         self.cursor.close()
         # self.conn.close()
 
+    # def write_register_sql_new(self, username, staffid):
+    #     create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    #     # user_id = ''.join(map(str, np.random.randint(0, 9, 6)))
+    #     register_info = """INSERT INTO xcheck.user(username,password,status,create_date,staffid,team_ids) values('{}','{}','{}','{}','{}','{}')""".format(
+    #         username.strip(), "", 0, create_date, staffid,"{3001}")
+    #     self.cursor.execute(register_info)
+    #     self.conn.commit()
+    #     self.cursor.close()
+    #     # self.conn.close()
+
     def write_register_sql_new(self, username, staffid):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        # user_id = ''.join(map(str, np.random.randint(0, 9, 6)))
-        register_info = """INSERT INTO xcheck.user(username,password,status,create_date,staffid,team_ids) values('{}','{}','{}','{}','{}','{}')""".format(
-            username.strip(), "", 0, create_date, staffid,"{3001}")
+        register_info = """
+            INSERT INTO xcheck.user (username, password, status, create_date, staffid)
+            VALUES ('{}', '', 0, '{}', '{}')
+            RETURNING user_id
+        """.format(username.strip(), create_date, staffid)
+
         self.cursor.execute(register_info)
+        user_id = self.cursor.fetchone()[0]  # 获取插入的用户ID
+
+        # 将用户和团队的关联关系插入到关系表中
+        team_id = 3001  # 假设要关联的团队ID为3001
+        insert_user_team = """
+            INSERT INTO xcheck.user_teams (userid, teamid)
+            VALUES (%s, %s)
+        """
+        self.cursor.execute(insert_user_team, (user_id, team_id))
+
         self.conn.commit()
         self.cursor.close()
-        # self.conn.close()    
 
     def get_register_username(self, username):
         register_infos = """SELECT username FROM xcheck.user where username = '{}'""".format(username)
@@ -368,35 +390,53 @@ class ConnectSQL():
         self.cursor.execute(register_info)
         self.conn.commit()
 
+    # def get_user_group(self, username):
+    #     group_query = """SELECT xcheck.group.name
+    #                     FROM xcheck.user
+    #                     JOIN xcheck.team ON xcheck.team.team_id = ANY (xcheck.user.team_ids)
+    #                     JOIN xcheck.group ON xcheck.group.group_id = ANY (xcheck.team.group_ids)
+    #                     WHERE xcheck.user.username = '{}' """.format(username)
+    #     self.cursor.execute(group_query)
+    #     rows = self.cursor.fetchall()
+    #     group_names = [row[0].rstrip() for row in rows]
+    #     return group_names
+
     def get_user_group(self, username):
-        group_query = """SELECT xcheck.group.name
-                        FROM xcheck.user
-                        JOIN xcheck.team ON xcheck.team.team_id = ANY (xcheck.user.team_ids)
-                        JOIN xcheck.group ON xcheck.group.group_id = ANY (xcheck.team.group_ids)
-                        WHERE xcheck.user.username = '{}' """.format(username)
-        self.cursor.execute(group_query)
+        group_query = """
+            SELECT g.name
+            FROM xcheck.user_teams ut
+            JOIN xcheck.team t ON t.team_id = ut.teamid
+            JOIN xcheck.group g ON g.group_id = ANY (t.group_ids)
+            JOIN xcheck.user u ON u.user_id = ut.userid
+            WHERE u.username = %s
+        """
+        self.cursor.execute(group_query, (username,))
         rows = self.cursor.fetchall()
         group_names = [row[0].rstrip() for row in rows]
         return group_names
 
+    # def get_team(self, username):
+    #     team_query = """SELECT t.name
+    #                     FROM xcheck.team t
+    #                     JOIN xcheck.user u ON u.team_ids @> ARRAY[t.team_id]
+    #                     WHERE u.username = '{}'; """.format(username)
+    #     self.cursor.execute(team_query)
+    #     rows = self.cursor.fetchall()
+    #     team = rows[0][0].rstrip()
+    #     return team
+
     def get_team(self, username):
-        team_query = """SELECT t.name
-                        FROM xcheck.team t
-                        JOIN xcheck.user u ON u.team_ids @> ARRAY[t.team_id]
-                        WHERE u.username = '{}'; """.format(username)
-        self.cursor.execute(team_query)
+        team_query = """
+            SELECT t.name
+            FROM xcheck.team t
+            JOIN xcheck.user_teams ut ON ut.teamid = t.team_id
+            JOIN xcheck.user u ON u.user_id = ut.userid
+            WHERE u.username = %s
+        """
+        self.cursor.execute(team_query, (username,))
         rows = self.cursor.fetchall()
-        team = rows[0][0].rstrip()
+        team = rows[0][0].rstrip() if rows else None
         return team
-
-
-    def set_team(self, team,username):
-        sql = """UPDATE xcheck.user 
-                set team_ids='{}'
-                WHERE username = '{}' """.format(
-             team,username.strip())
-        print(00000000000)
-        self.cursor.execute(sql)
 
     def get_avatar(self, username):
         avatar_query = """ SELECT avatar_url 

@@ -170,13 +170,24 @@ class tanos_manage():
         table_name = str(result[0][0]).strip()
         return table_name
 
-    def update_team(self, username, team):
-        sql = """UPDATE xcheck.user 
-                set team_ids='{}'
-                WHERE username = '{}' """.format(
-             team,username.strip())
-        useDB.useDB().executesql(sql)
+    # def update_team(self, username, team):
+    #     sql = """UPDATE xcheck.user
+    #             set team_ids='{}'
+    #             WHERE username = '{}' """.format(
+    #          team,username.strip())
+    #     useDB.useDB().executesql(sql)
 
+    def update_team(self, username, team):
+        sql = """
+            UPDATE xcheck.user_teams
+            SET teamid = %s
+            WHERE userid IN (
+                SELECT user_id
+                FROM xcheck.user
+                WHERE username = %s
+            )
+        """
+        useDB.useDB().executesql(sql, (team, username.strip()))
 
     def get_teams(self):
         sql = """select * from xcheck.team  """
@@ -184,10 +195,20 @@ class tanos_manage():
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
-    def get_user_from_team(self, team):
-        if team is None:
-            return []  # 返回空结果集或采取其他处理方式
-        sql = "SELECT username, staffid FROM xcheck.user WHERE '{}' = ANY (team_ids)".format(team)
+    # def get_user_from_team(self, team):
+    #     if team is None:
+    #         return []  # 返回空结果集或采取其他处理方式
+    #     sql = "SELECT username, staffid FROM xcheck.user WHERE '{}' = ANY (team_ids)".format(team)
+    #     result = useDB.useDB().executesql_fetch(sql)
+    #     return result
+
+    def get_users_from_team(self, team_id):
+        sql = """
+            SELECT u.username, u.staffid
+            FROM xcheck.user u
+            JOIN xcheck.user_teams t ON u.user_id = t.userid
+            WHERE t.teamid = {}
+        """.format(team_id)
         result = useDB.useDB().executesql_fetch(sql)
         return result
 

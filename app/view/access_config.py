@@ -47,42 +47,12 @@ def save_permission():
     return "OK"
 
 
-# 示例用户数据
-team_users = [
-    {'id': 1, 'name': 'User 1'},
-    {'id': 2, 'name': 'User 2'},
-    {'id': 3, 'name': 'User 3'},
-    {'id': 3, 'name': 'User 3'},
-    {'id': 3, 'name': 'User 3'},
-    {'id': 3, 'name': 'User 3'},
-    {'id': 9, 'name': 'User 3'},
-    {'id': 10, 'name': 'User 3'},
-    {'id': 3, 'name': 'User 3'},
-    {'id': 9, 'name': 'User 3'},
-    {'id': 10, 'name': 'User 3'},
-    {'id': 3, 'name': 'User 3'},
-    {'id': 9, 'name': 'User 3'},
-    {'id': 10, 'name': 'User 3'},
-    {'id': 3, 'name': 'User 3'},
-    {'id': 9, 'name': 'User 3'},
-    {'id': 10, 'name': 'User 3'},
-    {'id': 3, 'name': 'User 3'},
-    {'id': 9, 'name': 'User 3'},
-    {'id': 10, 'name': 'User 3'},
-]
-
-all_users = [
-    {'id': 100, 'name': 'User 4'},
-    {'id': 200, 'name': 'User 5'},
-    {'id': 300, 'name': 'User 6'}
-]
-
 
 @web.route('/team/getUserList', methods=['GET'])
 def getUserList():
     team_id = request.args.get('teamId')  # 获取团队ID参数
     #根据team_id从数据库中读取user
-    userlist= tanos_manage().get_user_from_team(team_id)
+    userlist= tanos_manage().get_users_from_team(team_id)
 
     team_users = []
     for row in userlist:
@@ -105,5 +75,39 @@ def getAllUsers():
         all_users.append(user)
 
     return jsonify(all_users)
+
+
+@web.route('/delete_from_team', methods=['POST'])
+def delete_from_team():
+    data = request.get_json()
+    print(data)
+    # id = data['id']
+    # teamid= data['team']
+    # print(id)
+    # print(teamid)
+
+    # 在这里执行删除操作，从关系表中删除指定的关联关系
+    # 例如：
+    # DELETE FROM xcheck.user_teams WHERE id = <id>
+
+    return jsonify({'message': 'Delete success'})
+
+
+@web.route('/add_to_team', methods=['POST'])
+def add_to_team():
+    data = request.get_json()
+    print(data)
+    # id = data['id']
+    # teamid= data['team']
+    # print(id)
+    # print(teamid)
+
+    # 在这里执行删除操作，从关系表中删除指定的关联关系
+    # 例如：
+    # DELETE FROM xcheck.user_teams WHERE id = <id>
+
+    return jsonify({'message': 'Add success'})
+
+
 
 

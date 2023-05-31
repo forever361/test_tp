@@ -148,8 +148,8 @@
 <script>
 
     $(document).on('click', '.edit-button', function () {
-        var teamId = $(this).data('team-id'); // 获取当前点击按钮对应的团队ID
-        console.info(teamId)
+        let teamId = $(this).data('team-id'); // 获取当前点击按钮对应的团队ID
+        console.info(teamId);
 
         $.ajax({
             url: '/team/getUserList', // 替换为你的后端接口地址
@@ -162,12 +162,123 @@
                 table1.bootstrapTable('refresh', {url: '/team/getUserList?teamId=' + teamId}); // 刷新表格1的数据并更新数据源URL
                 // table2.bootstrapTable('refresh', {url: '/team/getUserList'});
 
+                // 设置当前团队ID的全局变量
+                window.currentTeamId = teamId;
             },
             error: function (error) {
                 // 处理请求失败的情况
             }
         });
     });
+
+    //删除
+    var $table1 = $('#table1');
+
+    function deleteRow($tr) {
+        const id = $tr.find('td:eq(0)').text();
+        const teamId = window.currentTeamId; // 获取当前团队ID
+        console.log({id: id, teamId: teamId});
+        $.ajax({
+            url: '/delete_from_team',
+            type: 'POST',
+            data: JSON.stringify({id: id, team: teamId}),
+            contentType: 'application/json',
+            success: function () {
+                toastr.success('Delete successfully!');
+                $tr.remove();
+                $('#table1').bootstrapTable('refresh');
+            },
+            error: function (error) {
+                console.log(error);
+                toastr.error('Failed to delete the connection. Please try again.');
+            }
+        });
+    }
+
+    $table1.on('load-success.bs.table', function () {
+        // 表格加载完成后绑定删除按钮的点击事件
+        $('.delete-row').on('click', function () {
+            const $tr = $(this).closest('tr');
+
+            let dialog = bootbox.dialog({
+                title: 'Delete user!',
+                message: "<p>Please confirm if you want to delete?</p>",
+                centerVertical: true,
+                buttons: {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback: function () {
+                            console.log('Custom cancel clicked');
+                        }
+                    },
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback: function () {
+                            deleteRow($tr);
+                        }
+                    }
+                }
+            });
+        });
+    });
+
+    //添加
+    var $table2 = $('#table2');
+
+
+    function addRow($tr) {
+        const id = $tr.find('td:eq(0)').text();
+        const teamId = window.currentTeamId; // 获取当前团队ID
+        console.log({id: id, teamId: teamId});
+        $.ajax({
+            url: '/add_to_team',
+            type: 'POST',
+            data: JSON.stringify({id: id, team: teamId}),
+            contentType: 'application/json',
+            success: function () {
+                toastr.success('Add successfully!');
+                // 刷新前端表格数据
+                $table1.bootstrapTable('refresh');
+
+            },
+            error: function (error) {
+                console.log(error);
+                toastr.error('Failed to delete the connection. Please try again.');
+            }
+        });
+    }
+
+    $table2.on('load-success.bs.table', function () {
+        // 表格加载完成后绑定删除按钮的点击事件
+        $('.add-row').on('click', function () {
+            const $tr = $(this).closest('tr');
+
+            let dialog = bootbox.dialog({
+                title: 'Add user!',
+                message: "<p>Please confirm if you want to add the user?</p>",
+                centerVertical: true,
+                buttons: {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback: function () {
+                            console.log('Custom cancel clicked');
+                        }
+                    },
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback: function () {
+                            addRow($tr);
+                        }
+                    }
+                }
+            });
+        });
+    });
+
 
 </script>
 
@@ -183,11 +294,17 @@
 
     function actionFormatter2(value, row, index) {
         return ' <div class="btn-group" role="group" aria-label="...">' +
-            '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="bi bi-plus"></i></button>' +
+            '<button  class="btn btn-sm btn-danger add-row" style="margin-left: 10px;"><i class="bi bi-plus"></i></button>' +
             '</div>'
     }
 
-    var $table = $('#table')
+
+</script>
+
+
+<script>
+
+
 </script>
 
 
