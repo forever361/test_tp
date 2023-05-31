@@ -261,20 +261,21 @@ class tanos_manage():
         return user
 
 
-    def if_owner(self,name):
+    def if_owner(self,name,team):
         # 根据 staff_id 查询对应的 userid
         sql = "SELECT user_id FROM xcheck.user WHERE username = '{}'".format(name)
         result = useDB.useDB().executesql_fetch(sql)
+
+        sql = "SELECT team_id FROM xcheck.team WHERE name = '{}'".format(team)
+        team_id = useDB.useDB().executesql_fetch(sql)
+
         if result:
             user_id = result[0][0]
-            # 在数据库中插入用户与团队的关联关系
-            team_sql = "SELECT is_owner from xcheck.user_teams where userid={}".format(user_id)
-            rows = useDB.useDB().executesql(team_sql)
-            is_owner = rows[0][0].rstrip() if rows else None
-            return True  # 返回添加成功的标识，可以根据需要返回其他信息
-        else:
-            return False  # 如果找不到对应的用户，返回添加失败的标识
-
+            team_id= team_id[0][0]
+            team_sql = "SELECT is_owner from xcheck.user_teams where userid= '{}' and teamid='{}'".format(user_id,team_id)
+            rows = useDB.useDB().executesql_fetch(team_sql)
+            is_owner = rows[0][0] if rows else None
+            return is_owner  # 返回添加成功的标识，可以根据需要返回其他信息
 
 
 

@@ -20,7 +20,7 @@ def access_page():
     teams = []
     #通过用户名获取是否为owner
 
-    is_owner = tanos_manage().if_owner(username)
+    is_owner = tanos_manage().if_owner(username,team)
     if team=="Admin":
         teams_list = tanos_manage().get_teams()
 
