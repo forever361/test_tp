@@ -296,6 +296,31 @@ class tanos_manage():
                 team = rows[0][0].strip() if rows else None
                 return team  # 返回添加成功的标识，可以根据需要返回其他信息
 
+    def search_user_in_team(self,staff_id):
+        # 根据 staff_id 查询对应的 userid
+        sql = "SELECT user_id FROM xcheck.user WHERE staffid = '{}'".format(staff_id)
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            user_id = result[0][0]
+            s_sql = "SELECT * from xcheck.user_teams WHERE userid = {}".format(user_id)
+            rows= useDB.useDB().executesql_fetch(s_sql)
+            if rows:
+                return True  # 返回删除成功的标识，可以根据需要返回其他信息
+            else:
+                return False  # 如果找不到对应的用户，返回删除失败的标识
+
+    def search_user_in_guest(self, staff_id):
+        # 根据 staff_id 查询对应的 userid
+        sql = "SELECT user_id FROM xcheck.user WHERE staffid = '{}'".format(staff_id)
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            user_id = result[0][0]
+            s_sql = "SELECT * FROM xcheck.user_teams WHERE userid = {} AND teamid = 3001".format(user_id)
+            rows = useDB.useDB().executesql_fetch(s_sql)
+            if rows:
+                return True
+            else:
+                return False  # 如果找不到对应的用户，返回删除失败的标识
 
 
 if __name__ == '__main__':

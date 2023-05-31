@@ -109,6 +109,11 @@ def delete_from_team():
     # 在这里执行删除操作，从关系表中删除指定的关联关系
     tanos_manage().delete_user_from_team(teamid, staffid)
 
+    #查找是否在至少一个team,如果在,不做任何事，如果不在，默认加入guest team
+    t= tanos_manage().search_user_in_team(staffid)
+    if t is False:
+        tanos_manage().add_user_to_team(3001, staffid)
+
     return jsonify({'message': 'Delete success'})
 
 
@@ -121,15 +126,12 @@ def add_to_team():
 
     tanos_manage().add_user_to_team(teamid, staffid)
 
-    current_user = tanos_manage().get_username_from_staffid(staffid)
-    username = session.get('username', None)
-    if  username == current_user:
-        team = ConnectSQL().get_team_from_teamid(teamid)
-        print(1111,team)
-        session['team'] = team
+    # 查找是否在guest team,如果在，删除
 
-        groupname = ConnectSQL().get_user_group(current_user)
-        session['groupname'] = groupname[0]
+    t= tanos_manage().search_user_in_guest(staffid)
+    if t:
+        tanos_manage().delete_user_from_team(3001, staffid)
+
 
     return jsonify({'message': 'Add success'})
 
