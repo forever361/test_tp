@@ -302,7 +302,7 @@ def login_callback():
         # current_team_list = ['Admin', 'ChinaDataSolution']
         session['teams'] = current_team_list
 
-        session['team'] = current_team_list[1]
+        session['team'] = current_team_list[0]
 
         # avatar = ConnectSQL().get_avatar(username)
         # session['avatar'] = avatar
