@@ -20,10 +20,12 @@ def access_page():
     current_team_list=tanos_manage().get_teams_from_user(username)
     # current_team_list = ['Admin', 'ChinaDataSolution']
     session['teams'] = current_team_list
+
+    team = session.get('team', {})
     teams = []
 
     # 通过用户名获取是否为owner
-    is_owner = tanos_manage().if_owner(username,current_team_list)
+    is_owner = tanos_manage().if_owner(username,team)
     # is_owner = {'DelosUsers': 0, 'ChinaDataSolution': 0}
 
 
@@ -35,18 +37,15 @@ def access_page():
             teams.append(team)
         return render_template('access_config.html', teams=teams)
     else:
-        has_owner = any(value == 1 for value in is_owner.values())
-
-        if has_owner:
-            owner_teams = [key for key, value in is_owner.items() if value == 1]
-            teams_list = tanos_manage().get_teams_owner(owner_teams)
+        if is_owner:
+            teams_list = tanos_manage().get_teams_owner(team)
 
             for team_data in teams_list:
                 team = {"id": team_data[0], "name": team_data[1].strip()}
                 teams.append(team)
-            return render_template('access_config.html', username=username, teams=teams)
+            return render_template('access_config.html', teams=teams)
         else:
-            return render_template('access_config_normal.html', username=username, teams=teams)
+            return render_template('access_config_normal.html', teams=teams)
 
 
 @web.route('/save_permissions', methods=['POST'])

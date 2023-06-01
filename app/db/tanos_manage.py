@@ -195,9 +195,15 @@ class tanos_manage():
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
-    def get_teams_owner(self, teams):
-        placeholders = ', '.join(["'{}'".format(team) for team in teams])
-        sql = "SELECT * FROM xcheck.team WHERE name IN ({})".format(placeholders)
+    # def get_teams_owner(self, teams):
+    #     placeholders = ', '.join(["'{}'".format(team) for team in teams])
+    #     sql = "SELECT * FROM xcheck.team WHERE name IN ({})".format(placeholders)
+    #     result = useDB.useDB().executesql_fetch(sql)
+    #     return result
+
+    def get_teams_owner(self,team):
+        sql = """select * from xcheck.team where name='{}' """.format(team)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
@@ -261,45 +267,45 @@ class tanos_manage():
         return user
 
 
-    # def if_owner(self,name,team):
-    #     # 根据 staff_id 查询对应的 userid
-    #     sql = "SELECT user_id FROM xcheck.user WHERE username = '{}'".format(name)
-    #     result = useDB.useDB().executesql_fetch(sql)
-    #
-    #     sql = "SELECT team_id FROM xcheck.team WHERE name = '{}'".format(team)
-    #     team_id = useDB.useDB().executesql_fetch(sql)
-    #
-    #     if result:
-    #         user_id = result[0][0]
-    #         team_id= team_id[0][0]
-    #         team_sql = "SELECT is_owner from xcheck.user_teams where userid= '{}' and teamid='{}'".format(user_id,team_id)
-    #         rows = useDB.useDB().executesql_fetch(team_sql)
-    #         is_owner = rows[0][0] if rows else None
-    #         return is_owner  # 返回添加成功的标识，可以根据需要返回其他信息
-    def if_owner(self, name, teams):
-        # 根据用户名查询对应的用户ID
+    def if_owner(self,name,team):
+        # 根据 staff_id 查询对应的 userid
         sql = "SELECT user_id FROM xcheck.user WHERE username = '{}'".format(name)
         result = useDB.useDB().executesql_fetch(sql)
 
-        owners = {}  # 存储每个团队的所有者信息
+        sql = "SELECT team_id FROM xcheck.team WHERE name = '{}'".format(team)
+        team_id = useDB.useDB().executesql_fetch(sql)
 
         if result:
             user_id = result[0][0]
-
-            for team in teams:
-                # 查询团队ID
-                sql = "SELECT team_id FROM xcheck.team WHERE name = '{}'".format(team)
-                team_id = useDB.useDB().executesql_fetch(sql)
-
-                if team_id:
-                    team_id = team_id[0][0]
-                    team_sql = "SELECT is_owner FROM xcheck.user_teams WHERE userid = '{}' AND teamid = '{}'".format(
-                        user_id, team_id)
-                    rows = useDB.useDB().executesql_fetch(team_sql)
-                    is_owner = rows[0][0] if rows else None
-                    owners[team] = is_owner
-
-        return owners
+            team_id= team_id[0][0]
+            team_sql = "SELECT is_owner from xcheck.user_teams where userid= '{}' and teamid='{}'".format(user_id,team_id)
+            rows = useDB.useDB().executesql_fetch(team_sql)
+            is_owner = rows[0][0] if rows else None
+            return is_owner  # 返回添加成功的标识，可以根据需要返回其他信息
+    # def if_owner(self, name, teams):
+    #     # 根据用户名查询对应的用户ID
+    #     sql = "SELECT user_id FROM xcheck.user WHERE username = '{}'".format(name)
+    #     result = useDB.useDB().executesql_fetch(sql)
+    #
+    #     owners = {}  # 存储每个团队的所有者信息
+    #
+    #     if result:
+    #         user_id = result[0][0]
+    #
+    #         for team in teams:
+    #             # 查询团队ID
+    #             sql = "SELECT team_id FROM xcheck.team WHERE name = '{}'".format(team)
+    #             team_id = useDB.useDB().executesql_fetch(sql)
+    #
+    #             if team_id:
+    #                 team_id = team_id[0][0]
+    #                 team_sql = "SELECT is_owner FROM xcheck.user_teams WHERE userid = '{}' AND teamid = '{}'".format(
+    #                     user_id, team_id)
+    #                 rows = useDB.useDB().executesql_fetch(team_sql)
+    #                 is_owner = rows[0][0] if rows else None
+    #                 owners[team] = is_owner
+    #
+    #     return owners
 
     # def get_team_from_user(self, username):
     #     sql = "SELECT user_id FROM xcheck.user WHERE username = '{}'".format(username)
