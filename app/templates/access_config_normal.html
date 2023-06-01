@@ -28,8 +28,6 @@
             <div class="container">
                 <h4>Team Profile</h4>
 
-
-                <!-- Current Team Section -->
                 <div class="card" style="margin-top: 20px; padding: 10px;">
                     <div class="row">
                         <div class="col">
@@ -37,6 +35,20 @@
                             <div style="font-size: 15px; margin-top: 10px; padding: 8px; background-color: #e1f0ff; color: #1b5fcc; display: inline-block; border-radius: 5px;">
                                 {{ session.get('team', {}) }}
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Team Section -->
+                <div class="card" style="margin-top: 20px; padding: 10px;">
+                    <div class="row">
+                        <div class="col">
+                            <div style="font-size: 15px; margin-top: 5px;">Available Team:</div>
+                            {% for team_name in session.get('teams', {}) %}
+                            <div style="font-size: 15px; margin-top: 10px; padding: 8px; background-color: #e1f0ff; color: #1b5fcc; display: inline-block; border-radius: 5px;">
+                                {{ team_name }}
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

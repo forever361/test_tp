@@ -15,31 +15,38 @@ web = Blueprint("access_config", __name__)
 # @permission_required(session.get('groupname'))
 def access_page():
     username = session.get('username', None)
-    # session['team'] = "Admin"
-    # team = session.get('team', None)
-    team = tanos_manage().get_team_from_user(username)
-    session['team'] = team
-    print(6666,team)
-    teams = []
-    #通过用户名获取是否为owner
 
-    is_owner = tanos_manage().if_owner(username,team)
-    if team=="Admin":
+
+    current_team_list=tanos_manage().get_teams_from_user(username)
+    # current_team_list = ['Admin', 'ChinaDataSolution']
+    session['teams'] = current_team_list
+    teams = []
+
+    # 通过用户名获取是否为owner
+    is_owner = tanos_manage().if_owner(username,current_team_list)
+    # is_owner = {'DelosUsers': 0, 'ChinaDataSolution': 0}
+
+
+    if "Admin" in current_team_list:
         teams_list = tanos_manage().get_teams()
 
         for team_data in teams_list:
             team = {"id": team_data[0], "name": team_data[1].strip()}
             teams.append(team)
-        return render_template('access_config.html', username=username, team=team, teams=teams)
-    elif is_owner==1:
-        teams_list = tanos_manage().get_teams_owner(team)
-
-        for team_data in teams_list:
-            team = {"id": team_data[0], "name": team_data[1].strip()}
-            teams.append(team)
-        return render_template('access_config.html', username=username, team=team, teams=teams)
+        return render_template('access_config.html', teams=teams)
     else:
-        return render_template('access_config_normal.html', username=username, team=team, teams=teams)
+        has_owner = any(value == 1 for value in is_owner.values())
+
+        if has_owner:
+            owner_teams = [key for key, value in is_owner.items() if value == 1]
+            teams_list = tanos_manage().get_teams_owner(owner_teams)
+
+            for team_data in teams_list:
+                team = {"id": team_data[0], "name": team_data[1].strip()}
+                teams.append(team)
+            return render_template('access_config.html', username=username, teams=teams)
+        else:
+            return render_template('access_config_normal.html', username=username, teams=teams)
 
 
 @web.route('/save_permissions', methods=['POST'])
@@ -56,8 +63,9 @@ def save_permission():
         teamid = '{3001}'
     print(teamid)
     tanos_manage().update_team(data['username'], teamid)
-    team = ConnectSQL().get_team(data['username'])
-    session['team'] = team
+    current_team_list=tanos_manage().get_teams_from_user(data['username'])
+    # current_team_list = ['Admin', 'ChinaDataSolution']
+    session['teams'] = current_team_list
 
     groupname = ConnectSQL().get_user_group(data['username'])
     session['groupname'] = groupname[0]

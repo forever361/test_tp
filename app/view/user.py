@@ -298,8 +298,11 @@ def login_callback():
         print("user group:",groupname)
         session['groupname'] = groupname[0]
 
-        team = ConnectSQL().get_team(username)
-        session['team'] = team
+        current_team_list = tanos_manage().get_teams_from_user(username)
+        # current_team_list = ['Admin', 'ChinaDataSolution']
+        session['teams'] = current_team_list
+
+        session['team'] = current_team_list[1]
 
         # avatar = ConnectSQL().get_avatar(username)
         # session['avatar'] = avatar
@@ -338,3 +341,9 @@ def login():
 def permission():
     return render_template("auth/permission.html")
 
+
+@web.route('/update_session_team',methods=['GET','POST'])
+def update_session_team():
+    selected_team = request.form.get('team').strip()  # 获取前端发送的选项值
+    session['team'] = selected_team
+    return 'Success'

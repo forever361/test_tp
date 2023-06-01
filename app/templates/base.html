@@ -140,6 +140,20 @@
         <a class="navbar-brand " style="margin-left: 10px;font-size:1rem"
            href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
 
+        {% if session.get('teams', [])|length >= 2 %}
+        <!-- Dropdown Menu -->
+        <div style="color: #e0f0ef; margin-left: 30px; margin-right: 10px; font-size: 13px">
+            Current Team
+        </div>
+        <select style="width: 170px; font-size: 12px;" class="form-select" id="optionTeam">
+            {% for team_name in session.get('teams', []) %}
+            <option {% if team_name== session.get(
+            'team', '') %}selected="selected"{% endif %}>{{ team_name }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+
+
         <div class="collapse navbar-collapse" id="navbarNav1">
             <ul class="navbar-nav ms-auto" style="margin-right:50px">
                 <li class="nav-item"><a class="nav-link active" href="/"> Home </a></li>
@@ -225,7 +239,6 @@
 </nav>
 
 
-
 <div class="offcanvas offcanvas-end" tabindex="-1" id="user-profile-modal" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasRightLabel">User Profile</h5>
@@ -243,23 +256,46 @@
                 <h6>{{ session.get('user', {}).get('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
                     '')[0]
                     }}</h6>
-                <button type="button" style="height: 30px; display: flex; align-items: center;" class="logout-button btn btn-primary" onclick="location.href='/logout'">Logout</button>
+                <button type="button" style="height: 30px; display: flex; align-items: center;"
+                        class="logout-button btn btn-primary" onclick="location.href='/logout'">Logout
+                </button>
             </div>
         </div>
         <div class="row" style="margin-top: 20px">
             <div class="col">
-                <div style="font-size:15px; margin-top: 5px;">Curren Team:</div>
-                <div style="font-size:10px;margin-top: 10px; padding-left: 10px; padding-right: 10px; padding-top: 4px;padding-bottom: 4px;background-color: #e1f0ff; color: #1b5fcc;  display: inline-block; border-radius: 5px;">
-                    {{ session.get('team', {}) }}</div>
+                <div style="font-size: 15px; margin-top: 5px;">Current Team:</div>
+                <div style="font-size: 15px; margin-top: 10px; padding: 8px; background-color: #e1f0ff; color: #1b5fcc; display: inline-block; border-radius: 5px;">
+                    {{ session.get('team', {}) }}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 
+<script>
+    // 当选择选项时触发事件
+    $('#optionTeam').change(function () {
+        var selectedOption = $(this).val(); // 获取选中选项的值
 
-
-
+        // 发起AJAX请求
+        $.ajax({
+            url: '/update_session_team', // 替换为您的后端接口地址
+            method: 'POST',
+            data: {team: selectedOption}, // 选中选项的值作为数据发送给后端
+            success: function (response) {
+                // 请求成功后的逻辑处理
+                console.log(response);
+                location.reload()
+                toastr.success('change team successfully!');
+            },
+            error: function (error) {
+                // 请求失败的逻辑处理
+                console.error(error);
+            }
+        });
+    });
+</script>
 
 {% endblock %}
 
