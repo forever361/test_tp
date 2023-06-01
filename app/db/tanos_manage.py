@@ -375,6 +375,19 @@ class tanos_manage():
             else:
                 return False  # 如果找不到对应的用户，返回删除失败的标识
 
+    def update_owner_info(self,staff_id, teamId, isChecked):
+        # 根据 staff_id 查询对应的 userid
+        sql = "SELECT user_id FROM xcheck.user WHERE staffid = '{}'".format(staff_id)
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            user_id = result[0][0]
+            update_sql = """UPDATE xcheck.user_teams SET is_owner = {} WHERE userid = {} AND teamid = {}""".format(isChecked,user_id,teamId)
+            rows= useDB.useDB().executesql(update_sql)
+            if rows:
+                return True  # 返回删除成功的标识，可以根据需要返回其他信息
+            else:
+                return False  # 如果找不到对应的用户，返回删除失败的标识
+
 
 if __name__ == '__main__':
     testcase = tanos_manage()

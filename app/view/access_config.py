@@ -144,4 +144,19 @@ def add_to_team():
 
 
 
+@web.route('/team/updateOwnerInfo', methods=['POST'])
+def update_owner_info():
+    data = request.get_json()
+    # 根据具体的业务逻辑，更新 teams 字典中对应 teamId 的 owner 状态
+    staffId = data['staffId']
+    teamId= data['team']
+    isChecked = 1 if data['isChecked'] else 0
+
+    tanos_manage().update_owner_info(staffId, teamId, isChecked)
+
+    # 假设更新成功后，返回一个成功的响应
+    response = {'message': 'Owner information updated successfully'}
+    return jsonify(response), 200
+
+
 
