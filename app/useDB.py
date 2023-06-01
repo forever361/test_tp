@@ -41,7 +41,7 @@ class useDB(object):
         self.conn.close()
 
     def executesql_fetch(self, sql):
-        print(sql)
+        # print(sql)
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
         self.conn.close()
