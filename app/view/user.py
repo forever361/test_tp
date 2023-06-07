@@ -346,4 +346,6 @@ def permission():
 def update_session_team():
     selected_team = request.form.get('team').strip()  # 获取前端发送的选项值
     session['team'] = selected_team
+    group = tanos_manage().get_group_from_team(selected_team)
+    session['groupname'] = group
     return 'Success'
