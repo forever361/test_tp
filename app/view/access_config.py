@@ -29,7 +29,7 @@ def access_page():
     # is_owner = {'DelosUsers': 0, 'ChinaDataSolution': 0}
 
 
-    if "Admin" in current_team_list:
+    if "Admin" == team:
         teams_list = tanos_manage().get_teams()
 
         for team_data in teams_list:
