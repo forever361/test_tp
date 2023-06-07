@@ -21,7 +21,14 @@ def access_page():
     # current_team_list = ['Admin', 'ChinaDataSolution']
     session['teams'] = current_team_list
 
-    team = session.get('team', {})
+    if len(current_team_list) == 1:
+        team = current_team_list[0]
+        session['team']=team
+    else:
+        team = session.get('team', {})
+
+    group = tanos_manage().get_group_from_team(team)
+    session['groupname'] = group
     teams = []
 
     # 通过用户名获取是否为owner

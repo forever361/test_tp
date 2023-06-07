@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import time
 
@@ -388,6 +389,25 @@ class tanos_manage():
             else:
                 return False  # 如果找不到对应的用户，返回删除失败的标识
 
+    def get_group_from_team(self,team):
+        sql = """select group_ids from xcheck.team where name='{}' """.format(team)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            group_id = result[0][0][0]
+            group_sql = """select name from xcheck.group where group_id='{}' """.format(group_id)
+            result = useDB.useDB().executesql_fetch(group_sql)
+            groupname = result[0][0].strip()
+            return groupname
+
+
+    def get_teamname_fromid(self,id):
+        sql = """select name from xcheck.team where name='{}' """.format(id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            team_name = result[0][0]
+            return team_name
 
 if __name__ == '__main__':
     testcase = tanos_manage()

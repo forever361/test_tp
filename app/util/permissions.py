@@ -25,7 +25,8 @@ class AdminGroup(Scope):
     allow_module = ['data_connect_management','data_ponint_management','data_testcase','data_testcase_tanos']
 
 class Guest(Scope):
-    allow_module = ['data_connect_management','data_ponint_management','data_testcase']
+    # allow_module = ['data_connect_management','data_ponint_management','data_testcase']
+    allow_module = ['apinew','data_connect_management','data_ponint_management',]
 
 class SuperScope(Scope):
     allow_module = ['v1.user']
@@ -33,8 +34,12 @@ class SuperScope(Scope):
 class DelosTestGroup(Scope):
     pass
     #绑定一个API就是一个role
-    allow_api = ['apinew.test_api']
+    allow_module = ['data_ponint_management',]
 
+class DataTestGroup(Scope):
+    pass
+    #绑定一个API就是一个role
+    allow_module = ['data_connect_management',]
 
 
 def is_in_scope(scope, endpoint):
@@ -71,6 +76,7 @@ def permission_required(scope):
         @wraps(fn)
         def decorated_function(*args, **kwargs):
             endpoint = request.endpoint
+            print("my scope:",scope)
             if is_in_scope(scope, endpoint):
                 return fn(*args, **kwargs)
             else:
