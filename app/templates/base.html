@@ -141,7 +141,7 @@
            href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
 
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
-                class="fas fa-sliders"></i></button>
+                class="fas fa-sliders " style="color:gainsboro"></i></button>
 
         {% if session.get('teams', [])|length >= 2 %}
         <!-- Dropdown Menu -->
@@ -159,48 +159,70 @@
 
         <div class="collapse navbar-collapse" id="navbarNav1">
             <ul class="navbar-nav ms-auto" style="margin-right:50px">
-                <li class="nav-item"><a class="nav-link active" href="/"> Home </a></li>
+                <!--                <li class="nav-item"><a class="nav-link active" href="/"> Home </a></li>-->
+                <!--                <li class="nav-item dropdown">-->
+                <!--                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Data Test </a>-->
+                <!--                    <ul class="dropdown-menu dropdown-menu-right">-->
+                <!--                        <li><a class="dropdown-item" href="/data_connect_management">Data Connections</a></li>-->
+                <!--                        <li class="divider"></li>-->
+                <!--                        <li><a class="dropdown-item" href="/data_point_management">Data Points</a></li>-->
+                <!--                        <li class="divider"></li>-->
+                <!--                        <li><a class="dropdown-item" href="/api_data_test_cases"> Data Validation Jobs </a></li>-->
+                <!--                        &lt;!&ndash;                        <li><a class="dropdown-item" href="/data_guide">Data Quality Checker Guide</a></li>&ndash;&gt;-->
+                <!--                    </ul>-->
+                <!--                </li>-->
+
+                <!--                <li class="nav-item dropdown">-->
+                <!--                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Web Test </a>-->
+                <!--                    <ul class="dropdown-menu dropdown-menu-right">-->
+                <!--                        <li><a class="dropdown-item" href="/web_test_compare">Add new test case</a></li>-->
+                <!--                        <li><a class="dropdown-item" href="/web_test_cases">Web Test Cases</a></li>-->
+                <!--                        <li><a class="dropdown-item" href="/web_guide">Web Test Guide</a></li>-->
+                <!--                    </ul>-->
+                <!--                </li>-->
+
+                <!--                <li class="nav-item dropdown">-->
+                <!--                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> API Test </a>-->
+                <!--                    <ul class="dropdown-menu dropdown-menu-right">-->
+                <!--                        <li><a class="dropdown-item" href="/api_intergration">System Integration Test</a></li>-->
+                <!--                        <li><a class="dropdown-item" href="/test_api">Smoke Test</a></li>-->
+                <!--                        <li><a class="dropdown-item" href="/test_api">Regular Sanity Test</a></li>-->
+                <!--                        <li><a class="dropdown-item" href="/test_api">Hourly Health Check</a></li>-->
+                <!--                        <li><a class="dropdown-item" href="/test_api">"Null Data" Check</a></li>-->
+                <!--                    </ul>-->
+                <!--                </li>-->
+
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Data Test </a>
+                    <a class="nav-link active" href="#" data-bs-toggle="dropdown">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users" style="color:gainsboro"></i></div>
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="/data_connect_management">Data Connections</a></li>
-                        <li class="divider"></li>
-                        <li><a class="dropdown-item" href="/data_point_management">Data Points</a></li>
-                        <li class="divider"></li>
-                        <li><a class="dropdown-item" href="/api_data_test_cases"> Data Validation Jobs </a></li>
-                        <!--                        <li><a class="dropdown-item" href="/data_guide">Data Quality Checker Guide</a></li>-->
+                        <li><a class="dropdown-item" href="/access">Team Config</a></li>
+                        <li><a class="dropdown-item" href="/role_config">Role Config</a></li>
                     </ul>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Web Test </a>
+                    <a class="nav-link active" href="#" data-bs-toggle="dropdown">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tools" style="color:gainsboro"></i></div>
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="/web_test_compare">Add new test case</a></li>
-                        <li><a class="dropdown-item" href="/web_test_cases">Web Test Cases</a></li>
-                        <li><a class="dropdown-item" href="/web_guide">Web Test Guide</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> API Test </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="/api_intergration">System Integration Test</a></li>
-                        <li><a class="dropdown-item" href="/test_api">Smoke Test</a></li>
-                        <li><a class="dropdown-item" href="/test_api">Regular Sanity Test</a></li>
-                        <li><a class="dropdown-item" href="/test_api">Hourly Health Check</a></li>
-                        <li><a class="dropdown-item" href="/test_api">"Null Data" Check</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown">Other Tools </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows
-                            Scan</a></li>
+                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows Scan</a></li>
                         <li><a class="dropdown-item" href="/encrypt">Encrypt Password</a></li>
-                        <li><a class="dropdown-item" href="/access">Access Config</a></li>
                     </ul>
                 </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link active" href="#" data-bs-toggle="dropdown">
+                        <div class="sb-nav-link-icon"><i class="fas fa-question-circle" style="color:gainsboro"></i>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="dropdown-item" href="/document">Get Started</a></li>
+                    </ul>
+                </li>
+
 
             </ul>
 
@@ -299,36 +321,36 @@
                         </nav>
                     </div>
 
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                       data-bs-target="#collapsePagesge"
-                       aria-expanded="false" aria-controls="collapsePages">
-                        <div class="sb-nav-link-icon"><i class="fas fa-shapes"></i></div>
-                        General
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse" id="collapsePagesge" aria-labelledby="headingTwo"
-                         data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesge">
-                            <a class="nav-link" href="/access">Team Config</a>
-                            <a class="nav-link" href="/access">Role Config</a>
-                        </nav>
-                    </div>
+                    <!--                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"-->
+                    <!--                       data-bs-target="#collapsePagesge"-->
+                    <!--                       aria-expanded="false" aria-controls="collapsePages">-->
+                    <!--                        <div class="sb-nav-link-icon"><i class="fas fa-shapes"></i></div>-->
+                    <!--                        General-->
+                    <!--                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>-->
+                    <!--                    </a>-->
+                    <!--                    <div class="collapse" id="collapsePagesge" aria-labelledby="headingTwo"-->
+                    <!--                         data-bs-parent="#sidenavAccordion">-->
+                    <!--                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesge">-->
+                    <!--                            <a class="nav-link" href="/access">Team Config</a>-->
+                    <!--                            <a class="nav-link" href="/access">Role Config</a>-->
+                    <!--                        </nav>-->
+                    <!--                    </div>-->
 
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                       data-bs-target="#collapsePagesother"
-                       aria-expanded="false" aria-controls="collapsePages">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tools"></i></div>
-                        Other Tools
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse" id="collapsePagesother" aria-labelledby="headingTwo"
-                         data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesoyher">
-                            <a class="nav-link" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows
-                                Scan</a>
-                            <a class="nav-link" href="/encrypt">Encrypt Password</a>
-                        </nav>
-                    </div>
+                    <!--                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"-->
+                    <!--                       data-bs-target="#collapsePagesother"-->
+                    <!--                       aria-expanded="false" aria-controls="collapsePages">-->
+                    <!--                        <div class="sb-nav-link-icon"><i class="fas fa-tools"></i></div>-->
+                    <!--                        Other Tools-->
+                    <!--                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>-->
+                    <!--                    </a>-->
+                    <!--                    <div class="collapse" id="collapsePagesother" aria-labelledby="headingTwo"-->
+                    <!--                         data-bs-parent="#sidenavAccordion">-->
+                    <!--                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesoyher">-->
+                    <!--                            <a class="nav-link" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows-->
+                    <!--                                Scan</a>-->
+                    <!--                            <a class="nav-link" href="/encrypt">Encrypt Password</a>-->
+                    <!--                        </nav>-->
+                    <!--                    </div>-->
 
 
                     <!--                    <div class="sb-sidenav-menu-heading">API Test</div>-->
