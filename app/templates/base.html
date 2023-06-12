@@ -126,7 +126,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-dark" style="background-color: #000000;">
     <div class="container-fluid">
-        <svg style="margin-left: 30px;" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50"
+        <svg style="margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50"
              height="25"
              viewBox="0 0 64 32"
              xml:space="preserve" focusable="false" class="mr-4 navbar-header">
@@ -139,6 +139,9 @@
             </svg>
         <a class="navbar-brand " style="margin-left: 10px;font-size:1rem"
            href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
+
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+                class="fas fa-sliders"></i></button>
 
         {% if session.get('teams', [])|length >= 2 %}
         <!-- Dropdown Menu -->
@@ -190,7 +193,7 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown">OtherTools </a>
+                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown">Other Tools </a>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows
                             Scan</a></li>
@@ -239,63 +242,189 @@
 </nav>
 
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="user-profile-modal" aria-labelledby="offcanvasRightLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">User Profile</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion" style="background-color: #000000;">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <br>
+                    <a class="nav-link" href="/">
+                        <div class="sb-nav-link-icon"><i class="fas fa-home"/></i></div>
+                        Home
+                    </a>
+                    <!--                    <div class="sb-sidenav-menu-heading">Web Test</div>-->
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
+                       aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Data Test
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                         data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="/data_connect_management">Data Connections</a>
+                            <a class="nav-link" href="/data_point_management">Data Points</a>
+                            <a class="nav-link" href="/api_data_test_cases"> Data Validation Jobs </a>
+                        </nav>
+                    </div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
+                       aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-globe"></i></div>
+                        Web Test
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+                         data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link" href="/web_test_compare">Add new test case</a>
+                            <a class="nav-link" href="/web_test_cases">Web Test Cases</a>
+                            <a class="nav-link" href="/web_guide">Web Test Guide</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePagesapi"
+                       aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-poll-h"></i></div>
+                        API Test
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePagesapi" aria-labelledby="headingTwo"
+                         data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesapi">
+                            <a class="nav-link" href="/api_intergration">System Test</a>
+                            <a class="nav-link" href="/test_api">Smoke Test</a>
+                            <a class="nav-link" href="/test_api">Regular Sanity Test</a>
+                            <a class="nav-link" href="/test_api">Hourly Health Check</a>
+                            <a class="nav-link" href="/test_api">"Null Data" Check</a></li>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                       data-bs-target="#collapsePagesge"
+                       aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-shapes"></i></div>
+                        General
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePagesge" aria-labelledby="headingTwo"
+                         data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesge">
+                            <a class="nav-link" href="/access">Team Config</a>
+                            <a class="nav-link" href="/access">Role Config</a>
+                        </nav>
+                    </div>
+
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                       data-bs-target="#collapsePagesother"
+                       aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tools"></i></div>
+                        Other Tools
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePagesother" aria-labelledby="headingTwo"
+                         data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesoyher">
+                            <a class="nav-link" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows
+                                Scan</a>
+                            <a class="nav-link" href="/encrypt">Encrypt Password</a>
+                        </nav>
+                    </div>
+
+
+                    <!--                    <div class="sb-sidenav-menu-heading">API Test</div>-->
+                </div>
+            </div>
+            <!--            <div class="sb-sidenav-footer">-->
+            <!--                <div class="small">Logged in as:</div>-->
+            <!--                Start Bootstrap-->
+            <!--            </div>-->
+        </nav>
     </div>
-    <div class="offcanvas-body">
-        <div class="row">
-            <div class="col-4">
-                <img style="width: 75px;height: 85px; border-radius: 10%;" src="{{ session.get('avatar', '') }}"
-                     alt="Avatar">
+
+    <div id="layoutSidenav_content">
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="user-profile-modal"
+             aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasRightLabel">User Profile</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
             </div>
-            <div class="col-8">
-                <h6>{{ session.get('user', {}).get('http://schemas.microsoft.com/identity/claims/displayname', '')[0]
-                    }}</h6>
-                <h6>{{ session.get('user', {}).get('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
-                    '')[0]
-                    }}</h6>
-                <button type="button" style="height: 30px; display: flex; align-items: center;"
-                        class="logout-button btn btn-primary" onclick="location.href='/logout'">Logout
-                </button>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 20px">
-            <div class="col">
-                <div style="font-size: 15px; margin-top: 5px;">Current Team:</div>
-                <div style="font-size: 15px; margin-top: 10px; padding: 8px; background-color: #e1f0ff; color: #1b5fcc; display: inline-block; border-radius: 5px;">
-                    {{ session.get('team', {}) }}
+            <div class="offcanvas-body">
+                <div class="row">
+                    <div class="col-4">
+                        <img style="width: 75px;height: 85px; border-radius: 10%;" src="{{ session.get('avatar', '') }}"
+                             alt="Avatar">
+                    </div>
+                    <div class="col-8">
+                        <h6>{{ session.get('user', {}).get('http://schemas.microsoft.com/identity/claims/displayname',
+                            '')[0]
+                            }}</h6>
+                        <h6>{{ session.get('user',
+                            {}).get('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
+                            '')[0]
+                            }}</h6>
+                        <button type="button" style="height: 30px; display: flex; align-items: center;"
+                                class="logout-button btn btn-primary" onclick="location.href='/logout'">Logout
+                        </button>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px">
+                    <div class="col">
+                        <div style="font-size: 15px; margin-top: 5px;">Current Team:</div>
+                        <div style="font-size: 15px; margin-top: 10px; padding: 8px; background-color: #e1f0ff; color: #1b5fcc; display: inline-block; border-radius: 5px;">
+                            {{ session.get('team', {}) }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 
-<script>
-    // 当选择选项时触发事件
-    $('#optionTeam').change(function () {
-        var selectedOption = $(this).val(); // 获取选中选项的值
+        <script>
+            // 当选择选项时触发事件
+            $('#optionTeam').change(function () {
+                var selectedOption = $(this).val(); // 获取选中选项的值
 
-        // 发起AJAX请求
-        $.ajax({
-            url: '/update_session_team', // 替换为您的后端接口地址
-            method: 'POST',
-            data: {team: selectedOption}, // 选中选项的值作为数据发送给后端
-            success: function (response) {
-                // 请求成功后的逻辑处理
-                console.log(response);
-                location.reload()
-                toastr.success('change team successfully!');
-            },
-            error: function (error) {
-                // 请求失败的逻辑处理
-                console.error(error);
-            }
-        });
-    });
-</script>
+                // 发起AJAX请求
+                $.ajax({
+                    url: '/update_session_team', // 替换为您的后端接口地址
+                    method: 'POST',
+                    data: {team: selectedOption}, // 选中选项的值作为数据发送给后端
+                    success: function (response) {
+                        // 请求成功后的逻辑处理
+                        console.log(response);
+                        location.reload()
+                        toastr.success('change team successfully!');
+                    },
+                    error: function (error) {
+                        // 请求失败的逻辑处理
+                        console.error(error);
+                    }
+                });
+            });
+        </script>
 
-{% endblock %}
+        <script>
+
+            window.addEventListener('DOMContentLoaded', event => {
+
+                // Toggle the side navigation
+                const sidebarToggle = document.body.querySelector('#sidebarToggle');
+                if (sidebarToggle) {
+                    // Uncomment Below to persist sidebar toggle between refreshes
+                    // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+                    //     document.body.classList.toggle('sb-sidenav-toggled');
+                    // }
+                    sidebarToggle.addEventListener('click', event => {
+                        event.preventDefault();
+                        document.body.classList.toggle('sb-sidenav-toggled');
+                        localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                    });
+                }
+
+            });
+        </script>
+
+        {% endblock %}
 
