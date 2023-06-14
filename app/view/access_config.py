@@ -1,7 +1,7 @@
 import json
 import math
 
-from flask import Blueprint, render_template, session, request, jsonify
+from flask import Blueprint, render_template, session, request, jsonify, redirect
 
 from app.db.tanos_manage import tanos_manage
 from app.useDB import ConnectSQL
@@ -14,16 +14,15 @@ web = Blueprint("access_config", __name__)
 @user.login_required
 # @permission_required(session.get('groupname'))
 def access_page():
-    username = session.get('username', None)
+    tools = session.get('tools', None)
 
-
-    current_team_list=tanos_manage().get_teams_from_user(username)
+    current_team_list = tanos_manage().get_teams_from_user(tools)
     # current_team_list = ['Admin', 'ChinaDataSolution']
     session['teams'] = current_team_list
 
     if len(current_team_list) == 1:
         team = current_team_list[0]
-        session['team']=team
+        session['team'] = team
     else:
         team = session.get('team', {})
 
@@ -32,9 +31,8 @@ def access_page():
     teams = []
 
     # 通过用户名获取是否为owner
-    is_owner = tanos_manage().if_owner(username,team)
+    is_owner = tanos_manage().if_owner(tools, team)
     # is_owner = {'DelosUsers': 0, 'ChinaDataSolution': 0}
-
 
     if "Admin" == team:
         teams_list = tanos_manage().get_teams()
@@ -42,7 +40,7 @@ def access_page():
         for team_data in teams_list:
             team = {"id": team_data[0], "name": team_data[1].strip()}
             teams.append(team)
-        return render_template('access_config.html', teams=teams)
+        return render_template('/access/access_config.html', teams=teams)
     else:
         if is_owner:
             teams_list = tanos_manage().get_teams_owner(team)
@@ -50,9 +48,9 @@ def access_page():
             for team_data in teams_list:
                 team = {"id": team_data[0], "name": team_data[1].strip()}
                 teams.append(team)
-            return render_template('access_config.html', teams=teams)
+            return render_template('/access/access_config.html', teams=teams)
         else:
-            return render_template('access_config_normal.html', teams=teams)
+            return render_template('/access/access_config_normal.html', teams=teams)
 
 
 @web.route('/save_permissions', methods=['POST'])
@@ -68,23 +66,22 @@ def save_permission():
     else:
         teamid = '{3001}'
     print(teamid)
-    tanos_manage().update_team(data['username'], teamid)
-    current_team_list=tanos_manage().get_teams_from_user(data['username'])
+    tanos_manage().update_team(data['tools'], teamid)
+    current_team_list = tanos_manage().get_teams_from_user(data['tools'])
     # current_team_list = ['Admin', 'ChinaDataSolution']
     session['teams'] = current_team_list
 
-    groupname = ConnectSQL().get_user_group(data['username'])
+    groupname = ConnectSQL().get_user_group(data['tools'])
     session['groupname'] = groupname[0]
 
     return "OK"
 
 
-
 @web.route('/team/getUserList', methods=['GET'])
 def getUserList():
     team_id = request.args.get('teamId')  # 获取团队ID参数
-    #根据team_id从数据库中读取user
-    userlist= tanos_manage().get_users_from_team(team_id)
+    # 根据team_id从数据库中读取user
+    userlist = tanos_manage().get_users_from_team(team_id)
 
     team_users = []
     for row in userlist:
@@ -92,7 +89,7 @@ def getUserList():
         name = row[0].strip()
         owner = row[2]
         is_owner = 'yes' if owner == 1 else 'no'  # 根据条件设置 is_owner 的值
-        user = {'staffid': staffid, 'name': name,"is_owner":is_owner}
+        user = {'staffid': staffid, 'name': name, "is_owner": is_owner}
         team_users.append(user)
 
     return jsonify(team_users)
@@ -100,7 +97,7 @@ def getUserList():
 
 @web.route('/team/getAllUsers.json', methods=['GET'])
 def getAllUsers():
-    userlist= tanos_manage().get_all_user()
+    userlist = tanos_manage().get_all_user()
     all_users = []
     for row in userlist:
         staffid = row[1]
@@ -116,15 +113,15 @@ def delete_from_team():
     data = request.get_json()
     print(data)
     staffid = data['id']
-    teamid= data['team']
+    teamid = data['team']
     print(staffid)
     print(teamid)
 
     # 在这里执行删除操作，从关系表中删除指定的关联关系
     tanos_manage().delete_user_from_team(teamid, staffid)
 
-    #查找是否在至少一个team,如果在,不做任何事，如果不在，默认加入guest team
-    t= tanos_manage().search_user_in_team(staffid)
+    # 查找是否在至少一个team,如果在,不做任何事，如果不在，默认加入guest team
+    t = tanos_manage().search_user_in_team(staffid)
     if t is False:
         tanos_manage().add_user_to_team(3001, staffid)
 
@@ -136,19 +133,17 @@ def add_to_team():
     data = request.get_json()
     print(data)
     staffid = data['id']
-    teamid= data['team']
+    teamid = data['team']
 
     tanos_manage().add_user_to_team(teamid, staffid)
 
     # 查找是否在guest team,如果在，删除
 
-    t= tanos_manage().search_user_in_guest(staffid)
+    t = tanos_manage().search_user_in_guest(staffid)
     if t:
         tanos_manage().delete_user_from_team(3001, staffid)
 
-
     return jsonify({'message': 'Add success'})
-
 
 
 @web.route('/team/updateOwnerInfo', methods=['POST'])
@@ -156,7 +151,7 @@ def update_owner_info():
     data = request.get_json()
     # 根据具体的业务逻辑，更新 teams 字典中对应 teamId 的 owner 状态
     staffId = data['staffId']
-    teamId= data['team']
+    teamId = data['team']
     isChecked = 1 if data['isChecked'] else 0
 
     tanos_manage().update_owner_info(staffId, teamId, isChecked)
@@ -166,4 +161,85 @@ def update_owner_info():
     return jsonify(response), 200
 
 
+@web.route('/role_config', methods=['GET', 'POST'])
+@user.login_required
+# @permission_required(session.get('groupname'))
+def role_config():
+    tools = session.get('tools', None)
 
+    current_team_list = tanos_manage().get_teams_from_user(tools)
+    # current_team_list = ['Admin', 'ChinaDataSolution']
+    session['teams'] = current_team_list
+
+    if len(current_team_list) == 1:
+        team = current_team_list[0]
+        session['team'] = team
+    else:
+        team = session.get('team', {})
+
+    group = tanos_manage().get_group_from_team(team)
+    session['groupname'] = group
+    teams = []
+
+    # 通过用户名获取是否为owner
+    # is_owner = tanos_manage().if_owner(tools,team)
+    # is_owner = {'DelosUsers': 0, 'ChinaDataSolution': 0}
+
+    if "Admin" == team:
+        teams_list = tanos_manage().get_teams()
+
+        for team_data in teams_list:
+            team = {"id": team_data[0], "name": team_data[1].strip()}
+            teams.append(team)
+        return render_template('/access/role_config.html', teams=teams)
+    else:
+        return redirect("/permission")
+
+
+@web.route('/team/getAllRole.json', methods=['GET'])
+def getAllRole():
+    data2 = [{
+        "team": 'Team1',
+        "data_test": '11',
+        "web_test": 'PostgreSQL',
+        "api_test": "My connection",
+        "tools": 'hsh',
+        "config": '54uru',
+    }, {
+        "team": 'Team2',
+        "data_test": '10',
+        "web_test": 'AliCloud',
+        "api_test": "My connection",
+        "tools": 'hsh',
+        "config": 'we643w623',
+    },
+        {
+            "team": 'Team3',
+            "data_test": '00',
+            "web_test": '11',
+            "api_test": "External connection",
+            "tools": 'hshfaf',
+            "config": '32623623',
+        },
+        {
+            "team": 'Team4',
+            "data_test": '01',
+            "web_test": 'Oracle',
+            "api_test": "External connection",
+            "tools": '01',
+            "config": '32623623',
+            "host": 'host3',
+            "dblibrary": "tes3"
+        },
+        {
+            "team": 'Team5',
+            "data_test": '11',
+            "web_test": 'Oracle',
+            "api_test": "External connection",
+            "tools": 'hshfaf',
+            "config": '32623623',
+        },
+
+    ]
+
+    return jsonify(data2)
