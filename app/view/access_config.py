@@ -14,9 +14,9 @@ web = Blueprint("access_config", __name__)
 @user.login_required
 # @permission_required(session.get('groupname'))
 def access_page():
-    tools = session.get('tools', None)
+    username = session.get('username', None)
 
-    current_team_list = tanos_manage().get_teams_from_user(tools)
+    current_team_list = tanos_manage().get_teams_from_user(username)
     # current_team_list = ['Admin', 'ChinaDataSolution']
     session['teams'] = current_team_list
 
@@ -31,7 +31,7 @@ def access_page():
     teams = []
 
     # 通过用户名获取是否为owner
-    is_owner = tanos_manage().if_owner(tools, team)
+    is_owner = tanos_manage().if_owner(username, team)
     # is_owner = {'DelosUsers': 0, 'ChinaDataSolution': 0}
 
     if "Admin" == team:
@@ -40,7 +40,7 @@ def access_page():
         for team_data in teams_list:
             team = {"id": team_data[0], "name": team_data[1].strip()}
             teams.append(team)
-        return render_template('/access/access_config.html', teams=teams)
+        return render_template('access/access_config.html', teams=teams)
     else:
         if is_owner:
             teams_list = tanos_manage().get_teams_owner(team)
@@ -48,9 +48,9 @@ def access_page():
             for team_data in teams_list:
                 team = {"id": team_data[0], "name": team_data[1].strip()}
                 teams.append(team)
-            return render_template('/access/access_config.html', teams=teams)
+            return render_template('access/access_config.html', teams=teams)
         else:
-            return render_template('/access/access_config_normal.html', teams=teams)
+            return render_template('access/access_config_normal.html', teams=teams)
 
 
 @web.route('/save_permissions', methods=['POST'])
@@ -66,12 +66,12 @@ def save_permission():
     else:
         teamid = '{3001}'
     print(teamid)
-    tanos_manage().update_team(data['tools'], teamid)
-    current_team_list = tanos_manage().get_teams_from_user(data['tools'])
+    tanos_manage().update_team(data['username'], teamid)
+    current_team_list = tanos_manage().get_teams_from_user(data['username'])
     # current_team_list = ['Admin', 'ChinaDataSolution']
     session['teams'] = current_team_list
 
-    groupname = ConnectSQL().get_user_group(data['tools'])
+    groupname = ConnectSQL().get_user_group(data['username'])
     session['groupname'] = groupname[0]
 
     return "OK"
@@ -165,9 +165,9 @@ def update_owner_info():
 @user.login_required
 # @permission_required(session.get('groupname'))
 def role_config():
-    tools = session.get('tools', None)
+    username = session.get('tools', None)
 
-    current_team_list = tanos_manage().get_teams_from_user(tools)
+    current_team_list = tanos_manage().get_teams_from_user(username)
     # current_team_list = ['Admin', 'ChinaDataSolution']
     session['teams'] = current_team_list
 
@@ -182,7 +182,7 @@ def role_config():
     teams = []
 
     # 通过用户名获取是否为owner
-    # is_owner = tanos_manage().if_owner(tools,team)
+    # is_owner = tanos_manage().if_owner(username,team)
     # is_owner = {'DelosUsers': 0, 'ChinaDataSolution': 0}
 
     if "Admin" == team:
@@ -199,45 +199,59 @@ def role_config():
 @web.route('/team/getAllRole.json', methods=['GET'])
 def getAllRole():
     data2 = [{
-        "team": 'Team1',
-        "data_test": '11',
-        "web_test": 'PostgreSQL',
-        "api_test": "My connection",
-        "tools": 'hsh',
-        "config": '54uru',
+        "team": 'Admin',
+        "data_connection": '11',
+        "data_point": '11',
+        "data_validation": "11",
+        "api_test_system": "11",
+        "api_test_smoke": "11",
+        "api_test_sanity": "11",
+        "api_test_health": "11",
+        "api_test_null": "11",
+        "web_test": "11",
+        "tools": '11',
+        "config": '11',
     }, {
-        "team": 'Team2',
-        "data_test": '10',
-        "web_test": 'AliCloud',
-        "api_test": "My connection",
-        "tools": 'hsh',
-        "config": 'we643w623',
+        "team": 'Guest',
+        "data_connection": '10',
+        "data_point": '10',
+        "data_validation": "10",
+        "api_test_system": "10",
+        "api_test_smoke": "10",
+        "api_test_sanity": "10",
+        "api_test_health": "10",
+        "api_test_null": "10",
+        "web_test": "10",
+        "tools": '00',
+        "config": '00',
     },
         {
-            "team": 'Team3',
-            "data_test": '00',
-            "web_test": '11',
-            "api_test": "External connection",
-            "tools": 'hshfaf',
-            "config": '32623623',
+            "team": 'DelosUsers',
+            "data_connection": '00',
+            "data_point": '00',
+            "data_validation": "00",
+            "api_test_system": "11",
+            "api_test_smoke": "00",
+            "api_test_sanity": "00",
+            "api_test_health": "00",
+            "api_test_null": "00",
+            "web_test": "00",
+            "tools": '00',
+            "config": '00',
         },
         {
-            "team": 'Team4',
-            "data_test": '01',
-            "web_test": 'Oracle',
-            "api_test": "External connection",
-            "tools": '01',
-            "config": '32623623',
-            "host": 'host3',
-            "dblibrary": "tes3"
-        },
-        {
-            "team": 'Team5',
-            "data_test": '11',
-            "web_test": 'Oracle',
-            "api_test": "External connection",
-            "tools": 'hshfaf',
-            "config": '32623623',
+            "team": 'ChinaDataSolution',
+            "data_connection": '11',
+            "data_point": '11',
+            "data_validation": "11",
+            "api_test_system": "00",
+            "api_test_smoke": "00",
+            "api_test_sanity": "00",
+            "api_test_health": "00",
+            "api_test_null": "00",
+            "web_test": "11",
+            "tools": '00',
+            "config": '00',
         },
 
     ]

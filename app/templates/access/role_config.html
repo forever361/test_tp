@@ -41,21 +41,42 @@
                     >
                         <thead>
                         <tr>
-                            <th data-field="team" data-width="10" data-width-unit="%">TEAM
+                            <th data-field="team" rowspan="2" data-width="10">TEAM</th>
+                            <th colspan="3" data-align="center">DATA TEST</th>
+                            <th colspan="1" data-align="center">WEB TEST</th>
+                            <th colspan="5" data-align="center">API TEST</th>
+                            <th colspan="2"></th>
+                        </tr>
+                        <tr>
+                            <th data-field="data_connection" data-formatter="dataFormatter1" data-align="center">Data
+                                Connection
                             </th>
-                            <th data-field="data_test" data-formatter="dataFormatter" data-align="center">DATA TEST</th>
-                            <th data-field="web_test" data-formatter="webFormatter" data-align="center">
-                                WEB TEST
+                            <th data-field="data_point" data-formatter="dataFormatter2" data-align="center">Data Point
                             </th>
-                            <th data-field="api_test" data-formatter="apiFormatter" data-align="center">
-                                API TEST
+                            <th data-field="data_validation" data-formatter="dataFormatter3" data-align="center">Data
+                                Validation
                             </th>
-                            <th data-field="tools" data-formatter="toolsFormatter" data-align="center">
-                                TOOLS
+
+                            <th data-field="web_test" data-formatter="webFormatter1" data-align="center">Web UI</th>
+
+                            <th data-field="api_test_system" data-formatter="apiFormatter1" data-align="center">System
+                                Test
                             </th>
-                            <th data-field="config" data-formatter="configFormatter" data-align="center">
-                                CONFIG
+                            <th data-field="api_test_smoke" data-formatter="apiFormatter2" data-align="center">Smoke
+                                Test
                             </th>
+                            <th data-field="api_test_sanity" data-formatter="apiFormatter3" data-align="center">Regular
+                                Sanity Test
+                            </th>
+                            <th data-field="api_test_health" data-formatter="apiFormatter4" data-align="center">Hourly
+                                Health Check
+                            </th>
+                            <th data-field="api_test_null" data-formatter="apiFormatter5" data-align="center">"Null
+                                Data" Check
+                            </th>
+
+                            <th data-field="tools" data-formatter="toolsFormatter" data-align="center">TOOLS</th>
+                            <th data-field="config" data-formatter="configFormatter" data-align="center">CONFIG</th>
                         </tr>
                         </thead>
                     </table>
@@ -97,9 +118,115 @@
             </div>`;
     }
 
+    function dataFormatter1(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="...">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+              </div>
+              <div class="form-check" style="margin-left: 40px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              </div>
+            </div>`;
+    }
+
+
+    function dataFormatter2(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="...">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+              </div>
+              <div class="form-check" style="margin-left: 40px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              </div>
+            </div>`;
+    }
+
+
+    function dataFormatter3(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="...">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+              </div>
+              <div class="form-check" style="margin-left: 40px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              </div>
+            </div>`;
+    }
+
 
     function webFormatter(value, row, index) {
-       let readChecked = "";
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="...">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+              </div>
+              <div class="form-check" style="margin-left: 40px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              </div>
+            </div>`;
+    }
+
+    function webFormatter1(value, row, index) {
+        let readChecked = "";
         let writeChecked = "";
 
         if (value === "11") {
@@ -125,7 +252,7 @@
     }
 
     function apiFormatter(value, row, index) {
-         let readChecked = "";
+        let readChecked = "";
         let writeChecked = "";
 
         if (value === "11") {
@@ -150,8 +277,144 @@
             </div>`;
     }
 
+
+    function apiFormatter1(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="...">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+              </div>
+              <div class="form-check" style="margin-left: 40px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              </div>
+            </div>`;
+    }
+
+
+    function apiFormatter2(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="...">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+              </div>
+              <div class="form-check" style="margin-left: 40px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              </div>
+            </div>`;
+    }
+
+
+    function apiFormatter3(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="...">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+              </div>
+              <div class="form-check" style="margin-left: 40px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              </div>
+            </div>`;
+    }
+
+
+    function apiFormatter4(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="...">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+              </div>
+              <div class="form-check" style="margin-left: 40px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              </div>
+            </div>`;
+    }
+
+
+    function apiFormatter5(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="...">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+              </div>
+              <div class="form-check" style="margin-left: 40px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              </div>
+            </div>`;
+    }
+
+
     function toolsFormatter(value, row, index) {
-         let readChecked = "";
+        let readChecked = "";
         let writeChecked = "";
 
         if (value === "11") {
@@ -177,7 +440,7 @@
     }
 
     function configFormatter(value, row, index) {
-         let readChecked = "";
+        let readChecked = "";
         let writeChecked = "";
 
         if (value === "11") {

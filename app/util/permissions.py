@@ -22,7 +22,7 @@ class UserScope(Scope):
     allow_api = ['data_connect_management.data_connect_page']
     # forbidden_api = ['data_connect_management.add_row']
 class AdminGroup(Scope):
-    allow_module = ['data_connect_management','data_ponint_management','data_testcase','data_testcase_tanos','web_testcase','apinew']
+    allow_module = ['data_connect_management','data_ponint_management','data_testcase','data_testcase_tanos','web_testcase','web_compare','apinew']
 
 class Guest(Scope):
     # allow_module = ['data_connect_management','data_ponint_management','data_testcase']

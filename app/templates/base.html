@@ -199,7 +199,11 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a class="dropdown-item" href="/access">Team Config</a></li>
+
+                        {% if session.get('team', {})=='Admin' %}
                         <li><a class="dropdown-item" href="/role_config">Role Config</a></li>
+                        {% else %}
+                        {% endif %}
                     </ul>
                 </li>
 
