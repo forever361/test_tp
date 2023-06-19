@@ -26,66 +26,72 @@
          class="card">
         <!-- card-body中style 可以防止内容向下溢出 -->
         <div class="card-body" style="padding-bottom:10px; overflow-y: auto; max-height: calc(100% - 10px);">
-            <div class="container">
-                <h4>Role Management</h4>
-                <div style="margin-top: 20px">
-                    <table class="table table-striped"
-                           id="table"
-                           data-toggle="table"
-                           data-height="600"
-                           data-url="team/getAllRole.json"
-                           data-pagination="true"
-                           data-search="false"
-                           data-sort-name="is_owner"
-                           data-sort-order="desc"
-                    >
-                        <thead>
-                        <tr>
-                            <th data-field="team" rowspan="2" data-width="10">TEAM</th>
-                            <th colspan="3" data-align="center">DATA TEST</th>
-                            <th colspan="1" data-align="center">WEB TEST</th>
-                            <th colspan="5" data-align="center">API TEST</th>
-                            <th colspan="2"></th>
-                        </tr>
-                        <tr>
-                            <th data-field="data_connection" data-formatter="dataFormatter1" data-align="center">Data
-                                Connection
-                            </th>
-                            <th data-field="data_point" data-formatter="dataFormatter2" data-align="center">Data Point
-                            </th>
-                            <th data-field="data_validation" data-formatter="dataFormatter3" data-align="center">Data
-                                Validation
-                            </th>
 
-                            <th data-field="web_test" data-formatter="webFormatter1" data-align="center">Web UI</th>
+            <h4>Role Management</h4>
+            <div style="margin-top: 20px">
+                <table class="table table-striped"
+                       id="table"
+                       data-toggle="table"
+                       data-height="580"
+                       data-url="team/getAllRole.json"
+                       data-pagination="true"
+                       data-search="false"
+                       data-sort-name="is_owner"
+                       data-sort-order="desc"
+                >
+                    <thead>
+                    <tr>
+                        <th data-field="team" rowspan="2" data-width="10">TEAM</th>
+                        <th data-field="data_connection" data-formatter="dataFormatter" rowspan="2" data-width="10"
+                            data-align="center">ALL
+                        </th>
+                        <th colspan="3" data-align="center">DATA TEST</th>
+                        <th colspan="1" data-align="center">WEB TEST</th>
+                        <th colspan="5" data-align="center">API TEST</th>
+                        <th colspan="2"></th>
+                    </tr>
+                    <tr>
+                        <th data-field="data_connection" data-formatter="dataFormatter1" data-align="center">Data
+                            Connection
+                        </th>
+                        <th data-field="data_point" data-formatter="dataFormatter2" data-align="center">Data Point
+                        </th>
+                        <th data-field="data_validation" data-formatter="dataFormatter3" data-align="center">Data
+                            Validation
+                        </th>
 
-                            <th data-field="api_test_system" data-formatter="apiFormatter1" data-align="center">System
-                                Test
-                            </th>
-                            <th data-field="api_test_smoke" data-formatter="apiFormatter2" data-align="center">Smoke
-                                Test
-                            </th>
-                            <th data-field="api_test_sanity" data-formatter="apiFormatter3" data-align="center">Regular
-                                Sanity Test
-                            </th>
-                            <th data-field="api_test_health" data-formatter="apiFormatter4" data-align="center">Hourly
-                                Health Check
-                            </th>
-                            <th data-field="api_test_null" data-formatter="apiFormatter5" data-align="center">"Null
-                                Data" Check
-                            </th>
+                        <th data-field="web_test" data-formatter="webFormatter1" data-align="center">Web UI</th>
 
-                            <th data-field="tools" data-formatter="toolsFormatter" data-align="center">TOOLS</th>
-                            <th data-field="config" data-formatter="configFormatter" data-align="center">CONFIG</th>
-                        </tr>
-                        </thead>
-                    </table>
+                        <th data-field="api_test_system" data-formatter="apiFormatter1" data-align="center">System
+                            Test
+                        </th>
+                        <th data-field="api_test_smoke" data-formatter="apiFormatter2" data-align="center">Smoke
+                            Test
+                        </th>
+                        <th data-field="api_test_sanity" data-formatter="apiFormatter3" data-align="center">Regular
+                            Sanity Test
+                        </th>
+                        <th data-field="api_test_health" data-formatter="apiFormatter4" data-align="center">Hourly
+                            Health Check
+                        </th>
+                        <th data-field="api_test_null" data-formatter="apiFormatter5" data-align="center">"Null
+                            Data" Check
+                        </th>
 
-
-                </div>
+                        <th data-field="tools" data-formatter="toolsFormatter" data-align="center">TOOLS</th>
+                        <th data-field="config" data-formatter="configFormatter" data-align="center">CONFIG</th>
+                    </tr>
+                    </thead>
+                </table>
 
 
             </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                <button type="button" class="btn btn-primary" id="save-config">Save</button>
+            </div>
+
+
         </div>
     </div>
 </div>
@@ -106,13 +112,13 @@
         }
 
         return `
-            <div class="btn-group" role="group" aria-label="...">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
+            <div class="btn-group" role="group"  style="margin-left: 10px; margin-right: 10px"  aria-label="...">
+              <div class="form-check" >
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked} style="background-color: green;">
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
-                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
+              <div class="form-check" style="margin-left: 10px" >
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked} style="background-color: green;">
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
             </div>`;
@@ -137,7 +143,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -164,7 +170,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -191,7 +197,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -218,7 +224,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -244,7 +250,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -270,7 +276,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -297,7 +303,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -324,7 +330,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -351,7 +357,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -378,7 +384,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -405,7 +411,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -432,7 +438,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
@@ -458,7 +464,7 @@
                 <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
                 <label class="form-check-label" for="readCheckbox${index}">Read</label>
               </div>
-              <div class="form-check" style="margin-left: 40px">
+              <div class="form-check" style="margin-left: 10px">
                 <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
                 <label class="form-check-label" for="writeCheckbox${index}">Write</label>
               </div>
