@@ -9,3 +9,29 @@ CREATE TABLE xcheck.user_teams (
   PRIMARY KEY (userid, teamid)
 );
 
+
+
+-- Table: xcheck.role2
+
+-- DROP TABLE IF EXISTS xcheck.role2;
+
+CREATE TABLE IF NOT EXISTS xcheck.role2
+(
+    role_id integer NOT NULL,
+    name character(100) COLLATE pg_catalog."default",
+    read character(5) COLLATE pg_catalog."default",
+    write character(5) COLLATE pg_catalog."default",
+    role_value character(300) COLLATE pg_catalog."default",
+    CONSTRAINT role2_pkey PRIMARY KEY (role_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS xcheck.role2
+    OWNER to postgres;
+
+
+3002	DelosUsers                                                                                          	0	1	00001000011
+3001	Guest                                                                                               	1	0	00000000010
+3000	Admin                                                                                               	0	1	11111111111
+3003	ChinaDataSolution                                                                                   	0	1	11100000011

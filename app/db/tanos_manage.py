@@ -409,6 +409,23 @@ class tanos_manage():
             team_name = result[0][0]
             return team_name
 
+
+    def get_role_value(self,team_id):
+        sql = """SELECT role_value FROM xcheck.role2 WHERE role_id = '{}' """.format(team_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            role_value = result[0][0]
+            return role_value
+
+    def get_role_read_write(self,team_id):
+        sql = """SELECT read,write FROM xcheck.role2 WHERE role_id = '{}' """.format(team_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            role_value = result[0]
+            return role_value
+
 if __name__ == '__main__':
     testcase = tanos_manage()
     # a= testcase.search_by_connect_id(10002)

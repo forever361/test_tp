@@ -938,7 +938,7 @@ ChangeLog
 - [enh] Updated `showRow`, `hideRow` and `updateCell` methods.
 - [bug] Fix #1390: radio maintainSelected bug.
 - [bug] Fix #1421: checkBy filter enabled.
-- [bug] Remove `bootstrap-table-all.js` and `bootstrap-table-all.min.js`.
+- [bug] Remove `bootstrap-table-all-fontawesome.js` and `bootstrap-table-all.min.js`.
 
 ### 1.8.1
 
@@ -965,7 +965,7 @@ ChangeLog
 - [enh] Added 'getAllSelections' method to get checked rows across all pages.
 - [enh] Added `ro-RO` locale.
 - [enh] Added `table-no-bordered` class to remove table-bordered style.
-- [enh] Added `bootstrap-table-all.js` and `bootstrap-table-locale-all.js` files to dist.
+- [enh] Added `bootstrap-table-all-fontawesome.js` and `bootstrap-table-locale-all-fontawesome.js` files to dist.
 - [enh] Added detail view feature.
 - [enh] Added `updateCell` method.
 - [enh] Added `onClickCell` and `onDblClickCell` events.

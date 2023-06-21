@@ -198,10 +198,10 @@ def role_config():
 
 @web.route('/team/getAllRole.json', methods=['GET'])
 def getAllRole():
-    data2 = [{
-        "team": 'Admin',
-        "data_connection": '11',
-        "data_point": '11',
+    data = [{
+        "team": '3000',
+        "data_connection": '00',
+        "data_point": '00',
         "data_validation": "11",
         "api_test_system": "11",
         "api_test_smoke": "11",
@@ -212,7 +212,7 @@ def getAllRole():
         "tools": '11',
         "config": '11',
     }, {
-        "team": 'Guest',
+        "team": '3001',
         "data_connection": '10',
         "data_point": '10',
         "data_validation": "10",
@@ -226,9 +226,9 @@ def getAllRole():
         "config": '00',
     },
         {
-            "team": 'DelosUsers',
-            "data_connection": '00',
-            "data_point": '00',
+            "team": '3002',
+            "data_connection": '11',
+            "data_point": '11',
             "data_validation": "00",
             "api_test_system": "11",
             "api_test_smoke": "00",
@@ -240,9 +240,9 @@ def getAllRole():
             "config": '00',
         },
         {
-            "team": 'ChinaDataSolution',
-            "data_connection": '11',
-            "data_point": '11',
+            "team": '3003',
+            "data_connection": '01',
+            "data_point": '00',
             "data_validation": "11",
             "api_test_system": "00",
             "api_test_smoke": "00",
@@ -256,4 +256,141 @@ def getAllRole():
 
     ]
 
+    return jsonify(data)
+
+
+@web.route('/team/getAllRole2.json', methods=['GET'])
+def getAllRole2():
+
+    team_id = request.args.get('teamId')  # 获取团队ID参数
+    print(team_id)
+
+    result = tanos_manage().get_role_value(team_id)
+
+    role_value = result if result else None
+
+    print(role_value)
+
+    right = tanos_manage().get_role_read_write(team_id)
+    read = right[0]
+    write = right[1]
+
+
+    data = {
+        "Data_Connection": role_value[0],
+        "Data_Point": role_value[1],
+        "Data_Validation": role_value[2],
+        "Web_UI": role_value[3],
+        "System_Test": role_value[4],
+        "Smoke_Test": role_value[5],
+        "Regular_Sanity_Test": role_value[6],
+        "Hourly_Health_Check": role_value[7],
+        "Null_Data_Check": role_value[8],
+        "TOOLS": role_value[9],
+        "CONFIG": role_value[10]
+    }
+
+    data2 = {
+        "data": [{
+            'read':read.strip(),
+            'write':write.strip(),
+            'title': 'All',
+            'id': 1,
+            'field': 'name1',
+            'checked': False,
+            'spread': True,
+            'children': [{
+                'title': 'DATA TEST',
+                'id': 2,
+                'spread': True,
+                'field': 'name11',
+                'checked': False,
+                'children': [{
+                    'title': 'Data_Connection',
+                    'id': 3,
+                    'field': '',
+                    'checked': False,
+                }, {
+                    'title': 'Data_Point',
+                    'id': 4,
+                    'field': '',
+                    'checked': False,
+                }, {
+                    'title': 'Data_Validation',
+                    'id': 5,
+                    'field': '',
+                    'checked': False,
+                }]
+            }, {
+                'title': 'WEB TEST',
+                'id': 6,
+                'spread': True,
+                'children': [{
+                    'title': 'Web_UI',
+                    'id': 7,
+                    'field': '',
+                    'checked': False,
+                }]
+            }, {
+                'title': 'API TEST',
+                'id': 8,
+                'field': '',
+                'spread': True,
+                'children': [{
+                    'title': 'System_Test',
+                    'id': 9,
+                    'field': '',
+                    'checked': False,
+                }, {
+                    'title': 'Smoke_Test',
+                    'id': 10,
+                    'field': '',
+                    'checked': False,
+                },{
+                    'title': 'Regular_Sanity_Test',
+                    'id': 11,
+                    'field': '',
+                    'checked': False,
+                },{
+                    'title': 'Hourly_Health_Check',
+                    'id': 12,
+                    'field': '',
+                    'checked': False,
+                },{
+                    'title': 'Null_Data_Check',
+                    'id': 13,
+                    'field': '',
+                    'checked': False,
+                },]
+            },{
+                'title': 'TOOLS',
+                'id': 14,
+                'spread': True,
+                'children': [],
+                'checked': False,
+            }, {
+                'title': 'CONFIG',
+                'id': 15,
+                'spread': True,
+                'children': [],
+                'checked': False,
+            },
+            ]
+        }]
+    }
+
+
+
+    update_data2(data2["data"][0]["children"], data)
+
     return jsonify(data2)
+
+def update_data2(children, matched_data):
+    for child in children:
+        title = child.get("title")
+        if title in matched_data:
+            checked_value = matched_data[title]
+            child["checked"] = checked_value == "1"
+
+        if "children" in child:
+            update_data2(child["children"], matched_data)
