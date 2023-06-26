@@ -165,7 +165,7 @@ def update_owner_info():
 @user.login_required
 # @permission_required(session.get('groupname'))
 def role_config():
-    username = session.get('tools', None)
+    username = session.get('username', None)
 
     current_team_list = tanos_manage().get_teams_from_user(username)
     # current_team_list = ['Admin', 'ChinaDataSolution']
@@ -198,10 +198,35 @@ def role_config():
 
 @web.route('/team/getAllRole.json', methods=['GET'])
 def getAllRole():
+
+    result = tanos_manage().get_all_role_calue()
+    print(result)
+    data2 = []
+    for team, values in result:
+        value_list = values.strip().split("|")
+        data_dict = {
+            "team": team.strip(),
+            "data_connection": value_list[0],
+            "data_point": value_list[1],
+            "data_validation": value_list[2],
+            "web_test": value_list[3],
+            "api_test_system": value_list[4],
+            "api_test_smoke": value_list[5],
+            "api_test_sanity": value_list[6],
+            "api_test_health": value_list[7],
+            "api_test_null": value_list[8],
+            "tools": value_list[9],
+            "config": value_list[10],
+        }
+        data2.append(data_dict)
+
+    # print(data2)
+
+
     data = [{
-        "team": '3000',
-        "data_connection": '00',
-        "data_point": '00',
+        "team": 'Admin',
+        "data_connection": '11',
+        "data_point": '11',
         "data_validation": "11",
         "api_test_system": "11",
         "api_test_smoke": "11",
@@ -212,7 +237,7 @@ def getAllRole():
         "tools": '11',
         "config": '11',
     }, {
-        "team": '3001',
+        "team": 'Guest',
         "data_connection": '10',
         "data_point": '10',
         "data_validation": "10",
@@ -226,7 +251,7 @@ def getAllRole():
         "config": '00',
     },
         {
-            "team": '3002',
+            "team": 'DelosUsers',
             "data_connection": '11',
             "data_point": '11',
             "data_validation": "00",
@@ -240,10 +265,10 @@ def getAllRole():
             "config": '00',
         },
         {
-            "team": '3003',
+            "team": 'ChinaDataSolution',
             "data_connection": '01',
             "data_point": '00',
-            "data_validation": "11",
+            "data_validation": "00",
             "api_test_system": "00",
             "api_test_smoke": "00",
             "api_test_sanity": "00",
@@ -256,141 +281,50 @@ def getAllRole():
 
     ]
 
-    return jsonify(data)
-
-
-@web.route('/team/getAllRole2.json', methods=['GET'])
-def getAllRole2():
-
-    team_id = request.args.get('teamId')  # 获取团队ID参数
-    print(team_id)
-
-    result = tanos_manage().get_role_value(team_id)
-
-    role_value = result if result else None
-
-    print(role_value)
-
-    right = tanos_manage().get_role_read_write(team_id)
-    read = right[0]
-    write = right[1]
-
-
-    data = {
-        "Data_Connection": role_value[0],
-        "Data_Point": role_value[1],
-        "Data_Validation": role_value[2],
-        "Web_UI": role_value[3],
-        "System_Test": role_value[4],
-        "Smoke_Test": role_value[5],
-        "Regular_Sanity_Test": role_value[6],
-        "Hourly_Health_Check": role_value[7],
-        "Null_Data_Check": role_value[8],
-        "TOOLS": role_value[9],
-        "CONFIG": role_value[10]
-    }
-
-    data2 = {
-        "data": [{
-            'read':read.strip(),
-            'write':write.strip(),
-            'title': 'All',
-            'id': 1,
-            'field': 'name1',
-            'checked': False,
-            'spread': True,
-            'children': [{
-                'title': 'DATA TEST',
-                'id': 2,
-                'spread': True,
-                'field': 'name11',
-                'checked': False,
-                'children': [{
-                    'title': 'Data_Connection',
-                    'id': 3,
-                    'field': '',
-                    'checked': False,
-                }, {
-                    'title': 'Data_Point',
-                    'id': 4,
-                    'field': '',
-                    'checked': False,
-                }, {
-                    'title': 'Data_Validation',
-                    'id': 5,
-                    'field': '',
-                    'checked': False,
-                }]
-            }, {
-                'title': 'WEB TEST',
-                'id': 6,
-                'spread': True,
-                'children': [{
-                    'title': 'Web_UI',
-                    'id': 7,
-                    'field': '',
-                    'checked': False,
-                }]
-            }, {
-                'title': 'API TEST',
-                'id': 8,
-                'field': '',
-                'spread': True,
-                'children': [{
-                    'title': 'System_Test',
-                    'id': 9,
-                    'field': '',
-                    'checked': False,
-                }, {
-                    'title': 'Smoke_Test',
-                    'id': 10,
-                    'field': '',
-                    'checked': False,
-                },{
-                    'title': 'Regular_Sanity_Test',
-                    'id': 11,
-                    'field': '',
-                    'checked': False,
-                },{
-                    'title': 'Hourly_Health_Check',
-                    'id': 12,
-                    'field': '',
-                    'checked': False,
-                },{
-                    'title': 'Null_Data_Check',
-                    'id': 13,
-                    'field': '',
-                    'checked': False,
-                },]
-            },{
-                'title': 'TOOLS',
-                'id': 14,
-                'spread': True,
-                'children': [],
-                'checked': False,
-            }, {
-                'title': 'CONFIG',
-                'id': 15,
-                'spread': True,
-                'children': [],
-                'checked': False,
-            },
-            ]
-        }]
-    }
-
-
-
-    update_data2(data2["data"][0]["children"], data)
-
     return jsonify(data2)
 
-def update_data2(children, matched_data):
-    for child in children:
-        title = child.get("title")
-        if title in matched_data:
-            checked_value = matched_data[title]
-            child["checked"] = checked_value == "1"
 
-        if "children" in child:
-            update_data2(child["children"], matched_data)
+@web.route('/team/saveRole.json', methods=['POST'])
+def saveRole():
+    data = request.get_json()
+    data_str = []
+
+    for item in data:
+        first_column = item['firstColumnValue']
+        group_str = ''
+        for index in range(1, 12):  # 11个复选框，索引从1到11
+            checkbox_r = item[f'checkbox{index}_r']
+            checkbox_w = item[f'checkbox{index}_w']
+            if checkbox_r and checkbox_w:
+                group_str += '11'  # 保存为11
+            elif checkbox_r and not checkbox_w:
+                group_str += '10'  # 保存为10
+            elif not checkbox_r and checkbox_w:
+                group_str += '01'  # 保存为01
+            else:
+                group_str += '00'  # 保存为00
+        data_str.append((first_column, group_str))
+
+
+    converted_data = convert_data_format(data_str)
+
+    tanos_manage().save_role_value(converted_data)
+    return jsonify('save data')
+
+
+
+
+
+def convert_data_format(data):
+    converted_data = []
+    for item in data:
+        name = item[0]
+        role_value = item[1]
+
+        # 将字符串的每两个字符分组并用竖线连接
+        role_value_formatted = '|'.join([role_value[i:i+2] for i in range(0, len(role_value), 2)])
+
+        converted_data.append((name, role_value_formatted))
+
+    return converted_data
+

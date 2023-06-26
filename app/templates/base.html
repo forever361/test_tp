@@ -72,6 +72,17 @@
         object-fit: cover;
     }
 
+    .bg-gradient-primary {
+        background-color: #4e73df;
+        background-image: linear-gradient(180deg, #000000 10%, #224abe 100%);
+        background-size: cover;
+    }
+
+    .sidebar .nav-item .collapse .collapse-inner .collapse-item.active, .sidebar .nav-item .collapsing .collapse-inner .collapse-item.active {
+        color: #4e73df;
+        font-weight: 700;
+    }
+
 
 </style>
 
@@ -140,7 +151,7 @@
         <a class="navbar-brand " style="margin-left: 10px;font-size:1rem"
            href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
 
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggl" href="#!"><i
                 class="fas fa-sliders " style="color:gainsboro"></i></button>
 
         {% if session.get('teams', [])|length >= 2 %}
@@ -159,40 +170,6 @@
 
         <div class="collapse navbar-collapse" id="navbarNav1">
             <ul class="navbar-nav ms-auto" style="margin-right:50px">
-                <!--                <li class="nav-item"><a class="nav-link active" href="/"> Home </a></li>-->
-                <!--                <li class="nav-item dropdown">-->
-                <!--                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Data Test </a>-->
-                <!--                    <ul class="dropdown-menu dropdown-menu-right">-->
-                <!--                        <li><a class="dropdown-item" href="/data_connect_management">Data Connections</a></li>-->
-                <!--                        <li class="divider"></li>-->
-                <!--                        <li><a class="dropdown-item" href="/data_point_management">Data Points</a></li>-->
-                <!--                        <li class="divider"></li>-->
-                <!--                        <li><a class="dropdown-item" href="/api_data_test_cases"> Data Validation Jobs </a></li>-->
-                <!--                        &lt;!&ndash;                        <li><a class="dropdown-item" href="/data_guide">Data Quality Checker Guide</a></li>&ndash;&gt;-->
-                <!--                    </ul>-->
-                <!--                </li>-->
-
-                <!--                <li class="nav-item dropdown">-->
-                <!--                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Web Test </a>-->
-                <!--                    <ul class="dropdown-menu dropdown-menu-right">-->
-                <!--                        <li><a class="dropdown-item" href="/web_test_compare">Add new test case</a></li>-->
-                <!--                        <li><a class="dropdown-item" href="/web_test_cases">Web Test Cases</a></li>-->
-                <!--                        <li><a class="dropdown-item" href="/web_guide">Web Test Guide</a></li>-->
-                <!--                    </ul>-->
-                <!--                </li>-->
-
-                <!--                <li class="nav-item dropdown">-->
-                <!--                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> API Test </a>-->
-                <!--                    <ul class="dropdown-menu dropdown-menu-right">-->
-                <!--                        <li><a class="dropdown-item" href="/api_intergration">System Integration Test</a></li>-->
-                <!--                        <li><a class="dropdown-item" href="/test_api">Smoke Test</a></li>-->
-                <!--                        <li><a class="dropdown-item" href="/test_api">Regular Sanity Test</a></li>-->
-                <!--                        <li><a class="dropdown-item" href="/test_api">Hourly Health Check</a></li>-->
-                <!--                        <li><a class="dropdown-item" href="/test_api">"Null Data" Check</a></li>-->
-                <!--                    </ul>-->
-                <!--                </li>-->
-
-
                 <li class="nav-item dropdown">
                     <a class="nav-link active" href="#" data-bs-toggle="dropdown">
                         <div class="sb-nav-link-icon"><i class="fas fa-users" style="color:gainsboro"></i></div>
@@ -212,7 +189,8 @@
                         <div class="sb-nav-link-icon"><i class="fas fa-tools" style="color:gainsboro"></i></div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows Scan</a></li>
+                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows
+                            Scan</a></li>
                         <li><a class="dropdown-item" href="/encrypt">Encrypt Password</a></li>
                     </ul>
                 </li>
@@ -223,23 +201,12 @@
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="/document">Get Started</a></li>
+                        <li><a class="dropdown-item" href="/docs/intro">Get Started</a></li>
                     </ul>
                 </li>
 
 
             </ul>
-
-
-            <!-- <ul class="navbar-nav">
-                {% if  session.get('username',None)%}
-                <li class="nav-item"><a class="nav-link" href="javascript:viod(0)">{{ session.get('username',None)}}</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="/logout">logout</a></li>
-                {% else %}
-                <li class="nav-item"><a class="nav-link" href="/login_page">Login</a></li>
-                {% endif %}
-            </ul> -->
 
             <!-- 用户系统 -->
             <ul class="navbar-nav" style="margin-right: 30px">
@@ -267,107 +234,135 @@
 
 </nav>
 
+<!-- Page Wrapper -->
+<div id="wrapper">
 
-<div id="layoutSidenav">
-    <div id="layoutSidenav_nav">
-        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion" style="background-color: #000000;">
-            <div class="sb-sidenav-menu">
-                <div class="nav">
-                    <br>
-                    <a class="nav-link" href="/">
-                        <div class="sb-nav-link-icon"><i class="fas fa-home"/></i></div>
-                        Home
-                    </a>
-                    <!--                    <div class="sb-sidenav-menu-heading">Web Test</div>-->
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
-                       aria-expanded="false" aria-controls="collapseLayouts">
-                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Data Test
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
-                         data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="/data_connect_management">Data Connections</a>
-                            <a class="nav-link" href="/data_point_management">Data Points</a>
-                            <a class="nav-link" href="/api_data_test_cases"> Data Validation Jobs </a>
-                        </nav>
-                    </div>
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
-                       aria-expanded="false" aria-controls="collapsePages">
-                        <div class="sb-nav-link-icon"><i class="fas fa-globe"></i></div>
-                        Web Test
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
-                         data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                            <a class="nav-link" href="/web_test_compare">Add new test case</a>
-                            <a class="nav-link" href="/web_test_cases">Web Test Cases</a>
-                            <a class="nav-link" href="/web_guide">Web Test Guide</a>
-                        </nav>
-                    </div>
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePagesapi"
-                       aria-expanded="false" aria-controls="collapsePages">
-                        <div class="sb-nav-link-icon"><i class="fas fa-poll-h"></i></div>
-                        API Test
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse" id="collapsePagesapi" aria-labelledby="headingTwo"
-                         data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesapi">
-                            <a class="nav-link" href="/api_intergration">System Test</a>
-                            <a class="nav-link" href="/test_api">Smoke Test</a>
-                            <a class="nav-link" href="/test_api">Regular Sanity Test</a>
-                            <a class="nav-link" href="/test_api">Hourly Health Check</a>
-                            <a class="nav-link" href="/test_api">"Null Data" Check</a></li>
-                        </nav>
-                    </div>
+        <!-- Sidebar - Brand -->
+        <!--            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">-->
+        <!--                <div class="sidebar-brand-icon rotate-n-15">-->
+        <!--                    <i class="fas fa-laugh-wink"></i>-->
+        <!--                </div>-->
+        <!--                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>-->
+        <!--            </a>-->
 
-                    <!--                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"-->
-                    <!--                       data-bs-target="#collapsePagesge"-->
-                    <!--                       aria-expanded="false" aria-controls="collapsePages">-->
-                    <!--                        <div class="sb-nav-link-icon"><i class="fas fa-shapes"></i></div>-->
-                    <!--                        General-->
-                    <!--                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>-->
-                    <!--                    </a>-->
-                    <!--                    <div class="collapse" id="collapsePagesge" aria-labelledby="headingTwo"-->
-                    <!--                         data-bs-parent="#sidenavAccordion">-->
-                    <!--                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesge">-->
-                    <!--                            <a class="nav-link" href="/access">Team Config</a>-->
-                    <!--                            <a class="nav-link" href="/access">Role Config</a>-->
-                    <!--                        </nav>-->
-                    <!--                    </div>-->
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
 
-                    <!--                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"-->
-                    <!--                       data-bs-target="#collapsePagesother"-->
-                    <!--                       aria-expanded="false" aria-controls="collapsePages">-->
-                    <!--                        <div class="sb-nav-link-icon"><i class="fas fa-tools"></i></div>-->
-                    <!--                        Other Tools-->
-                    <!--                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>-->
-                    <!--                    </a>-->
-                    <!--                    <div class="collapse" id="collapsePagesother" aria-labelledby="headingTwo"-->
-                    <!--                         data-bs-parent="#sidenavAccordion">-->
-                    <!--                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesoyher">-->
-                    <!--                            <a class="nav-link" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows-->
-                    <!--                                Scan</a>-->
-                    <!--                            <a class="nav-link" href="/encrypt">Encrypt Password</a>-->
-                    <!--                        </nav>-->
-                    <!--                    </div>-->
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="/">
+                <i class="fas fa-fw fa-home"></i>
+                <span>Home</span></a>
+        </li>
 
+        <!-- Divider -->
+        <hr class="sidebar-divider">
 
-                    <!--                    <div class="sb-sidenav-menu-heading">API Test</div>-->
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Test Sets
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
+               aria-expanded="true" aria-controls="collapseOne">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Data Test</span>
+            </a>
+            <div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <!--                        <h6 class="collapse-header">Custom Components:</h6>-->
+                    <a class="collapse-item " href="/data_connect_management">◈ Data
+                        Connections</a>
+                    <a class="collapse-item" href="/data_point_management">◈ Data Points</a>
+                    <a class="collapse-item" href="/api_data_test_cases">◈ Data Validation Jobs </a>
+                    <a class="collapse-item" href="/static/buttons.html">◈ Buttons</a>
                 </div>
             </div>
-            <!--            <div class="sb-sidenav-footer">-->
-            <!--                <div class="small">Logged in as:</div>-->
-            <!--                Start Bootstrap-->
-            <!--            </div>-->
-        </nav>
-    </div>
+        </li>
 
-    <div id="layoutSidenav_content">
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-globe"></i>
+                <span>Web Test</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <!--                        <h6 class="collapse-header">Custom Components:</h6>-->
+                    <a class="collapse-item" href="/web_test_compare">◈ Add new test case</a>
+                    <a class="collapse-item" href="/web_test_cases">◈ Web Test Cases</a>
+                    <a class="collapse-item" href="/web_guide">◈ Web Test Guide</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+               aria-expanded="true" aria-controls="collapseThree">
+                <i class="fas fa-fw fa-poll-h"></i>
+                <span>API Test</span>
+            </a>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <!--                        <h6 class="collapse-header">Custom Components:</h6>-->
+                    <a class="collapse-item" href="/api_intergration">◈ System Test</a>
+                    <a class="collapse-item" href="/test_api">◈ Smoke Test</a>
+                    <a class="collapse-item" href="/test_api">◈ Regular Sanity Test</a>
+                    <a class="collapse-item" href="/test_api">◈ Hourly Health Check</a>
+                    <a class="collapse-item" href="/test_api">◈ "Null Data" Check</a>
+                </div>
+            </div>
+        </li>
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Addons
+        </div>
+
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link" href="tables.html">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Tables</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+
+    </ul>
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+
+        <!--        &lt;!&ndash; Content Wrapper &ndash;&gt;-->
+        <!--        <div id="content-wrapper" class="d-flex flex-column">-->
+
+        <!--            &lt;!&ndash; Main Content &ndash;&gt;-->
+        <!--            <div id="content">-->
+
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
 
         <div class="offcanvas offcanvas-end" tabindex="-1" id="user-profile-modal"
              aria-labelledby="offcanvasRightLabel">
@@ -431,26 +426,68 @@
             });
         </script>
 
+
+        <!-- Bootstrap core JavaScript-->
+        <!--    <script src="/static/vendor/jquery/jquery.min.js"></script>-->
+        <script src="/static/bootstrap4.6/js/bootstrap.bundle.min.js"></script>
+
+
+        <!--    &lt;!&ndash; Custom scripts for all pages&ndash;&gt;-->
+        <script src="/static/js/sb-admin-2.min.js"></script>
+
+
+        <!--        <script>-->
+        <!--            $(document).ready(function () {-->
+        <!--                // 从 localStorage 中获取展开状态-->
+        <!--                var expandedMenu = localStorage.getItem('expandedMenu');-->
+
+        <!--                // 默认收缩起来-->
+        <!--                $('.collapse').collapse('hide');-->
+
+        <!--                // 恢复保存的展开状态-->
+        <!--                if (expandedMenu) {-->
+        <!--                    $('#' + expandedMenu).collapse('show');-->
+        <!--                }-->
+
+        <!--                // 点击子菜单后展开父菜单并保存展开状态-->
+        <!--                $('.collapse-item').on('click', function () {-->
+        <!--                    var parentId = $(this).closest('.collapse').attr('id');-->
+        <!--                    $(this).addClass('active');-->
+        <!--                    $('#' + parentId).collapse('show');-->
+        <!--                    localStorage.setItem('expandedMenu', parentId);-->
+        <!--                });-->
+        <!--            });-->
+
+        <!--            // 点击 Home 菜单时清空展开状态-->
+        <!--            $('.nav-link[href="/"]').on('click', function () {-->
+        <!--                localStorage.removeItem('expandedMenu');-->
+        <!--            });-->
+
+        <!--        </script>-->
+        <!--        <script>-->
+        <!--            $('.collapse').collapse('open');-->
+        <!--        </script>-->
+
         <script>
+            $(document).ready(function () {
+                $('.no-refresh-link').click(function (event) {
+                    event.preventDefault(); // 阻止默认行为，即页面刷新
 
-            window.addEventListener('DOMContentLoaded', event => {
-
-                // Toggle the side navigation
-                const sidebarToggle = document.body.querySelector('#sidebarToggle');
-                if (sidebarToggle) {
-                    // Uncomment Below to persist sidebar toggle between refreshes
-                    // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-                    //     document.body.classList.toggle('sb-sidenav-toggled');
-                    // }
-                    sidebarToggle.addEventListener('click', event => {
-                        event.preventDefault();
-                        document.body.classList.toggle('sb-sidenav-toggled');
-                        localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-                    });
-                }
-
+                    // var url = $(this).attr('href'); // 获取链接的目标 URL
+                    // var $collapse = $(this).closest('.collapse'); // 找到最近的折叠容器
+                    //
+                    // // 使用 Ajax 请求加载内容并更新折叠容器的内部内容
+                    // $.ajax({
+                    //     url: url,
+                    //     success: function (data) {
+                    //         $collapse.find('.collapse-inner').html(data); // 更新折叠容器的内部内容
+                    //         $collapse.collapse('show'); // 展开折叠容器
+                    //     }
+                    // });
+                });
             });
         </script>
+
 
         {% endblock %}
 

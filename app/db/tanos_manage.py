@@ -426,6 +426,18 @@ class tanos_manage():
             role_value = result[0]
             return role_value
 
+    def get_all_role_calue(self):
+        sql = """SELECT name,role_value FROM xcheck.role2  """
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            return result
+
+    def save_role_value(self, data):
+        for name, role_value in data:
+            sql = """UPDATE xcheck.role2 SET role_value = '{}' WHERE name = '{}'""".format(role_value, name)
+            useDB.useDB().executesql(sql)
+
 if __name__ == '__main__':
     testcase = tanos_manage()
     # a= testcase.search_by_connect_id(10002)

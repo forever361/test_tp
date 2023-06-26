@@ -10,6 +10,7 @@
 <script src="/static/tanos/popper.js"></script>
 <script src="/static/tanos/toastr.min.js"></script>
 <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+<link href="/static/tanos/awesome-bootstrap-checkbox.css" rel="stylesheet"/>
 
 
 <!-- Bootstrap Font Icon CSS -->
@@ -32,25 +33,37 @@
     <div style=" height:92%; width:100%; margin-left: 30px;  margin-right: 30px; margin-top: 10px; margin-bottom: 10px; "
          class="card">
         <!-- card-body中style 可以防止内容向下溢出 -->
-        <div class="card-body" style="padding-bottom:100px; overflow-y: auto; max-height: calc(100% - 200px);">
+        <div class="card-body" style="padding-bottom:10px; overflow-y: auto; max-height: calc(100% - 10px);">
 
             <h4>Role Management</h4>
+
+            <div style=" display: flex;flex-direction: column; margin-top: 20px">
+                <label class="form-check-label">
+                    R: Read and Execute
+                </label>
+
+                <label class="form-check-label">
+                    E: Edit
+                </label>
+            </div>
+
+
             <div style="margin-top: 20px">
                 <table class="table table-striped"
                        id="table"
                        data-toggle="table"
-                       data-height="580"
+                       data-height="550"
                        data-url="team/getAllRole.json"
                        data-pagination="true"
                        data-search="false"
-                       data-sort-name="is_owner"
-                       data-sort-order="desc"
+                       data-sort-name="team"
+                       data-sort-order="asc"
                 >
                     <thead>
                     <tr>
                         <th data-field="team" rowspan="2" data-width="10">TEAM</th>
-                        <th data-formatter="dataFormatter" rowspan="2" data-width="10"
-                            data-align="center">ALL
+                        <th data-formatter="allFormatter" rowspan="2" data-width="10"
+                            data-align="center">Select All
                         </th>
                         <th colspan="3" data-align="center">DATA TEST</th>
                         <th colspan="1" data-align="center">WEB TEST</th>
@@ -94,40 +107,8 @@
 
             </div>
 
-            <!--            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">-->
-            <!--                <button type="button" class="btn btn-primary" id="save-config">Save</button>-->
-            <!--            </div>-->
-
-            <!-- Permission Form -->
-            <div style="margin-top: 10px;" class="row">
-                <div class="d-flex justify-content-between mb-3">
-                    <!--                        <button class="btn btn-primary">-->
-                    <!--                            Add Team-->
-                    <!--                        </button>-->
-                </div>
-                <div class="col">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Team Name</th>
-                            <th>Edit Role</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for team in teams %}
-                        <tr>
-                            <td>{{ team.name }}</td>
-                            <td>
-                                <button class="btn btn-primary edit-button" data-bs-toggle="offcanvas"
-                                        data-bs-target="#team-profile-modal" data-team-id="{{ team.id }}">Edit
-                                </button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-
-                </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                <button type="button" class="btn btn-primary" id="save-config">Save</button>
             </div>
 
 
@@ -135,33 +116,9 @@
     </div>
 </div>
 
+
 <script>
 
-    function dataFormatter(value, row, index) {
-        let readChecked = "";
-        let writeChecked = "";
-
-        if (value === "11") {
-            readChecked = "checked";
-            writeChecked = "checked";
-        } else if (value === "10") {
-            readChecked = "checked";
-        } else if (value === "01") {
-            writeChecked = "checked";
-        }
-
-        return `
-            <div class="btn-group" role="group"  style="margin-left: 10px; margin-right: 10px"  aria-label="...">
-              <div class="form-check" >
-                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked} style="background-color: green;">
-                <label class="form-check-label" for="readCheckbox${index}">Read</label>
-              </div>
-              <div class="form-check" style="margin-left: 10px" >
-                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked} style="background-color: green;">
-                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
-              </div>
-            </div>`;
-    }
 
     function dataFormatter1(value, row, index) {
         let readChecked = "";
@@ -177,16 +134,16 @@
         }
 
         return `
-            <div class="btn-group" role="group" aria-label="...">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
-                <label class="form-check-label" for="readCheckbox${index}">Read</label>
-              </div>
-              <div class="form-check" style="margin-left: 10px">
-                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
-                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
-              </div>
-            </div>`;
+        <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="readCheckbox${index}_1" value="read" ${readChecked}>
+            <label class="form-check-label" for="readCheckbox${index}_1">R</label>
+          </div>
+          <div class="form-check" style="margin-top: 10px">
+            <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_1" value="write" ${writeChecked}>
+            <label class="form-check-label" for="writeCheckbox${index}_1">E</label>
+          </div>
+        </div>`;
     }
 
 
@@ -204,14 +161,14 @@
         }
 
         return `
-            <div class="btn-group" role="group" aria-label="...">
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
-                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_2" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
               </div>
-              <div class="form-check" style="margin-left: 10px">
-                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
-                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_2" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
               </div>
             </div>`;
     }
@@ -231,120 +188,577 @@
         }
 
         return `
-            <div class="btn-group" role="group" aria-label="...">
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="readCheckbox${index}" value="read" ${readChecked}>
-                <label class="form-check-label" for="readCheckbox${index}">Read</label>
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_3" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
               </div>
-              <div class="form-check" style="margin-left: 10px">
-                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}" value="write" ${writeChecked}>
-                <label class="form-check-label" for="writeCheckbox${index}">Write</label>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_3" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
               </div>
             </div>`;
     }
 
 
+    // function webFormatter(value, row, index) {
+    //     let readChecked = "";
+    //     let writeChecked = "";
+    //
+    //     if (value === "11") {
+    //         readChecked = "checked";
+    //         writeChecked = "checked";
+    //     } else if (value === "10") {
+    //         readChecked = "checked";
+    //     } else if (value === "01") {
+    //         writeChecked = "checked";
+    //     }
+    //
+    //     return `
+    //         <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+    //           <div class="form-check">
+    //             <input class="form-check-input" type="checkbox" id="readCheckbox${index}_4" value="read" ${readChecked}>
+    //             <label class="form-check-label" for="readCheckbox${index}">R</label>
+    //           </div>
+    //           <div class="form-check" style="margin-top: 10px">
+    //             <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_4" value="write" ${writeChecked}>
+    //             <label class="form-check-label" for="writeCheckbox${index}">E</label>
+    //           </div>
+    //         </div>`;
+    // }
+
+
+    function webFormatter1(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_4" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
+              </div>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_4" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
+              </div>
+            </div>`;
+    }
+
+
+    // function apiFormatter(value, row, index) {
+    //     let readChecked = "";
+    //     let writeChecked = "";
+    //
+    //     if (value === "11") {
+    //         readChecked = "checked";
+    //         writeChecked = "checked";
+    //     } else if (value === "10") {
+    //         readChecked = "checked";
+    //     } else if (value === "01") {
+    //         writeChecked = "checked";
+    //     }
+    //
+    //     return `
+    //         <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+    //           <div class="form-check">
+    //             <input class="form-check-input" type="checkbox" id="readCheckbox${index}_6" value="read" ${readChecked}>
+    //             <label class="form-check-label" for="readCheckbox${index}">R</label>
+    //           </div>
+    //           <div class="form-check" style="margin-top: 10px">
+    //             <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_6" value="write" ${writeChecked}>
+    //             <label class="form-check-label" for="writeCheckbox${index}">E</label>
+    //           </div>
+    //         </div>`;
+    // }
+
+
+    function apiFormatter1(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_5" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
+              </div>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_5" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
+              </div>
+            </div>`;
+    }
+
+
+    function apiFormatter2(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_6" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
+              </div>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_6" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
+              </div>
+            </div>`;
+    }
+
+
+    function apiFormatter3(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_7" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
+              </div>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_7" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
+              </div>
+            </div>`;
+    }
+
+
+    function apiFormatter4(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_8" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
+              </div>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_8" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
+              </div>
+            </div>`;
+    }
+
+
+    function apiFormatter5(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_9" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
+              </div>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_9" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
+              </div>
+            </div>`;
+    }
+
+
+    function toolsFormatter(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_10" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
+              </div>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_10" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
+              </div>
+            </div>`;
+    }
+
+
+    function configFormatter(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        if (value === "11") {
+            readChecked = "checked";
+            writeChecked = "checked";
+        } else if (value === "10") {
+            readChecked = "checked";
+        } else if (value === "01") {
+            writeChecked = "checked";
+        }
+
+        return `
+            <div class="btn-group" role="group" aria-label="..." style="display: flex;flex-direction: column; ">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="readCheckbox${index}_11" value="read" ${readChecked}>
+                <label class="form-check-label" for="readCheckbox${index}">R</label>
+              </div>
+              <div class="form-check" style="margin-top: 10px">
+                <input class="form-check-input" type="checkbox" id="writeCheckbox${index}_11" value="write" ${writeChecked}>
+                <label class="form-check-label" for="writeCheckbox${index}">E</label>
+              </div>
+            </div>`;
+    }
+
+    function allFormatter(value, row, index) {
+        let readChecked = "";
+        let writeChecked = "";
+
+        // 生成HTML字符串并返回,因为要照顾到生成的时差，不然无法识别同一时间生成的其他checkbox
+        const html = `
+    <div class="form-check abc-checkbox abc-checkbox-success">
+        <input class="form-check-input" id="readAllCheckbox${index}" type="checkbox" onclick="toggleAll('read', ${index})">
+        <label class="form-check-label" for="readAllCheckbox${index}">
+            R
+        </label>
+    </div>
+    <div class="form-check abc-checkbox abc-checkbox-success" style="margin-top: 10px">
+        <input class="form-check-input" id="writeAllCheckbox${index}" type="checkbox" onclick="toggleAll('write', ${index})">
+        <label class="form-check-label" for="writeAllCheckbox${index}">
+            E
+        </label>
+    </div>
+    `;
+
+        const div = document.createElement('div');
+        div.innerHTML = html;
+
+        const readAllCheckbox = div.querySelector(`#readAllCheckbox${index}`);
+        const writeAllCheckbox = div.querySelector(`#writeAllCheckbox${index}`);
+
+        setTimeout(function () {
+            const dataReadCheckbox1 = document.getElementById(`readCheckbox${index}_1`);
+            const dataReadCheckbox2 = document.getElementById(`readCheckbox${index}_2`);
+            const dataReadCheckbox3 = document.getElementById(`readCheckbox${index}_3`);
+            const dataReadCheckbox4 = document.getElementById(`readCheckbox${index}_4`);
+            const dataReadCheckbox5 = document.getElementById(`readCheckbox${index}_5`);
+            const dataReadCheckbox6 = document.getElementById(`readCheckbox${index}_6`);
+            const dataReadCheckbox7 = document.getElementById(`readCheckbox${index}_7`);
+            const dataReadCheckbox8 = document.getElementById(`readCheckbox${index}_8`);
+            const dataReadCheckbox9 = document.getElementById(`readCheckbox${index}_9`);
+            const dataReadCheckbox10 = document.getElementById(`readCheckbox${index}_10`);
+            const dataReadCheckbox11 = document.getElementById(`readCheckbox${index}_11`);
+
+            const dataWriteCheckbox1 = document.getElementById(`writeCheckbox${index}_1`);
+            const dataWriteCheckbox2 = document.getElementById(`writeCheckbox${index}_2`);
+            const dataWriteCheckbox3 = document.getElementById(`writeCheckbox${index}_3`);
+            const dataWriteCheckbox4 = document.getElementById(`writeCheckbox${index}_4`);
+            const dataWriteCheckbox5 = document.getElementById(`writeCheckbox${index}_5`);
+            const dataWriteCheckbox6 = document.getElementById(`writeCheckbox${index}_6`);
+            const dataWriteCheckbox7 = document.getElementById(`writeCheckbox${index}_7`);
+            const dataWriteCheckbox8 = document.getElementById(`writeCheckbox${index}_8`);
+            const dataWriteCheckbox9 = document.getElementById(`writeCheckbox${index}_9`);
+            const dataWriteCheckbox10 = document.getElementById(`writeCheckbox${index}_10`);
+            const dataWriteCheckbox11 = document.getElementById(`writeCheckbox${index}_11`);
+
+
+            if (
+                dataReadCheckbox1.checked &&
+                dataReadCheckbox2.checked &&
+                dataReadCheckbox3.checked &&
+                dataReadCheckbox4.checked &&
+                dataReadCheckbox5.checked &&
+                dataReadCheckbox6.checked &&
+                dataReadCheckbox7.checked &&
+                dataReadCheckbox8.checked &&
+                dataReadCheckbox9.checked &&
+                dataReadCheckbox10.checked &&
+                dataReadCheckbox11.checked
+            ) {
+                readChecked = "checked";
+            } else if (
+                dataReadCheckbox1.checked ||
+                dataReadCheckbox2.checked ||
+                dataReadCheckbox3.checked ||
+                dataReadCheckbox4.checked ||
+                dataReadCheckbox5.checked ||
+                dataReadCheckbox6.checked ||
+                dataReadCheckbox7.checked ||
+                dataReadCheckbox8.checked ||
+                dataReadCheckbox9.checked ||
+                dataReadCheckbox10.checked ||
+                dataReadCheckbox11.checked
+            ) {
+                readChecked = "indeterminate";
+            } else {
+                readChecked = "";
+            }
+
+
+            if (
+                dataWriteCheckbox1.checked &&
+                dataWriteCheckbox2.checked &&
+                dataWriteCheckbox3.checked &&
+                dataWriteCheckbox4.checked &&
+                dataWriteCheckbox5.checked &&
+                dataWriteCheckbox6.checked &&
+                dataWriteCheckbox7.checked &&
+                dataWriteCheckbox8.checked &&
+                dataWriteCheckbox9.checked &&
+                dataWriteCheckbox10.checked &&
+                dataWriteCheckbox11.checked
+            ) {
+                writeChecked = "checked";
+            } else if (
+                dataWriteCheckbox1.checked ||
+                dataWriteCheckbox2.checked ||
+                dataWriteCheckbox3.checked ||
+                dataWriteCheckbox4.checked ||
+                dataWriteCheckbox5.checked ||
+                dataWriteCheckbox6.checked ||
+                dataWriteCheckbox7.checked ||
+                dataWriteCheckbox8.checked ||
+                dataWriteCheckbox9.checked ||
+                dataWriteCheckbox10.checked ||
+                dataWriteCheckbox11.checked
+            ) {
+                writeChecked = "indeterminate";
+            } else {
+                writeChecked = "";
+            }
+
+
+            const readAllCheckbox = document.querySelector('#readAllCheckbox' + index);
+            // console.info(readAllCheckbox)
+            if (readAllCheckbox) {
+                readAllCheckbox.indeterminate = true;
+            }
+
+            const writeAllCheckbox = document.querySelector('#writeAllCheckbox' + index);
+            if (writeAllCheckbox) {
+                writeAllCheckbox.indeterminate = true;
+            }
+
+
+            readAllCheckbox.checked = (readChecked === "checked");
+            readAllCheckbox.indeterminate = (readChecked === "indeterminate");
+
+            writeAllCheckbox.checked = (writeChecked === "checked");
+            writeAllCheckbox.indeterminate = (writeChecked === "indeterminate");
+
+        }, 0.5);
+
+        return div.innerHTML;
+    }
+
 </script>
-
-
-<!-- Offcanvas for Team Profile -->
-<div style="width: 400px" class="offcanvas offcanvas-end" tabindex="-1" id="team-profile-modal"
-     aria-labelledby="offcanvasRightLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Role Config</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <!-- Team profile information and management functionality -->
-        <div id="test1" class="demo-tree-more"></div>
-
-        <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3">
-
-        <div style="margin-top: 20px; text-align: center;">
-            <label class="form-check-label" style="margin-right: 10px">Access:</label>
-            <div class="btn-group" role="group" aria-label="...">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="ritht-readCheckbox" value="read">
-                    <label class="form-check-label">Read</label>
-                </div>
-                <div class="form-check" style="margin-left: 10px">
-                    <input class="form-check-input" type="checkbox" id="ritht-writeCheckbox" value="write">
-                    <label class="form-check-label">Write</label>
-                </div>
-            </div>
-
-            <div style="margin-top: 60px;">
-                <button type="button" class="btn btn-danger " data-bs-dismiss="offcanvas">Close</button>
-                <button style="margin-left: 100px" type="button" class="btn btn-success" id="save-new-row">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <script>
 
 
-    $(document).on('click', '.edit-button', function () {
-        let teamId = $(this).data('team-id'); // 获取当前点击按钮对应的团队ID
-        console.info(teamId);
+    function toggleAll(type, index) {
 
-        function getData(callback) {
-            $.ajax({
-                url: '/team/getAllRole2.json',
-                method: 'GET',
-                data: {teamId: teamId},
-                success: function (result) {
-                    callback(result);
-                    // console.info(result)
-                    // 获取 read 和 write 值
-                    var read = result.data[0].read;
-                    var write = result.data[0].write;
+        const dataReadCheckboxes = document.querySelectorAll(`input[id^="readCheckbox${index}"]`);
+        // console.info(dataReadCheckboxes)
+        const dataWriteCheckboxes = document.querySelectorAll(`input[id^="writeCheckbox${index}"]`);
 
+        if (type === 'read') {
+            const allReadCheckbox = document.getElementById(`readAllCheckbox${index}`);
 
-                    console.info(read)
-                    console.info(write)
-
-                    console.log($('#ritht-readCheckbox'));  // 检查是否正确选择到复选框元素
-
-
-                    // 根据 read 和 write 值设置复选框状态
-                    if (read === '1') {
-                        $('#ritht-readCheckbox').prop('checked', true);
-                    } else {
-                        $('#ritht-readCheckbox').prop('checked', false);
-                    }
-
-                    if (write === '1') {
-                        $('#ritht-writeCheckbox').prop('checked', true);
-                    } else {
-                        $('#ritht-writeCheckbox').prop('checked', false);
-                    }
-                }
+            dataReadCheckboxes.forEach((checkbox) => {
+                checkbox.checked = allReadCheckbox.checked;
             });
         }
 
-        layui.use(['tree', 'util'], function () {
-            var tree = layui.tree;
-            var layer = layui.layer;
-            var util = layui.util;
+        if (type === 'write') {
+            const allWriteCheckbox = document.getElementById(`writeAllCheckbox${index}`);
 
-            getData(function (data) {
-                // 基本演示
-                tree.render({
-                    elem: '#test1',
-                    data: data.data, // 注意修改数据格式为 { "data": data2 }
-                    showCheckbox: true,
-                    id: 'demoId1',
-                    isJump: true,
-                    click: function (obj) {
-                        var data = obj.data;
-                        layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
-                    }
-                });
+            dataWriteCheckboxes.forEach((checkbox) => {
+                checkbox.checked = allWriteCheckbox.checked;
             });
+        }
+    }
+
+</script>
+
+<script>
+    // 获取保存按钮元素
+    var saveButton = $('#save-config');
+
+    // 点击保存按钮时的事件处理程序
+    saveButton.on('click', function () {
+        const numberOfCheckboxes = 4;
+        const checkboxStates = []; // 用于存储复选框状态的数组
+
+        var tableData = [];
+
+        $('#table tbody tr').each(function () {
+            var firstColumnValue = $(this).find('td:first').text();
+            tableData.push(firstColumnValue);
+        });
+
+        console.info(tableData)
+
+
+        for (let index = 0; index < numberOfCheckboxes; index++) {
+            const dataReadCheckbox1 = document.getElementById(`readCheckbox${index}_1`);
+            const dataReadCheckbox2 = document.getElementById(`readCheckbox${index}_2`);
+            const dataReadCheckbox3 = document.getElementById(`readCheckbox${index}_3`);
+            const dataReadCheckbox4 = document.getElementById(`readCheckbox${index}_4`);
+            const dataReadCheckbox5 = document.getElementById(`readCheckbox${index}_5`);
+            const dataReadCheckbox6 = document.getElementById(`readCheckbox${index}_6`);
+            const dataReadCheckbox7 = document.getElementById(`readCheckbox${index}_7`);
+            const dataReadCheckbox8 = document.getElementById(`readCheckbox${index}_8`);
+            const dataReadCheckbox9 = document.getElementById(`readCheckbox${index}_9`);
+            const dataReadCheckbox10 = document.getElementById(`readCheckbox${index}_10`);
+            const dataReadCheckbox11 = document.getElementById(`readCheckbox${index}_11`);
+
+            const dataWriteCheckbox1 = document.getElementById(`writeCheckbox${index}_1`);
+            const dataWriteCheckbox2 = document.getElementById(`writeCheckbox${index}_2`);
+            const dataWriteCheckbox3 = document.getElementById(`writeCheckbox${index}_3`);
+            const dataWriteCheckbox4 = document.getElementById(`writeCheckbox${index}_4`);
+            const dataWriteCheckbox5 = document.getElementById(`writeCheckbox${index}_5`);
+            const dataWriteCheckbox6 = document.getElementById(`writeCheckbox${index}_6`);
+            const dataWriteCheckbox7 = document.getElementById(`writeCheckbox${index}_7`);
+            const dataWriteCheckbox8 = document.getElementById(`writeCheckbox${index}_8`);
+            const dataWriteCheckbox9 = document.getElementById(`writeCheckbox${index}_9`);
+            const dataWriteCheckbox10 = document.getElementById(`writeCheckbox${index}_10`);
+            const dataWriteCheckbox11 = document.getElementById(`writeCheckbox${index}_11`);
+
+            // 获取复选框状态
+            const checkbox1_r = dataReadCheckbox1 ? dataReadCheckbox1.checked : false;
+            const checkbox2_r = dataReadCheckbox2 ? dataReadCheckbox2.checked : false;
+            const checkbox3_r = dataReadCheckbox3 ? dataReadCheckbox3.checked : false;
+            const checkbox4_r = dataReadCheckbox4 ? dataReadCheckbox4.checked : false;
+            const checkbox5_r = dataReadCheckbox5 ? dataReadCheckbox5.checked : false;
+            const checkbox6_r = dataReadCheckbox6 ? dataReadCheckbox6.checked : false;
+            const checkbox7_r = dataReadCheckbox7 ? dataReadCheckbox7.checked : false;
+            const checkbox8_r = dataReadCheckbox8 ? dataReadCheckbox8.checked : false;
+            const checkbox9_r = dataReadCheckbox9 ? dataReadCheckbox9.checked : false;
+            const checkbox10_r = dataReadCheckbox10 ? dataReadCheckbox10.checked : false;
+            const checkbox11_r = dataReadCheckbox11 ? dataReadCheckbox11.checked : false;
+
+            // 获取复选框状态
+            const checkbox1_w = dataWriteCheckbox1 ? dataWriteCheckbox1.checked : false;
+            const checkbox2_w = dataWriteCheckbox2 ? dataWriteCheckbox2.checked : false;
+            const checkbox3_w = dataWriteCheckbox3 ? dataWriteCheckbox3.checked : false;
+            const checkbox4_w = dataWriteCheckbox4 ? dataWriteCheckbox4.checked : false;
+            const checkbox5_w = dataWriteCheckbox5 ? dataWriteCheckbox5.checked : false;
+            const checkbox6_w = dataWriteCheckbox6 ? dataWriteCheckbox6.checked : false;
+            const checkbox7_w = dataWriteCheckbox7 ? dataWriteCheckbox7.checked : false;
+            const checkbox8_w = dataWriteCheckbox8 ? dataWriteCheckbox8.checked : false;
+            const checkbox9_w = dataWriteCheckbox9 ? dataWriteCheckbox9.checked : false;
+            const checkbox10_w = dataWriteCheckbox10 ? dataWriteCheckbox10.checked : false;
+            const checkbox11_w = dataWriteCheckbox11 ? dataWriteCheckbox11.checked : false;
+
+
+            // 将复选框状态存入数组
+            checkboxStates.push({
+                checkbox1_r,
+                checkbox2_r,
+                checkbox3_r,
+                checkbox4_r,
+                checkbox5_r,
+                checkbox6_r,
+                checkbox7_r,
+                checkbox8_r,
+                checkbox9_r,
+                checkbox10_r,
+                checkbox11_r,
+                checkbox1_w,
+                checkbox2_w,
+                checkbox3_w,
+                checkbox4_w,
+                checkbox5_w,
+                checkbox6_w,
+                checkbox7_w,
+                checkbox8_w,
+                checkbox9_w,
+                checkbox10_w,
+                checkbox11_w,
+                firstColumnValue: tableData[index]
+            });
+        }
+
+        console.info(checkboxStates)
+
+
+        // 发送数据到后端
+        $.ajax({
+            url: '/team/saveRole.json',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(checkboxStates),
+            contentType: 'application/json',
+            success: function (response) {
+                toastr.success('Save successfully!');
+            },
+            error: function (xhr, status, error) {
+                toastr.success('Fail to save');
+            }
         });
     });
+
 </script>
 
 
