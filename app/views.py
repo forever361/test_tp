@@ -36,7 +36,7 @@ def index():
         # print("user group:",groupname)
         # session['groupname'] = groupname[0]
 
-        return render_template("index.html", message='Hello %s,' % email)
+        return render_template("index.html", message='Hi, %s' % email)
 
 # @app.route('/', methods=['GET', 'POST'])
 # def index():

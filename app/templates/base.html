@@ -151,8 +151,8 @@
         <a class="navbar-brand " style="margin-left: 10px;font-size:1rem"
            href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
 
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggl" href="#!"><i
-                class="fas fa-sliders " style="color:gainsboro"></i></button>
+        <!--        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggl" href="#!"><i-->
+        <!--                class="fas fa-sliders " style="color:gainsboro"></i></button>-->
 
         {% if session.get('teams', [])|length >= 2 %}
         <!-- Dropdown Menu -->
@@ -170,7 +170,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNav1">
             <ul class="navbar-nav ms-auto" style="margin-right:50px">
-                <li class="nav-item dropdown">
+               <!-- <li class="nav-item dropdown">
                     <a class="nav-link active" href="#" data-bs-toggle="dropdown">
                         <div class="sb-nav-link-icon"><i class="fas fa-users" style="color:gainsboro"></i></div>
                     </a>
@@ -182,27 +182,23 @@
                         {% else %}
                         {% endif %}
                     </ul>
-                </li>
+                </li>-->
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link active" href="#" data-bs-toggle="dropdown">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tools" style="color:gainsboro"></i></div>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows
-                            Scan</a></li>
-                        <li><a class="dropdown-item" href="/encrypt">Encrypt Password</a></li>
-                    </ul>
-                </li>
+<!--                <li class="nav-item dropdown">-->
+<!--                    <a class="nav-link active" href="#" data-bs-toggle="dropdown">-->
+<!--                        <div class="sb-nav-link-icon"><i class="fas fa-tools" style="color:gainsboro"></i></div>-->
+<!--                    </a>-->
+<!--                    <ul class="dropdown-menu dropdown-menu-right">-->
+<!--                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows-->
+<!--                            Scan</a></li>-->
+<!--                        <li><a class="dropdown-item" href="/encrypt">Encrypt Password</a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link active" href="#" data-bs-toggle="dropdown">
-                        <div class="sb-nav-link-icon"><i class="fas fa-question-circle" style="color:gainsboro"></i>
-                        </div>
+                <li class="nav-item dropdown" style="color: #e0f0ef; font-size: 14px">
+                    <a class="nav-link active" href="/docs/intro" target="_blank">
+                        Get Started
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="/docs/intro" target="_blank" >Get Started</a></li>
-                    </ul>
                 </li>
 
 
@@ -280,7 +276,7 @@
                         Connections</a>
                     <a class="collapse-item" href="/data_point_management">◈ Data Points</a>
                     <a class="collapse-item" href="/api_data_test_cases">◈ Data Validation Jobs </a>
-                    <a class="collapse-item" href="/static/buttons.html">◈ Buttons</a>
+                    <!--                    <a class="collapse-item" href="/static/buttons.html">◈ Buttons</a>-->
                 </div>
             </div>
         </li>
@@ -296,7 +292,7 @@
                     <!--                        <h6 class="collapse-header">Custom Components:</h6>-->
                     <a class="collapse-item" href="/web_test_compare">◈ Add new test case</a>
                     <a class="collapse-item" href="/web_test_cases">◈ Web Test Cases</a>
-                    <a class="collapse-item" href="/web_guide">◈ Web Test Guide</a>
+                    <!--                    <a class="collapse-item" href="/web_guide">◈ Web Test Guide</a>-->
                 </div>
             </div>
         </li>
@@ -331,10 +327,41 @@
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse4"
+               aria-expanded="true" aria-controls="collapseThree">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Config</span>
+            </a>
+            <div id="collapse4" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <!--                        <h6 class="collapse-header">Custom Components:</h6>-->
+                    <a class="collapse-item" href="/access">◈ Team Config</a>
+                    {% if session.get('team', {})=='Admin' %}
+                    <a class="collapse-item" href="/role_config">◈ Role Config</a>
+                    {% else %}
+                    {% endif %}
+                </div>
+            </div>
         </li>
+
+
+                <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse5"
+               aria-expanded="true" aria-controls="collapseThree">
+                <i class="fas fa-fw fa-tools"></i>
+                <span>Tools</span>
+            </a>
+            <div id="collapse5" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">◈ Cyberflows Scan</a>
+                    <a class="collapse-item" href="/encrypt">◈ Encrypt Password</a>
+                </div>
+            </div>
+        </li>
+
+
+
+
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
