@@ -343,4 +343,4 @@ def saveCase():
     tanos_manage().new_job(data['job_name'],data_str,case_id)
     #查询case#查询job，跳转到http://127.0.0.1:8889/data_edit_test_case_tanos?id=10074，前端实现
 
-    return jsonify(success=True, message='run job successfully',case_id=case_id)
+    return jsonify(success=True, message='run job successfully',case_id=case_id,domain=app.config['URL'])

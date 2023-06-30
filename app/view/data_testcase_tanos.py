@@ -288,11 +288,11 @@ def runJob(jsonData):
     print(r_dict_conn_t)
 
 
-    if r_dict_conn_s['dbtype']=='PostgreSQL':
+    if r_dict_conn_s['dbtype']=='AliCloud-PostgreSQL':
         s_type='pg'
     elif  r_dict_conn_s['dbtype']=='123':
         s_type = '123'
-    if r_dict_conn_t['dbtype']=='PostgreSQL':
+    if r_dict_conn_t['dbtype']=='AliCloud-PostgreSQL':
         t_type='pg'
 
     connt= {

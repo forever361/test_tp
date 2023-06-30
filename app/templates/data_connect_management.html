@@ -537,13 +537,14 @@
                 'dbtype': dbtype,
                 'connect_type': connect_type,
                 'host': host,
-                'db_library': db_library,
+                'dblibrary': db_library,
                 'username': username,
                 'pwd': pwd,
                 'port': port,
             }),
             contentType: 'application/json',
             success: function (data) {
+                data = String(data);
                 if (data.startsWith('<!DOCTYPE permission html>')) {
                     // data以<!DOCTYPE html>开头
                     $('#add-row-modal').offcanvas('hide');
@@ -571,6 +572,7 @@
                     toastr.success('new connection added successfully!');
                     $('#add-row-modal').offcanvas('hide');
                     $('#table').bootstrapTable('refresh');
+
                 }
             },
             error: function () {

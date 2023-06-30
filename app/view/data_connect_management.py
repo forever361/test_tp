@@ -77,7 +77,7 @@ def add_row():
         data = request.json
         # TODO: Update data in the database
         tanos_manage().new_connection(data['connect_name'], data['dbtype'], data['connect_type'],
-                                      data['host'], data['db_library'], data['username'], data['pwd'], data['port'])
+                                      data['host'], data['dblibrary'], data['username'], data['pwd'], data['port'])
 
         return jsonify(success=True, message='add connection successfully')
 
