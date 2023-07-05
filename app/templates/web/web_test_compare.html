@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block content %}
+
+
+<!--下面两个是使用Code Mirror必须引入的-->
+<link rel="stylesheet" href="./static/codemirror/lib/codemirror.css"/>
+<script src="./static/codemirror/lib/codemirror.js"></script>
+<!--Java代码高亮必须引入-->
+<!--<script src="./static/codemirror/mode/clike/clike.js"></script>-->
+<!--<script src="./static/codemirror/mode/python/python.js"></script>-->
+<script src="./static/codemirror/addon/edit/matchbrackets.js"></script>
+<!--<script src=./static/codemirror/mode/shell/shell.js></script>-->
+<script src=./static/codemirror/mode/python/python.js></script>
+
+<!--引入css文件，用以支持主题-->
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/3024-night.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/3024-day.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+<link rel="stylesheet" href="./static/codemirror/theme/abbott.css"/>
+
+<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex; ">
+    <div style=" height:91%; width:100%; margin-left: 30px;  margin-right: 30px; margin-top: 10px; margin-bottom: 10px; "
+         class="card">
+        <form method="POST" class="row g-0">
+                <div class="col-md-11">
+                    <div class="card-body">
+                        <!-- Default panel contents -->
+                        <h5 class="card-title">Web automation </h5>
+                        <p>You can edit automation scripts to automate web UI operations.</p>
+
+                        <div class="card-text" style="display: flex; flex-direction: column;   align-items: center;">
+                            <textarea id="code" name="code"></textarea>
+
+
+                            <div id="loading" style="display:none" align="middle">
+                                <img src="./static/loading.gif" height="150" align="middle">
+                                <div style="color:#00b4ef">Testing...please wait a moment.</div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-1" style="align-items: center; display:flex; ">
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+
+                        <button type="button" class="btn btn-primary report"
+                                style="width: 100px;margin-top: 15px;" id="Report" onclick="window.location.href=('/')">
+                            Back
+                        </button>
+                        <button type="submit" name="Save" value="Save" class="btn btn-primary card-edit"
+                                style="width: 100px;margin-top: 15px" id="card-edit"> Save
+                        </button>
+                        <button type="submit" name="Run" value="Run" class="btn btn-success card-run"
+                                style="width: 100px;margin-top: 15px"
+                                id="card-run"> Run
+                        </button>
+
+                    </div>
+                </div>
+        </form>
+    </div>
+
+    <script>
+
+
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        var now_time = year + '_' + month + '_' + day + '_' + hour + '_' + minute;
+
+        var r1 = "#----Case_name: you must define a unique casename------------\n";
+        var case_name = "#Case_name= casename" + now_time + "\n\n";
+        <!--        var version ="# version: Python3\n";-->
+        <!--        var codeAreaTip ="# please edit your code here:\n";-->
+        <!--        var codeStart ="# code start\n\n";-->
+        <!--        var codeEnd = "# code end\n\n";-->
+        var codeTip = "'''\nThis function is used to edit test cases\n'''\n";
+        var code1 = "from seleniumbase import BaseCase\n\n";
+        var code2 = "class MyTestSuite(BaseCase):\n\t";
+        var code3 = "def test_case1(self):\n\t";
+        var codeAreaTip = "#----please edit your code here:----\n\t" + "#####################################\n\t\t";
+        var code4 = 'self.open("http://hkl20081427.hk.hsbc:20101/RBTools/pages/points/search.jsf")\n\t\t';
+        var code5 = 'self.type("#login\\:usr", "43917800")\n\t\t';
+        var code6 = 'self.type("#login\\:pwd", "********")\n\t\t';
+        var code7 = 'self.click("#login\\:rb")\n\t\t';
+
+        var test = 'self.assert_exact_text("RBWM Web Tools", "h2")\n';
+        var initValue = r1 + case_name + codeTip + code1 + code2 + code3 + codeAreaTip + code4 + code5 + code6 + code7 + test;
+
+
+        //根据DOM元素的id构造出一个编辑器
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            //mode: 'shell',
+            lineNumbers: true,
+            matchBrackets: true,    //括号匹配
+            theme: "3024-night",	//设置主题
+            mode: {
+                name: "python",
+                version: 3,
+                singleLineStringErrors: false
+            },
+            smartIndent: true, // 智能缩进
+            indentUnit: 4, // 智能缩进单位为4个空格长度
+            indentWithTabs: true,
+            //mode: "text/groovy",    //实现groovy代码高亮
+            //mode: "text/x-java", //实现Java代码高亮
+            //lineWrapping: true,	//代码折叠
+            //foldGutter: true,
+            //gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            //readOnly: true,        //只读
+        });
+
+
+        editor.setSize('1400px', '600px');     //设置代码框的长宽
+        //取得文本框的值
+        function quzhi() {
+            var value = editor.getValue();
+            console.log(value)
+            //editor.setValue(value)
+
+        }
+
+        // 设置初始文本，这个选项也可以在fromTextArea中配置
+        editor.setOption("value", initValue);
+        // 编辑器按键监听
+        //    editor.on("keypress", function() {
+        //    // 显示智能提示
+        //    editor.showHint(); // 注意，注释了CodeMirror库中show-hint.js第131行的代码（阻止了代码补全，同时提供智能提示）
+        //    });
+
+        //    editor.setValue("");    //先代码框的值清空
+        //    editor.setValue(obj.scriptCode);    //给代码框赋值
+
+        // editor.setOption("readOnly", true);
+        var test = document.getElementById("test");
+        test.onclick = function () {
+            var value = editor.getValue();
+            console.log(value);
+        }
+
+
+    </script>
+
+    {% if message %}
+    <script>
+        var msg = "{{ message }}"
+        layer.msg(msg, {time: 2000});
+    </script>
+    {% endif %}
+
+    {% endblock %}
