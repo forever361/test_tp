@@ -19,14 +19,14 @@ def test_suite():
 
 
 @web.route('/test_cases')
-# @user.authorize
+# @user.login_required
 def test_cases():
 
     return render_template("uitest/test_cases.html"  )
 
 
 @web.route('/add_test_case', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 def save_new_test_case():
     if request.method == 'GET':
         return render_template("uitest/new_test_cases.html"  )
@@ -44,7 +44,7 @@ def save_new_test_case():
 
 
 @web.route('/edit_test_case', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 def edit_test_case():
     user_id = session.get('userid', None)
     codelist=[]
@@ -115,7 +115,7 @@ def edit_test_case():
 
 
 @web.route('/copy_test_case', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 def copy_test_case():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -138,7 +138,7 @@ def copy_test_case():
 
 
 @web.route('/delete_test_case', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 def delete_test_case():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -162,7 +162,7 @@ def delete_test_case():
 
 #点击search后查询库中case列表
 @web.route('/test_case.json', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 def search_test_cases():
 
     if request.method == 'POST':
@@ -206,7 +206,7 @@ def search_test_cases():
 
 
 @web.route('/runtest.json', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 def runtest():
     # log.log().logger.info(request)
     if request.method == 'POST':
@@ -224,6 +224,6 @@ def runtest():
         return result
 
 @web.route('/test_run')
-# @user.authorize
+# @user.login_required
 def test_data():
     return render_template('test_error.html'  )

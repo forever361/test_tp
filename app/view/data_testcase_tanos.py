@@ -4,7 +4,7 @@ import subprocess
 import traceback
 from time import sleep
 
-from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, session, redirect, url_for
+from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, send_from_directory, session, redirect, url_for
 # from app import log
 from flask_socketio import emit
 
@@ -17,12 +17,14 @@ from app.util.log import logg
 from app.useDB import ConnectSQL
 from app.util.crypto_ECB import AEScoder
 from app.util.log_util.all_new_log import logger_all
+from app.util.permissions import permission_required
 from app.view import user, viewutil
 import os
 
 from app.view.data_batch_new import get_log
 
 from app.util.Constant_setting import Constant_cmd
+from app.application import app
 
 web = Blueprint('data_testcase_tanos', __name__, template_folder='templates/uitest')
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
@@ -30,22 +32,24 @@ configP = configparser.ConfigParser()
 
 
 @web.route('/api_data_test_cases_tanos')
-@user.authorize
+@user.login_required
+# @permission_required(session.get('groupname'))
 def test_cases():
-    return render_template("uitest/data_test_cases.html")
+    return permission_required(session.get('groupname'))(render_template)("uitest/data_test_cases.html")
 
 
 @web.route('/data_edit_test_case_tanos', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
+# @permission_required(session.get('groupname'))
 def edit_test_case():
     user_id = session.get('userid', None)
-    user_path = '{}/userinfo/{}/'.format(configPath, user_id)
+    folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
 
     if request.method == 'GET':
         info = request.values
         id = viewutil.getInfoAttribute(info, 'id')
 
-        ini_path = user_path + '/' + 'config.ini'
+        ini_path = folder_path + '/config/' + 'config.ini'
         # 添加section
         configP.clear()
         configP.add_section("default")
@@ -61,7 +65,8 @@ def edit_test_case():
         infor_value = ConnectSQL().data_get_infor_value_id(id)
         print(infor_value)
 
-    return render_template("uitest/data_edit_tanos.html")
+    return permission_required(session.get('groupname'))(render_template)("uitest/data_edit_tanos.html")
+
 
     # SAVE保存的过程,点save就相当于提交了表单走post
     # elif request.method == 'POST':
@@ -76,7 +81,7 @@ def edit_test_case():
 
 
 @web.route('/runtest_tanos.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest_tanos():
     if request.method == 'POST':
 
@@ -129,7 +134,7 @@ def runtest_tanos():
 
 
 @web.route('/data_search_report_tanos', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def web_search_report():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -138,8 +143,9 @@ def web_search_report():
         id = viewutil.getInfoAttribute(info, 'id')
         # print('idididiidididid', id)
         user_id = session.get('userid', None)
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', user_id)
 
-        return render_template("userinfo/{}/{}_data_test.html".format(user_id, id))
+        return send_from_directory(folder_path,"/html/{}_data_test.html".format(id))
 
 
 
@@ -282,12 +288,28 @@ def runJob(jsonData):
     print(r_dict_conn_t)
 
 
-    if r_dict_conn_s['dbtype']=='PostgreSQL':
-        s_type='pg'
-    elif  r_dict_conn_s['dbtype']=='123':
-        s_type = '123'
-    if r_dict_conn_t['dbtype']=='PostgreSQL':
-        t_type='pg'
+    # if r_dict_conn_s['dbtype']=='AliCloud-PostgreSQL':
+    #     s_type='pg'
+    # elif  r_dict_conn_s['dbtype']=='123':
+    #     s_type = '123'
+    # if r_dict_conn_t['dbtype']=='AliCloud-PostgreSQL':
+    #     t_type='pg'
+
+    #TYPE:
+    #orl,pg,ali,landingserver_file,landingserver_file_batch
+
+    type_mapping = {
+        'AliCloud-PostgreSQL': 'pg',
+        'DB-Oracle': 'orl',
+        'AliCloud-Maxcompute': 'ali',
+        'Fileserver': 'landingserver_file',
+        '456': '456'
+    }
+    s_type = type_mapping.get(r_dict_conn_s['dbtype'], 'default_value')
+    t_type = type_mapping.get(r_dict_conn_t['dbtype'], 'default_value')
+
+    # s_type = type_mapping.get('DB-Oracle', 'default_value')
+    # t_type = type_mapping.get('AliCloud-Maxcompute', 'default_value')
 
     connt= {
         'Source TYPE': s_type,
@@ -312,7 +334,8 @@ def runJob(jsonData):
 
 
     user_id = session.get('userid', None)
-    user_path = '{}/userinfo/{}/'.format(configPath, user_id)
+    folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
+    user_path = folder_path + '/config/' 
 
     file = open(user_path + 'data_conn.txt', 'w')
     file.write(str(connt))

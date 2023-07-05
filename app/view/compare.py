@@ -15,7 +15,7 @@ configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 
 
 @web.route('/test_compare',methods=['GET'])
-# @user.authorize
+# @user.login_required
 def test_compare():
     return render_template("code_mode/test_compare.html"  )
 

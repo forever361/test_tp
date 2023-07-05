@@ -64,7 +64,7 @@
          class="card">
         <div class="card-body">
             <!-- Default panel contents -->
-            <h4 class="card-title">Data Connection Management</h4>
+            <h5 class="card-title">Data Connection Management</h5>
             <div class="card-text">
                 <p>On this page, you can configure the connection server information,
                     and of course you can directly obtain the server information of the
@@ -81,7 +81,8 @@
                         <form>
                             <div class="form-group">
                                 <label for="new-row-name" class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" id="new-row-name" placeholder="example:pg-servcer1-example">
+                                <input type="text" class="form-control" id="new-row-name"
+                                       placeholder="example:pg-servcer1-example">
                             </div>
                             <div class="form-group">
                                 <label for="new-row-dbtype" class="col-form-label">Connection Type:</label>
@@ -252,11 +253,11 @@
 
     // Define options for select input
     const typeOptions_db = [
-        {value: "PostgreSQL", text: "AliCloud-PostgreSQL"},
-        {value: "AliCloud", text: "AliCloud-Maxcompute"},
-        {value: "Oracle", text: "DB-Oracle"},
-        {value: "DB2", text: "DB-DB2"},
-        {value: "GCP", text: "GCP-BigQuery"},
+        {value: "AliCloud-PostgreSQL", text: "AliCloud-PostgreSQL"},
+        {value: "AliCloud-Maxcompute", text: "AliCloud-Maxcompute"},
+        {value: "DB-Oracle", text: "DB-Oracle"},
+        {value: "DB-DB2", text: "DB-DB2"},
+        {value: "GCP-BigQuery", text: "GCP-BigQuery"},
         {value: "API", text: "API"},
         {value: "Fileserver", text: "Fileserver"},
     ];
@@ -536,20 +537,49 @@
                 'dbtype': dbtype,
                 'connect_type': connect_type,
                 'host': host,
-                'db_library': db_library,
+                'dblibrary': db_library,
                 'username': username,
                 'pwd': pwd,
                 'port': port,
             }),
             contentType: 'application/json',
-            success: function () {
-                toastr.success('new connection added successfully!');
-                $('#add-row-modal').offcanvas('hide');
-                $('#table').bootstrapTable('refresh');
+            success: function (data) {
+                data = String(data);
+                if (data.startsWith('<!DOCTYPE permission html>')) {
+                    // data以<!DOCTYPE html>开头
+                    $('#add-row-modal').offcanvas('hide');
+                    // toastr.error('Sorry, you do not have permission to access!');
+                    $('#table').bootstrapTable('refresh');
+                    let dialog = bootbox.dialog({
+                        title: 'Permission denied!',
+                        message: "<p>Sorry, you do not have permission to operate! </p>",
+                        centerVertical: true,
+                        buttons:
+                            {
+                                ok: {
+                                    label: "Yes",
+                                    className: 'btn-danger',
+                                    callback:
+                                        function () {
+                                        }
+                                }
+                            }
+                    });
+
+
+                } else {
+                    console.info(data)
+                    toastr.success('new connection added successfully!');
+                    $('#add-row-modal').offcanvas('hide');
+                    $('#table').bootstrapTable('refresh');
+
+                }
             },
             error: function () {
                 $('#add-row-modal').offcanvas('hide');
                 toastr.error('failed to add new connection!');
+                $('#table').bootstrapTable('refresh');
+
             }
         });
 

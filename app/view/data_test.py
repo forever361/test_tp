@@ -5,7 +5,7 @@ import os
 import sys
 
 from app.util.IP_PORT import Constant
-from app.view.user import authorize
+
 
 basePath = os.path.join(os.path.join(os.path.dirname(__file__)))
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
@@ -21,7 +21,7 @@ web.send_file_max_age_default = timedelta(seconds=1)
 
 
 @web.route('/test_data')
-@authorize
+# @authorize
 def test_data():
     return render_template('/test_data/test_data2.html'  )
 

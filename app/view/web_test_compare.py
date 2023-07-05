@@ -1,6 +1,7 @@
 import subprocess
 from datetime import datetime
 from app.util.crypto_ECB import AEScoder
+from app.util.permissions import permission_required
 from app.view import viewutil, user
 
 from flask import Blueprint, render_template, jsonify, request, redirect, flash, session
@@ -14,9 +15,11 @@ configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 
 
 @web.route('/web_test_compare',methods=['GET'])
-@user.authorize
+@user.login_required
+# @permission_required(session.get('groupname'))
 def test_compare():
-    return render_template("code_mode/web_test_compare.html"  )
+    return permission_required(session.get('groupname'))(render_template)("web/web_test_compare.html"  )
+
 
 @web.route('/web_test_compare',methods=['POST'])
 def test_compare1():
@@ -62,10 +65,10 @@ def test_compare1():
             code = AEScoder().encrypt(code)
             ConnectSQL().web_write_config_value_all(user_id, case_name, code)
 
-            return render_template('code_mode/web_test_compare_save.html'  ,
+            return render_template('web/web_test_compare_save.html'  ,
                                    message='Save success!',code_str=code_str)
         else:
-            return render_template('code_mode/web_test_compare_save.html'  ,
+            return render_template('web/web_test_compare_save.html'  ,
                                    message='Casename already exists!',code_str=code_str)
 
 

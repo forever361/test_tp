@@ -15,7 +15,7 @@ bootstrap-table/
 └── dist/
     ├── extensions/
     ├── locale/
-    ├── bootstrap-table-locale-all.js
+    ├── bootstrap-table-locale-all-fontawesome.js
     ├── bootstrap-table-locale-all.min.js
     ├── bootstrap-table.css
     ├── bootstrap-table.min.css
@@ -23,7 +23,7 @@ bootstrap-table/
     └── bootstrap-table.min.js
 {% endhighlight %}
 
-The `dist/` folder includes everything compiled and minified with `src/`. For ease of use, we also compile all locale files into one file `bootstrap-table-locale-all.js`.
+The `dist/` folder includes everything compiled and minified with `src/`. For ease of use, we also compile all locale files into one file `bootstrap-table-locale-all-fontawesome.js`.
 
 ## Source Code
 

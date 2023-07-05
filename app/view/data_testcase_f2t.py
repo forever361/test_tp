@@ -22,13 +22,13 @@ configP = configparser.ConfigParser()
 
 
 @web.route('/api_data_test_cases_f2t')
-@user.authorize
+@user.login_required
 def test_cases():
     return render_template("uitest/data_test_cases_f2t.html")
 
 
 @web.route('/data_edit_test_case_f2t', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def edit_test_case():
     user_id = session.get('userid', None)
     codelist = []
@@ -114,7 +114,7 @@ def edit_test_case():
 
 
 @web.route('/data_f2t_runtest.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest2():
     if request.method == 'POST':
 
@@ -234,7 +234,7 @@ def runtest2():
 
 
 @web.route('/data_delete_test_case_f2t', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def delete_test_case():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -257,7 +257,7 @@ def delete_test_case():
 
 
 @web.route('/data_f2t_search_report', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def web_search_report():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -272,7 +272,7 @@ def web_search_report():
 
 # 点击search后查询库中case列表
 @web.route('/data_test_case_f2t.json', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 def search_test_cases():
     if request.method == 'POST':
         # logger.info("2222222222222222222")
@@ -316,7 +316,7 @@ def search_test_cases():
 
 
 @web.route('/runtest.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest():
     print("enter run api...")
     if request.method == 'POST':
@@ -335,13 +335,13 @@ def runtest():
 
 
 @web.route('/test_run')
-@user.authorize
+@user.login_required
 def test_data():
     return render_template('test_error.html')
 
 
 @web.route('/data_guide', methods=['GET'])
-# @user.authorize
+# @user.login_required
 def test_compare():
     return render_template("guide/data_guide.html")
 
@@ -354,7 +354,7 @@ def error():
     return (message)
 
 # @web.route('/data_csv_report', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 # def data_csv_report():
 #     # log.log().logger.info(request.value)
 #     if request.method == 'GET':

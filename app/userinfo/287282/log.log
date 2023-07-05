@@ -1,9 +1,0 @@
-|||||||||||||||||||||||||Start checking|||||||||||||||||||||||||
-Prepare data...
-2022-11-01 11:49:19,456 [] [INFO] 224 - ====================DEMO:start check====================
-2022-11-01 11:49:19,456 [] [INFO] 240 - different columns between Source and Target are: {'ID'}
-2022-11-01 11:49:30,857 [] [ERROR] 208 - value check failed
-2022-11-01 11:49:48,760 [] [INFO] 87 - |total_count   check|source:0 target:1
-2022-11-01 11:49:48,820 [] [ERROR] 108 - count check failed
-2022-11-01 11:49:48,835 [] [INFO] 483 - count check fail please check table:['demo']
-

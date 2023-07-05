@@ -6,6 +6,7 @@ from app.db import test_case_manage
 from app.util.log import logg
 from app.useDB import ConnectSQL
 from app.util.crypto_ECB import AEScoder
+from app.util.permissions import permission_required
 from app.view import user, viewutil
 import os
 
@@ -19,13 +20,15 @@ configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 
 
 @web.route('/web_test_cases')
-@user.authorize
+@user.login_required
+# @permission_required(session.get('groupname'))
 def test_cases():
-    return render_template("uitest/web_test_cases.html"  )
+    return permission_required(session.get('groupname'))(render_template)("uitest/web_test_cases.html"  )
+
 
 
 @web.route('/web_add_test_case', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def save_new_test_case():
     if request.method == 'GET':
         return render_template("uitest/new_test_cases.html"  )
@@ -43,7 +46,7 @@ def save_new_test_case():
 
 
 @web.route('/web_edit_test_case', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def edit_test_case():
     user_id = session.get('userid', None)
     codelist=[]
@@ -131,7 +134,7 @@ def edit_test_case():
 
 
 @web.route('/web_copy_test_case', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def copy_test_case():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -154,7 +157,7 @@ def copy_test_case():
 
 
 @web.route('/web_delete_test_case', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def delete_test_case():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -178,7 +181,7 @@ def delete_test_case():
 
 
 @web.route('/web_search_report', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def web_search_report():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -191,7 +194,7 @@ def web_search_report():
 
 #点击search后查询库中case列表
 @web.route('/web_test_case.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def search_test_cases():
 
     if request.method == 'POST':
@@ -235,7 +238,7 @@ def search_test_cases():
 
 
 @web.route('/runtest.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest():
     # log.log().logger.info(request)
     if request.method == 'POST':
@@ -253,12 +256,13 @@ def runtest():
         return result
 
 @web.route('/test_run')
-@user.authorize
+@user.login_required
 def test_data():
     return render_template('test_error.html'  )
 
 
 @web.route('/web_guide',methods=['GET'])
-#@user.authorize
+@user.login_required
+# @permission_required(session.get('groupname'))
 def test_compare():
-    return render_template("guide/web_guide.html"  )
+    return permission_required(session.get('groupname'))(render_template)("guide/web_guide.html"  )

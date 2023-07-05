@@ -14,7 +14,7 @@ from traceback import print_exc
 from app.util.IP_PORT import Constant
 from app.util.log_util.all_new_log import logger_all
 from app.util.log_util.new_log import logger
-
+from app.application import app
 
 basePath = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 sys.path.append(basePath)
@@ -26,9 +26,11 @@ LOG_PATH_NEW = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 
 
 
-userid = Constant_id().cookie_id
-iniPath = os.path.join(LOG_PATH_NEW + "/userinfo/{}/config.ini".format(userid))
-logPath = os.path.join(LOG_PATH_NEW + "/userinfo/{}/log.log".format(userid))
+user_id = Constant_id().cookie_id
+folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
+user_path = folder_path + '/config/' 
+iniPath = os.path.join(user_path + "/config.ini")
+logPath = os.path.join(user_path + "/log.log")
 
 
 config = configparser.ConfigParser()
@@ -121,8 +123,8 @@ class BatchChecker(Checker):
                 self.s_validator.table, int(times))
             Excel_write.get_target_table_name(
                 self.t_validator.table, int(times))
-            Excel_write.get_value_detail('http://{}:{}/static/userinfo/{}/{}_{}.csv'.format(
-                Constant().ip, Constant().port, userid, self.t_validator.table, caseid), int(times))
+            Excel_write.get_value_detail('https://{}:{}/static/user_files/{}/csv/{}_{}.csv'.format(
+                Constant().ip, Constant().port, user_id, self.t_validator.table, caseid), int(times))
 
             if self.s_validator.count[key] != self.t_validator.count[key]:
                 count_check_flag = False
@@ -154,6 +156,7 @@ class BatchChecker(Checker):
         value_check_flag = True
         # verify_result_log_file_path = f"{LOG_PATH}/{self.s_validator.table}"
         # userid = ConnectSQL().get_personal_user_id()
+        userPath = folder_path + '/csv/' 
         verify_result_log_file_path = LOG_PATH+'/Log'
         date_str = datetime.strftime(datetime.now(), '%Y%m%d%H%M')
 
@@ -163,7 +166,7 @@ class BatchChecker(Checker):
             os.makedirs(verify_result_log_file_path)
 
         batch_valueflag = True
-        userPath = os.path.join(LOG_PATH_NEW + "/static/userinfo/{}".format(userid))
+        # userPath = os.path.join(csv_path + "/static/userinfo/{}".format(userid))
 
         # user_id = ConnectSQL().get_personal_user_id()
         # ExcelLog().create_excel(user_id, self.s_validator.verify_tablename)

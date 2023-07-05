@@ -1,1 +1,1 @@
-nohup /hsbc/tac/app/anaconda3/bin/python3.6 run.py > runoob.log 2>&1 &
+nohup /uat/app/anaconda3/envs/vnpy1/bin/python3.6 run.py > runoob.log 2>&1 &

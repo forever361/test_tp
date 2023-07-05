@@ -2,12 +2,13 @@ from flask import Blueprint, render_template, request, jsonify
 
 from app.util.crypto_ECB import AEScoder
 from app.view import viewutil
+from app.application import app
 
 web = Blueprint("othertools", __name__)
 
 @web.route('/encrypt',methods=['GET'])
 def encrypt_page():
-        return render_template('encrypt.html')
+        return render_template('encrypt.html',domain=app.config['URL'])
 
 
 @web.route('/encrypt.json',methods=['POST'])

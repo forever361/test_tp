@@ -2,7 +2,6 @@ import configparser
 import os
 import sys
 
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 
 import psycopg2
@@ -42,6 +41,7 @@ from app.data2_check.parameter import Parameter_or_ali, Parameter_or_or,Paramete
 from app.data2_check.commom.main_Gen import Parser as GenReport
 from app.data2_check.commom.write_excel_data import ExcelUtilAll
 from app.util.log_util.new_log import logger
+from app.application import app
 
 
 
@@ -591,11 +591,13 @@ def method_main():
     value_check_error_list = []
     count_check_error_list = []
     config = configparser.ConfigParser()
+    folder_path = os.path.join(app.root_path, 'static', 'user_files', user_id)
+
     user_path = '{}/userinfo/{}/'.format(configPath, userid)
-    ini_path = user_path + 'config.ini'
+    ini_path = folder_path + '/config/config.ini'
     config.read(ini_path)
     # clear excel
-    excel_path = user_path + 'verification_result.xlsx'
+    excel_path = folder_path + '/config/verification_result.xlsx'
     if os.path.exists(excel_path):
         os.remove(excel_path)
         wb = Workbook()

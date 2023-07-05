@@ -1,18 +1,22 @@
 from traceback import print_exc
 
 import psycopg2
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, session
 
 from app import useDB
 from app.db.tanos_manage import tanos_manage
 from app.util.crypto_ECB import AEScoder
-from app.view import viewutil
+from app.util.permissions import permission_required
+from app.view import viewutil, user
 
 web = Blueprint("data_ponint_management", __name__)
 
+
 @web.route('/data_point_management',methods=['GET'])
+@user.login_required
+# @permission_required(session.get('groupname'))
 def encrypt_page():
-        return render_template('/data_point_management.html')
+        return permission_required(session.get('groupname'))(render_template)('/data_point_management.html')
 
 
 @web.route('/add_point', methods=['POST'])

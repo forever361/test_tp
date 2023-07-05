@@ -4,7 +4,7 @@ import subprocess
 import traceback
 from time import sleep
 
-from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, session
+from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, send_from_directory, session
 # from app import log
 from app.db import test_case_manage
 from app.util import global_manager
@@ -13,12 +13,14 @@ from app.util.log import logg
 from app.useDB import ConnectSQL
 from app.util.crypto_ECB import AEScoder
 from app.util.log_util.all_new_log import logger_all
+from app.util.permissions import permission_required
 from app.view import user, viewutil
 import os
 
 from app.view.data_batch_new import get_log
 
 from app.util.Constant_setting import Constant_cmd
+from app.application import app
 
 web = Blueprint('data_testcase', __name__, template_folder='templates/uitest')
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
@@ -26,13 +28,15 @@ configP = configparser.ConfigParser()
 
 
 @web.route('/api_data_test_cases')
-@user.authorize
+@user.login_required
+# @permission_required(session.get('groupname'))
 def test_cases():
-    return render_template("uitest/data_test_cases.html")
+    return permission_required(session.get('groupname'))(render_template)("uitest/data_test_cases.html")
+
 
 
 @web.route('/data_edit_test_case', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def edit_test_case():
     user_id = session.get('userid', None)
     codelist = []
@@ -169,7 +173,7 @@ def edit_test_case():
 
 
 @web.route('/runtest2.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest2():
     if request.method == 'POST':
 
@@ -252,7 +256,7 @@ def runtest2():
             return result, {'Content-Type': 'application/json'}
 
 @web.route('/runtest2_ssh.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest2_ssh():
     if request.method == 'POST':
         info = request.values
@@ -404,7 +408,7 @@ def runtest2_ssh():
 
 
 @web.route('/data_delete_test_case', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def delete_test_case():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -428,7 +432,7 @@ def delete_test_case():
 
 
 @web.route('/data_search_report', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def data_search_report():
     # log.log().logger.info(request.value)
     if request.method == 'GET':
@@ -437,13 +441,15 @@ def data_search_report():
         id = viewutil.getInfoAttribute(info, 'id')
         # print('idididiidididid', id)
         user_id = session.get('userid', None)
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
+        print(1111,folder_path)
 
-        return render_template("userinfo/{}/{}_data_test.html".format(user_id, id))
+        return send_from_directory(folder_path+'/html',"{}_data_test.html".format(id))
 
 
 # 点击search后查询库中case列表
 @web.route('/data_test_case.json', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 def search_test_cases():
     if request.method == 'POST':
         pass
@@ -488,7 +494,7 @@ def search_test_cases():
 
 
 @web.route('/runtest.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest():
     print("enter run api...")
     if request.method == 'POST':
@@ -507,13 +513,13 @@ def runtest():
 
 
 @web.route('/test_run')
-@user.authorize
+@user.login_required
 def test_data():
     return render_template('test_error.html')
 
 
 @web.route('/data_guide', methods=['GET'])
-# @user.authorize
+# @user.login_required
 def test_compare():
     return render_template("guide/data_guide.html")
 
@@ -526,7 +532,7 @@ def error():
     return (message)
 
 # @web.route('/data_csv_report', methods=['POST', 'GET'])
-# @user.authorize
+# @user.login_required
 # def data_csv_report():
 #     # log.log().logger.info(request.value)
 #     if request.method == 'GET':

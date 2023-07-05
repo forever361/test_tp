@@ -18,7 +18,8 @@ from app.util.IP_PORT import Constant
 from app.util.crypto_ECB import AEScoder
 from app.view import viewutil, user
 
-from app.view.user import authorize
+
+from app.application import app
 
 basePath = os.path.join(os.path.join(os.path.dirname(__file__),"../"))
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
@@ -30,9 +31,9 @@ configP2 = configparser.ConfigParser()
 web = Blueprint("batch_new", __name__)
 
 @web.route('/api_batch_test_data',methods=['GET'])
-@user.authorize
+@user.login_required
 def batch_test_compare():
-    return render_template("/code_mode/batch_tanos_data_new.html" )
+    return render_template("/code_mode/batch_tanos_data_new.html",domain=app.config['URL'] )
 
 
 @web.route('/api_batch_test_data',methods=['POST'])
@@ -114,7 +115,7 @@ def batch_test_compare1():
 
 
 @web.route('/runtest3.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest3():
     if request.method == 'POST':
 
@@ -235,7 +236,7 @@ line_number = [0] #存放当前日志行数
 log_data = []
 # 定义接口把处理日志并返回到前端
 @web.route('/get_log',methods=['GET','POST'])
-# @user.authorize
+# @user.login_required
 def get_log(flag=False):
     if flag==False:
         log_data = red_logs() # 获取日志
@@ -342,4 +343,4 @@ def saveCase():
     tanos_manage().new_job(data['job_name'],data_str,case_id)
     #查询case#查询job，跳转到http://127.0.0.1:8889/data_edit_test_case_tanos?id=10074，前端实现
 
-    return jsonify(success=True, message='run job successfully',case_id=case_id)
+    return jsonify(success=True, message='run job successfully',case_id=case_id,domain=app.config['URL'])

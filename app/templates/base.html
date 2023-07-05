@@ -10,101 +10,134 @@
 <style>
 
     .dropdown-submenu {
-            position: relative;
-        }
-        .dropdown-submenu > .dropdown-menu {
-            top: 0;
-            left: 100%;
-            margin-top: -6px;
-            margin-left: -1px;
-            -webkit-border-radius: 0 6px 6px 6px;
-            -moz-border-radius: 0 6px 6px;
-            border-radius: 0 6px 6px 6px;
-        }
-        .dropdown-submenu:hover > .dropdown-menu {
-            display: block;
-        }
-        .dropdown-submenu > a:after {
-            display: block;
-            content: " ";
-            float: right;
-            width: 0;
-            height: 0;
-            border-color: transparent;
-            border-style: solid;
-            border-width: 5px 0 5px 5px;
-            border-left-color: #ccc;
-            margin-top: 5px;
-            margin-right: -10px;
-        }
-        .dropdown-submenu:hover > a:after {
-            border-left-color: #fff;
-        }
-        .dropdown-submenu.pull-left {
-            float: none;
-        }
-        .dropdown-submenu.pull-left > .dropdown-menu {
-            left: -100%;
-            margin-left: 10px;
-            -webkit-border-radius: 6px 0 6px 6px;
-            -moz-border-radius: 6px 0 6px 6px;
-            border-radius: 6px 0 6px 6px;
-        }
+        position: relative;
+    }
+
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+    }
+
+    .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-submenu > a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover > a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left > .dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+
+
+    .avatar {
+        display: inline-block;
+        width: 38px;
+        height: 35px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .bg-gradient-primary {
+        background-color: #4e73df;
+        background-image: linear-gradient(180deg, #000000 10%, #224abe 100%);
+        background-size: cover;
+    }
+
+    .sidebar .nav-item .collapse .collapse-inner .collapse-item.active, .sidebar .nav-item .collapsing .collapse-inner .collapse-item.active {
+        color: #4e73df;
+        font-weight: 700;
+    }
+
 
 </style>
 
 
 <style type="text/css">
 
-        /* ============ desktop view ============ */
-        @media all and (min-width: 992px) {
+    /* ============ desktop view ============ */
+    @media all and (min-width: 992px) {
 
-            .dropdown-menu li {
-                position: relative;
-            }
-
-            .dropdown-menu .submenu {
-                display: none;
-                position: absolute;
-                left: 100%;
-                top: -7px;
-            }
-
-            .dropdown-menu .submenu-left {
-                right: 100%;
-                left: auto;
-            }
-
-            .dropdown-menu > li:hover {
-                background-color: #f1f1f1
-            }
-
-            .dropdown-menu > li:hover > .submenu {
-                display: block;
-            }
+        .dropdown-menu li {
+            position: relative;
         }
 
-        /* ============ desktop view .end// ============ */
-
-        /* ============ small devices ============ */
-        @media (max-width: 991px) {
-
-            .dropdown-menu .dropdown-menu {
-                margin-left: 0.7rem;
-                margin-right: 0.7rem;
-                margin-bottom: .5rem;
-            }
-
+        .dropdown-menu .submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: -7px;
         }
 
-        /* ============ small devices .end// ============ */
+        .dropdown-menu .submenu-left {
+            right: 100%;
+            left: auto;
+        }
+
+        .dropdown-menu > li:hover {
+            background-color: #f1f1f1
+        }
+
+        .dropdown-menu > li:hover > .submenu {
+            display: block;
+        }
+    }
+
+    /* ============ desktop view .end// ============ */
+
+    /* ============ small devices ============ */
+    @media (max-width: 991px) {
+
+        .dropdown-menu .dropdown-menu {
+            margin-left: 0.7rem;
+            margin-right: 0.7rem;
+            margin-bottom: .5rem;
+        }
+
+    }
+
+    /* ============ small devices .end// ============ */
 
 </style>
 
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-dark" style="background-color: #000000;">
     <div class="container-fluid">
-        <svg style="margin-left: 30px;" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50"
+        <svg style="margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50"
              height="25"
              viewBox="0 0 64 32"
              xml:space="preserve" focusable="false" class="mr-4 navbar-header">
@@ -115,68 +148,373 @@
             <path fill="#db0011" d="M16.019-0l-15.65 15.65 15.65 15.613v-31.264z"></path>
             <path fill="#db0011" d="M47.245 31.263l-15.613-15.613-15.613 15.613h31.227z"></path>
             </svg>
-        <a class="navbar-brand " style="margin-left: 10px;font-size:1rem" href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
+        <a class="navbar-brand " style="margin-left: 10px;font-size:1rem"
+           href="/">HSBC&nbsp;&nbsp;|&nbsp;&nbsp;TANOS</a>
+
+        <!--        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggl" href="#!"><i-->
+        <!--                class="fas fa-sliders " style="color:gainsboro"></i></button>-->
+
+        {% if session.get('teams', [])|length >= 2 %}
+        <!-- Dropdown Menu -->
+        <div style="color: #e0f0ef; margin-left: 30px; margin-right: 10px; font-size: 13px">
+            Current Team
+        </div>
+        <select style="width: 170px; font-size: 12px;" class="form-select" id="optionTeam">
+            {% for team_name in session.get('teams', []) %}
+            <option {% if team_name== session.get(
+            'team', '') %}selected="selected"{% endif %}>{{ team_name }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+
 
         <div class="collapse navbar-collapse" id="navbarNav1">
             <ul class="navbar-nav ms-auto" style="margin-right:50px">
-                <li class="nav-item"><a class="nav-link active" href="/"> Home </a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Data Test </a>
+               <!-- <li class="nav-item dropdown">
+                    <a class="nav-link active" href="#" data-bs-toggle="dropdown">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users" style="color:gainsboro"></i></div>
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="/data_connect_management">Data Connections</a></li>
-                        <li class="divider"></li>
-                        <li><a class="dropdown-item" href="/data_point_management">Data Points</a></li>
-                        <li class="divider"></li>
-                        <li><a class="dropdown-item" href="/api_data_test_cases"> Data Validation Jobs </a></li>
-<!--                        <li><a class="dropdown-item" href="/data_guide">Data Quality Checker Guide</a></li>-->
+                        <li><a class="dropdown-item" href="/access">Team Config</a></li>
+
+                        {% if session.get('team', {})=='Admin' %}
+                        <li><a class="dropdown-item" href="/role_config">Role Config</a></li>
+                        {% else %}
+                        {% endif %}
                     </ul>
+                </li>-->
+
+<!--                <li class="nav-item dropdown">-->
+<!--                    <a class="nav-link active" href="#" data-bs-toggle="dropdown">-->
+<!--                        <div class="sb-nav-link-icon"><i class="fas fa-tools" style="color:gainsboro"></i></div>-->
+<!--                    </a>-->
+<!--                    <ul class="dropdown-menu dropdown-menu-right">-->
+<!--                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows-->
+<!--                            Scan</a></li>-->
+<!--                        <li><a class="dropdown-item" href="/encrypt">Encrypt Password</a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+
+                <li class="nav-item dropdown" style="color: #e0f0ef; font-size: 14px">
+                    <a class="nav-link active" href="/docs/intro" target="_blank">
+                        Get Started
+                    </a>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> Web Test </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="/web_test_compare">Add new test case</a></li>
-                        <li><a class="dropdown-item" href="/web_test_cases">Web Test Cases</a></li>
-                        <li><a class="dropdown-item" href="/web_guide">Web Test Guide</a></li>
-                    </ul>
-                </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown"> API Test </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="/api_intergration">System Integration Test</a></li>
-                        <li><a class="dropdown-item" href="/test_api">Smoke Test</a></li>
-                        <li><a class="dropdown-item" href="/test_api">Regular Sanity Test</a></li>
-                        <li><a class="dropdown-item" href="/test_api">Hourly Health Check</a></li>
-                        <li><a class="dropdown-item" href="/test_api">"Null Data" Check</a></li>
-                    </ul>
-                </li>
+            </ul>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle active" href="#" data-bs-toggle="dropdown">OtherTools </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">Cyberflows Scan</a></li>
-                        <li><a class="dropdown-item" href="/encrypt">Encrypt Password</a></li>
-                    </ul>
+            <!-- 用户系统 -->
+            <ul class="navbar-nav" style="margin-right: 30px">
+                <li class="nav-item">
+                    {% if session.get('user', None) %}
+                    <a class="nav-link user-profile-link" href="#" data-bs-toggle="offcanvas"
+                       data-bs-target="#user-profile-modal">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                           <span style="margin-right: 10px" class="username">{{ session.get('user', {}).get('http://schemas.microsoft.com/identity/claims/displayname', '')[0] }}
+                           </span>
+                            <div class="avatar">
+                                <img src="{{ session.get('avatar', '') }}" alt="Avatar">
+                            </div>
+                        </div>
+                    </a>
+                    {% else %}
+                    <a class="nav-link" href="/login_page">Login</a>
+                    {% endif %}
                 </li>
             </ul>
 
-
-            <ul class="navbar-nav">
-                {% if request.cookies.get('Name') and session.get('username',None)%}
-                <li class="nav-item"><a class="nav-link" href="javascript:viod(0)">{{ request.cookies.get('Name')}}</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="/logout">logout</a></li>
-                {% else %}
-                <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-                {% endif %}
-            </ul>
 
         </div>
     </div>
+
 </nav>
 
+<!-- Page Wrapper -->
+<div id="wrapper">
 
-{% endblock %}
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <!--            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">-->
+        <!--                <div class="sidebar-brand-icon rotate-n-15">-->
+        <!--                    <i class="fas fa-laugh-wink"></i>-->
+        <!--                </div>-->
+        <!--                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>-->
+        <!--            </a>-->
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="/">
+                <i class="fas fa-fw fa-home"></i>
+                <span>Home</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Test Sets
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
+               aria-expanded="true" aria-controls="collapseOne">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Data Test</span>
+            </a>
+            <div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <!--                        <h6 class="collapse-header">Custom Components:</h6>-->
+                    <a class="collapse-item " href="/data_connect_management">◈ Data
+                        Connections</a>
+                    <a class="collapse-item" href="/data_point_management">◈ Data Points</a>
+                    <a class="collapse-item" href="/api_data_test_cases">◈ Data Validation Jobs </a>
+                    <!--                    <a class="collapse-item" href="/static/buttons.html">◈ Buttons</a>-->
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-globe"></i>
+                <span>Web Test</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <!--                        <h6 class="collapse-header">Custom Components:</h6>-->
+                    <a class="collapse-item" href="/web_test_compare">◈ Add new test case</a>
+                    <a class="collapse-item" href="/web_test_cases">◈ Web Test Cases</a>
+                    <!--                    <a class="collapse-item" href="/web_guide">◈ Web Test Guide</a>-->
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+               aria-expanded="true" aria-controls="collapseThree">
+                <i class="fas fa-fw fa-poll-h"></i>
+                <span>API Test</span>
+            </a>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <!--                        <h6 class="collapse-header">Custom Components:</h6>-->
+                    <a class="collapse-item" href="/api_intergration">◈ System Test</a>
+                    <a class="collapse-item" href="/test_api">◈ Smoke Test</a>
+                    <a class="collapse-item" href="/test_api">◈ Regular Sanity Test</a>
+                    <a class="collapse-item" href="/test_api">◈ Hourly Health Check</a>
+                    <a class="collapse-item" href="/test_api">◈ "Null Data" Check</a>
+                </div>
+            </div>
+        </li>
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Addons
+        </div>
+
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse4"
+               aria-expanded="true" aria-controls="collapseThree">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Config</span>
+            </a>
+            <div id="collapse4" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <!--                        <h6 class="collapse-header">Custom Components:</h6>-->
+                    <a class="collapse-item" href="/access">◈ Team Config</a>
+                    {% if session.get('team', {})=='Admin' %}
+                    <a class="collapse-item" href="/role_config">◈ Role Config</a>
+                    {% else %}
+                    {% endif %}
+                </div>
+            </div>
+        </li>
+
+
+                <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse5"
+               aria-expanded="true" aria-controls="collapseThree">
+                <i class="fas fa-fw fa-tools"></i>
+                <span>Tools</span>
+            </a>
+            <div id="collapse5" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="https://cyberflows.systems.uk.hsbc/" target="_blank">◈ Cyberflows Scan</a>
+                    <a class="collapse-item" href="/encrypt">◈ Encrypt Password</a>
+                </div>
+            </div>
+        </li>
+
+
+
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+
+    </ul>
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+
+        <!--        &lt;!&ndash; Content Wrapper &ndash;&gt;-->
+        <!--        <div id="content-wrapper" class="d-flex flex-column">-->
+
+        <!--            &lt;!&ndash; Main Content &ndash;&gt;-->
+        <!--            <div id="content">-->
+
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="user-profile-modal"
+             aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasRightLabel">User Profile</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="row">
+                    <div class="col-4">
+                        <img style="width: 75px;height: 85px; border-radius: 10%;" src="{{ session.get('avatar', '') }}"
+                             alt="Avatar">
+                    </div>
+                    <div class="col-8">
+                        <h6>{{ session.get('user', {}).get('http://schemas.microsoft.com/identity/claims/displayname',
+                            '')[0]
+                            }}</h6>
+                        <h6>{{ session.get('user',
+                            {}).get('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
+                            '')[0]
+                            }}</h6>
+                        <button type="button" style="height: 30px; display: flex; align-items: center;"
+                                class="logout-button btn btn-primary" onclick="location.href='/logout'">Logout
+                        </button>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px">
+                    <div class="col">
+                        <div style="font-size: 15px; margin-top: 5px;">Current Team:</div>
+                        <div style="font-size: 15px; margin-top: 10px; padding: 8px; background-color: #e1f0ff; color: #1b5fcc; display: inline-block; border-radius: 5px;">
+                            {{ session.get('team', {}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            // 当选择选项时触发事件
+            $('#optionTeam').change(function () {
+                var selectedOption = $(this).val(); // 获取选中选项的值
+
+                // 发起AJAX请求
+                $.ajax({
+                    url: '/update_session_team', // 替换为您的后端接口地址
+                    method: 'POST',
+                    data: {team: selectedOption}, // 选中选项的值作为数据发送给后端
+                    success: function (response) {
+                        // 请求成功后的逻辑处理
+                        console.log(response);
+                        location.reload()
+                        toastr.success('change team successfully!');
+                    },
+                    error: function (error) {
+                        // 请求失败的逻辑处理
+                        console.error(error);
+                    }
+                });
+            });
+        </script>
+
+
+        <!-- Bootstrap core JavaScript-->
+        <!--    <script src="/static/vendor/jquery/jquery.min.js"></script>-->
+        <script src="/static/bootstrap4.6/js/bootstrap.bundle.min.js"></script>
+
+
+        <!--    &lt;!&ndash; Custom scripts for all pages&ndash;&gt;-->
+        <script src="/static/js/sb-admin-2.min.js"></script>
+
+
+        <!--        <script>-->
+        <!--            $(document).ready(function () {-->
+        <!--                // 从 localStorage 中获取展开状态-->
+        <!--                var expandedMenu = localStorage.getItem('expandedMenu');-->
+
+        <!--                // 默认收缩起来-->
+        <!--                $('.collapse').collapse('hide');-->
+
+        <!--                // 恢复保存的展开状态-->
+        <!--                if (expandedMenu) {-->
+        <!--                    $('#' + expandedMenu).collapse('show');-->
+        <!--                }-->
+
+        <!--                // 点击子菜单后展开父菜单并保存展开状态-->
+        <!--                $('.collapse-item').on('click', function () {-->
+        <!--                    var parentId = $(this).closest('.collapse').attr('id');-->
+        <!--                    $(this).addClass('active');-->
+        <!--                    $('#' + parentId).collapse('show');-->
+        <!--                    localStorage.setItem('expandedMenu', parentId);-->
+        <!--                });-->
+        <!--            });-->
+
+        <!--            // 点击 Home 菜单时清空展开状态-->
+        <!--            $('.nav-link[href="/"]').on('click', function () {-->
+        <!--                localStorage.removeItem('expandedMenu');-->
+        <!--            });-->
+
+        <!--        </script>-->
+        <!--        <script>-->
+        <!--            $('.collapse').collapse('open');-->
+        <!--        </script>-->
+
+        <script>
+            $(document).ready(function () {
+                $('.no-refresh-link').click(function (event) {
+                    event.preventDefault(); // 阻止默认行为，即页面刷新
+
+                    // var url = $(this).attr('href'); // 获取链接的目标 URL
+                    // var $collapse = $(this).closest('.collapse'); // 找到最近的折叠容器
+                    //
+                    // // 使用 Ajax 请求加载内容并更新折叠容器的内部内容
+                    // $.ajax({
+                    //     url: url,
+                    //     success: function (data) {
+                    //         $collapse.find('.collapse-inner').html(data); // 更新折叠容器的内部内容
+                    //         $collapse.collapse('show'); // 展开折叠容器
+                    //     }
+                    // });
+                });
+            });
+        </script>
+
+
+        {% endblock %}
 

@@ -1,3 +1,0 @@
-/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/cb_loan_acct_20150128.text,ODS_CDP_CCB_CB_LOAN_ACCT,,,acctnbr,,START_DT='2023-02-17'
-/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/cb_loan_acctbal_20150128.text,ODS_CDP_CCB_CB_LOAN_ACCTBAL,,,acctnbr|balcatcd|baltypcd,,START_DT='2023-02-17'
-/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/core/check/20230217/cb_loan_acctloan_20150128.text,ODS_CDP_CCB_CB_LOAN_ACCTLOAN,,,acctnbr,,START_DT='2023-02-17'

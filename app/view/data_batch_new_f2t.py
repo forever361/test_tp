@@ -16,7 +16,7 @@ from app.util.IP_PORT import Constant
 from app.util.crypto_ECB import AEScoder
 from app.view import viewutil, user
 
-from app.view.user import authorize
+
 
 basePath = os.path.join(os.path.join(os.path.dirname(__file__),"../"))
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
@@ -28,7 +28,7 @@ configP2 = configparser.ConfigParser()
 web = Blueprint("batch_new_f2t", __name__)
 
 @web.route('/api_batch_test_data_f2t',methods=['GET'])
-@user.authorize
+@user.login_required
 def batch_test_compare():
     return render_template("/code_mode/batch_data_new_f2t.html" )
 
@@ -114,7 +114,7 @@ def batch_test_compare1():
 
 
 @web.route('/runtest_f2t.json', methods=['POST', 'GET'])
-@user.authorize
+@user.login_required
 def runtest3():
     if request.method == 'POST':
 
