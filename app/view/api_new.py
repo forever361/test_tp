@@ -27,6 +27,18 @@ def test_api():
         return render_template('api/api_intergration_no.html', api_name=api_name)
 
 
+@web.route('/api_intergration_normal', methods=['GET', 'POST'])
+@user.login_required
+# @permission_required(session.get('groupname'))
+def test_api_normal():
+    api_name = request.args.get('apiName', '')
+    if 'token' in session:
+        return render_template('api/api_intergration_normal.html', api_name=api_name)
+    else:
+        return render_template('api/api_intergration_normal.html', api_name=api_name)
+
+
+
 @web.route('/get_api_detail', methods=['POST'])
 def get_api_detail():
     data = request.json

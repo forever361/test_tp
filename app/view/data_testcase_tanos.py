@@ -287,13 +287,28 @@ def runJob(jsonData):
     print(r_dict_conn_s)
     print(r_dict_conn_t)
 
+    # if r_dict_conn_s['dbtype']=='AliCloud-PostgreSQL':
+    #     s_type='pg'
+    # elif  r_dict_conn_s['dbtype']=='123':
+    #     s_type = '123'
+    # if r_dict_conn_t['dbtype']=='AliCloud-PostgreSQL':
+    #     t_type='pg'
 
-    if r_dict_conn_s['dbtype']=='AliCloud-PostgreSQL':
-        s_type='pg'
-    elif  r_dict_conn_s['dbtype']=='123':
-        s_type = '123'
-    if r_dict_conn_t['dbtype']=='AliCloud-PostgreSQL':
-        t_type='pg'
+    # TYPE:
+    # orl,pg,ali,landingserver_file,landingserver_file_batch
+
+    type_mapping = {
+        'AliCloud-PostgreSQL': 'pg',
+        'DB-Oracle': 'orl',
+        'AliCloud-Maxcompute': 'ali',
+        'Fileserver': 'landingserver_file',
+        '456': '456'
+    }
+    s_type = type_mapping.get(r_dict_conn_s['dbtype'], 'default_value')
+    t_type = type_mapping.get(r_dict_conn_t['dbtype'], 'default_value')
+
+    # s_type = type_mapping.get('DB-Oracle', 'default_value')
+    # t_type = type_mapping.get('AliCloud-Maxcompute', 'default_value')
 
     connt= {
         'Source TYPE': s_type,
