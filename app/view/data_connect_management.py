@@ -2,6 +2,9 @@ from traceback import print_exc
 
 from flask import Blueprint, render_template, request, jsonify, session, g, current_app
 import json
+
+from odps import ODPS
+
 from app.db.tanos_manage import tanos_manage
 from app.util import global_manager
 from app.util.crypto_ECB import AEScoder
@@ -98,18 +101,35 @@ def test_connect():
         result_dict = dict(zip(keys, values))
         result_list.append(result_dict)
     r_dict= dict(result_list[0])
-    try:
-        # TODO: connect function
-        conn = psycopg2.connect(database=r_dict['dblibrary'], user=r_dict['username'], password=r_dict['pwd'],
-                                 host=r_dict['host'], port=r_dict['port'])
-        cur = conn.cursor()
-        print(cur)
-        conn.close()
-        return jsonify(success=True, message='connect successfully')
 
-    except Exception:
-        print(print_exc())
-        return jsonify(success=False, message='connect error')
+    if r_dict['dbtype']== 'AliCloud-PostgreSQL':
+        print(r_dict['dbtype'])
+        try:
+            # TODO: connect function
+            conn = psycopg2.connect(database=r_dict['dblibrary'], user=r_dict['username'], password=r_dict['pwd'],
+                                     host=r_dict['host'], port=r_dict['port'])
+            cur = conn.cursor()
+            print(cur)
+            conn.close()
+            return jsonify(success=True, message='connect successfully')
+
+        except Exception:
+            print(print_exc())
+            return jsonify(success=False, message='connect error')
+
+    elif r_dict['dbtype']== 'AliCloud-Maxcompute':
+        print(r_dict['dbtype'])
+        try:
+            # TODO: connect function
+
+            o = ODPS(access_id=r_dict['username'], secret_access_key=r_dict['pwd'], project=r_dict['dblibrary'], endpoint=r_dict['host'])
+            tables = o.list_tables()
+            print(tables)
+            return jsonify(success=True, message='connect successfully')
+
+        except Exception:
+            print(print_exc())
+            return jsonify(success=False, message='connect error')
 
 
 
