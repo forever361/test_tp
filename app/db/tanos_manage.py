@@ -410,8 +410,8 @@ class tanos_manage():
             return team_name
 
 
-    def get_role_value(self,team_id):
-        sql = """SELECT role_value FROM xcheck.role2 WHERE role_id = '{}' """.format(team_id)
+    def get_role_value(self,team_name):
+        sql = """SELECT role_value FROM xcheck.role2 WHERE name = '{}' """.format(team_name)
         # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
         result = useDB.useDB().executesql_fetch(sql)
         if result:

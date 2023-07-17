@@ -191,7 +191,7 @@
         return {
             btnAdd: {
                 text: 'Add new row',
-                icon: 'bi bi-plus fs-2',
+                icon: 'fa-regular fa-plus',
                 render: true,
                 event: function () {
                     <!--              $('#add-row-modal').find('input,select').val('');-->
@@ -287,8 +287,8 @@
     // Formatter for "action" column
     function actionFormatter(value, row, index) {
         return ' <div class="btn-group" role="group" aria-label="...">' +
-            '<button  class="btn btn-sm btn-primary edit-row" > <i class="bi bi-pencil-square"></i> </button>' +
-            '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="bi bi-trash"></i></button>' +
+            '<button  class="btn btn-sm btn-primary edit-row" > <i class="fa-regular fa-pen-to-square"></i> </button>' +
+            '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +
             '</div>'
     }
 

@@ -145,5 +145,5 @@ def run_api_get():
 @user.login_required
 # @permission_required(session.get('groupname'))
 def test_api_other():
-    return permission_required(session.get('groupname'))(render_template)('test_api.html')
+    return permission_required(session.get('groupname'))(render_template)('util/not-finish.html')
 
