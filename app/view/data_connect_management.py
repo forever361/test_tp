@@ -75,7 +75,7 @@ def delete_data():
 
 @web.route('/add_connetion', methods=['POST'])
 def add_row():
-    @permission_required(session.get('groupname'))
+    # @permission_required(session.get('groupname'))
     def decorated_function():
         data = request.json
         # TODO: Update data in the database

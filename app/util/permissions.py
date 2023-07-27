@@ -23,7 +23,7 @@ class UserScope(Scope):
     allow_api = ['data_connect_management.data_connect_page']
 
 class AdminGroup(Scope):
-    allow_module = ['access_config']
+    allow_module = ['access_config','data_testcase_tanos']
     def __init__(self):
         # 只有在实例化AdminGroup类时才会执行这部分代码
         self.p = tanos_manage().get_role_value('Admin')
@@ -67,7 +67,7 @@ class DelosTestGroup(Scope):
 
 
 class DataTestGroup(Scope):
-    pass
+    allow_module = ['access_config','data_testcase_tanos']
     #绑定一个API就是一个role
     # allow_module = ['data_connect_management',]
     def __init__(self):
