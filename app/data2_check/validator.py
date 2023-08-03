@@ -256,28 +256,9 @@ class AliValidator(Validator):
         else:
             # add 换行符和空格处理
             s_str = str(s).replace('\n', '').replace('\r', '').replace(' ', '')
-            if s_str.endswith('.0'):
-                return s_str.split('.0')[0]
-            elif s_str.endswith('.00'):
-                return s_str.split('.00')[0]
-            elif s_str.endswith('.000'):
-                return s_str.split('.000')[0]
-            elif s_str.endswith('.0000'):
-                return s_str.split('.0000')[0]
-            elif s_str.endswith('.00000'):
-                return s_str.split('.00000')[0]
-            elif s_str.endswith('.000000'):
-                return s_str.split('.000000')[0]
-            elif s_str.endswith('.0000000'):
-                return s_str.split('.0000000')[0]
-            elif s_str.endswith('.00000000'):
-                return s_str.split('.00000000')[0]
-            elif s_str.endswith('.000000000'):
-                return s_str.split('.000000000')[0]
-            elif s_str.endswith('.0000000000'):
-                return s_str.split('.0000000000')[0]
-            else:
-                return s_str
+            # 不管小数点后面多少0，用正则表达式去掉后面小数点
+            simplified_str = re.sub(r'\.0+$', '', s_str)
+            return simplified_str
 
     def convert2str(self, s):
         if isinstance(s, Decimal):
