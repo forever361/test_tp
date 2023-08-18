@@ -153,10 +153,15 @@ class tanos_manage():
         useDB.useDB().executesql(sql)
 
 
+    # def update_job(self, job_id, job_name, job):
+    #     sql = "UPDATE xcheck.job_management set job_name='{}',job='{}' WHERE job_id = {};".format(
+    #         job_name.strip(), job, job_id)
+    #     useDB.useDB().executesql(sql)
+
     def update_job(self, job_id, job_name, job):
-        sql = "UPDATE xcheck.job_management set job_name='{}',job='{}' WHERE job_id = {};".format(
-            job_name.strip(), job, job_id)
-        useDB.useDB().executesql(sql)
+        sql = "UPDATE xcheck.job_management SET job_name = %s, job = %s WHERE job_id = %s;"
+        params = (job_name.strip(), job, job_id)
+        useDB.useDB().executesqlP(sql, params)
 
 
     def get_connectid_by_point_name(self, point_name):

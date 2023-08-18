@@ -238,7 +238,9 @@ def deleteJob(job_id):
 def saveJob():
     # TODO: Update data in the database
     data = request.json
+    # print(111,data)
     data_str = json.dumps(data['job'])
+    print(222,data_str)
     tanos_manage().update_job(data['job_id'],data['job_name'],data_str)
     return jsonify(success=True, message='save job successfully')
 

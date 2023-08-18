@@ -401,7 +401,7 @@
                                                                         <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
                                                                         <div class="col-md-9" style="padding-top: 10px;">
                                                                             <input type="text" class="form-control source_condition" placeholder="source where condition" id="source_condition"
-                                                                            aria-describedby="basic-addon1" value=${item.job.source_condition}>
+                                                                            aria-describedby="basic-addon1" value="${item.job.source_condition.replace(/'/g, '&apos;')}">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -419,7 +419,7 @@
                                                                         <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
                                                                         <div class="col-md-9" style="padding-top: 10px;">
                                                                             <input type="text" class="form-control target_condition" id="target_condition" placeholder="target where condition"
-                                                                            aria-describedby="basic-addon1" value=${item.job.target_condition}>
+                                                                            aria-describedby="basic-addon1" value="${item.job.target_condition.replace(/'/g, '&apos;')}">
                                                                         </div>
                                                                     </div>
                                                                 </div>

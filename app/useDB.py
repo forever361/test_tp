@@ -40,6 +40,16 @@ class useDB(object):
             logger_all.error('commit error')
         self.conn.close()
 
+    def executesqlP(self, sql, params=None):
+        print(sql)
+        self.cursor.execute(sql, params)
+        self.cursor.close()
+        try:
+            self.conn.commit()
+        except:
+            logger_all.error('commit error')
+        self.conn.close()
+
     def executesql_fetch(self, sql):
         # print(sql)
         self.cursor.execute(sql)
