@@ -1,5 +1,6 @@
 import ast
 import configparser
+import csv
 import json
 import os
 import sys
@@ -41,10 +42,17 @@ class Parameter_db():
 
     def parse_parameter_file(seft):
         user_id = Constant_id().cookie_id
-        user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        data_db_path = folder_path + '/config/' + 'data_db.csv'
+        user_path = f'{configPath}/userinfo/{user_id}'
+        data_db_path = f'{folder_path}/config/data_db.csv'
+        parsed_data = []
+
         with open(data_db_path, "r") as f:
-            return [i.split(',') for i in f.readlines() if i[0] not in ('#', '\n','')]
+            csv_reader = csv.reader(f)
+            for row in csv_reader:
+                if row and not row[0].startswith(('#', '\n')):
+                    parsed_data.append(row)
+
+        return parsed_data
 
 class Parameter_or_ali():
     def __init__(self):

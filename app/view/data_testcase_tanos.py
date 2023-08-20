@@ -26,6 +26,8 @@ from app.view.data_batch_new import get_log
 from app.util.Constant_setting import Constant_cmd
 from app.application import app
 
+import csv
+
 web = Blueprint('data_testcase_tanos', __name__, template_folder='templates/uitest')
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 configP = configparser.ConfigParser()
@@ -321,6 +323,7 @@ def runJob(jsonData):
     }
 
 
+
     s_tablename= tanos_manage().get_tablename_by_point_name(source_point_name)
     t_tablename = tanos_manage().get_tablename_by_point_name(target_point_name)
 
@@ -331,8 +334,7 @@ def runJob(jsonData):
     if '.' in t_tablename:
         first_half_t_tablename, second_half_t_tablename = t_tablename.split('.')
 
-    table="{},{},,{},{}".format(second_half_s_tablename,second_half_t_tablename,first_half_s_tablename,data['job']['fields'])
-
+    table=[[second_half_s_tablename,second_half_t_tablename,'',first_half_s_tablename,data['job']['fields'],data['job']['source_condition'],data['job']['target_condition']]]
 
     user_id = session.get('userid', None)
     folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
@@ -342,9 +344,9 @@ def runJob(jsonData):
     file.write(str(connt))
     file.close()
 
-    file = open(user_path + 'data_db.csv', 'w')
-    file.write(table)
-    file.close()
+    with open(user_path +'data_db.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(table)
 
     try:
         # 创建子进程并异步捕捉其输出
