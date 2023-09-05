@@ -254,6 +254,9 @@ def login_callback():
     errors = auth.get_errors()
 
     if len(errors) == 0 and auth.is_authenticated():
+
+
+
         session['user'] = auth.get_attributes()  # Save user information in session
         session['token'] = auth.get_session_index()  # Save token in session
         session['staffid'] = 580515000
@@ -266,6 +269,8 @@ def login_callback():
         print(222,username)
         token = session['token']
         staffid = session['staffid']
+
+        logger_all.info('User {} {} logging'.format(username,staffid))
 
         avatarUrl = 'https://www.aixint.cn:5000/static/kundwang.jpg'
         session['avatar']=avatarUrl

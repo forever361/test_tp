@@ -33,7 +33,7 @@ web = Blueprint("batch_new", __name__)
 @web.route('/api_batch_test_data',methods=['GET'])
 @user.login_required
 def batch_test_compare():
-    return render_template("/code_mode/batch_tanos_data_new.html",domain=app.config['URL'] )
+    return render_template("/code_mode/batch_tanos_data_new.html" )
 
 
 @web.route('/api_batch_test_data',methods=['POST'])
@@ -336,11 +336,11 @@ def saveCase():
 
     case_id = ConnectSQL().data_get_case_id(case_name)[0][0]
 
-    # 新建job
-    data_str = json.dumps(data['job'])
-    print(data_str)
-    # TODO: Update data in the database
-    tanos_manage().new_job(data['job_name'],data_str,case_id)
+    # # 新建job
+    # data_str = json.dumps(data['job'])
+    # print(data_str)
+    # # TODO: Update data in the database
+    # tanos_manage().new_job(data['job_name'],data_str,case_id)
     #查询case#查询job，跳转到http://127.0.0.1:8889/data_edit_test_case_tanos?id=10074，前端实现
 
-    return jsonify(success=True, message='run job successfully',case_id=case_id,domain=app.config['URL'])
+    return jsonify(success=True, message='run job successfully',case_id=case_id)

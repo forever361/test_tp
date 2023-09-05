@@ -1,3 +1,4 @@
+import traceback
 from traceback import print_exc
 
 from flask import Blueprint, render_template, request, jsonify, session, g, current_app
@@ -11,6 +12,8 @@ from app.util.crypto_ECB import AEScoder
 from app.util.permissions import permission_required
 from app.view import viewutil, user
 import psycopg2
+from app.util.log_util.all_new_log import logger_all
+
 
 web = Blueprint("data_connect_management", __name__)
 
@@ -62,6 +65,7 @@ def delete_data():
     data = request.json
     # TODO: Update data in the database
     tanos_manage().delete_connection(data["id"])
+    logger_all.info('delete connection：{}'.format(data["id"]))
     return jsonify(success=True, message='Data deleted successfully')
 
 
@@ -82,6 +86,7 @@ def add_row():
         tanos_manage().new_connection(data['connect_name'], data['dbtype'], data['connect_type'],
                                       data['host'], data['dblibrary'], data['username'], data['pwd'], data['port'])
 
+        logger_all.info('add connection：{}'.format(data['connect_name']))
         return jsonify(success=True, message='add connection successfully')
 
     return decorated_function()
@@ -115,6 +120,8 @@ def test_connect():
 
         except Exception:
             print(print_exc())
+            logger_all.error('error connection：{}'.format(traceback.format_exc()))
+
             return jsonify(success=False, message='connect error')
 
     elif r_dict['dbtype']== 'AliCloud-Maxcompute':
@@ -129,6 +136,7 @@ def test_connect():
 
         except Exception:
             print(print_exc())
+            logger_all.error('error connection：{}'.format(traceback.format_exc()))
             return jsonify(success=False, message='connect error')
 
 

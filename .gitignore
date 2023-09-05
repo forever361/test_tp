@@ -11,6 +11,7 @@
 /app/templates/userinfo
 /app/userinfo
 /app/templates/personal/personal_center.html
+/Log
 /*.key
 /*.pem
 /*.log

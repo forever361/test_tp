@@ -2,4 +2,4 @@ logger:
   name: ITester
   level: DEBUG
   format: '%(filename)s-%(lineno)d-%(asctime)s-%(levelname)s: %(message)s'
-  format2: '%(asctime)s-%(levelname)s: %(message)s'
+  format2: '%(asctime)s [%(filename)s-%(lineno)d] %(levelname)s: %(message)s'

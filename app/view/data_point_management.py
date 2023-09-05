@@ -1,3 +1,4 @@
+import traceback
 from traceback import print_exc
 
 import psycopg2
@@ -6,6 +7,7 @@ from flask import Blueprint, render_template, request, jsonify, session
 from app import useDB
 from app.db.tanos_manage import tanos_manage
 from app.util.crypto_ECB import AEScoder
+from app.util.log_util.all_new_log import logger_all
 from app.util.permissions import permission_required
 from app.view import viewutil, user
 
@@ -24,6 +26,8 @@ def add_row():
     data = request.json
     # TODO: Update data in the database
     tanos_manage().new_point(data['point_name'],data['connect_id'],data['table_name'])
+
+    logger_all.info('add connection：{}'.format(data['point_name']))
 
     return jsonify(success=True, message='add connection successfully')
 
@@ -122,6 +126,7 @@ def test_connect_point():
 
     except Exception:
         print(print_exc())
+        logger_all.error('error connection：{}'.format(traceback.format_exc()))
         return jsonify(success=False, message='connect error')
 
 

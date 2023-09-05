@@ -40,13 +40,15 @@
 {% block content %}
 
 
-<div style="background-color: #eee; padding-bottom: 30px; height:100%; width:100%; display:flex; flex-direction:column; overflow-x:hidden; align-items: center;">
+<div  style="background-color: #eee; padding-bottom: 30px; height:100%; width:100%; display:flex; flex-direction:column; overflow-x:hidden; align-items: center;">
 
     <div style="display: flex; justify-content: flex-end; padding-top: 15px; width:100%;  ">
         <button id='add-new-row' type="button" class="btn btn-primary" style="margin-bottom: 5px; width: 65px; margin-right:40px"><i class="fa-regular fa-plus"></i></button>
     </div>
 
-    <div class="row" id="card-group" style="justify-content: center; width:97%; "></div>
+    <div class="row" id="card-group" style="justify-content: center; width:97%; ">
+        <div class="no-job" style="text-align: center" ></div>
+    </div>
 
     <nav>
         <ul class="pagination justify-content-center"></ul>
@@ -70,7 +72,7 @@
 <div class="offcanvas offcanvas-top" tabindex="-1" id="add-row-top-canvas"
      aria-labelledby="offcanvasRightLabel" style="height: 600px">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasTopLabel">Add new connection</h5>
+        <h5 class="offcanvas-title" id="offcanvasTopLabel">Add new job</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                 aria-label="Close"></button>
     </div>
@@ -358,124 +360,130 @@
                     data: JSON.stringify({case_id: case_id}),
                     contentType: 'application/json',
                     success: function (data) {
-                        cardsData = data.map(item => {
+                        if (Array.isArray(data) && data.length > 0) {
+                            cardsData = data.map(item => {
 
-                            var optionsHtml_source = "";
-                            for (let i = 0; i < options.length; i++) {
-                                const option = options[i];
-                                const selected = (option.value === item.job.source_point) ? "selected" : "";
-                                optionsHtml_source += `<option value="${option.value}" ${selected}>${option.text}</option>`;
-                            }
-
-
-                            var optionsHtml_target = "";
-                            for (let i = 0; i < options.length; i++) {
-                                const option = options[i];
-                                const selected = (option.value === item.job.target_point) ? "selected" : "";
-                                optionsHtml_target += `<option value="${option.value}" ${selected}>${option.text}</option>`;
-                            }
-
-                            const selectRule = item.job.select_rules || "Default";
+                                var optionsHtml_source = "";
+                                for (let i = 0; i < options.length; i++) {
+                                    const option = options[i];
+                                    const selected = (option.value === item.job.source_point) ? "selected" : "";
+                                    optionsHtml_source += `<option value="${option.value}" ${selected}>${option.text}</option>`;
+                                }
 
 
-                            return `
-                                     <form class="card  mb-3"  method="POST"  >
-                                          <div class="row g-0" >
-                                             <div class="col-md-11">
-                                                <div class="card-body " style="text-align: center;" >
-                                                    <h5 class='card-title' > ${item.job_name} </h5>
-                                                    <div class="card-text" style="text-align: left;">
-                                                        <div class="container text-center ">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <label class="col-md-12 control-label">Source</label>
-                                                                        <div class="col-md-3" style="padding-top: 10px;">
-                                                                            <b style="color:red">*</b> Data point
+                                var optionsHtml_target = "";
+                                for (let i = 0; i < options.length; i++) {
+                                    const option = options[i];
+                                    const selected = (option.value === item.job.target_point) ? "selected" : "";
+                                    optionsHtml_target += `<option value="${option.value}" ${selected}>${option.text}</option>`;
+                                }
+
+                                const selectRule = item.job.select_rules || "Default";
+
+
+                                return `
+                                         <form class="card  mb-3"  method="POST"  >
+                                              <div class="row g-0" >
+                                                 <div class="col-md-11">
+                                                    <div class="card-body " style="text-align: center;" >
+                                                        <h5 class='card-title' > ${item.job_name} </h5>
+                                                        <div class="card-text" style="text-align: left;">
+                                                            <div class="container text-center ">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="row">
+                                                                            <label class="col-md-12 control-label">Source</label>
+                                                                            <div class="col-md-3" style="padding-top: 10px;">
+                                                                                <b style="color:red">*</b> Data point
+                                                                            </div>
+                                                                            <div class="col-md-9" style="padding-top: 10px;">
+                                                                                <select id="source_point_select" class="form-select source_point " >
+                                                                                    ${optionsHtml_source}
+                                                                                </select>
+                                                                            </div>
+                                                                            <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
+                                                                            <div class="col-md-9" style="padding-top: 10px;">
+                                                                                <input type="text" class="form-control source_condition" placeholder="source where condition" id="source_condition"
+                                                                                aria-describedby="basic-addon1" value="${item.job.source_condition.replace(/'/g, '&apos;')}">
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col-md-9" style="padding-top: 10px;">
-                                                                            <select id="source_point_select" class="form-select source_point " >
-                                                                                ${optionsHtml_source}
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="row">
+                                                                            <label class="col-md-12 control-label">Target</label>
+                                                                            <div class="col-md-3" style="padding-top: 10px;">
+                                                                                <b style="color:red">*</b> Data point
+                                                                            </div>
+                                                                            <div class="col-md-9" style="padding-top: 10px;">
+                                                                                <select class="form-select target_point"  id="target_point_select" name="select_t" data-live-search="true">
+                                                                                    ${optionsHtml_target}
+                                                                                </select>
+                                                                            </div>
+                                                                            <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
+                                                                            <div class="col-md-9" style="padding-top: 10px;">
+                                                                                <input type="text" class="form-control target_condition" id="target_condition" placeholder="target where condition"
+                                                                                aria-describedby="basic-addon1" value="${item.job.target_condition.replace(/'/g, '&apos;')}">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3">
+                                                                        <label class="col-md-12" style="padding-bottom:5px">Rules</label>
+                                                                    </div>
+                                                                    <div style="display:flex; width:100%; justify-content: start; align-items: center; margin-right: 50px ">
+                                                                        <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
+                                                                            <p>Select rules</p>
+                                                                        </div>
+                                                                        <select class="form-select select_rules" name="select_rules" id="select_rules" style="width:90.5%">
+                                                                            <option ${selectRule === "Default" ? "selected" : ""}>Default</option>
+                                                                            <option ${selectRule === "Check-table-header" ? "selected" : ""}>Check-table-header</option>
+                                                                            <option ${selectRule === "Check-count" ? "selected" : ""}>Check-count</option>
+                                                                            <option ${selectRule === "Check-the-first-200-rows" ? "selected" : ""}>Check-the-first-200-rows</option>
+                                                                            <option ${selectRule === "Check-the-first-500-rows" ? "selected" : ""}>Check-the-first-500-rows</option>
+                                                                            <option ${selectRule === "Check-the-first-1000-rows" ? "selected" : ""}>Check-the-first-1000-rows</option>
                                                                             </select>
-                                                                        </div>
-                                                                        <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
-                                                                        <div class="col-md-9" style="padding-top: 10px;">
-                                                                            <input type="text" class="form-control source_condition" placeholder="source where condition" id="source_condition"
-                                                                            aria-describedby="basic-addon1" value="${item.job.source_condition.replace(/'/g, '&apos;')}">
-                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="row">
-                                                                        <label class="col-md-12 control-label">Target</label>
-                                                                        <div class="col-md-3" style="padding-top: 10px;">
-                                                                            <b style="color:red">*</b> Data point
+                                                                    <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                                                        <div style="width:13.8%; display:flex; align-items:center; padding-left:40px">
+                                                                            <p>Custom rules</p>
                                                                         </div>
-                                                                        <div class="col-md-9" style="padding-top: 10px;">
-                                                                            <select class="form-select target_point"  id="target_point_select" name="select_t" data-live-search="true">
-                                                                                ${optionsHtml_target}
-                                                                            </select>
-                                                                        </div>
-                                                                        <p class="col-md-3 control-label" style="padding-top: 10px;">Condition</p>
-                                                                        <div class="col-md-9" style="padding-top: 10px;">
-                                                                            <input type="text" class="form-control target_condition" id="target_condition" placeholder="target where condition"
-                                                                            aria-describedby="basic-addon1" value="${item.job.target_condition.replace(/'/g, '&apos;')}">
-                                                                        </div>
+                                                                        <input style="width:85.5%; " type="text" class="form-control custom_rules" id="custom_rules"
+                                                                        placeholder="undefined" aria-describedby="basic-addon1" value=${item.job.custom_rules}>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <hr style="filter: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color="#6f5499" size="3">
-                                                                    <label class="col-md-12" style="padding-bottom:5px">Rules</label>
-                                                                </div>
-                                                                <div style="display:flex; width:100%; justify-content: start; align-items: center; margin-right: 50px ">
-                                                                    <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
-                                                                        <p>Select rules</p>
+                                                                    <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                                                        <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
+                                                                            <span style="color:red; ">*&nbsp</span> <span>By fields </span></div>
+                                                                            <input name="field" style="width:85.5%; " type="text" class=" form-control fields" id="fields"
+                                                                                 placeholder="the columns used as the checking basis" aria-describedby="basic-addon1" value=${item.job.fields}>
                                                                     </div>
-                                                                    <select class="form-select select_rules" name="select_rules" id="select_rules" style="width:90.5%">
-                                                                        <option ${selectRule === "Default" ? "selected" : ""}>Default</option>
-                                                                        <option ${selectRule === "Check-table-header" ? "selected" : ""}>Check-table-header</option>
-                                                                        <option ${selectRule === "Check-count" ? "selected" : ""}>Check-count</option>
-                                                                        <option ${selectRule === "Check-the-first-200-rows" ? "selected" : ""}>Check-the-first-200-rows</option>
-                                                                        <option ${selectRule === "Check-the-first-500-rows" ? "selected" : ""}>Check-the-first-500-rows</option>
-                                                                        <option ${selectRule === "Check-the-first-1000-rows" ? "selected" : ""}>Check-the-first-1000-rows</option>
-                                                                        </select>
-                                                                </div>
-                                                                <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
-                                                                    <div style="width:13.8%; display:flex; align-items:center; padding-left:40px">
-                                                                        <p>Custom rules</p>
-                                                                    </div>
-                                                                    <input style="width:85.5%; " type="text" class="form-control custom_rules" id="custom_rules"
-                                                                    placeholder="undefined" aria-describedby="basic-addon1" value=${item.job.custom_rules}>
-                                                                </div>
-                                                                <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
-                                                                    <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
-                                                                        <span style="color:red; ">*&nbsp</span> <span>By fields </span></div>
-                                                                        <input name="field" style="width:85.5%; " type="text" class=" form-control fields" id="fields"
-                                                                             placeholder="the columns used as the checking basis" aria-describedby="basic-addon1" value=${item.job.fields}>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                   </div>
+                                                 </div>
+                                                 <div class="col-md-1">
+                                                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                                                      <button type="button" class="btn btn-primary card-edit" style="width: 100px;margin-top: 15px" id="card-edit" > Save</button>
+                                                      <button type="button" class="btn btn-danger card-delete" style="width: 100px;margin-top: 15px" id="card-delete" > Delete</button>
+                                                      <button type="button" class="btn btn-success card-run" style="width: 100px;margin-top: 15px" id="card-run"> Run </button>
+                                                      <button type="button" class="btn btn-warning report" style="width: 100px;margin-top: 15px;display:none;" id="Report" > Report </button>
                                                     </div>
-                                               </div>
-                                             </div>
-                                             <div class="col-md-1">
-                                                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
-                                                  <button type="button" class="btn btn-primary card-edit" style="width: 100px;margin-top: 15px" id="card-edit" > Save</button>
-                                                  <button type="button" class="btn btn-danger card-delete" style="width: 100px;margin-top: 15px" id="card-delete" > Delete</button>
-                                                  <button type="button" class="btn btn-success card-run" style="width: 100px;margin-top: 15px" id="card-run"> Run </button>
-                                                  <button type="button" class="btn btn-warning report" style="width: 100px;margin-top: 15px;display:none;" id="Report" > Report </button>
-                                                </div>
-                                                <div class="card-id" style="display: none">${item.job_id}</div>
-                                             </div>
-                                          </div>
-                                     </form>
-                            `
-                        });
+                                                    <div class="card-id" style="display: none">${item.job_id}</div>
+                                                 </div>
+                                              </div>
+                                         </form>
+                                `
+                            });
                         totalPages = Math.ceil(cardsData.length / pageSize);
                         renderPage(currentPage);
                         renderPagination();
+                        } else {
+                                    // 处理 data 为空数组的情况，例如显示一条消息或者隐藏整个内容区域
+                                    $(".no-job").html("There are no jobs under this case. Please click the button on the right to create a new job.");
+                                    console.log(1111111)
+                                }
 
 
                         // 绑定点击事件
