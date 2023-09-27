@@ -4,6 +4,7 @@ from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.config.from_pyfile("config/base_setting.py")
+app.debug = True
 socketio = SocketIO(app, async_mode='gevent')
 # socketio = SocketIO(app, async_mode='threading')
 

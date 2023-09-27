@@ -56,6 +56,17 @@ def login_required(fn):
             return render_template("auth/login_sso.html")
     return wrapper
 
+#捕捉异常
+#用法：@handle_exceptions
+def handle_exceptions(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as e:
+            logger_all.info(f"An error occurred: {str(e)}",exc_info=True)
+            return jsonify({"error": "An error occurred"}), 500
+    return wrapper
 
 # @web.route('/login',methods=['GET','POST'])
 # def login():
@@ -244,6 +255,7 @@ def prepare_flask_request(request):
 #         return 'Login failed'
 
 @web.route('/login/callback', methods=['GET', 'POST'])
+@handle_exceptions
 def login_callback():
     session_current_url = session.get('current_url', None)
     req = prepare_flask_request(request)
@@ -297,7 +309,20 @@ def login_callback():
 
         else:
             id = ConnectSQL().get_login_userid(username)
-            session['userid']= id
+            session['userid'] = id
+
+            #在/static/user_files下面创建id命名的文件夹，里面包含三个子文件夹：config,html,csv
+            user_folder_path = os.path.join(app.root_path, 'static', 'user_files', str(id))
+
+            # 检查文件夹是否存在
+            if not os.path.exists(user_folder_path):
+                # 创建用户文件夹及子文件夹
+                os.makedirs(os.path.join(user_folder_path, 'config'))
+                os.makedirs(os.path.join(user_folder_path, 'html'))
+                os.makedirs(os.path.join(user_folder_path, 'csv'))
+
+
+
 
         groupname = ConnectSQL().get_user_group(username)
         print("user group:",groupname)
