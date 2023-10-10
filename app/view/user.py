@@ -20,6 +20,7 @@ configPath = os.path.abspath(os.path.join(os.path.dirname(__file__),"../"))
 sys.path.append(configPath)
 
 from app.util.crypto_ECB import AEScoder
+from app.util.oss import AliyunOSSClient
 from app.useDB import ConnectSQL
 from app.personal_center import Template_user
 
@@ -313,10 +314,18 @@ def login_callback():
                 os.makedirs(os.path.join(user_folder_path, 'html'))
                 os.makedirs(os.path.join(user_folder_path, 'csv'))
 
+                # AliyunOSSClient().upload_file(app.root_path+'/util/oss_a','TANOS/user_files/{}/config/oss_a'.format(str(id)))
+                # AliyunOSSClient().upload_file(app.root_path + '/util/oss_a', 'TANOS/user_files/{}/html/oss_a'.format(str(id)))
+                # AliyunOSSClient().upload_file(app.root_path + '/util/oss_a', 'TANOS/user_files/{}/csv/oss_a'.format(str(id)))
+
+
 
         else:
             id = ConnectSQL().get_login_userid(username)
             session['userid'] = id
+
+            # print(1111111,app.root_path+'/util/oss_a')
+            # print(2222222, 'TANOS/user_files/{}/csv/oss_a'.format(str(id)))
 
             #在/static/user_files下面创建id命名的文件夹，里面包含三个子文件夹：config,html,csv
             user_folder_path = os.path.join(app.root_path, 'static', 'user_files', str(id))
@@ -327,6 +336,10 @@ def login_callback():
                 os.makedirs(os.path.join(user_folder_path, 'config'))
                 os.makedirs(os.path.join(user_folder_path, 'html'))
                 os.makedirs(os.path.join(user_folder_path, 'csv'))
+
+                # AliyunOSSClient().upload_file(app.root_path+'/util/oss_a','TANOS/user_files/{}/config/oss_a'.format(str(id)))
+                # AliyunOSSClient().upload_file(app.root_path + '/util/oss_a', 'TANOS/user_files/{}/html/oss_a'.format(str(id)))
+                # AliyunOSSClient().upload_file(app.root_path + '/util/oss_a', 'TANOS/user_files/{}/csv/oss_a'.format(str(id)))
 
 
 

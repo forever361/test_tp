@@ -1,5 +1,7 @@
 import logging
 import os
+from logging.handlers import TimedRotatingFileHandler
+
 from app.application import app
 from app.util.log_util.yaml_handler import yaml_data
 
@@ -11,12 +13,14 @@ class CommaToDotFormatter(logging.Formatter):
         time_str = super().formatTime(record, datefmt)
         return time_str.replace(',', '.')
 
+
+
 class LoggerHandler(logging.Logger):
     # 继承Logger类
     def __init__(self,
                  name='root',
                  level='DEBUG',
-                 file=None,
+                 log_dir=None,
                  format=None
                  ):
         # 设置收集器
@@ -26,8 +30,15 @@ class LoggerHandler(logging.Logger):
         # 设置日志格式
         fmt = CommaToDotFormatter(format)  # 使用自定义的格式化器
         # 如果存在文件，就设置文件处理器，日志输出到文件
-        if file:
-            file_handler = logging.FileHandler(file,encoding='utf-8')
+        if log_dir:
+            file_handler = TimedRotatingFileHandler(
+                filename=os.path.join(log_dir, 'tanos.log'),
+                when='D',
+                interval=1,
+                backupCount=30  # 保留7天的日志文件
+            )
+            file_handler.suffix = "%Y-%m-%d_%H-%M-%S.log.gz"
+            file_handler.encoding = "utf-8"
             file_handler.setLevel(level)
             file_handler.setFormatter(fmt)
             self.addHandler(file_handler)
@@ -39,13 +50,13 @@ class LoggerHandler(logging.Logger):
 
 
 # 从yaml配置文件中读取logging相关配置
-ALL_LOG_PATH= os.path.join(LOG_PATH_NEW + "/Log/tanos.log")
+ALL_LOG_PATH= os.path.join(LOG_PATH_NEW + "/Log/")
 
 custom_format = '%(asctime)s-%(levelname)s: %(message)s'.replace(',', '.')
 
 logger_all = LoggerHandler(name=yaml_data['logger']['name'],
                        level=yaml_data['logger']['level'],
-                       file=ALL_LOG_PATH,
+                       log_dir=ALL_LOG_PATH,
                        format=yaml_data['logger']['format2'])
 
 # logger_all.info([222,ALL_LOG_PATH])

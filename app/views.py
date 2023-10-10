@@ -1,6 +1,7 @@
+import os
 from datetime import timedelta
 
-from flask import render_template, session, request,redirect
+from flask import render_template, session, request, redirect, send_file
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
 from app.util import global_manager
@@ -77,19 +78,14 @@ def test_webui():
     return render_template('test_webui.html')
 
 
-
-def init_saml_auth(req):
-    auth = OneLogin_Saml2_Auth(req, custom_base_path=app.config['SAML_PATH'])
-    return auth
-
-def prepare_flask_request(request):
-    # If server is behind proxies or balancers, use the HTTP_X_FORWARDED fields
-    return {
-        'https': 'on' if request.scheme == 'https' else 'off',
-        'http_host': request.host,
-        'script_name': request.path,
-        'get_data': request.args.copy(),
-        # Uncomment if using ADFS as IdP, https://github.com/onelogin/python-saml/pull/144
-        # 'lowercase_urlencoding': True,
-        'post_data': request.form.copy()
-    }
+def is_authenticated(token):
+    return token == '7758521'
+#http://127.0.0.1:8889/logfile?s=7758521 只有知道token才能访问
+@app.route('/logfile')
+def logfile():
+    s = request.args.get('s')
+    if not s or not is_authenticated(s):
+        return "Authentication failed. Access denied.", 403
+    LOG_PATH_NEW = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+    log_file_path = LOG_PATH_NEW+'/Log/tanos.log'
+    return send_file(log_file_path, as_attachment=True)
