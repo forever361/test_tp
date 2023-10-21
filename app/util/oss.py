@@ -1,3 +1,5 @@
+import os
+
 import oss2
 
 class AliyunOSSClient:
@@ -31,6 +33,17 @@ class AliyunOSSClient:
             print(f"Deleted {remote_file_path} successfully.")
         except oss2.exceptions.OssError as e:
             print(f"Error deleting {remote_file_path}: {str(e)}")
+
+    def download_objects(self,prefix, local_dir):
+        for obj in oss2.ObjectIterator(self.bucket, prefix=prefix):
+            if obj.is_prefix():  # 如果是目录，递归下载子目录
+                subdir = os.path.join(local_dir, obj.key[len(prefix):])
+                os.makedirs(subdir, exist_ok=True)
+                self.download_objects(obj.key, subdir)
+            else:  # 如果是文件，下载到本地
+                local_file_path = os.path.join(local_dir, obj.key[len(prefix):])
+                self.bucket.get_object_to_file(obj.key, local_file_path)
+                print(f'Downloaded: {obj.key} to {local_file_path}')
 
 if __name__ == '__main__':
 
