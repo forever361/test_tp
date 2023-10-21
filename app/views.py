@@ -90,14 +90,20 @@ def logfile():
     log_file_path = LOG_PATH_NEW+'/Log/tanos.log'
     return send_file(log_file_path, as_attachment=True)
 
-#http://localhost:5000/updateaksk?ak=your_access_key_id&sk=your_secret_access_key
-@app.route('/updateaksk', methods=['GET'])
+
+# {
+#     "ak": "your_access_key_id",
+#     "sk": "your_secret_access_key"
+# }
+
+@app.route('/updateaksk', methods=['POST'])
 def update_aksk():
     try:
-        access_key_id = request.args.get('ak', '')
-        secret_access_key = request.args.get('sk', '')
+        data = request.json
+        access_key_id = data.get('ak', '')
+        secret_access_key = data.get('sk', '')
 
-        # 将 AS 和 SK 分别写入两行
+        # 将 AS 和 SK分别写入两行
         with open('aksk.txt', 'w') as file:
             file.write(f'Access Key ID: {access_key_id}\n')
             file.write(f'Secret Access Key: {secret_access_key}')
