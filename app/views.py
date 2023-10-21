@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-from flask import render_template, session, request, redirect, send_file
+from flask import render_template, session, request, redirect, send_file, jsonify
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
 from app.util import global_manager
@@ -89,3 +89,31 @@ def logfile():
     LOG_PATH_NEW = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
     log_file_path = LOG_PATH_NEW+'/Log/tanos.log'
     return send_file(log_file_path, as_attachment=True)
+
+#http://localhost:5000/updateaksk?ak=your_access_key_id&sk=your_secret_access_key
+@app.route('/updateaksk', methods=['GET'])
+def update_aksk():
+    try:
+        access_key_id = request.args.get('ak', '')
+        secret_access_key = request.args.get('sk', '')
+
+        # 将 AS 和 SK 分别写入两行
+        with open('aksk.txt', 'w') as file:
+            file.write(f'Access Key ID: {access_key_id}\n')
+            file.write(f'Secret Access Key: {secret_access_key}')
+
+        return jsonify({'message': 'AS and SK updated successfully'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+
+def read_aksk_from_file():
+    try:
+        with open('aksk.txt', 'r') as file:
+            lines = file.readlines()
+            access_key_id = lines[0].strip().split(': ')[1]
+            secret_access_key = lines[1].strip().split(': ')[1]
+            return access_key_id, secret_access_key
+    except FileNotFoundError:
+        return None, None
