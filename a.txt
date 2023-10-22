@@ -40,3 +40,26 @@ ALTER TABLE IF EXISTS xcheck.role2
 00|00|00|00|00|00|00|00|00|10|00
 00|00|00|00|11|00|00|00|00|11|11
 11|11|11|00|00|00|00|00|00|11|11
+
+
+import os
+
+# 远程文件路径
+remote_path = 'new/test/TANOS/50001/csv/123.csv'
+
+# 本地保存目录的根路径
+local_root = './'
+
+# 拆分远程路径，创建本地目录结构
+remote_directories = remote_path.split('/')
+local_path = local_root
+
+for i, directory in enumerate(remote_directories):
+    local_path = os.path.join(local_path, directory)
+    if i < len(remote_directories) - 1 and not os.path.exists(local_path):
+        os.makedirs(local_path)
+
+# 下载文件到本地
+local_file_path = os.path.join(local_root, remote_path)
+
+print(f'文件已保存到本地: {local_file_path}')
