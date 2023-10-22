@@ -42,24 +42,49 @@ ALTER TABLE IF EXISTS xcheck.role2
 11|11|11|00|00|00|00|00|00|11|11
 
 
+-----
+
 import os
+import oss2
 
-# 远程文件路径
-remote_path = 'new/test/TANOS/50001/csv/123.csv'
+def create_local_directories(remote_path, local_root):
+    remote_directories = remote_path.split('/')
+    local_path = local_root
 
-# 本地保存目录的根路径
-local_root = './'
+    for i, directory in enumerate(remote_directories):
+        local_path = os.path.join(local_path, directory)
+        if i < len(remote_directories) - 1 and not os.path.exists(local_path):
+            os.makedirs(local_path)
 
-# 拆分远程路径，创建本地目录结构
-remote_directories = remote_path.split('/')
-local_path = local_root
+def download_oss_directory(oss_dir, sav_dir, access_key_id, access_key_secret, endpoint, bucket_name):
+    auth = oss2.Auth(access_key_id, access_key_secret)
+    bucket = oss2.Bucket(auth, endpoint, bucket_name)
 
-for i, directory in enumerate(remote_directories):
-    local_path = os.path.join(local_path, directory)
-    if i < len(remote_directories) - 1 and not os.path.exists(local_path):
-        os.makedirs(local_path)
+    for obj in oss2.ObjectIterator(bucket, prefix=oss_dir):
+        if obj.is_prefix():
+            # 跳过目录
+            continue
 
-# 下载文件到本地
-local_file_path = os.path.join(local_root, remote_path)
+        remote_path = obj.key
+        local_path = os.path.join(sav_dir, remote_path)
 
-print(f'文件已保存到本地: {local_file_path}')
+        create_local_directories(remote_path, sav_dir)
+
+        # 下载文件
+        bucket.get_object_to_file(remote_path, local_path)
+        print(f'Downloaded: {local_path}')
+
+if __name__ == '__main':
+    # 远程OSS目录路径
+    oss_dir = 'new/test/TANOS/50001/csv/'
+
+    # 本地保存目录的根路径
+    local_root = './'
+
+    # 阿里云OSS配置
+    access_key_id = 'your_access_key_id'
+    access_key_secret = 'your_access_key_secret'
+    endpoint = 'your_endpoint'
+    bucket_name = 'your_bucket_name'
+
+    download_oss_directory(oss_dir, local_root, access_key_id, access_key_secret, endpoint, bucket_name)
