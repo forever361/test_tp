@@ -88,3 +88,19 @@ if __name__ == '__main':
     bucket_name = 'your_bucket_name'
 
     download_oss_directory(oss_dir, local_root, access_key_id, access_key_secret, endpoint, bucket_name)
+
+
+
+create sequence xcheck.target_id_seq increment by 1 minvalue 1 no maxvalue start with 1;
+CREATE TABLE xcheck.config_target_info
+(
+    target_id integer NOT NULL DEFAULT nextval('xcheck.target_id_seq'::regclass),
+    user_id integer NOT NULL,
+    database_type character(50) COLLATE pg_catalog."default",
+    target_access_id character(100) COLLATE pg_catalog."default",
+    target_secret_access_key character(100) COLLATE pg_catalog."default",
+    target_project character(100) COLLATE pg_catalog."default",
+    target_endpoint character(100) COLLATE pg_catalog."default",
+    create_date timestamp without time zone,
+    CONSTRAINT config_target_info_pkey PRIMARY KEY (target_id)
+)
