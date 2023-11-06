@@ -292,7 +292,7 @@ def login_callback():
 
         logger_all.info('User {} {} logging'.format(username,staffid))
 
-        avatarUrl = 'https://www.aixint.cn:5000/static/kundwang.jpg'
+        avatarUrl = 'https://img1.baidu.com/it/u=1215581741,978897026&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=468'
         session['avatar']=avatarUrl
 
         # print(333,avatar)
