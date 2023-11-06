@@ -12,6 +12,9 @@ if __name__ == '__main__':
 
     app.config.from_object(DevelopmentConfig)
 
+
+
+
     # CORS(app, supports_credentials=True)
 
     # socketio.run(app,host='chinadataplatform.cds.dev.ali.cloud.cn.hsbc', port=8889,allow_unsafe_werkzeug=True,ssl_context=("chinadataplatform_cds_dev_ali_cloud_cn_hsbc.pem","chinadataplatform_cds_dev_ali_cloud_cn_hsbc.key"))

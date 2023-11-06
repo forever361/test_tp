@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}UI自动化 测试平台 - test suite{% endblock %}
+
+{% block head %}
+{% endblock %}
 
 {% block js %}
+<!--<script src="/static/scripts/core/data_test_case_tanos.js"></script>-->
 <script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
 <link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
 
@@ -12,73 +16,21 @@
 <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
 
 <!-- Bootstrap Font Icon CSS -->
-<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
-
-<!--<script src="/static/tanos/data_connect.js"></script>-->
-
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">-->
 
 {% endblock %}
 
 {% block content %}
-
-<style>
-    .panel-info {
-        border-color: #eee;
-    }
-
-    .panel-info > .panel-heading {
-        color: #000;
-        background-color: #fff;
-        border-color: #eee;
-    }
-
-    .panel-info > .panel-heading + .panel-collapse > .panel-body {
-        border-top-color: #000;
-    }
-
-    .panel-info > .panel-heading .badge {
-        color: #d9edf7;
-        background-color: #31708f;
-    }
-
-    .panel-info > .panel-footer + .panel-collapse > .panel-body {
-        border-bottom-color: #000;
-    }
-
-
-    .table-striped > tbody > tr:nth-of-type(odd) {
-        background-color: #fff;
-    }
-
-    .form-control-input.has-value {
-        background-color: #eee; /* 填入内容后的背景色 */
-    }
-
-
-</style>
-
-
-{#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
-
-
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/api_batch_suite">API Suite Management</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link " href="/api_batch_case">API case Management</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/api_batch_job">Job Management</a>
-      </li>
-    </ul>
+{#<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex; ">#}
 
     <div style=" margin: 20px; margin-bottom: 100px " class="card">
-         <div class="card-body" style="padding:10px;">
+        <div class="card-body" style="padding:10px; ">
             <!-- Default panel contents -->
-            <h5 class="card-title">API Suite Management</h5>
+            <h5 class="card-title">Data Test Case</h5>
             <div class="card-text">
-                <p>On this page, you can batch import a suite of APIs and manage them.</p>
+
+                <p>On this page, you can configure the information of the "Test Cases", which can include one validation job or multiple jobs in batch for validation.</p>
+
 
                 <table class="table table-striped"
                        id="table"
@@ -107,17 +59,12 @@
                     </thead>
                 </table>
 
-
             </div>
-        </div>
 
+        </div>
     </div>
 
-
-
-
-
-
+</div>
 
 <script>
 
@@ -210,12 +157,4 @@
 
 
 </script>
-
-
-
-
-{% if message %}
-
-{% endif %}
-
 {% endblock %}

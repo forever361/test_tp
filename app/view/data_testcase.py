@@ -31,7 +31,7 @@ configP = configparser.ConfigParser()
 @user.login_required
 # @permission_required(session.get('groupname'))
 def test_cases():
-    return permission_required(session.get('groupname'))(render_template)("uitest/data_test_cases.html")
+    return permission_required(session.get('groupname'))(render_template)("data_test_cases.html")
 
 
 
@@ -414,7 +414,7 @@ def delete_test_case():
     if request.method == 'GET':
         info = request.values
         id = viewutil.getInfoAttribute(info, 'id')
-        return render_template("uitest/data_test_cases.html")
+        return render_template("uitest/../templates/data_test_cases.html")
     if request.method == 'POST':
         data = request.json
         print(data)
@@ -458,7 +458,7 @@ def search_test_cases():
         # log().logger.info("1111111111111111111")
         # print("tiaoshi", "get 请求")
         info = request.values
-        limit = info.get('limit', 10)  # 每页显示的条数
+        limit = info.get('limit', 1000)  # 每页显示的条数
         offset = info.get('offset', 0)  # 分片数，(页码-1)*limit, 它表示一段数据的起点
         type = viewutil.getInfoAttribute(info, 'type')
         id = viewutil.getInfoAttribute(info, 'id')
