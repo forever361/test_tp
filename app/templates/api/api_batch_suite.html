@@ -84,7 +84,7 @@
                        id="table"
                        data-toggle="table"
 {#                       data-height="600"#}
-                       data-url="data_test_case.json"
+                       data-url="batch_api_suite_search.json"
                        data-pagination="true"
                        data-search="true"
                        data-buttons-class="primary"
@@ -97,9 +97,9 @@
                     <tr>
                         <th data-field="user_id" data-width="5" data-width-unit="%">USER ID
                         </th>
-                        <th data-field="id" data-align="center" data-sortable="true">CASE ID
+                        <th data-field="suite_id" data-align="center" data-sortable="true">SUITE ID
                         </th>
-                        <th data-field="name" data-align="left" data-sortable="true">TEST CASE NAME
+                        <th data-field="suite_name" data-align="left" data-sortable="true">SUITE NAME
                         </th>
                         <th data-formatter="actionFormatter" data-align="center">OPERATION</th>
 
@@ -114,6 +114,30 @@
     </div>
 
 
+    <!-- 模态窗口 -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/upload_excel" enctype="multipart/form-data">
+                            <input type="file" name="file" accept=".xlsx, .xls">
+                            <button type="submit" class="btn btn-primary">Upload File</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
 
 
 
@@ -125,15 +149,16 @@
         return {
             btnAdd: {
                 text: 'Add new row',
-                icon: 'fa-regular fa-plus',
+                icon: 'fas fa-file-arrow-up',
                 render: true,
                 event: function () {
+                     $('#uploadModal').modal('show');
                     // 跳转到指定页面
-                    window.location.href = "/api_batch_test_data";
+                    {#window.location.href = "/api_batch_test_data";#}
                 },
                 attributes: {
                     class: 'Add a new row to the table',
-                    style: 'width: 80px; height:38px; margin-left:40px;display: flex; justify-content: center; align-items: center;',
+                    style: 'width: 120px; height:40px; margin-left:40px;display: flex; justify-content: center; align-items: center;',
                     iconAlignment: 'center',
                 }
             }

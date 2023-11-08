@@ -443,6 +443,22 @@ class tanos_manage():
             sql = """UPDATE xcheck.role2 SET role_value = '{}' WHERE name = '{}'""".format(role_value, name)
             useDB.useDB().executesql(sql)
 
+    def show_api_batch_suite(self):
+        user_id = session.get('userid', None)
+        sql = """select user_id,suite_id,suite_name,create_date from xcheck.api_batch_suite where user_id= '{}'  """ \
+            .format(user_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        return result
+
+    def add_api_batch_suite(self, suite_name):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        user_id = session.get('userid', None)
+        sql = """INSERT INTO xcheck.api_batch_suite (user_id,suite_name,create_date)\
+          VALUES ('{}','{}','{}')""" \
+            .format(user_id, suite_name.strip(),create_date)
+        useDB.useDB().executesql(sql)
+
 if __name__ == '__main__':
     testcase = tanos_manage()
     # a= testcase.search_by_connect_id(10002)
