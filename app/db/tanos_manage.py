@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import time
+from datetime import datetime
 
 from flask import session
 
@@ -449,6 +450,7 @@ class tanos_manage():
             .format(user_id)
         # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
         result = useDB.useDB().executesql_fetch(sql)
+
         return result
 
     def add_api_batch_suite(self, suite_name):
@@ -458,6 +460,46 @@ class tanos_manage():
           VALUES ('{}','{}','{}')""" \
             .format(user_id, suite_name.strip(),create_date)
         useDB.useDB().executesql(sql)
+
+    def add_api_batch_case(self, suite_id, url, methods, request_body, headers,expected_result):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        user_id = session.get('userid', None)
+        sql = """INSERT INTO xcheck.api_batch_case (user_id,suite_id,url,methods,request_body,headers,expected_result,create_date)\
+          VALUES ('{}','{}','{}','{}','{}','{}','{}','{}')""" \
+            .format(user_id,suite_id, url.strip(),methods.strip(),request_body.strip(),headers.strip(),expected_result.strip(),create_date)
+        useDB.useDB().executesql(sql)
+
+    def delete_api_batch_suite(self, id):
+        sql = "DELETE FROM xcheck.api_batch_suite WHERE suite_id = '{}';".format(id)
+        useDB.useDB().executesql(sql)
+
+    def get_suite_id(self,filename):
+        sql = """SELECT suite_id FROM xcheck.api_batch_suite where suite_name='{}'  """.format(filename)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            result = result[0][0]
+            return result
+
+
+    def show_api_batch_case(self):
+        user_id = session.get('userid', None)
+        sql = """select user_id,case_id,suite_id,url,methods,request_body,headers,expected_result,create_date from xcheck.api_batch_case where user_id= '{}'  """ \
+            .format(user_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+
+        return result
+
+    def show_api_batch_case_in_suite_id(self,suite_id):
+        user_id = session.get('userid', None)
+        sql = """select user_id,case_id,suite_id,url,methods,request_body,headers,expected_result,create_date from xcheck.api_batch_case where suite_id= '{}'  """ \
+            .format(suite_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+
+        return result
+
 
 if __name__ == '__main__':
     testcase = tanos_manage()

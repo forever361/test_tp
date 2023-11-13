@@ -1,5 +1,8 @@
 import json
+from datetime import datetime
 
+import openpyxl
+import pandas as pd
 import requests
 from flask import Blueprint, render_template, request, jsonify, session
 from werkzeug.utils import secure_filename
@@ -9,6 +12,7 @@ import sys
 
 from app.application import app
 from app.db.tanos_manage import tanos_manage
+from app.util.log_util.all_new_log import logger_all
 from app.util.permissions import permission_required
 from app.view import user
 
@@ -70,22 +74,126 @@ def upload_file():
                 os.makedirs(os.path.join(user_folder_path, 'upload'))
             file.save(f'{user_folder_path}/upload/{filename}')
         else:
+            # os.remove(f'{user_folder_path}/upload/{filename}')
             return jsonify({'success': False, 'message': 'file existed'})
 
-    #入库这里要有异常处理
-    tanos_manage().add_api_batch_suite(filename)
+    # 读取Excel文件并插入数据
+    excel_path = f'{user_folder_path}/upload/{filename}'
+
+
+    try:
+        #入库这里要有异常处理
+        tanos_manage().add_api_batch_suite(filename)
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error insert suite: {str(e)}'})
+
+    suite_id = tanos_manage().get_suite_id(filename)
+
+    try:
+        # 使用pandas读取Excel文件
+        df = pd.read_excel(excel_path, engine='openpyxl')
+        print(df)
+        # 将DataFrame数据插入数据库
+        for index, row in df.iterrows():
+            url = row['Url']
+            method = row['Method']
+            request_body = row['Request body']
+            header = row['Header']
+            expected_result = row['Expected result']
+
+            # 在这里使用 tanos_manager.add_api_batch_suite 方法插入数据库，具体根据您的模型和需求调整
+            tanos_manage().add_api_batch_case(suite_id=suite_id, url=url, methods=method, request_body=request_body, headers=header,
+                                              expected_result=expected_result)
+
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error reading Excel file: {str(e)}'})
 
     return render_template('api/api_batch_suite.html',)
 
 
 @web.route('/batch_api_suite_search.json', methods=['GET'])
-def show_data():
+def show_batch():
     rows = tanos_manage().show_api_batch_suite()
     keys=('user_id','suite_id','suite_name','create_date')
     result_list=[]
     for row in rows:
-        values = [value.strip() if isinstance(value,str) else value for value in row]
-        result_dict =dict(zip(keys,values))
+        # Assuming create_date is the fourth element in the row
+        create_date_str = row[3].strftime("%a, %d %b %Y %H:%M:%S GMT")
+        # Convert create_date string to datetime object
+        create_date_datetime = datetime.strptime(create_date_str, "%a, %d %b %Y %H:%M:%S GMT")
+        # Format datetime object as needed
+        formatted_create_date = create_date_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        # Update the row with the formatted create_date
+        row_with_formatted_date = (*row[:3], formatted_create_date)
+        # Create a dictionary from keys and updated row
+        result_dict = dict(zip(keys, row_with_formatted_date))
+        # Append the result dictionary to the list
         result_list.append(result_dict)
-    print(11,result_list)
     return jsonify(result_list)
+
+
+@web.route('/delete_api_batch_suite', methods=['POST'])
+def delete_data():
+    data = request.json
+    # TODO: Update data in the database
+    tanos_manage().delete_api_batch_suite(data["id"])
+    #这里文件最好也能删掉
+    logger_all.info('delete connection：{}'.format(data["id"]))
+    return jsonify(success=True, message='Data deleted successfully')
+
+
+
+
+@web.route('/batch_api_case_search.json', methods=['GET'])
+def show_case():
+    rows = tanos_manage().show_api_batch_case()
+    keys=('user_id','case_id','suite_id','url','methods','request_body','headers','expected_result','create_date')
+    result_list=[]
+    for row in rows:
+        # Assuming create_date is the fourth element in the row
+        create_date_str = row[8].strftime("%a, %d %b %Y %H:%M:%S GMT")
+        # Convert create_date string to datetime object
+        create_date_datetime = datetime.strptime(create_date_str, "%a, %d %b %Y %H:%M:%S GMT")
+        # Format datetime object as needed
+        formatted_create_date = create_date_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        # Update the row with the formatted create_date
+        row_with_formatted_date = (*row[:8], formatted_create_date)
+        # Create a dictionary from keys and updated row
+        result_dict = dict(zip(keys, row_with_formatted_date))
+        # Append the result dictionary to the list
+        result_list.append(result_dict)
+    return jsonify(result_list)
+
+
+@app.route('/batch_search_case',methods=['GET'])
+def batch_search_case():
+    # 获取请求参数中的id
+    suite_id = request.args.get('id')
+    return render_template('api/api_batch_case.html', suite_id=suite_id)
+
+@app.route('/batch_search_case_json', methods=['GET'])
+def batch_search_case_json():
+    # 获取请求参数中的id
+    suite_id = request.args.get('id')
+
+    rows = tanos_manage().show_api_batch_case_in_suite_id(suite_id)
+    keys = (
+        'user_id', 'case_id', 'suite_id', 'url', 'methods', 'request_body', 'headers', 'expected_result', 'create_date')
+    result_list = []
+    for row in rows:
+        # Assuming create_date is the fourth element in the row
+        create_date_str = row[8].strftime("%a, %d %b %Y %H:%M:%S GMT")
+        # Convert create_date string to datetime object
+        create_date_datetime = datetime.strptime(create_date_str, "%a, %d %b %Y %H:%M:%S GMT")
+        # Format datetime object as needed
+        formatted_create_date = create_date_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        # Update the row with the formatted create_date
+        row_with_formatted_date = (*row[:8], formatted_create_date)
+        # Create a dictionary from keys and updated row
+        result_dict = dict(zip(keys, row_with_formatted_date))
+        # Append the result dictionary to the list
+        result_list.append(result_dict)
+
+    return jsonify(result_list)
+
+

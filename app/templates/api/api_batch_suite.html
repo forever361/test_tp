@@ -80,6 +80,8 @@
             <div class="card-text">
                 <p>On this page, you can batch import a suite of APIs and manage them.</p>
 
+                <button class="btn btn-primary" id="btnImport" type="button" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Import File</button>
+
                 <table class="table table-striped"
                        id="table"
                        data-toggle="table"
@@ -88,20 +90,22 @@
                        data-pagination="true"
                        data-search="true"
                        data-buttons-class="primary"
-                       data-buttons="buttons"
-                       data-sort-name="id"
+{#                       data-buttons="buttons"#}
+                       data-sort-name="suite_id"
                        data-sort-order="desc"
 
                 >
                     <thead>
                     <tr>
-                        <th data-field="user_id" data-width="5" data-width-unit="%">USER ID
+                        <th data-field="user_id" data-width="15" data-width-unit="%">USER ID
                         </th>
-                        <th data-field="suite_id" data-align="center" data-sortable="true">SUITE ID
+                        <th data-field="suite_id" data-align="center" data-sortable="true" data-width="15" data-width-unit="%">SUITE ID
                         </th>
-                        <th data-field="suite_name" data-align="left" data-sortable="true">SUITE NAME
+                        <th data-field="suite_name" data-formatter="suiteNameFormatter" data-align="left" data-sortable="true"  >SUITE NAME
                         </th>
-                        <th data-formatter="actionFormatter" data-align="center">OPERATION</th>
+                        <th data-field="create_date" data-align="left" data-sortable="true" >CREATE DATE
+                        </th>
+                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>
 
                     </tr>
                     </thead>
@@ -145,9 +149,17 @@
 
 <script>
 
+    $(document).ready(function () {
+        // 监听按钮点击事件
+        $('#btnImport').on('click', function () {
+            // 显示模态框
+            $('#uploadModal').modal('show');
+        });
+    });
+
     function buttons() {
         return {
-            btnAdd: {
+            btnImport: {
                 text: 'Add new row',
                 icon: 'fas fa-file-arrow-up',
                 render: true,
@@ -164,6 +176,10 @@
             }
         }
     }
+
+
+
+
 </script>
 
 
@@ -171,14 +187,33 @@
 
     const $table = $('#table');
 
+    $(document).ready(function () {
+        // Assuming you have a specific class for SUITE NAME cells, e.g., 'suite-name-cell'
+        $table.on('click', '.suite-name-cell', function () {
+            // Get the suite_id from the row data
+            var suite_id = $(this).closest('tr').find('td[data-field="suite_id"]').text();
+
+            // Redirect to the specified page with the suite_id
+            window.location.href = '/batch_search_case?id=' + suite_id;
+        });
+    });
+
 
     // Formatter for "action" column
     function actionFormatter(value, row, index) {
-        return '<button class="btn btn-sm btn-primary edit-row" onclick="window.location.href=(\'/data_edit_test_case_tanos?id=' + row.id + '\')"><i class="fa-regular fa-pen-to-square"></i></button> ' +
-            '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +
-            '<button class="btn btn-sm btn-success report-row" style="margin-left: 10px;" onclick="window.location.href=(\'/data_search_report?id=' + row.id + '\')"><i class="fa-sharp fa-regular fa-eye"></i></button> '
+        return '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>'
 
     }
+
+        // Formatter for "action" column
+    {#function suiteFormatter(value, row, index) {#}
+    {#    return '<a href="javascript:;" onclick="window.location.href=(\'/batch_search_case?id='+ row.id + '\')">suite_name</a> '#}
+    {##}
+
+    function suiteNameFormatter(value, row) {
+        return '<a href="/batch_search_case?id=' + row.suite_id + '">' + value + '</a>';
+    }
+
 
 
     /////delete function
@@ -186,7 +221,7 @@
         const id = $tr.find('td:eq(1)').text();
         console.log({id: id})
         $.ajax({
-            url: '/data_delete_test_case',
+            url: '/delete_api_batch_suite',
             type: 'POST',
             data: JSON.stringify({"id": id, "act": "del"}),
             contentType: 'application/json',
@@ -196,7 +231,7 @@
             },
             error: function (error) {
                 console.log(error);
-                toastr.error('failed to delete the case. Please try again.');
+                toastr.error('failed to delete the suite. Please try again.');
             }
         });
     }

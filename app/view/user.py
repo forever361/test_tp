@@ -257,7 +257,7 @@ def prepare_flask_request(request):
 #         return 'Login failed'
 
 @web.route('/login/callback', methods=['GET', 'POST'])
-@handle_exceptions
+# @handle_exceptions
 def login_callback():
     session_current_url = session.get('current_url', None)
     req = prepare_flask_request(request)
@@ -271,7 +271,7 @@ def login_callback():
         r'<Attribute Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"><AttributeValue>(.*?)</AttributeValue>',
         auth.get_last_response_xml())
 
-    print(111, match2.group(1))
+    logger_all.info(111, match2.group(1))
 
     if len(errors) == 0 and auth.is_authenticated():
 

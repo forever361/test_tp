@@ -58,7 +58,8 @@
 </style>
 
 
-<div style="background-color: #eee; height: 100%; width: 100%; display: flex; flex-direction: column; align-items: flex-start;">
+{#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
+
 
     <ul class="nav nav-tabs">
       <li class="nav-item">
@@ -72,164 +73,168 @@
       </li>
     </ul>
 
-    <div style="display: flex; justify-content: center;  height: 90%; width: 97%; margin: 10px 30px;"
-         class="card">
-        <div class="card-body" style="padding:10px; overflow-y: auto; max-height: calc(100% - 100px);">
+    <div style=" margin: 20px; margin-bottom: 100px " class="card">
+         <div class="card-body" style="padding:10px;">
             <!-- Default panel contents -->
-            <h5 class="card-title">API Suite Management</h5>
+            <h5 class="card-title">API Case Management</h5>
             <div class="card-text">
-                <p>On this page, you can batch import a suite of APIs and manage them.</p>
+                <p>On this page, you can manage API test cases and generate job.</p>
 
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="add-row-modal"
-                     aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasRightLabel">Add new connection</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="new-row-name" class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" id="new-row-name"
-                                       placeholder="example:pg-servcer1-example">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-dbtype" class="col-form-label">Connection Type:</label>
-                                <select class="form-select" id="new-row-dbtype">
-                                    <option>AliCloud-PostgreSQL</option>
-                                    <option>AliCloud-Maxcompute</option>
-                                    <option>DB-Oracle</option>
-                                    <option>DB-DB2</option>
-                                    <option>GCP-BigQuery</option>
-                                    <option>API</option>
-                                    <option>Fileserver</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-type" class="col-form-label">Type:</label>
-                                <select class="form-select" id="new-row-type">
-                                    <option>private</option>
-                                    <option>public</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-host" class="col-form-label">Host:</label>
-                                <input type="text" class="form-control" id="new-row-host">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-port" class="col-form-label">Port:</label>
-                                <input type="text" class="form-control" id="new-row-port">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-library" class="col-form-label">Library:</label>
-                                <input type="text" class="form-control" id="new-row-library">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-username" class="col-form-label">Username:</label>
-                                <input type="text" class="form-control" id="new-row-username">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-pwd" class="col-form-label">Password:</label>
-                                <input type="password" class="form-control" id="new-row-pwd">
-                            </div>
+                <button class="btn btn-primary" type="button" id="btnGenjob" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Generate job </button>
 
-                        </form>
+                <table class="table table-striped"
+                       id="table"
+                       data-toggle="table"
+                       data-url="/batch_search_case_json?id={{ suite_id }}"
+                       data-pagination="true"
+                       data-search="true"
+                       data-buttons-class="primary"
+                       data-sort-name="case_id"
+                       data-sort-order="desc"
+                       data-page-list="[10, 25, 50, 100, all]"
+{#                        data-multiple-select-row="true"#}
+{#                        data-click-to-select="true"#}
 
-                        <div style="margin-top:20px">
-                            <div style="width:80%; margin:auto; text-align:center">
-                                <button style="float:left" type="button" class="btn btn-danger"
-                                        data-bs-dismiss="modal">Close
-                                </button>
-                                <button style="float:right" type="button" class="btn btn-success" id="save-new-row">
-                                    Save
-                                </button>
-                            </div>
+                >
+                    <thead>
+                    <tr>
+                        <th data-field="state" data-checkbox="true"></th>
+{#                        <th data-field="state" data-checkbox="true"></th>#}
+                        <th data-field="user_id" data-width="15" data-width-unit="%">USER ID
+                        </th>
 
-                        </div>
+                         <th data-field="suite_id" data-align="center" data-sortable="true" data-width="15" data-width-unit="%">SUITE ID
+                        </th>
+                        <th data-field="case_id" data-align="center" data-sortable="true" data-width="15" data-width-unit="%">CASE ID
+                        </th>
 
-                    </div>
-                </div>
+                        <th data-field="url" data-align="left" data-sortable="true" >URL
+                        </th>
+                        <th data-field="methods" data-align="left" data-sortable="true" >Method
+                        </th>
+                        <th data-field="request_body" data-align="left" data-sortable="true" >Request_body
+                        </th>
+                        <th data-field="headers" data-align="left" data-sortable="true" >Headers
+                        </th>
+                        <th data-field="expected_result" data-align="left" data-sortable="true" >Expected_result
+                        </th>
+                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>
 
+                    </tr>
+                    </thead>
+                </table>
 
-                <div class="modal fade" id="loadingModal" tabIndex="-1" aria-labelledby="loadingModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body text-center">
-                                <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                                <p>Please wait while testing the connection.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--                <input type="text" class="form-control form-control-input" id="exampleFormControlInput1"-->
-                <!--                       placeholder="输入内容">-->
-
-{##}
-{#                <table class="table table-striped"#}
-{#                       id="table"#}
-{#                       data-toggle="table"#}
-{#                       data-height="600"#}
-{#                       data-url="connect_search.json"#}
-{#                       data-pagination="true"#}
-{#                       data-search="true"#}
-{#                       data-buttons-class="primary"#}
-{#                       data-buttons="buttons"#}
-{#                       data-sort-name="connect_id"#}
-{#                       data-sort-order="desc"#}
-{##}
-{#                >#}
-{#                    <thead>#}
-{#                    <tr>#}
-{#                        <th data-field="connect_id" data-sortable="true" data-width="5" data-width-unit="%">ID#}
-{#                        </th>#}
-{#                        <th data-field="connect_name" data-formatter="nameFormatter" data-align="center">#}
-{#                            Connection Name#}
-{#                        </th>#}
-{#                        <th data-field="connect_type" data-formatter="typeFormatter" data-align="center" data-width="8"#}
-{#                            data-width-unit="%">Type#}
-{#                        </th>#}
-{#                        <th data-field="dbtype" data-formatter="typeFormatter_db" data-width="12"#}
-{#                            data-width-unit="%"#}
-{#                            data-align="center">#}
-{#                            Connection Type#}
-{#                        </th>#}
-{#                        <th data-field="host" data-formatter="hostFormatter" data-align="center">Host#}
-{#                        </th>#}
-{#                        <th data-field="port" data-formatter="portFormatter" data-width="5" data-width-unit="%">#}
-{#                            Port#}
-{#                        </th>#}
-{#                        <th data-field="dblibrary" data-formatter="libraryFormatter" data-align="center">Library#}
-{#                        </th>#}
-{#                        <th data-field="username" data-formatter="userFormatter" data-align="center">Username#}
-{#                        </th>#}
-{#                        <th data-field="pwd" data-formatter="pwdFormatter" data-align="center">Password</th>#}
-{#                        <th data-formatter="actionFormatter">Operation</th>#}
-{#                        <th data-formatter="testFormatter" data-align="center">Test Connection</th>#}
-{#                    </tr>#}
-{#                    </thead>#}
-{#                </table>#}
 
             </div>
         </div>
 
-{#        <div style="position: absolute; right: 15px;bottom: 15px;">#}
-{#            <button id='next' type="button" class="btn btn-secondary" style="width: 120px;"> NEXT>>#}
-{#            </button>#}
-{#        </div>#}
-
     </div>
 
 
-</div>
 
 
 
+<script>
 
+    $(document).ready(function () {
+        // 监听按钮点击事件
+        $('#btnGenjob').on('click', function () {
+            var rows = $('#table').bootstrapTable('getSelections');
+            if (rows.length < 1) {
+                alert("请至少选择一条数据");
+            } else {
+                // 多选时获取case_id
+                var caseIds = [];
+                for (var i = 0; i < rows.length; i++) {
+                    caseIds.push(rows[i].case_id);
+                }
+
+                // caseIds 数组中存储了选中行的 case_id
+                alert(caseIds);
+
+
+            }
+
+        });
+    });
+
+
+</script>
+
+
+<script>
+
+    const $table = $('#table');
+
+
+    // Formatter for "action" column
+    function actionFormatter(value, row, index) {
+        return '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>'
+
+    }
+
+    {#function actionFormatter(value, row, index) {#}
+    {#    return '<button class="btn btn-sm btn-primary edit-row" onclick="window.location.href=(\'/data_edit_test_case_tanos?id=' + row.id + '\')"><i class="fa-regular fa-pen-to-square"></i></button> ' +#}
+    {#        '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +#}
+    {#        '<button class="btn btn-sm btn-success report-row" style="margin-left: 10px;" onclick="window.location.href=(\'/data_search_report?id=' + row.id + '\')"><i class="fa-sharp fa-regular fa-eye"></i></button> '#}
+    {##}
+    {#}#}
+
+
+    /////delete function
+    function deleteRow($tr) {
+        const id = $tr.find('td:eq(1)').text();
+        console.log({id: id})
+        $.ajax({
+            url: '/delete_api_batch_suite',
+            type: 'POST',
+            data: JSON.stringify({"id": id, "act": "del"}),
+            contentType: 'application/json',
+            success: function () {
+                toastr.success('delete successfully!');
+                $('#table').bootstrapTable('refresh');
+            },
+            error: function (error) {
+                console.log(error);
+                toastr.error('failed to delete the suite. Please try again.');
+            }
+        });
+    }
+
+
+    $table.on('click', '.delete-row', function () {
+        const $tr = $(this).closest('tr');
+
+        let dialog = bootbox.dialog({
+            title: 'Delete item!',
+            message: "<p>Please confirm if you want to delete? </p>",
+            centerVertical: true,
+            buttons:
+                {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback:
+                            function () {
+                                console.log('Custom cancel clicked');
+                            }
+                    },
+
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback:
+                            function () {
+                                deleteRow($tr)
+                            }
+                    }
+                }
+        });
+
+    });
+
+
+</script>
 
 
 
