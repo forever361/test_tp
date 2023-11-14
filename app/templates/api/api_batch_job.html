@@ -58,179 +58,223 @@
 </style>
 
 
-<div style="background-color: #eee; height: 100%; width: 100%; display: flex; flex-direction: column; align-items: flex-start;">
+{#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
+
 
     <ul class="nav nav-tabs">
       <li class="nav-item">
-        <a class="nav-link " aria-current="page" href="/api_batch_suite">API Suite Management</a>
+        <a class="nav-link" aria-current="page" href="/api_batch_suite">API Suite Management</a>
       </li>
       <li class="nav-item">
         <a class="nav-link " href="/api_batch_case">API case Management</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" href="/api_batch_job">Job Management</a>
+        <a class="nav-link  active" href="/api_batch_job">Job Management</a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/api_batch_result">Test result</a>
+      </li>
+
     </ul>
 
-    <div style="display: flex; justify-content: center;  height: 90%; width: 97%; margin: 10px 30px;"
-         class="card">
-        <div class="card-body" style="padding:10px; overflow-y: auto; max-height: calc(100% - 100px);">
+    <div style=" margin: 20px; margin-bottom: 100px " class="card">
+         <div class="card-body" style="padding:10px;">
             <!-- Default panel contents -->
             <h5 class="card-title">API Suite Management</h5>
             <div class="card-text">
-                <p>On this page, you can batch import a suite of APIs and manage them.</p>
+                <p>On this page, you can manage the jobs.</p>
 
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="add-row-modal"
-                     aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasRightLabel">Add new connection</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="new-row-name" class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" id="new-row-name"
-                                       placeholder="example:pg-servcer1-example">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-dbtype" class="col-form-label">Connection Type:</label>
-                                <select class="form-select" id="new-row-dbtype">
-                                    <option>AliCloud-PostgreSQL</option>
-                                    <option>AliCloud-Maxcompute</option>
-                                    <option>DB-Oracle</option>
-                                    <option>DB-DB2</option>
-                                    <option>GCP-BigQuery</option>
-                                    <option>API</option>
-                                    <option>Fileserver</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-type" class="col-form-label">Type:</label>
-                                <select class="form-select" id="new-row-type">
-                                    <option>private</option>
-                                    <option>public</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-host" class="col-form-label">Host:</label>
-                                <input type="text" class="form-control" id="new-row-host">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-port" class="col-form-label">Port:</label>
-                                <input type="text" class="form-control" id="new-row-port">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-library" class="col-form-label">Library:</label>
-                                <input type="text" class="form-control" id="new-row-library">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-username" class="col-form-label">Username:</label>
-                                <input type="text" class="form-control" id="new-row-username">
-                            </div>
-                            <div class="form-group">
-                                <label for="new-row-pwd" class="col-form-label">Password:</label>
-                                <input type="password" class="form-control" id="new-row-pwd">
-                            </div>
+{#                <button class="btn btn-primary" id="btnImport" type="button" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Import File</button>#}
 
-                        </form>
-
-                        <div style="margin-top:20px">
-                            <div style="width:80%; margin:auto; text-align:center">
-                                <button style="float:left" type="button" class="btn btn-danger"
-                                        data-bs-dismiss="modal">Close
-                                </button>
-                                <button style="float:right" type="button" class="btn btn-success" id="save-new-row">
-                                    Save
-                                </button>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <div class="modal fade" id="loadingModal" tabIndex="-1" aria-labelledby="loadingModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body text-center">
-                                <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                                <p>Please wait while testing the connection.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--                <input type="text" class="form-control form-control-input" id="exampleFormControlInput1"-->
-                <!--                       placeholder="输入内容">-->
-
-{##}
-{#                <table class="table table-striped"#}
-{#                       id="table"#}
-{#                       data-toggle="table"#}
+                <table class="table table-striped"
+                       id="table"
+                       data-toggle="table"
 {#                       data-height="600"#}
-{#                       data-url="connect_search.json"#}
-{#                       data-pagination="true"#}
-{#                       data-search="true"#}
-{#                       data-buttons-class="primary"#}
+                       data-url="batch_api_job_search.json"
+                       data-pagination="true"
+                       data-search="true"
+                       data-buttons-class="primary"
 {#                       data-buttons="buttons"#}
-{#                       data-sort-name="connect_id"#}
-{#                       data-sort-order="desc"#}
-{##}
-{#                >#}
-{#                    <thead>#}
-{#                    <tr>#}
-{#                        <th data-field="connect_id" data-sortable="true" data-width="5" data-width-unit="%">ID#}
-{#                        </th>#}
-{#                        <th data-field="connect_name" data-formatter="nameFormatter" data-align="center">#}
-{#                            Connection Name#}
-{#                        </th>#}
-{#                        <th data-field="connect_type" data-formatter="typeFormatter" data-align="center" data-width="8"#}
-{#                            data-width-unit="%">Type#}
-{#                        </th>#}
-{#                        <th data-field="dbtype" data-formatter="typeFormatter_db" data-width="12"#}
-{#                            data-width-unit="%"#}
-{#                            data-align="center">#}
-{#                            Connection Type#}
-{#                        </th>#}
-{#                        <th data-field="host" data-formatter="hostFormatter" data-align="center">Host#}
-{#                        </th>#}
-{#                        <th data-field="port" data-formatter="portFormatter" data-width="5" data-width-unit="%">#}
-{#                            Port#}
-{#                        </th>#}
-{#                        <th data-field="dblibrary" data-formatter="libraryFormatter" data-align="center">Library#}
-{#                        </th>#}
-{#                        <th data-field="username" data-formatter="userFormatter" data-align="center">Username#}
-{#                        </th>#}
-{#                        <th data-field="pwd" data-formatter="pwdFormatter" data-align="center">Password</th>#}
-{#                        <th data-formatter="actionFormatter">Operation</th>#}
-{#                        <th data-formatter="testFormatter" data-align="center">Test Connection</th>#}
-{#                    </tr>#}
-{#                    </thead>#}
-{#                </table>#}
+                       data-sort-name="suite_id"
+                       data-sort-order="desc"
+
+                >
+                    <thead>
+                    <tr>
+                        <th data-field="user_id" data-width="15" data-width-unit="%">USER ID
+                        </th>
+                        <th data-field="job_id" data-align="center" data-sortable="true" data-width="15" data-width-unit="%">JOB ID
+                        </th>
+                        <th data-field="job_name" data-formatter="suiteNameFormatter" data-align="left" data-sortable="true"  >JOB NAME
+                        </th>
+                        <th data-field="create_date" data-align="left" data-sortable="true" >CREATE DATE
+                        </th>
+                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>
+
+                    </tr>
+                    </thead>
+                </table>
+
 
             </div>
         </div>
 
-{#        <div style="position: absolute; right: 15px;bottom: 15px;">#}
-{#            <button id='next' type="button" class="btn btn-secondary" style="width: 120px;"> NEXT>>#}
-{#            </button>#}
-{#        </div>#}
-
     </div>
 
 
-</div>
+    <!-- 模态窗口 -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/upload_excel" enctype="multipart/form-data">
+                            <input type="file" name="file" accept=".xlsx, .xls">
+                            <button type="submit" class="btn btn-primary">Upload File</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
 
 
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        // 监听按钮点击事件
+        $('#btnImport').on('click', function () {
+            // 显示模态框
+            $('#uploadModal').modal('show');
+        });
+    });
+
+    function buttons() {
+        return {
+            btnImport: {
+                text: 'Add new row',
+                icon: 'fas fa-file-arrow-up',
+                render: true,
+                event: function () {
+                     $('#uploadModal').modal('show');
+                    // 跳转到指定页面
+                    {#window.location.href = "/api_batch_test_data";#}
+                },
+                attributes: {
+                    class: 'Add a new row to the table',
+                    style: 'width: 120px; height:40px; margin-left:40px;display: flex; justify-content: center; align-items: center;',
+                    iconAlignment: 'center',
+                }
+            }
+        }
+    }
+
+
+
+
+</script>
+
+
+<script>
+
+    const $table = $('#table');
+
+    $(document).ready(function () {
+        // Assuming you have a specific class for SUITE NAME cells, e.g., 'suite-name-cell'
+        $table.on('click', '.suite-name-cell', function () {
+            // Get the suite_id from the row data
+            var suite_id = $(this).closest('tr').find('td[data-field="suite_id"]').text();
+
+            // Redirect to the specified page with the suite_id
+            window.location.href = '/batch_search_case?id=' + suite_id;
+        });
+    });
+
+
+    // Formatter for "action" column
+    function actionFormatter(value, row, index) {
+        return '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>'
+
+    }
+
+        // Formatter for "action" column
+    {#function suiteFormatter(value, row, index) {#}
+    {#    return '<a href="javascript:;" onclick="window.location.href=(\'/batch_search_case?id='+ row.id + '\')">suite_name</a> '#}
+    {##}
+
+    function suiteNameFormatter(value, row) {
+        return '<a href="/batch_search_job?id=' + row.suite_id + '">' + value + '</a>';
+    }
+
+
+
+    /////delete function
+    function deleteRow($tr) {
+        const id = $tr.find('td:eq(1)').text();
+        console.log({id: id})
+        $.ajax({
+            url: '/delete_api_batch_suite',
+            type: 'POST',
+            data: JSON.stringify({"id": id, "act": "del"}),
+            contentType: 'application/json',
+            success: function () {
+                toastr.success('delete successfully!');
+                $('#table').bootstrapTable('refresh');
+            },
+            error: function (error) {
+                console.log(error);
+                toastr.error('failed to delete the suite. Please try again.');
+            }
+        });
+    }
+
+
+    $table.on('click', '.delete-row', function () {
+        const $tr = $(this).closest('tr');
+
+        let dialog = bootbox.dialog({
+            title: 'Delete item!',
+            message: "<p>Please confirm if you want to delete? </p>",
+            centerVertical: true,
+            buttons:
+                {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback:
+                            function () {
+                                console.log('Custom cancel clicked');
+                            }
+                    },
+
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback:
+                            function () {
+                                deleteRow($tr)
+                            }
+                    }
+                }
+        });
+
+    });
+
+
+</script>
 
 
 

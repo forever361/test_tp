@@ -48,6 +48,14 @@ def api_batch_case():
 def api_batch_job():
     return render_template('api/api_batch_job.html',)
 
+
+@web.route('/api_batch_result', methods=['GET', 'POST'])
+@user.login_required
+# @permission_required(session.get('groupname'))
+def api_batch_result():
+    return render_template('api/api_batch_result.html',)
+
+
 # 定义允许的文件扩展名检查函数
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'xlsx', 'xls'}
@@ -197,3 +205,87 @@ def batch_search_case_json():
     return jsonify(result_list)
 
 
+@app.route('/batch_search_job',methods=['GET'])
+def batch_search_job():
+    # 获取请求参数中的id
+    suite_id = request.args.get('id')
+    return render_template('api/api_batch_case.html', suite_id=suite_id)
+
+@app.route('/batch_search_job_json', methods=['GET'])
+def batch_search_job_json():
+    # 获取请求参数中的id
+    suite_id = request.args.get('id')
+
+    rows = tanos_manage().show_api_batch_case_in_suite_id(suite_id)
+    keys = (
+        'user_id', 'case_id', 'suite_id', 'url', 'methods', 'request_body', 'headers', 'expected_result', 'create_date')
+    result_list = []
+    for row in rows:
+        # Assuming create_date is the fourth element in the row
+        create_date_str = row[8].strftime("%a, %d %b %Y %H:%M:%S GMT")
+        # Convert create_date string to datetime object
+        create_date_datetime = datetime.strptime(create_date_str, "%a, %d %b %Y %H:%M:%S GMT")
+        # Format datetime object as needed
+        formatted_create_date = create_date_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        # Update the row with the formatted create_date
+        row_with_formatted_date = (*row[:8], formatted_create_date)
+        # Create a dictionary from keys and updated row
+        result_dict = dict(zip(keys, row_with_formatted_date))
+        # Append the result dictionary to the list
+        result_list.append(result_dict)
+
+    return jsonify(result_list)
+
+
+
+@app.route('/gen_api_batch_job',methods=['POST'])
+def gen_api_batch_job():
+    data = request.json
+    print(data)
+    print(data['caseIds'])
+
+    current_time = datetime.now()
+
+    # 格式化时间戳
+    formatted_time = current_time.strftime("%Y_%m_%d_%H%M_%S%f")[:-3]  # 去掉最后的微秒部分
+    case_ids_count = len(data['caseIds'])
+    job_name = f"{formatted_time}_[{case_ids_count}]"
+
+    try:
+        #入库这里要有异常处理
+        tanos_manage().add_api_batch_job(job_name)
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error insert job: {str(e)}'})
+
+    job_id = tanos_manage().get_job_id(job_name)
+    print(111,job_id)
+
+    # try:
+    #     tanos_manage().add_api_batch_result(suite_id=suite_id, url=url, methods=method, request_body=request_body,
+    #                                           headers=header,
+    #                                           expected_result=expected_result)
+    # except Exception as e:
+    #     return jsonify({'success': False, 'message': f'Error reading Excel file: {str(e)}'})
+
+
+    return jsonify(data)
+
+@web.route('/batch_api_job_search.json', methods=['GET'])
+def show_batch_job():
+    rows = tanos_manage().show_api_batch_job()
+    keys=('user_id','job_id','job_name','create_date')
+    result_list=[]
+    for row in rows:
+        # Assuming create_date is the fourth element in the row
+        create_date_str = row[3].strftime("%a, %d %b %Y %H:%M:%S GMT")
+        # Convert create_date string to datetime object
+        create_date_datetime = datetime.strptime(create_date_str, "%a, %d %b %Y %H:%M:%S GMT")
+        # Format datetime object as needed
+        formatted_create_date = create_date_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        # Update the row with the formatted create_date
+        row_with_formatted_date = (*row[:3], formatted_create_date)
+        # Create a dictionary from keys and updated row
+        result_dict = dict(zip(keys, row_with_formatted_date))
+        # Append the result dictionary to the list
+        result_list.append(result_dict)
+    return jsonify(result_list)

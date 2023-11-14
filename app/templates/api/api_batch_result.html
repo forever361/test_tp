@@ -66,24 +66,24 @@
         <a class="nav-link " aria-current="page" href="/api_batch_suite">API Suite Management</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" href="/api_batch_case">API case Management</a>
+        <a class="nav-link " href="/api_batch_case">API case Management</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/api_batch_job">Job Management</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/api_batch_result">Test result</a>
+          <li class="nav-item">
+        <a class="nav-link active" href="/api_batch_result">Test result</a>
       </li>
     </ul>
 
     <div style=" margin: 20px; margin-bottom: 100px " class="card">
          <div class="card-body" style="padding:10px;">
             <!-- Default panel contents -->
-            <h5 class="card-title">API Case Management</h5>
+            <h5 class="card-title">API Test result</h5>
             <div class="card-text">
-                <p>On this page, you can manage API test cases and generate job.</p>
+                <p>On this page, you can run job and check test result.</p>
 
-                <button class="btn btn-primary" type="button" id="btnGenjob" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Generate job </button>
+                <button class="btn btn-primary" type="button" id="btnGenjob" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Run job </button>
 
                 <table class="table table-striped"
                        id="table"
@@ -121,6 +121,8 @@
                         </th>
                         <th data-field="expected_result" data-align="left" data-sortable="true" >Expected_result
                         </th>
+                        <th data-field="test_result" data-align="left" data-sortable="true" >Result
+                        </th>
                         <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>
 
                     </tr>
@@ -153,20 +155,7 @@
                 }
 
                 // caseIds 数组中存储了选中行的 case_id
-                {#alert(caseIds);#}
-                $.ajax({
-                    url: '/gen_api_batch_job',
-                    type: 'POST',
-                    data: JSON.stringify({caseIds: caseIds}),
-                    contentType: 'application/json',
-                    success: function (data) {
-                        toastr.success('generate job successfully!');
-                    },
-                    error: function (error) {
-
-                        toastr.error('failed to generate job.');
-                    }
-                });
+                alert(caseIds);
 
 
             }

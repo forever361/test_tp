@@ -500,6 +500,31 @@ class tanos_manage():
 
         return result
 
+    def add_api_batch_job(self,job_name):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        user_id = session.get('userid', None)
+        sql = """INSERT INTO xcheck.api_batch_job (user_id,job_name,create_date)\
+          VALUES ('{}','{}','{}')""" \
+            .format(user_id, job_name.strip(),create_date)
+        useDB.useDB().executesql(sql)
+
+    def get_job_id(self,job_name):
+        sql = """SELECT job_id FROM xcheck.api_batch_job where job_name='{}'  """.format(job_name)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            result = result[0][0]
+            return result
+
+
+    def show_api_batch_job(self):
+        user_id = session.get('userid', None)
+        sql = """select user_id,job_id,job_name,create_date from xcheck.api_batch_job where user_id= '{}'  """ \
+            .format(user_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+
+        return result
 
 if __name__ == '__main__':
     testcase = tanos_manage()

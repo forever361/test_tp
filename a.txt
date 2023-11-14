@@ -114,3 +114,22 @@ CREATE TABLE xcheck.api_batch_suite
     suite_name character varying,
     create_date timestamp without time zone
 )
+
+
+create sequence xcheck.api_job_id_seq increment by 1 minvalue 1 no maxvalue start with 10000;
+CREATE TABLE xcheck.api_batch_job
+(
+    job_id character varying NOT NULL DEFAULT nextval('xcheck.api_job_id_seq'::regclass),
+    user_id character varying,
+    job_name character varying,
+    create_date timestamp without time zone
+)
+
+
+CREATE TABLE xcheck.api_batch_result
+(
+    suite_id character varying NOT NULL DEFAULT nextval('xcheck.api_suite_id_seq'::regclass),
+    user_id character varying,
+    suite_name character varying,
+    create_date timestamp without time zone
+)
