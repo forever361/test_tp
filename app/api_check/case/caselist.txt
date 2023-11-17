@@ -1,5 +1,0 @@
-#ptl/test01ptlSearch
-ptl/testbatch
-#ptl/test02ptlTowerControl
-#ptl/test03ptlBatchCommandLight
-#ptl/test04ptlBatchCommandLightBubble
