@@ -500,6 +500,15 @@ class tanos_manage():
 
         return result
 
+    def search_api_batch_case_from_case_id(self,case_id):
+        # user_id = session.get('userid', None)
+        sql = """select * from xcheck.api_batch_case where case_id= '{}'  """ \
+            .format(case_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+
+        return result
+
     def add_api_batch_job(self,job_name):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         user_id = session.get('userid', None)
@@ -521,6 +530,25 @@ class tanos_manage():
         user_id = session.get('userid', None)
         sql = """select user_id,job_id,job_name,create_date from xcheck.api_batch_job where user_id= '{}'  """ \
             .format(user_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+
+        return result
+
+    def add_api_batch_result(self, case_id, job_id, url, methods, request_body, headers,expected_result,test_result):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        user_id = session.get('userid', None)
+        sql = """INSERT INTO xcheck.api_batch_result (user_id,case_id, job_id,url,methods,request_body,headers,expected_result,test_result,create_date)\
+          VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')""" \
+            .format(user_id, case_id,job_id, url.strip(),methods.strip(),request_body.strip(),headers.strip(),expected_result.strip(),test_result.strip(),create_date)
+        useDB.useDB().executesql(sql)
+
+
+    def show_api_batch_result_in_job_id(self,job_id):
+        # user_id = session.get('userid', None)
+        sql = """select user_id,case_id,job_id,url,methods,request_body,headers,expected_result,create_date from xcheck.api_batch_result where job_id= '{}'  """ \
+            .format(job_id)
+        print(sql)
         # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
         result = useDB.useDB().executesql_fetch(sql)
 

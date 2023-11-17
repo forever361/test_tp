@@ -258,17 +258,26 @@ def gen_api_batch_job():
         return jsonify({'success': False, 'message': f'Error insert job: {str(e)}'})
 
     job_id = tanos_manage().get_job_id(job_name)
-    print(111,job_id)
 
-    # try:
-    #     tanos_manage().add_api_batch_result(suite_id=suite_id, url=url, methods=method, request_body=request_body,
-    #                                           headers=header,
-    #                                           expected_result=expected_result)
-    # except Exception as e:
-    #     return jsonify({'success': False, 'message': f'Error reading Excel file: {str(e)}'})
+    for case_id in data['caseIds']:
+        # 查询相关信息，替换下面的示例数据
+        case_info = tanos_manage().search_api_batch_case_from_case_id(case_id)
+        print(11111,case_info)
 
+        url = case_info[0][3]
+        methods = case_info[0][4]
+        request_body = case_info[0][5]
+        headers = case_info[0][6]
+        expected_result = case_info[0][7]
 
-    return jsonify(data)
+        try:
+            tanos_manage().add_api_batch_result(case_id=case_id, job_id=job_id, url=url, methods=methods,
+                                              request_body=request_body, headers=headers,
+                                              expected_result=expected_result,test_result='')
+        except Exception as e:
+            return jsonify({'success': False, 'message': f'Error insert result: {str(e)}'})
+
+    return jsonify({'job_id':job_id})
 
 @web.route('/batch_api_job_search.json', methods=['GET'])
 def show_batch_job():
@@ -289,3 +298,89 @@ def show_batch_job():
         # Append the result dictionary to the list
         result_list.append(result_dict)
     return jsonify(result_list)
+
+
+@app.route('/batch_search_result',methods=['GET'])
+def batch_search_result():
+    # 获取请求参数中的id
+    job_id = request.args.get('id')
+    # print(2222,job_id)
+    return render_template('api/api_batch_result.html', job_id=job_id)
+
+@app.route('/batch_search_result_json', methods=['GET'])
+def batch_search_result_json():
+    # 获取请求参数中的id
+    job_id = request.args.get('id')
+
+    rows = tanos_manage().show_api_batch_result_in_job_id(job_id)
+    keys = (
+        'user_id', 'case_id', 'job_id', 'url', 'methods', 'request_body', 'headers', 'expected_result', 'test_result','create_date')
+    result_list = []
+    for row in rows:
+        # Assuming create_date is the fourth element in the row
+        create_date_str = row[8].strftime("%a, %d %b %Y %H:%M:%S GMT")
+        # Convert create_date string to datetime object
+        create_date_datetime = datetime.strptime(create_date_str, "%a, %d %b %Y %H:%M:%S GMT")
+        # Format datetime object as needed
+        formatted_create_date = create_date_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        # Update the row with the formatted create_date
+        row_with_formatted_date = (*row[:8], formatted_create_date)
+        # Create a dictionary from keys and updated row
+        result_dict = dict(zip(keys, row_with_formatted_date))
+        # Append the result dictionary to the list
+        result_list.append(result_dict)
+
+    return jsonify(result_list)
+
+@app.route('/apitest111',methods=['GET'])
+def apitest111():
+    data = [
+            {
+                "connect_id": 1,
+                "connect_name": 'Item 1',
+                "dbtype": 'PostgreSQL',
+                "connect_type": "My connection",
+                "username": 'hsh',
+                "pwd": '54uru',
+                "host": 'host1',
+                "dblibrary": "test1"
+            },
+            {
+                "connect_id": 2,
+                "connect_name": 'Item 2',
+                "dbtype": 'AliCloud',
+                "connect_type": "My connection",
+                "username": 'hsh',
+                "pwd": 'we643w623',
+                "host": 'host2',
+                "dblibrary": "test2"
+            },
+    ]
+    return jsonify(data)
+
+
+@app.route('/apitest222',methods=['GET'])
+def apitest222():
+    data = [
+            {
+                "connect_id": 100,
+                "connect_name": 'Item 1',
+                "dbtype": 'PostgreSQL',
+                "connect_type": "My connection",
+                "username": 'hsh',
+                "pwd": '54uru',
+                "host": 'host1',
+                "dblibrary": "test1"
+            },
+            {
+                "connect_id": 200,
+                "connect_name": 'Item 2',
+                "dbtype": 'AliCloud',
+                "connect_type": "My connection",
+                "username": 'hsh',
+                "pwd": 'we643w623',
+                "host": 'host2',
+                "dblibrary": "test2"
+            },
+    ]
+    return jsonify(data)

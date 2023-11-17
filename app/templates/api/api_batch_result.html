@@ -88,7 +88,7 @@
                 <table class="table table-striped"
                        id="table"
                        data-toggle="table"
-                       data-url="/batch_search_case_json?id={{ suite_id }}"
+                       data-url="/batch_search_result_json?id={{ job_id }}"
                        data-pagination="true"
                        data-search="true"
                        data-buttons-class="primary"
@@ -101,14 +101,14 @@
                 >
                     <thead>
                     <tr>
-                        <th data-field="state" data-checkbox="true"></th>
 {#                        <th data-field="state" data-checkbox="true"></th>#}
-                        <th data-field="user_id" data-width="15" data-width-unit="%">USER ID
-                        </th>
+{#                        <th data-field="state" data-checkbox="true"></th>#}
+{#                        <th data-field="user_id" data-width="15" data-width-unit="%">USER ID#}
+{#                        </th>#}
 
-                         <th data-field="suite_id" data-align="center" data-sortable="true" data-width="15" data-width-unit="%">SUITE ID
+                         <th data-field="job_id" data-align="center" data-sortable="true" data-width="5" data-width-unit="%">JOB ID
                         </th>
-                        <th data-field="case_id" data-align="center" data-sortable="true" data-width="15" data-width-unit="%">CASE ID
+                        <th data-field="case_id" data-align="center" data-sortable="true" data-width="5" data-width-unit="%">CASE ID
                         </th>
 
                         <th data-field="url" data-align="left" data-sortable="true" >URL
@@ -123,7 +123,7 @@
                         </th>
                         <th data-field="test_result" data-align="left" data-sortable="true" >Result
                         </th>
-                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>
+{#                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>#}
 
                     </tr>
                     </thead>

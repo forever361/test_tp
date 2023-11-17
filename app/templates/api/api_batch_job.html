@@ -96,7 +96,7 @@
                        data-search="true"
                        data-buttons-class="primary"
 {#                       data-buttons="buttons"#}
-                       data-sort-name="suite_id"
+                       data-sort-name="job_id"
                        data-sort-order="desc"
 
                 >
@@ -216,7 +216,7 @@
     {##}
 
     function suiteNameFormatter(value, row) {
-        return '<a href="/batch_search_job?id=' + row.suite_id + '">' + value + '</a>';
+        return '<a href="/batch_search_result?id=' + row.job_id + '">' + value + '</a>';
     }
 
 

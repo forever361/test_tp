@@ -125,11 +125,18 @@ CREATE TABLE xcheck.api_batch_job
     create_date timestamp without time zone
 )
 
-
+create sequence xcheck.api_result_id_seq increment by 1 minvalue 1 no maxvalue start with 1;
 CREATE TABLE xcheck.api_batch_result
 (
-    suite_id character varying NOT NULL DEFAULT nextval('xcheck.api_suite_id_seq'::regclass),
-    user_id character varying,
-    suite_name character varying,
+    api_result_id character varying COLLATE pg_catalog."default" NOT NULL DEFAULT nextval('xcheck.api_result_id_seq'::regclass),
+    job_id character varying COLLATE pg_catalog."default",
+	case_id racter varying COLLATE pg_catalog."default",
+    user_id character varying COLLATE pg_catalog."default",
+    url character varying COLLATE pg_catalog."default",
+    methods character varying COLLATE pg_catalog."default",
+    request_body character varying COLLATE pg_catalog."default",
+    headers character varying COLLATE pg_catalog."default",
+    expected_result character varying COLLATE pg_catalog."default",
+    test_result character varying COLLATE pg_catalog."default",
     create_date timestamp without time zone
 )

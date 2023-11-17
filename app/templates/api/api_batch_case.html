@@ -160,7 +160,10 @@
                     data: JSON.stringify({caseIds: caseIds}),
                     contentType: 'application/json',
                     success: function (data) {
-                        toastr.success('generate job successfully!');
+                        job_id = data.job_id
+                        window.location.href = '/batch_search_result?id=' + job_id;
+                        {#toastr.success('generate job successfully!');#}
+
                     },
                     error: function (error) {
 
