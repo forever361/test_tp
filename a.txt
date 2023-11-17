@@ -140,3 +140,17 @@ CREATE TABLE xcheck.api_batch_result
     test_result character varying COLLATE pg_catalog."default",
     create_date timestamp without time zone
 )
+
+create sequence xcheck.api_case_id_seq increment by 1 minvalue 1 no maxvalue start with 10000;
+CREATE TABLE xcheck.api_batch_case
+(
+    case_id character varying COLLATE pg_catalog."default" NOT NULL DEFAULT nextval('xcheck.api_case_id_seq'::regclass),
+    suite_id character varying COLLATE pg_catalog."default",
+    user_id character varying COLLATE pg_catalog."default",
+    url character varying COLLATE pg_catalog."default",
+    methods character varying COLLATE pg_catalog."default",
+    request_body character varying COLLATE pg_catalog."default",
+    headers character varying COLLATE pg_catalog."default",
+    expected_result character varying COLLATE pg_catalog."default",
+    create_date timestamp without time zone
+)
