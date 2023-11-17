@@ -1,0 +1,1 @@
+{'Source TYPE': 'pg', 'Target TYPE': 'pg', 'Source conn': '47.113.185.98,5353,test_frame,postgres,b86fB3mLCinBScqv3R5LXQ==', 'Target conn': '47.113.185.98,5353,test_frame,postgres,b86fB3mLCinBScqv3R5LXQ==', 'select_rules': 'Default'}
