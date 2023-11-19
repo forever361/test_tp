@@ -72,7 +72,7 @@
         <a class="nav-link" href="/api_batch_job">Job Management</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/api_batch_result">Test result</a>
+        <a class="nav-link" href="/api_batch_result">Job detail</a>
       </li>
     </ul>
 
@@ -83,7 +83,10 @@
             <div class="card-text">
                 <p>On this page, you can batch import a suite of APIs and manage them.</p>
 
-                <button class="btn btn-primary" id="btnImport" type="button" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Import File</button>
+                <div style="display: flex; justify-content: flex-start;">
+                    <button class="btn btn-primary" id="btnImport" type="button" style="width: 180px; height: 40px; margin-top: 20px; margin-right: 50px;">Import File</button>
+                    <button class="btn btn-primary" id="btnDown" type="button" style="width: 180px; height: 40px; margin-top: 20px;">Download Sample</button>
+                </div>
 
                 <table class="table table-striped"
                        id="table"
@@ -157,6 +160,25 @@
         $('#btnImport').on('click', function () {
             // 显示模态框
             $('#uploadModal').modal('show');
+        });
+
+        $('#btnDown').on('click', function () {
+            //创建一个虚拟的下载链接
+            var downloadLink = document.createElement('a');
+
+            // 设置下载链接的属性
+            downloadLink.href = '/static/api_suite_sample.xlsx';
+            downloadLink.download = 'api_suite_sample.xlsx';
+
+            // 将下载链接追加到文档中
+            document.body.appendChild(downloadLink);
+
+            // 模拟点击下载链接
+            downloadLink.click();
+
+            // 删除创建的下载链接元素
+            document.body.removeChild(downloadLink);
+
         });
     });
 

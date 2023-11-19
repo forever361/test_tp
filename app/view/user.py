@@ -282,11 +282,11 @@ def login_callback():
         session['staffid'] = 580515000
         session['username'] = session['user']['http://schemas.microsoft.com/identity/claims/displayname'][0]
         session.permanent = True
-        print(111,auth.get_attributes())
+        logger_all.info(111,auth.get_attributes())
 
         # print('user:',auth.get_attributes())
         username = session['username']
-        print(222,username)
+        logger_all.info(222,username)
         token = session['token']
         staffid = session['staffid']
 

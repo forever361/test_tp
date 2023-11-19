@@ -1,11 +1,21 @@
-from common import getPath, HTMLTestRunner, configEmail, readConfig
+import sys
 import unittest
+
+from app.api_check.common.Constant_api import Constant_api
+from app.application import app
+from app.util import global_manager
+from common import getPath, HTMLTestRunner
 import os
 import time
 
 path = getPath.get_path()
 report_path = os.path.join(path, 'report')
 
+job_id= sys.argv[1]
+user_id = sys.argv[2]
+global_manager._init()
+global_manager.set_value('job_id', job_id)
+global_manager.set_value('user_id', user_id)
 
 class AllTest:
     def __init__(self):
@@ -14,14 +24,17 @@ class AllTest:
         now = time.strftime("%Y-%m-%d %H_%M_%S")
         self.filename = now + '_report.html'
         # resultPath = os.path.join(report_path, self.filename)
-
-        resultPath='2023-11-16 10_12_58_report.html'
+        user_id = Constant_api().user_id
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
+        html_path = folder_path + '/html/'
+        resultPath=f'{html_path}/{job_id}_apibatch_report.html'
 
         #总case list
         self.caseListFile = os.path.join(path, "case/caselist.txt")
         # print('caseListFile', self.caseListFile)
         self.caseFileDir = os.path.join(path, "testScript")  # 测试结果断言文件路径，根据不同用例（接口）分别编写
         self.caseList = []
+
 
     def set_case_list(self):
         """
@@ -84,7 +97,7 @@ class AllTest:
 
         finally:
             print("******TEST END******")
-            fp.close()
+            # fp.close()
 
         # 根据配置文件config.ini中的email_flag判断是否需要发送邮件
         # email_flag = readConfig.GetConfig().email_flag

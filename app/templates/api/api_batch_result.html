@@ -72,18 +72,18 @@
         <a class="nav-link" href="/api_batch_job">Job Management</a>
       </li>
           <li class="nav-item">
-        <a class="nav-link active" href="/api_batch_result">Test result</a>
+        <a class="nav-link active" href="/api_batch_result">Job detail</a>
       </li>
     </ul>
 
     <div style=" margin: 20px; margin-bottom: 100px " class="card">
          <div class="card-body" style="padding:10px;">
             <!-- Default panel contents -->
-            <h5 class="card-title">API Test result</h5>
+            <h5 class="card-title">Trigger job</h5>
             <div class="card-text">
                 <p>On this page, you can run job and check test result.</p>
 
-                <button class="btn btn-primary" type="button" id="btnGenjob" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Run job </button>
+                <button class="btn btn-primary" type="button" id="btnRunjob" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Run job </button>
 
                 <table class="table table-striped"
                        id="table"
@@ -93,7 +93,7 @@
                        data-search="true"
                        data-buttons-class="primary"
                        data-sort-name="case_id"
-                       data-sort-order="desc"
+{#                       data-sort-order="desc"#}
                        data-page-list="[10, 25, 50, 100, all]"
 {#                        data-multiple-select-row="true"#}
 {#                        data-click-to-select="true"#}
@@ -121,7 +121,7 @@
                         </th>
                         <th data-field="expected_result" data-align="left" data-sortable="true" >Expected_result
                         </th>
-                        <th data-field="test_result" data-align="left" data-sortable="true" >Result
+                        <th data-field="test_result" data-align="left" data-sortable="true" >Creat date
                         </th>
 {#                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>#}
 
@@ -136,29 +136,41 @@
     </div>
 
 
-
+<div id="loading" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center;">
+    <img src="./static/loading.gif" height="150" align="middle">
+    <div style="color:#00b4ef; font-weight: bold;">Testing...please wait a moment</div>
+</div>
 
 
 <script>
 
     $(document).ready(function () {
-        // 监听按钮点击事件
-        $('#btnGenjob').on('click', function () {
-            var rows = $('#table').bootstrapTable('getSelections');
-            if (rows.length < 1) {
-                alert("请至少选择一条数据");
-            } else {
-                // 多选时获取case_id
-                var caseIds = [];
-                for (var i = 0; i < rows.length; i++) {
-                    caseIds.push(rows[i].case_id);
-                }
 
-                // caseIds 数组中存储了选中行的 case_id
-                alert(caseIds);
+        $('#btnRunjob').on('click', function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            // 获取名为 "id" 的参数值
+            var jobid = urlParams.get('id');
 
+             $('#loading').show();
 
-            }
+               $.ajax({
+                   url: '/run_api_batch_job',
+                   type: 'POST',
+                   data: JSON.stringify({jobid: jobid}),
+                   contentType: 'application/json',
+                   success: function (data) {
+                       {#window.location.href = '/batch_search_result?id=' + job_id;#}
+                       $('#loading').hide();
+                       const url = `/search_api_batch_result?jobid=${jobid}`;
+                       window.open(url, '_blank');
+                       {#toastr.success('generate job successfully!');#}
+
+                   },
+                   error: function (error) {
+                        $('#loading').hide();
+                       toastr.error('failed to generate job.');
+                   }
+               });
 
         });
     });

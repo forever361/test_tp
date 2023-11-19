@@ -1,10 +1,11 @@
 import json
+import subprocess
 from datetime import datetime
 
 import openpyxl
 import pandas as pd
 import requests
-from flask import Blueprint, render_template, request, jsonify, session
+from flask import Blueprint, render_template, request, jsonify, session, send_from_directory
 from werkzeug.utils import secure_filename
 
 import os
@@ -14,7 +15,7 @@ from app.application import app
 from app.db.tanos_manage import tanos_manage
 from app.util.log_util.all_new_log import logger_all
 from app.util.permissions import permission_required
-from app.view import user
+from app.view import user, viewutil
 
 basePath = os.path.join(os.path.join(os.path.dirname(__file__)))
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
@@ -98,16 +99,25 @@ def upload_file():
     suite_id = tanos_manage().get_suite_id(filename)
 
     try:
+
+        nan_replacements = {
+            'Url': '',  # 适当替换为数据库中的空值
+            'Method': '',  # 适当替换为数据库中的空值
+            'Request body': '',  # 适当替换为数据库中的空值
+            'Header': '',  # 适当替换为数据库中的空值
+            'Expected result': ''  # 适当替换为数据库中的空值
+        }
+
         # 使用pandas读取Excel文件
-        df = pd.read_excel(excel_path, engine='openpyxl')
+        df = pd.read_excel(excel_path, engine='openpyxl').fillna(nan_replacements)
         print(df)
         # 将DataFrame数据插入数据库
         for index, row in df.iterrows():
-            url = row['Url']
-            method = row['Method']
-            request_body = row['Request body']
-            header = row['Header']
-            expected_result = row['Expected result']
+            url = str(row['Url'])
+            method = str(row['Method'])
+            request_body = str(row['Request body'])
+            header = str(row['Header'])
+            expected_result = str(row['Expected result'])
 
             # 在这里使用 tanos_manager.add_api_batch_suite 方法插入数据库，具体根据您的模型和需求调整
             tanos_manage().add_api_batch_case(suite_id=suite_id, url=url, methods=method, request_body=request_body, headers=header,
@@ -332,6 +342,54 @@ def batch_search_result_json():
 
     return jsonify(result_list)
 
+
+
+@app.route('/run_api_batch_job',methods=['POST'])
+@user.login_required
+def run_api_batch_job():
+    data = request.json
+    job_id= data['jobid']
+    user_id = session.get('userid', None)
+    # print(111111111111,user_id)
+    configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+    command = 'D:/software/miniconda3/envs/tanos/python {}/api_check/runapi.py {} {}'.format(configPath, job_id,user_id)
+
+    # print(command)
+    try:
+        result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        # print(111,result)
+        print('result:',result.stdout.decode('gbk'))
+
+
+
+    # 检查命令是否成功执行
+        if result.returncode == 0:
+            # 返回命令执行结果
+            return jsonify({'success': True, 'message':'success' }),200
+        else:
+            # 返回错误信息
+            return jsonify({'success': False, 'message':'fail' }), 500
+
+    except Exception as e:
+        return jsonify({'success': False,'message': str(e)}), 500
+
+
+
+
+@web.route('/search_api_batch_result', methods=['POST', 'GET'])
+@user.login_required
+def search_api_batch_result():
+    if request.method == 'GET':
+        job_id = request.args.get('jobid')
+        print(1111234,job_id)
+        user_id = session.get('userid', None)
+
+        folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
+        print(folder_path+'/html',"{}_apibatch_report".format(job_id))
+
+        return send_from_directory(folder_path+'/html',"{}_apibatch_report.html".format(job_id))
+
+
 @app.route('/apitest111',methods=['GET'])
 def apitest111():
     data = [
@@ -384,3 +442,23 @@ def apitest222():
             },
     ]
     return jsonify(data)
+
+
+@app.route('/apitest333', methods=['POST'])
+def apitest333():
+    data1 = request.json
+    print(111,data1)
+    if data1:
+        data = {
+            "connect_id": 100,
+            "connect_name": 'Item 1',
+            "dbtype": 'PostgreSQL',
+            "connect_type": "My connection",
+            "username": 'hsh',
+            "pwd": '54uru',
+            "host": 'host1',
+            "dblibrary": "test1"
+        }
+        return jsonify(data)
+    else:
+        return jsonify({'success': False,'error': 'data is empty'})

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import configparser as cp
-from common import getPath
+from app.api_check.common import getPath
 
 
 class GetConfig:
