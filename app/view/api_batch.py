@@ -13,6 +13,7 @@ import sys
 
 from app.application import app
 from app.db.tanos_manage import tanos_manage
+from app.util.Constant_setting import Constant_cmd_api
 from app.util.log_util.all_new_log import logger_all
 from app.util.permissions import permission_required
 from app.view import user, viewutil
@@ -351,13 +352,11 @@ def run_api_batch_job():
     job_id= data['jobid']
     user_id = session.get('userid', None)
     # print(111111111111,user_id)
-    configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
-    command = 'D:/software/miniconda3/envs/tanos/python {}/api_check/runapi.py {} {}'.format(configPath, job_id,user_id)
+    # configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+    # command = '/Users/kun/miniconda3/envs/myenv/bin/python3.6 {}/api_check/runapi.py {} {}'.format(configPath, job_id,user_id)
 
-    # print(command)
     try:
-        result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        # print(111,result)
+        result = subprocess.run(Constant_cmd_api(user_id,job_id).cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         print('result:',result.stdout.decode('gbk'))
 
 
@@ -447,8 +446,12 @@ def apitest222():
 @app.route('/apitest333', methods=['POST'])
 def apitest333():
     data1 = request.json
+    if data1 is None:
+        return jsonify({'success': False, 'error': 'Invalid JSON data'}), 400
+    print(data1)
+    job_id = data1['jobid']
     print(111,data1)
-    if data1:
+    if job_id=='10031':
         data = {
             "connect_id": 100,
             "connect_name": 'Item 1',

@@ -14,7 +14,7 @@ def post_request(url, headers, data, params=None):
         string for the :class:`Request`. 即键值对。如：http://ip:port?name=zhangsan&pwd=123456
     :return:
     """
-    r = requests.post(url=url, headers=headers, data=data, params=params)
+    r = requests.post(url=url, headers=headers, data=data, json=params)
     #report = r.json()
     return r
 
@@ -31,18 +31,18 @@ def get_request(url, headers, data, params=None):
         string for the :class:`Request`. 即键值对。如：http://ip:port?name=zhangsan&pwd=123456
     :return:
     """
-    r = requests.get(url=url, headers=headers, data=data, params=params)
+    r = requests.get(url=url, headers=headers, data=data, json=params)
     #report = r.json()
     return r
 
 
-def run(method, url=None, headers=None, data=None, params=None):
+def run(method, url=None, headers=None, data=None, param=None):
     print('【method】', method)
     r = None
     if method == 'post':
-        r = post_request(url, headers, data, params)
+        r = post_request(url, headers, data, param)
     elif method == 'get':
-        r = get_request(url, headers, data, params)
+        r = get_request(url, headers, data, param)
     else:
         print('method错误！！！')
     return r

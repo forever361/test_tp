@@ -112,6 +112,8 @@ formatted_data = [[
     item.get("test_result"),
 ] for item in json_data]
 
+print(formatted_data)
+
 @paramunittest.parametrized(*formatted_data)
 class test_ptl_search(unittest.TestCase):
     def setParameters(self, case_name, path, method, headers, param, status_code, expectation, remark):
@@ -120,10 +122,15 @@ class test_ptl_search(unittest.TestCase):
         self.path = str(path)
         self.method = str(method)
         if str(headers) != '':
-            self.headers = ''
+            self.headers = {'Content-Type': 'application/json'}
         else:
             self.headers = ''
-        self.param = str(param)
+
+        if str(param) != '':
+            self.param =  json.loads(param)
+        else:
+            self.param = ''
+
         self.status_code = status_code
         self.expectation = str(expectation)
         self.remark = str(remark)
@@ -159,8 +166,8 @@ class test_ptl_search(unittest.TestCase):
         print(url)
         print('【url】', url)
         print('【headers】', self.headers)
-        print('【request_body】', self.param)
-        r = requestResult.run(self.method, url=url, headers=self.headers, data=self.param)
+        print('【request_body】', self.param,type(self.param))
+        r = requestResult.run(self.method, url=url, headers=self.headers, param=self.param)
         print ('【response】', r.json())
         print('【status_code】', r.status_code)
 
