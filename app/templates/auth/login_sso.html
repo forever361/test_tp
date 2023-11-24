@@ -20,6 +20,11 @@
         margin-bottom: 20px;
     }
 
+    body {
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        overflow-y: hidden; /* Hide vertical scrollbar */
+    }
+
 
 </style>
 
@@ -43,9 +48,11 @@
 </head>
 <body>
 
+
+
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-5 d-flex justify-content-center " style="background:black">
+    <div class="row" style="background:#1a1a1a">
+        <div class="col-md-5 d-flex justify-content-center " >
             <form method="POST">
                 <div class="text-center">
                     <div style="font-size:35px; margin-top: 20px; color: #ffffec">TANOS</div>
@@ -60,7 +67,7 @@
 
         </div>
 
-        <div class="col-md-7 " style="background:black ">
+        <div class="col-md-7 " >
             <canvas id="c"></canvas>
         </div>
 
