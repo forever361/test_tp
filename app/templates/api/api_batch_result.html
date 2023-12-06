@@ -3,87 +3,136 @@
 {% block title %}Flasky{% endblock %}
 
 {% block js %}
-<script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
-<link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+    <script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+    <link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
 
-<script src="/static/tanos/bootbox.all.min.js"></script>
-<script src="/static/tanos/popper.js"></script>
-<script src="/static/tanos/toastr.min.js"></script>
-<link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+    <script src="/static/tanos/bootbox.all.min.js"></script>
+    <script src="/static/tanos/popper.js"></script>
+    <script src="/static/tanos/toastr.min.js"></script>
+    <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
 
-<!-- Bootstrap Font Icon CSS -->
-<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
+    <!-- Bootstrap Font Icon CSS -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
 
-<!--<script src="/static/tanos/data_connect.js"></script>-->
+    <!--<script src="/static/tanos/data_connect.js"></script>-->
 
 
 {% endblock %}
 
 {% block content %}
 
-<style>
-    .panel-info {
-        border-color: #eee;
-    }
+    <style>
+        .panel-info {
+            border-color: #eee;
+        }
 
-    .panel-info > .panel-heading {
-        color: #000;
-        background-color: #fff;
-        border-color: #eee;
-    }
+        .panel-info > .panel-heading {
+            color: #000;
+            background-color: #fff;
+            border-color: #eee;
+        }
 
-    .panel-info > .panel-heading + .panel-collapse > .panel-body {
-        border-top-color: #000;
-    }
+        .panel-info > .panel-heading + .panel-collapse > .panel-body {
+            border-top-color: #000;
+        }
 
-    .panel-info > .panel-heading .badge {
-        color: #d9edf7;
-        background-color: #31708f;
-    }
+        .panel-info > .panel-heading .badge {
+            color: #d9edf7;
+            background-color: #31708f;
+        }
 
-    .panel-info > .panel-footer + .panel-collapse > .panel-body {
-        border-bottom-color: #000;
-    }
-
-
-    .table-striped > tbody > tr:nth-of-type(odd) {
-        background-color: #fff;
-    }
-
-    .form-control-input.has-value {
-        background-color: #eee; /* 填入内容后的背景色 */
-    }
+        .panel-info > .panel-footer + .panel-collapse > .panel-body {
+            border-bottom-color: #000;
+        }
 
 
-</style>
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #fff;
+        }
+
+        .form-control-input.has-value {
+            background-color: #eee; /* 填入内容后的背景色 */
+        }
 
 
-{#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
+    </style>
+
+
+    {#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
 
 
     <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link " aria-current="page" href="/api_batch_suite">API Suite Management</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link " href="/api_batch_case">API case Management</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/api_batch_job">Job Management</a>
-      </li>
-          <li class="nav-item">
-        <a class="nav-link active" href="/api_batch_result">Job detail</a>
-      </li>
+        <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="/api_batch_suite">API Suite Management</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="/api_batch_case">API case Management</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/api_batch_job">Job Management</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="/api_batch_result">Job detail</a>
+        </li>
     </ul>
 
     <div style=" margin: 20px; margin-bottom: 100px " class="card">
-         <div class="card-body" style="padding:10px;">
+        <div class="card-body" style="padding:10px;">
             <!-- Default panel contents -->
             <h5 class="card-title">Trigger job</h5>
             <div class="card-text">
                 <p>On this page, you can run job and check test result.</p>
 
-                <button class="btn btn-primary" type="button" id="btnRunjob" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Run job </button>
+                <!-- Token Options -->
+                <div class="border p-3 mb-4" style="width: 50%">
+
+                    <div class="form-group">
+                        <label for="tokenOptions">Token Options:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tokenOptions" id="noToken"
+                                   value="noToken" checked>
+                            <label class="form-check-label" for="noToken">
+                                No Token
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tokenOptions" id="withToken"
+                                   value="withToken">
+                            <label class="form-check-label" for="withToken">
+                                Include Token
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Token Input -->
+                    <div class="form-group" id="tokenInput" style="display: none;">
+                        <label for="tokenUrl">Input URL:</label>
+                        <input type="text" class="form-control" id="tokenUrl" name="tokenUrl">
+                        <label for="tokenBody">Input Body (JSON format):</label>
+                        <textarea class="form-control" id="tokenBody" name="tokenBody" rows="4"></textarea>
+
+                        <div class="row">
+                            <div class="col-md-auto"> <!-- 使用 col-md-6 使两个按钮一样宽 -->
+                                <button class="btn btn-primary" type="button" id="testTokenBtn"
+                                        style="margin-top: 10px; width: 100%;">
+                                    Test Getting Token
+                                </button>
+                            </div>
+                            <div class="col-md-auto ml-auto"> <!-- 使用 text-right 将 Save setting 按钮靠右 -->
+                                <button class="btn btn-primary" type="button" id="saveTokenBtn"
+                                        style="margin-top: 10px; width: 100%;">
+                                    Save setting
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button class="btn btn-primary" type="button" id="btnRunjob"
+                        style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;"
+                        iconalignment="center">Run job
+                </button>
 
                 <table class="table table-striped"
                        id="table"
@@ -93,37 +142,39 @@
                        data-search="true"
                        data-buttons-class="primary"
                        data-sort-name="case_id"
-{#                       data-sort-order="desc"#}
+                        {#                       data-sort-order="desc"#}
                        data-page-list="[10, 25, 50, 100, all]"
-{#                        data-multiple-select-row="true"#}
-{#                        data-click-to-select="true"#}
+                        {#                        data-multiple-select-row="true"#}
+                        {#                        data-click-to-select="true"#}
 
                 >
                     <thead>
                     <tr>
-{#                        <th data-field="state" data-checkbox="true"></th>#}
-{#                        <th data-field="state" data-checkbox="true"></th>#}
-{#                        <th data-field="user_id" data-width="15" data-width-unit="%">USER ID#}
-{#                        </th>#}
+                        {#                        <th data-field="state" data-checkbox="true"></th>#}
+                        {#                        <th data-field="state" data-checkbox="true"></th>#}
+                        {#                        <th data-field="user_id" data-width="15" data-width-unit="%">USER ID#}
+                        {#                        </th>#}
 
-                         <th data-field="job_id" data-align="center" data-sortable="true" data-width="5" data-width-unit="%">JOB ID
+                        <th data-field="job_id" data-align="center" data-sortable="true" data-width="5"
+                            data-width-unit="%">JOB ID
                         </th>
-                        <th data-field="case_id" data-align="center" data-sortable="true" data-width="5" data-width-unit="%">CASE ID
+                        <th data-field="case_id" data-align="center" data-sortable="true" data-width="5"
+                            data-width-unit="%">CASE ID
                         </th>
 
-                        <th data-field="url" data-align="left" data-sortable="true" >URL
+                        <th data-field="url" data-align="left" data-sortable="true">URL
                         </th>
-                        <th data-field="methods" data-align="left" data-sortable="true" >Method
+                        <th data-field="methods" data-align="left" data-sortable="true">Method
                         </th>
-                        <th data-field="request_body" data-align="left" data-sortable="true" >Request_body
+                        <th data-field="request_body" data-align="left" data-sortable="true">Request_body
                         </th>
-                        <th data-field="headers" data-align="left" data-sortable="true" >Headers
+                        <th data-field="headers" data-align="left" data-sortable="true">Headers
                         </th>
-                        <th data-field="expected_result" data-align="left" data-sortable="true" >Expected_result
+                        <th data-field="expected_result" data-align="left" data-sortable="true">Expected_result
                         </th>
-                        <th data-field="test_result" data-align="left" data-sortable="true" >Creat date
+                        <th data-field="test_result" data-align="left" data-sortable="true">Creat date
                         </th>
-{#                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>#}
+                        {#                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>#}
 
                     </tr>
                     </thead>
@@ -136,128 +187,167 @@
     </div>
 
 
-<div id="loading" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center;">
-    <img src="./static/loading.gif" height="150" align="middle">
-    <div style="color:#00b4ef; font-weight: bold;">Testing...please wait a moment</div>
-</div>
+    <div id="loading"
+         style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center;">
+        <img src="./static/loading.gif" height="150" align="middle">
+        <div style="color:#00b4ef; font-weight: bold;">Testing...please wait a moment</div>
+    </div>
 
 
-<script>
-
-    $(document).ready(function () {
-
-        $('#btnRunjob').on('click', function () {
-            var urlParams = new URLSearchParams(window.location.search);
-            // 获取名为 "id" 的参数值
-            var jobid = urlParams.get('id');
-
-             $('#loading').show();
-
-               $.ajax({
-                   url: '/run_api_batch_job',
-                   type: 'POST',
-                   data: JSON.stringify({jobid: jobid}),
-                   contentType: 'application/json',
-                   success: function (data) {
-                       {#window.location.href = '/batch_search_result?id=' + job_id;#}
-                       $('#loading').hide();
-                       const url = `/search_api_batch_result?jobid=${jobid}`;
-                       window.open(url, '_blank');
-                       {#toastr.success('generate job successfully!');#}
-
-                   },
-                   error: function (error) {
-                        $('#loading').hide();
-                       toastr.error('failed to generate job.');
-                   }
-               });
-
-        });
-    });
-
-
-</script>
-
-
-<script>
-
-    const $table = $('#table');
-
-
-    // Formatter for "action" column
-    function actionFormatter(value, row, index) {
-        return '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>'
-
-    }
-
-    {#function actionFormatter(value, row, index) {#}
-    {#    return '<button class="btn btn-sm btn-primary edit-row" onclick="window.location.href=(\'/data_edit_test_case_tanos?id=' + row.id + '\')"><i class="fa-regular fa-pen-to-square"></i></button> ' +#}
-    {#        '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +#}
-    {#        '<button class="btn btn-sm btn-success report-row" style="margin-left: 10px;" onclick="window.location.href=(\'/data_search_report?id=' + row.id + '\')"><i class="fa-sharp fa-regular fa-eye"></i></button> '#}
-    {##}
-    {#}#}
-
-
-    /////delete function
-    function deleteRow($tr) {
-        const id = $tr.find('td:eq(1)').text();
-        console.log({id: id})
-        $.ajax({
-            url: '/delete_api_batch_suite',
-            type: 'POST',
-            data: JSON.stringify({"id": id, "act": "del"}),
-            contentType: 'application/json',
-            success: function () {
-                toastr.success('delete successfully!');
-                $('#table').bootstrapTable('refresh');
-            },
-            error: function (error) {
-                console.log(error);
-                toastr.error('failed to delete the suite. Please try again.');
+    <script>
+        // Handle radio button change to show/hide token input
+        $('input[name="tokenOptions"]').change(function () {
+            if ($(this).val() === 'withToken') {
+                $('#tokenInput').show();
+            } else {
+                $('#tokenInput').hide();
             }
         });
-    }
 
+        // Handle testing token button click
+        $('#testTokenBtn').click(function () {
 
-    $table.on('click', '.delete-row', function () {
-        const $tr = $(this).closest('tr');
+            var url = $('#tokenUrl').val();
+            var body = $('#tokenBody').val();
 
-        let dialog = bootbox.dialog({
-            title: 'Delete item!',
-            message: "<p>Please confirm if you want to delete? </p>",
-            centerVertical: true,
-            buttons:
-                {
-                    cancel: {
-                        label: "No",
-                        className: 'btn-danger',
-                        callback:
-                            function () {
-                                console.log('Custom cancel clicked');
-                            }
-                    },
+            var data = {
+                url: url,
+                body: JSON.parse(body),
+            };
 
-                    ok: {
-                        label: "Yes",
-                        className: 'btn-success',
-                        callback:
-                            function () {
-                                deleteRow($tr)
-                            }
-                    }
+            $.ajax({
+                url: '/get_api_token_detail',
+                type: 'POST',
+                data: JSON.stringify(data), // Serialize the entire data object
+                contentType: 'application/json',
+                success: function (data) {
+                    //toastr.success('get token successfully!');
+                    alert(data.token)
+                },
+                error: function (error) {
+                    toastr.error('failed to get token.');
                 }
+            });
+        });
+    </script>
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#btnRunjob').on('click', function () {
+                var urlParams = new URLSearchParams(window.location.search);
+                // 获取名为 "id" 的参数值
+                var jobid = urlParams.get('id');
+
+                $('#loading').show();
+
+                $.ajax({
+                    url: '/run_api_batch_job',
+                    type: 'POST',
+                    data: JSON.stringify({jobid: jobid}),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        {#window.location.href = '/batch_search_result?id=' + job_id;#}
+                        $('#loading').hide();
+                        const url = `/search_api_batch_result?jobid=${jobid}`;
+                        window.open(url, '_blank');
+                        {#toastr.success('generate job successfully!');#}
+
+                    },
+                    error: function (error) {
+                        $('#loading').hide();
+                        toastr.error('failed to generate job.');
+                    }
+                });
+
+            });
         });
 
-    });
+
+    </script>
 
 
-</script>
+    <script>
+
+        const $table = $('#table');
+
+
+        // Formatter for "action" column
+        function actionFormatter(value, row, index) {
+            return '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>'
+
+        }
+
+        {#function actionFormatter(value, row, index) {#}
+        {#    return '<button class="btn btn-sm btn-primary edit-row" onclick="window.location.href=(\'/data_edit_test_case_tanos?id=' + row.id + '\')"><i class="fa-regular fa-pen-to-square"></i></button> ' +#}
+        {#        '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +#}
+        {#        '<button class="btn btn-sm btn-success report-row" style="margin-left: 10px;" onclick="window.location.href=(\'/data_search_report?id=' + row.id + '\')"><i class="fa-sharp fa-regular fa-eye"></i></button> '#}
+        {##}
+        {#}#}
+
+
+            /////delete function
+            function deleteRow($tr) {
+                const id = $tr.find('td:eq(1)').text();
+                console.log({id: id})
+                $.ajax({
+                    url: '/delete_api_batch_suite',
+                    type: 'POST',
+                    data: JSON.stringify({"id": id, "act": "del"}),
+                    contentType: 'application/json',
+                    success: function () {
+                        toastr.success('delete successfully!');
+                        $('#table').bootstrapTable('refresh');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        toastr.error('failed to delete the suite. Please try again.');
+                    }
+                });
+            }
+
+
+            $table.on('click', '.delete-row', function () {
+                const $tr = $(this).closest('tr');
+
+                let dialog = bootbox.dialog({
+                    title: 'Delete item!',
+                    message: "<p>Please confirm if you want to delete? </p>",
+                    centerVertical: true,
+                    buttons:
+                        {
+                            cancel: {
+                                label: "No",
+                                className: 'btn-danger',
+                                callback:
+                                    function () {
+                                        console.log('Custom cancel clicked');
+                                    }
+                            },
+
+                            ok: {
+                                label: "Yes",
+                                className: 'btn-success',
+                                callback:
+                                    function () {
+                                        deleteRow($tr)
+                                    }
+                            }
+                        }
+                });
+
+            });
+
+
+    </script>
 
 
 
 
-{% if message %}
+    {% if message %}
 
-{% endif %}
+    {% endif %}
 
 {% endblock %}

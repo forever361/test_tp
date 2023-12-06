@@ -465,3 +465,47 @@ def apitest333():
         return jsonify(data)
     else:
         return jsonify({'success': False,'error': 'data is empty'})
+
+
+@app.route('/apitestgettoken', methods=['POST'])
+def apitestgettoken():
+    data1 = request.json
+    print(333333, data1)
+
+    if data1 is None:
+        return jsonify({'success': False, 'error': 'Invalid JSON data'}), 400
+
+    print(data1)
+    job_id = data1.get('jobid')
+    print(111, data1)
+
+    if job_id == '10031':
+        data = {
+            "token": "2eJydVH9r2zAQ_SpDg_wVx5LjH4rArGUthbFBoR0MSimyJMdabclIcr1S-t13dpqRjnVrBwZZT7p3755OekA3vXIdN8oExIIb1BLxOx64Qww1IfSexbHutmRVcS2HlbBdrEM8lCQhWUZJkZLlpqB0U-AkX9RdmWRrGELJh2AXvO9LsqaLuvx0fnr2YSwzjBdNmeYULdHW2aE3vFOQ6US11l8qH84mEBZ94HWtJWIZxRmBMLxEQfFuv_erV86jHeYRu3qOfmy04SdQxYVth6CtAexYdtqgawixt8oAz01a1TivJY5IxnGU4pxGlUyyqMrTFBcbkiqMIXAAUsQeZjfADC8a1XG_6rRw1ts6zJ6IluvOx1B1YzoVGiu9U7Vyygg16xucYZZ77dlUsmdBsIvjL59ZssKMCwbx3gN8DsNonTx3NigRlLx03PjeugBKXqOgG9qg-1bNSv4VM_o4wZjGOI-1hA7Q4X4uYfoVfDJuV0s8gAYldK2VnCz8K-kvpidFUvu-5fe7k75CIzfbd8fO2fHNTPt57-wd_LuJrtV3atr8ZjJbfQeDdyjUNZNRnsukEnWUrunUEQmJKDRgJEmeCE5pWovizYmCMhwAOSXY0FSRdVZEioh1lFZERlxiEdVFmuc5zwtB_5TgR9d6y_uVddunM8ti-H7PBHt1y6V0ys89N7u8Gm-PGhumpRd8eiX7Fpw2-1N86QBfyfWMBhTeHCh8f_rt8v3RvDLe7nHoxEOT_z-zh4t40Ino-nF3w-e3ZoMxIbv508N00K2PPwF1z8X8.ZW6bow.QJ1druwWcAj77H5sma4O_u2oKCI",
+        }
+        return jsonify(data)
+    else:
+        return jsonify({'success': False, 'error': 'data is empty'})
+
+
+@web.route('/get_api_token_detail', methods=['POST'])
+def get_api_token_detail():
+    data = request.json
+    print('Received data:', data)  # Add this line to print data to the server console
+
+    url = data.get('url')
+    body = data.get('body')
+
+    print('URL:', url)
+    print('Body:', body)
+    print(type(body))
+
+    try:
+        res = requests.post(url=url, json=body, verify=False)
+        data_dict = json.loads(res.text)
+        print('Response:', data_dict)
+        return jsonify(data_dict)
+
+    except Exception as e:
+        print('Error:', e)
+        return jsonify({"error": "Something went wrong"}), 500

@@ -33,73 +33,6 @@ for row in rows:
 
 json_data = result_list
 
-# json_data = [
-#     {
-#         "case_id": "10014",
-#         "expected_result": [
-#             {
-#                 "connect_id": 1,
-#                 "connect_name": "Item 1",
-#                 "connect_type": "My connection",
-#                 "dblibrary": "test1",
-#                 "dbtype": "PostgreSQL",
-#                 "host": "host1",
-#                 "pwd": "54uru",
-#                 "username": "hsh"
-#             },
-#             {
-#                 "connect_id": 2,
-#                 "connect_name": "Item 2",
-#                 "connect_type": "My connection",
-#                 "dblibrary": "test2",
-#                 "dbtype": "AliCloud",
-#                 "host": "host2",
-#                 "pwd": "we643w623",
-#                 "username": "hsh"
-#             }
-#         ],
-#         "headers": "yes",
-#         "job_id": "10024",
-#         "methods": "get",
-#         "request_body": "{\"exchangeId\": \"4170\", \"companyTaxNo\":\"91310113MA1GLFN21P\", \"signType\":\"1\", \"signInfo\":\"24d9415fb799bed2f931b321b909d39c\"}",
-#         "test_result": "2023-11-15 08:05:32",
-#         "url": "apitest111",
-#         "user_id": "590011"
-#     },
-#     {
-#         "case_id": "10013",
-#         "expected_result": [
-#             {
-#                 "connect_id": 1,
-#                 "connect_name": "Item 1",
-#                 "connect_type": "My connection",
-#                 "dblibrary": "test1",
-#                 "dbtype": "PostgreSQL",
-#                 "host": "host1",
-#                 "pwd": "54uru",
-#                 "username": "hsh"
-#             },
-#             {
-#                 "connect_id": 2,
-#                 "connect_name": "Item 2",
-#                 "connect_type": "My connection",
-#                 "dblibrary": "test2",
-#                 "dbtype": "AliCloud",
-#                 "host": "host2",
-#                 "pwd": "we643w623",
-#                 "username": "hsh"
-#             }
-#         ],
-#         "headers": "yes",
-#         "job_id": "10024",
-#         "methods": "get",
-#         "request_body": "{\"exchangeId\": \"4170\", \"companyTaxNo\":\"91310113MA1GLFN21P\", \"signType\":\"1\", \"signInfo\":\"24d9415fb799bed2f931b321b909d39c\"}",
-#         "test_result": "2023-11-15 08:05:33",
-#         "url": "apitest222",
-#         "user_id": "590011"
-#     }
-# ]
-
 # Convert JSON data to a list of lists
 formatted_data = [[
     item.get("case_id"),
@@ -148,7 +81,24 @@ class test_ptl_search(unittest.TestCase):
         :return:
         """
 
+        self.api_test_count += 1  # 每次执行一个API测试，计数加1
+
+        if self.api_test_count % 5 == 0:
+            self.update_token()  # 在每执行5个API测试之后更新一次token
+
         print("\n【" + self.case_name + "】Start test case")
+
+    def update_token(self):
+        # 发送请求获取新的token
+        # 这里假设获取token的接口为 '/get_token'
+        token_url = base_url + '/get_token'
+        token_response = requestResult.run('GET', url=token_url)
+        new_token = token_response.json().get('token')
+
+        # 将新的token设置到headers中
+        if new_token:
+            self.headers = {'Content-Type': 'application/json', 'token': new_token}
+            print('Updated Token:', new_token)
 
     def test01case(self):
         self.checkResult()
