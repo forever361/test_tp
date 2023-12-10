@@ -47,17 +47,19 @@ formatted_data = [[
 
 print(formatted_data)
 
+# 获取Token的相关信息
+token_data = tanos_manage().get_api_batch_token(job_id)
+
 @paramunittest.parametrized(*formatted_data)
 class test_ptl_search(unittest.TestCase):
+
     def setParameters(self, case_name, path, method, headers, param, status_code, expectation, remark):
         # print(11111,case_name)
         self.case_name = str(case_name)
         self.path = str(path)
         self.method = str(method)
-        if str(headers) != '':
+        if str(headers) == '':
             self.headers = {'Content-Type': 'application/json'}
-        else:
-            self.headers = ''
 
         if str(param) != '':
             self.param =  json.loads(param)
@@ -75,30 +77,38 @@ class test_ptl_search(unittest.TestCase):
         """
         self.case_name
 
+
     def setUp(self):
-        """
 
-        :return:
-        """
+        if token_data is not None:
+            token_url, token_body, test_rule= token_data
 
-        self.api_test_count += 1  # 每次执行一个API测试，计数加1
+            if token_url:
+                # 发送请求获取Token，这里你可能需要调用具体的获取Token的函数，以下是一个示例
+                token_response = requestResult.run('post', url=token_url, param=json.loads(token_body))
 
-        if self.api_test_count % 5 == 0:
-            self.update_token()  # 在每执行5个API测试之后更新一次token
+                # 检查请求是否成功
+                if token_response and token_response.status_code == 200:
+                    try:
+                        # 尝试获取Token，如果返回的不是JSON数据，这里可能会引发异常
+                        token = token_response.json().get('token')
 
-        print("\n【" + self.case_name + "】Start test case")
+                        # 更新请求头，添加Token
+                        if token:
+                            self.headers = {'Content-Type': 'application/json', 'token': f'{token}'}
+                        else:
+                            # 如果无法获取Token，可以根据实际需求进行处理，这里简单地将headers置为空字符串
+                            self.headers = {'Content-Type': 'application/json'}
+                    except json.JSONDecodeError:
+                        print("Error decoding JSON response when attempting to retrieve the token.")
+                        self.headers = ''
+                else:
+                    print("Error obtaining the token. Status code:", token_response.status_code)
+                    self.headers = ''
 
-    def update_token(self):
-        # 发送请求获取新的token
-        # 这里假设获取token的接口为 '/get_token'
-        token_url = base_url + '/get_token'
-        token_response = requestResult.run('GET', url=token_url)
-        new_token = token_response.json().get('token')
+        print("\nStart test case")
 
-        # 将新的token设置到headers中
-        if new_token:
-            self.headers = {'Content-Type': 'application/json', 'token': new_token}
-            print('Updated Token:', new_token)
+
 
     def test01case(self):
         self.checkResult()
@@ -112,41 +122,147 @@ class test_ptl_search(unittest.TestCase):
         check test report
         :return:
         """
-        url = base_url + self.path
-        print(url)
-        print('【url】', url)
-        print('【headers】', self.headers)
-        print('【request_body】', self.param,type(self.param))
-        r = requestResult.run(self.method, url=url, headers=self.headers, param=self.param)
-        print ('【response】', r.json())
-        print('【status_code】', r.status_code)
 
-        # 断言请求返回值和excel中的status_code一致
-        self.assertEqual(r.status_code, self.status_code)
 
-        if r.status_code == 200:
-            result = r.json()
-            self.assertNotEqual(len(result), 0)
-            self.assertNotEqual(len(self.expectation), 0)
+        if token_data is not None:
+            test_rule = token_data[2]
+            print('【testRule】', test_rule)
 
-            # self.expectation = json.loads(self.expectation)
-            # actual_result = f'"{json.dumps(result, sort_keys=True,indent=4)}"'.replace("'", "\"")
-            actual_result = result
 
-            print('【actual_result】',actual_result)
-            # expectation_result= json.dumps(self.expectation, sort_keys=True,indent=4).replace("'", "\"")
-            expectation_result = json.loads(self.expectation)
-            print('【expectation_result】',expectation_result)
+            if test_rule=='onlyRetAndBody':
+                url = self.path
+                print('【url】', url)
+                print('【headers】', self.headers)
+                # print('【request_body】', self.param, type(self.param))
+                r = requestResult.run(self.method, url=url, headers=self.headers, param=self.param)
+                print('【response】', r.json())
+                print('【status_code】', r.status_code)
+                print('*'*20)
 
-            self.assertEqual(actual_result,expectation_result)
+                # 断言请求返回值和excel中的status_code一致
+                self.assertEqual(r.status_code, self.status_code)
 
-            # for key, value in self.expectation.items():
-            #     self.assertNotEqual(report[key], value)
-            # self.assertNotEqual(result['result'], '')
-            # self.assertEqual(result['code'], 200)
+                if r.status_code == 200:
+                    result = r.json()
+                    self.assertNotEqual(len(result), 0)
+                    self.assertNotEqual(len(self.expectation), 0)
+
+                    actual_body = result.get('body', {})
+                    actual_ret = result.get('ret', [])
+
+
+                    expectation_result = json.loads(self.expectation)
+                    expectation_body = expectation_result.get('body', {})
+                    expectation_ret = expectation_result.get('ret', [])
+
+                    print('【actual_body】', actual_body)
+                    print('【expect_body】', expectation_body)
+
+                    print('【actual_ret】', actual_ret)
+                    print('【expect_ret】', expectation_ret)
+
+                    # 断言 body 和 ret 是否一致
+                    self.assertEqual(actual_body, expectation_body)
+                    self.assertEqual(actual_ret, expectation_ret)
+
+                else:
+                    print("【" + self.case_name + "】 --- 测试用例接口请求失败！")
+
+            elif test_rule=='onlyRetAndBodyStructure':
+                url = self.path
+                print('【url】', url)
+                print('【headers】', self.headers)
+                # print('【request_body】', self.param, type(self.param))
+                r = requestResult.run(self.method, url=url, headers=self.headers, param=self.param)
+                print('【response】', r.json())
+                print('【status_code】', r.status_code)
+                print('*' * 40)
+
+                # 断言请求返回值和excel中的status_code一致
+                self.assertEqual(r.status_code, self.status_code)
+
+                if r.status_code == 200:
+                    result = r.json()
+                    self.assertNotEqual(len(result), 0)
+                    self.assertNotEqual(len(self.expectation), 0)
+
+                    actual_result = result
+                    expectation_result = json.loads(self.expectation)
+
+                    # 验证 ret 里包含 retCode 和 retMsg 的所有 key
+                    actual_ret_keys = set(key for ret_item in actual_result['ret'] for key in ret_item.keys())
+                    expected_ret_keys = set(key for ret_item in expectation_result['ret'] for key in ret_item.keys())
+
+
+                    self.assertTrue(expected_ret_keys.issubset(actual_ret_keys))
+
+                    # 验证 body 里包含所有 key
+                    actual_body_keys = set(actual_result['body'].keys())
+                    expected_body_keys = set(expectation_result['body'].keys())
+
+                    print('【actual_ret_keys】', actual_ret_keys)
+                    print('【expect_ret_keys】', expected_ret_keys)
+
+                    print('【actual_body_keys】', actual_body_keys)
+                    print('【expect_body_keys】', expected_body_keys)
+                    self.assertTrue(expected_body_keys.issubset(actual_body_keys))
+
+                else:
+                    print("【" + self.case_name + "】 --- 测试用例接口请求失败！")
+
+            else:
+                url = self.path
+                print('【url】', url)
+                print('【headers】', self.headers)
+                # print('【request_body】', self.param, type(self.param))
+                r = requestResult.run(self.method, url=url, headers=self.headers, param=self.param)
+                print('【response】', r.json())
+                print('【status_code】', r.status_code)
+                print('*' * 40)
+
+                # 断言请求返回值和excel中的status_code一致
+                self.assertEqual(r.status_code, self.status_code)
+
+                if r.status_code == 200:
+                    result = r.json()
+                    self.assertNotEqual(len(result), 0)
+                    self.assertNotEqual(len(self.expectation), 0)
+
+                    actual_result = result
+                    print('【actual_result】', actual_result)
+                    expectation_result = json.loads(self.expectation)
+                    print('【expect_result】', expectation_result)
+                    self.assertEqual(actual_result, expectation_result)
+
+                else:
+                    print("【" + self.case_name + "】 --- 测试用例接口请求失败！")
+
         else:
-            print("【" + self.case_name + "】 --- 测试用例接口请求失败！")
+            url =  self.path
+            print('【url】', url)
+            print('【headers】', self.headers)
+            # print('【request_body】', self.param, type(self.param))
+            r = requestResult.run(self.method, url=url, headers=self.headers, param=self.param)
+            print('【response】', r.json())
+            print('【status_code】', r.status_code)
+            print('*' * 40)
 
+            # 断言请求返回值和excel中的status_code一致
+            self.assertEqual(r.status_code, self.status_code)
+
+            if r.status_code == 200:
+                result = r.json()
+                self.assertNotEqual(len(result), 0)
+                self.assertNotEqual(len(self.expectation), 0)
+
+                actual_result = result
+                print('【actual_result】', actual_result)
+                expectation_result = json.loads(self.expectation)
+                print('【expect_result】', expectation_result)
+                self.assertEqual(actual_result, expectation_result)
+
+            else:
+                print("【" + self.case_name + "】 --- 测试用例接口请求失败！")
 
 
 if __name__ == '__main__':

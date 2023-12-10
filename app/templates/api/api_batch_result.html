@@ -87,6 +87,15 @@
                 <div class="border p-3 mb-4" style="width: 50%">
 
                     <div class="form-group">
+                        <label for="testRule">Test Rule:</label>
+                        <select class="form-control" id="testRule" name="testRule">
+                            <option value="default">Default</option>
+                            <option value="onlyRetAndBody">Only Ret and Body</option>
+                            <option value="onlyRetAndBodyStructure">Only Ret and Body Structure</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="tokenOptions">Token Options:</label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="tokenOptions" id="noToken"
@@ -104,6 +113,7 @@
                         </div>
                     </div>
 
+
                     <!-- Token Input -->
                     <div class="form-group" id="tokenInput" style="display: none;">
                         <label for="tokenUrl">Input URL:</label>
@@ -111,26 +121,24 @@
                         <label for="tokenBody">Input Body (JSON format):</label>
                         <textarea class="form-control" id="tokenBody" name="tokenBody" rows="4"></textarea>
 
-                        <div class="row">
-                            <div class="col-md-auto"> <!-- 使用 col-md-6 使两个按钮一样宽 -->
-                                <button class="btn btn-primary" type="button" id="testTokenBtn"
-                                        style="margin-top: 10px; width: 100%;">
-                                    Test Getting Token
-                                </button>
-                            </div>
-                            <div class="col-md-auto ml-auto"> <!-- 使用 text-right 将 Save setting 按钮靠右 -->
-                                <button class="btn btn-primary" type="button" id="saveTokenBtn"
-                                        style="margin-top: 10px; width: 100%;">
-                                    Save setting
-                                </button>
-                            </div>
+                        <div style="margin-top: 30px; display: flex; align-items: center;  width: 180px">
+                            <button class="btn btn-primary" type="button" id="testTokenBtn" style="width: 100%;">
+                                Test Getting Token
+                            </button>
                         </div>
                     </div>
+
+                    <div style="margin-top: 30px; display: flex; align-items: center;  width: 180px">
+                        <button class="btn btn-primary" type="button" id="saveTokenBtn" style="width: 100%;">
+                            Save setting
+                        </button>
+                    </div>
+
                 </div>
 
 
-                <button class="btn btn-primary" type="button" id="btnRunjob"
-                        style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;"
+                <button class="btn btn-success" type="button" id="btnRunjob"
+                        style="margin-left:15px;width: 180px;  margin-top:20px;display: flex; justify-content: center; align-items: center;"
                         iconalignment="center">Run job
                 </button>
 
@@ -204,29 +212,118 @@
             }
         });
 
-        // Handle testing token button click
-        $('#testTokenBtn').click(function () {
 
-            var url = $('#tokenUrl').val();
-            var body = $('#tokenBody').val();
+        var urlParams = new URLSearchParams(window.location.search);
+        var job_id = urlParams.get('id');
 
-            var data = {
-                url: url,
-                body: JSON.parse(body),
-            };
+        // 向后端请求数据
+        $.ajax({
+            url: '/get_data_by_job_id?id=' + job_id,
+            type: 'GET',
+            success: function (data) {
+                // 根据后端返回的数据填充到对应的输入框
+                console.info(data)
+                if (data) {
+                    // 检查元素是否存在，然后将数据填充到前端页面的相应元素中
+                    if ($('#tokenUrl').length) {
+                        $('#tokenUrl').val(data[0] || '');
+                    }
+                    if ($('#tokenBody').length) {
+                        $('#tokenBody').val(data[1] || '');
+                    }
+                    if ($('#testRule').length) {
+                        $('#testRule').val(data[2] || 'default');
+                    }
+                    if (data[0]) {
+                        $('input[name="tokenOptions"][value="withToken"]').prop('checked', true);
+                        $('#tokenInput').show();
+                    } else {
+                        $('input[name="tokenOptions"][value="noToken"]').prop('checked', true);
+                        $('#tokenInput').hide();
+                    }
 
-            $.ajax({
-                url: '/get_api_token_detail',
-                type: 'POST',
-                data: JSON.stringify(data), // Serialize the entire data object
-                contentType: 'application/json',
-                success: function (data) {
-                    //toastr.success('get token successfully!');
-                    alert(data.token)
-                },
-                error: function (error) {
-                    toastr.error('failed to get token.');
+                } else {
+                    console.error('Failed to fetch data by job_id:', job_id);
                 }
+            },
+            error: function (error) {
+                console.error('Error fetching data by job_id:', job_id);
+            }
+        });
+
+
+        // Handle testing token button click
+        $(document).ready(function () {
+            $('#testTokenBtn').on('click', function () {
+                var url = $('#tokenUrl').val();
+                var body = $('#tokenBody').val();
+
+                var data = {
+                    url: url,
+                    body: JSON.parse(body),
+                };
+
+                $.ajax({
+                    url: '/get_api_token_detail',
+                    type: 'POST',
+                    data: JSON.stringify(data), // Serialize the entire data object
+                    contentType: 'application/json',
+                    success: function (data) {
+                        //toastr.success('get token successfully!');
+                        alert(data.token)
+                    },
+                    error: function (error) {
+                        toastr.error('failed to get token.');
+                    }
+                });
+            });
+        });
+
+
+        // Handle testing token button click
+        $(document).ready(function () {
+            $('#saveTokenBtn').on('click', function () {
+                var urlParams = new URLSearchParams(window.location.search);
+                // 获取名为 "id" 的参数值
+                var job_id = urlParams.get('id');
+
+                var url = $('#tokenUrl').val();
+                var body = $('#tokenBody').val();
+                var testRule = $('#testRule').val();
+
+                if (!url && !body && testRule) {
+                    var data = {
+                        url: "",
+                        body: {},
+                        job_id: job_id,
+                        test_rule: testRule
+                    };
+
+                } else {
+
+                    var data = {
+                        url: url,
+                        body: JSON.parse(body),
+                        job_id: job_id,
+                        test_rule: testRule
+                    };
+
+                }
+
+
+                $.ajax({
+                    url: '/save_api_token',
+                    type: 'POST',
+                    data: JSON.stringify(data), // Serialize the entire data object
+                    contentType: 'application/json',
+                    success: function (data) {
+                        toastr.success('save token successfully!');
+                        {#alert(data.token)#}
+                    },
+                    error: function (error) {
+                        toastr.error('failed to save token.');
+                    }
+                });
             });
         });
     </script>

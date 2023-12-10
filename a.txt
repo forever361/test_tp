@@ -154,3 +154,13 @@ CREATE TABLE xcheck.api_batch_case
     expected_result character varying COLLATE pg_catalog."default",
     create_date timestamp without time zone
 )
+
+
+CREATE TABLE xcheck.api_batch_token
+(
+    job_id character varying COLLATE pg_catalog."default",
+    url character varying COLLATE pg_catalog."default",
+    body character varying COLLATE pg_catalog."default",
+	test_rule character varying COLLATE pg_catalog."default",
+    create_date timestamp without time zone
+)

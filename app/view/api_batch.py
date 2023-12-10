@@ -454,13 +454,34 @@ def apitest333():
     if job_id=='10031':
         data = {
             "connect_id": 100,
-            "connect_name": 'Item 1',
+            "connect_name": 'Item1',
             "dbtype": 'PostgreSQL',
             "connect_type": "My connection",
             "username": 'hsh',
             "pwd": '54uru',
             "host": 'host1',
-            "dblibrary": "test1"
+            "dblibrary": "test1",
+            "ret":[
+                {"retCode":"000000",
+                 'retMsg':"SUCCESS"}
+            ],
+            "body":{
+                "clientNo":"CNHBBJ421023052",
+                "contactlist":[
+                    {
+                        "addressId":"P2",
+                        "address1":"GUANGZHOU"
+                    },
+                    {
+                        "addressId": "P0",
+                        "address1": "SHANXI"
+                    },
+                    {
+                        "addressId": "P1",
+                        "address1": "SICHUAN"
+                    },
+                ]
+            }
         }
         return jsonify(data)
     else:
@@ -491,7 +512,6 @@ def apitestgettoken():
 @web.route('/get_api_token_detail', methods=['POST'])
 def get_api_token_detail():
     data = request.json
-    print('Received data:', data)  # Add this line to print data to the server console
 
     url = data.get('url')
     body = data.get('body')
@@ -509,3 +529,35 @@ def get_api_token_detail():
     except Exception as e:
         print('Error:', e)
         return jsonify({"error": "Something went wrong"}), 500
+
+
+@web.route('/save_api_token', methods=['POST'])
+def save_api_token():
+    data = request.json
+
+    job_id = data.get('job_id')
+    url = data.get('url')
+    body = data.get('body')
+    test_rule= data.get('test_rule')
+
+    try:
+        tanos_manage().add_api_batch_token(job_id, url, body,test_rule)
+        return jsonify({'success': True, 'info': 'save successfully '})
+
+
+    except Exception as e:
+        print('Error:', e)
+        return jsonify({"error": "Something went wrong"}), 500
+
+
+@app.route('/get_data_by_job_id', methods=['GET'])
+def get_data_by_job_id():
+    job_id = request.args.get('id')
+    if job_id:
+        try:
+            token_data= tanos_manage().get_api_batch_token(job_id)
+            return jsonify(token_data)
+
+        except Exception as e:
+            print('Error:', e)
+            return jsonify({"error": "Something went wrong"}), 500

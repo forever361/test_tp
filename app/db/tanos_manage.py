@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import sys
@@ -553,6 +554,40 @@ class tanos_manage():
         result = useDB.useDB().executesql_fetch(sql)
 
         return result
+
+
+    def add_api_batch_token(self, job_id, url, body,test_rule):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+        # Check if the job_id already exists in the database
+        check_sql = "SELECT * FROM xcheck.api_batch_token WHERE job_id = '{}'".format(job_id)
+        result = useDB.useDB().executesql_fetch(check_sql)
+
+        if result and len(result) > 0:
+            # Job_id exists, update the existing record
+            update_sql = """UPDATE xcheck.api_batch_token 
+                            SET url = '{}', body = '{}',test_rule='{}', create_date = '{}' 
+                            WHERE job_id = '{}'""" \
+                .format(url.strip(), json.dumps(body), test_rule.strip(),create_date, job_id)
+            useDB.useDB().executesql(update_sql)
+        else:
+            # Job_id doesn't exist, insert a new record
+            insert_sql = """INSERT INTO xcheck.api_batch_token (job_id, url, body,test_rule,create_date) 
+                            VALUES ('{}', '{}', '{}','{}', '{}')""" \
+                .format(job_id, url.strip(), json.dumps(body),test_rule.strip(), create_date)
+            useDB.useDB().executesql(insert_sql)
+
+    def get_api_batch_token(self, job_id):
+        # user_id = session.get('userid', None)
+        sql = """select url, body,test_rule from xcheck.api_batch_token where job_id= '{}'  """ \
+            .format(job_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from xcheck.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+        if result:
+            return result[0]
+        else:
+            return None
+
 
 if __name__ == '__main__':
     testcase = tanos_manage()
