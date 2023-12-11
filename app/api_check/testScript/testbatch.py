@@ -148,12 +148,12 @@ class test_ptl_search(unittest.TestCase):
                     self.assertNotEqual(len(self.expectation), 0)
 
                     actual_body = result.get('body', {})
-                    actual_ret = result.get('ret', [])
+                    actual_ret = result.get('sysHead', {}).get('ret', [])
 
 
                     expectation_result = json.loads(self.expectation)
                     expectation_body = expectation_result.get('body', {})
-                    expectation_ret = expectation_result.get('ret', [])
+                    expectation_ret = expectation_result.get('sysHead', {}).get('ret', [])
 
                     print('【actual_body】', actual_body)
                     print('【expect_body】', expectation_body)
@@ -190,18 +190,17 @@ class test_ptl_search(unittest.TestCase):
                     expectation_result = json.loads(self.expectation)
 
                     # 验证 ret 里包含 retCode 和 retMsg 的所有 key
-                    actual_ret_keys = set(key for ret_item in actual_result['ret'] for key in ret_item.keys())
-                    expected_ret_keys = set(key for ret_item in expectation_result['ret'] for key in ret_item.keys())
+                    actual_ret = result.get('sysHead', {}).get('ret', [])
+                    expectation_ret = expectation_result.get('sysHead', {}).get('ret', [])
 
-
-                    self.assertTrue(expected_ret_keys.issubset(actual_ret_keys))
+                    self.assertEqual(actual_ret, expectation_ret)
 
                     # 验证 body 里包含所有 key
                     actual_body_keys = set(actual_result['body'].keys())
                     expected_body_keys = set(expectation_result['body'].keys())
 
-                    print('【actual_ret_keys】', actual_ret_keys)
-                    print('【expect_ret_keys】', expected_ret_keys)
+                    print('【actual_ret】', actual_ret)
+                    print('【expect_ret】', expectation_ret)
 
                     print('【actual_body_keys】', actual_body_keys)
                     print('【expect_body_keys】', expected_body_keys)
