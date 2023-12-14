@@ -90,50 +90,67 @@ def upload_file():
     # 读取Excel文件并插入数据
     excel_path = f'{user_folder_path}/upload/{filename}'
 
-
     try:
-        #入库这里要有异常处理
-        tanos_manage().add_api_batch_suite(filename)
+        with pd.ExcelFile(excel_path, engine='openpyxl') as xls:
+            sheet_names = xls.sheet_names
+
+            for sheet_name in sheet_names:
+
+                if tanos_manage().sheet_exists(sheet_name):
+                    xls.close()
+                    os.remove(f'{user_folder_path}/upload/{filename}')
+                    return jsonify(
+                        {'success': False, 'message': f'Sheet "{sheet_name}" already exists in the database'})
+
+                try:
+                    tanos_manage().add_api_batch_suite(sheet_name)
+                except Exception as e:
+                    xls.close()
+                    os.remove(f'{user_folder_path}/upload/{filename}')
+                    return jsonify({'success': False, 'message': f'Error insert suite: {str(e)}'})
+
+                suite_id = tanos_manage().get_suite_id(sheet_name)
+
+                nan_replacements = {
+                    'Url': '',
+                    'Method': '',
+                    'Request body': '',
+                    'Header': '',
+                    'Expected result': ''
+                }
+
+                df = pd.read_excel(xls, sheet_name, engine='openpyxl').fillna(nan_replacements)
+
+                for index, row in df.iterrows():
+                    url = str(row['Url'])
+                    method = str(row['Method'])
+                    request_body = str(row['Request body'])
+                    header = str(row['Header'])
+                    expected_result = str(row['Expected result'])
+
+                    tanos_manage().add_api_batch_case(suite_id=suite_id, url=url, methods=method,
+                                                      request_body=request_body, headers=header,
+                                                      expected_result=expected_result)
+        try:
+            xls.close()
+            os.remove(f'{user_folder_path}/upload/{filename}')
+        except Exception as e:
+            print(e)
+            return jsonify({'success': False, 'message': f'Error Delete Excel file: {str(e)}'})
+
     except Exception as e:
-        return jsonify({'success': False, 'message': f'Error insert suite: {str(e)}'})
-
-    suite_id = tanos_manage().get_suite_id(filename)
-
-    try:
-
-        nan_replacements = {
-            'Url': '',  # 适当替换为数据库中的空值
-            'Method': '',  # 适当替换为数据库中的空值
-            'Request body': '',  # 适当替换为数据库中的空值
-            'Header': '',  # 适当替换为数据库中的空值
-            'Expected result': ''  # 适当替换为数据库中的空值
-        }
-
-        # 使用pandas读取Excel文件
-        df = pd.read_excel(excel_path, engine='openpyxl').fillna(nan_replacements)
-        print(df)
-        # 将DataFrame数据插入数据库
-        for index, row in df.iterrows():
-            url = str(row['Url'])
-            method = str(row['Method'])
-            request_body = str(row['Request body'])
-            header = str(row['Header'])
-            expected_result = str(row['Expected result'])
-
-            # 在这里使用 tanos_manager.add_api_batch_suite 方法插入数据库，具体根据您的模型和需求调整
-            tanos_manage().add_api_batch_case(suite_id=suite_id, url=url, methods=method, request_body=request_body, headers=header,
-                                              expected_result=expected_result)
-
-    except Exception as e:
+        xls.close()
+        os.remove(f'{user_folder_path}/upload/{filename}')
         return jsonify({'success': False, 'message': f'Error reading Excel file: {str(e)}'})
 
-    return render_template('api/api_batch_suite.html',)
+    return jsonify({'success': True, 'message': 'upload successfully'})
 
 
 @web.route('/batch_api_suite_search.json', methods=['GET'])
 def show_batch():
     rows = tanos_manage().show_api_batch_suite()
-    keys=('user_id','suite_id','suite_name','create_date')
+    print(rows)
+    keys=('user_id','suite_id','suite_name','create_date','suite_label')
     result_list=[]
     for row in rows:
         # Assuming create_date is the fourth element in the row
@@ -147,7 +164,11 @@ def show_batch():
         # Create a dictionary from keys and updated row
         result_dict = dict(zip(keys, row_with_formatted_date))
         # Append the result dictionary to the list
+
+        result_dict['suite_label'] = row[4] if row[4] else ""
         result_list.append(result_dict)
+
+    print(result_list)
     return jsonify(result_list)
 
 

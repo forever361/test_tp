@@ -3,100 +3,104 @@
 {% block title %}Flasky{% endblock %}
 
 {% block js %}
-<script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
-<link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+    <script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+    <link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
 
-<script src="/static/tanos/bootbox.all.min.js"></script>
-<script src="/static/tanos/popper.js"></script>
-<script src="/static/tanos/toastr.min.js"></script>
-<link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+    <script src="/static/tanos/bootbox.all.min.js"></script>
+    <script src="/static/tanos/popper.js"></script>
+    <script src="/static/tanos/toastr.min.js"></script>
+    <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
 
-<!-- Bootstrap Font Icon CSS -->
-<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
+    <!-- Bootstrap Font Icon CSS -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
 
-<!--<script src="/static/tanos/data_connect.js"></script>-->
+    <!--<script src="/static/tanos/data_connect.js"></script>-->
 
 
 {% endblock %}
 
 {% block content %}
 
-<style>
-    .panel-info {
-        border-color: #eee;
-    }
+    <style>
+        .panel-info {
+            border-color: #eee;
+        }
 
-    .panel-info > .panel-heading {
-        color: #000;
-        background-color: #fff;
-        border-color: #eee;
-    }
+        .panel-info > .panel-heading {
+            color: #000;
+            background-color: #fff;
+            border-color: #eee;
+        }
 
-    .panel-info > .panel-heading + .panel-collapse > .panel-body {
-        border-top-color: #000;
-    }
+        .panel-info > .panel-heading + .panel-collapse > .panel-body {
+            border-top-color: #000;
+        }
 
-    .panel-info > .panel-heading .badge {
-        color: #d9edf7;
-        background-color: #31708f;
-    }
+        .panel-info > .panel-heading .badge {
+            color: #d9edf7;
+            background-color: #31708f;
+        }
 
-    .panel-info > .panel-footer + .panel-collapse > .panel-body {
-        border-bottom-color: #000;
-    }
-
-
-    .table-striped > tbody > tr:nth-of-type(odd) {
-        background-color: #fff;
-    }
-
-    .form-control-input.has-value {
-        background-color: #eee; /* 填入内容后的背景色 */
-    }
+        .panel-info > .panel-footer + .panel-collapse > .panel-body {
+            border-bottom-color: #000;
+        }
 
 
-</style>
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #fff;
+        }
+
+        .form-control-input.has-value {
+            background-color: #eee; /* 填入内容后的背景色 */
+        }
 
 
-{#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
+    </style>
+
+
+    {#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
 
 
     <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/api_batch_suite">API Suite Management</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link " href="/api_batch_case">API case Management</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/api_batch_job">Job Management</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/api_batch_result">Job detail</a>
-      </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/api_batch_suite">API Suite Management</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="/api_batch_case">API case Management</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/api_batch_job">Job Management</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/api_batch_result">Job detail</a>
+        </li>
     </ul>
 
     <div style=" margin: 20px; margin-bottom: 100px " class="card">
-         <div class="card-body" style="padding:10px;">
+        <div class="card-body" style="padding:10px;">
             <!-- Default panel contents -->
             <h5 class="card-title">API Suite Management</h5>
             <div class="card-text">
                 <p>On this page, you can batch import a suite of APIs and manage them.</p>
 
                 <div style="display: flex; justify-content: flex-start;">
-                    <button class="btn btn-primary" id="btnImport" type="button" style="width: 180px; height: 40px; margin-top: 20px; margin-right: 50px;">Import File</button>
-                    <button class="btn btn-primary" id="btnDown" type="button" style="width: 180px; height: 40px; margin-top: 20px;">Download Sample</button>
+                    <button class="btn btn-primary" id="btnImport" type="button"
+                            style="width: 180px; height: 40px; margin-top: 20px; margin-right: 50px;">Import File
+                    </button>
+                    <button class="btn btn-primary" id="btnDown" type="button"
+                            style="width: 180px; height: 40px; margin-top: 20px;">Download Sample
+                    </button>
                 </div>
 
                 <table class="table table-striped"
                        id="table"
                        data-toggle="table"
-{#                       data-height="600"#}
+                        {#                       data-height="600"#}
                        data-url="batch_api_suite_search.json"
                        data-pagination="true"
                        data-search="true"
                        data-buttons-class="primary"
-{#                       data-buttons="buttons"#}
+                        {#                       data-buttons="buttons"#}
                        data-sort-name="suite_id"
                        data-sort-order="desc"
 
@@ -105,13 +109,20 @@
                     <tr>
                         <th data-field="user_id" data-width="15" data-width-unit="%">USER ID
                         </th>
-                        <th data-field="suite_id" data-align="center" data-sortable="true" data-width="15" data-width-unit="%">SUITE ID
+                        <th data-field="suite_id" data-align="center" data-sortable="true" data-width="15"
+                            data-width-unit="%">SUITE ID
                         </th>
-                        <th data-field="suite_name" data-formatter="suiteNameFormatter" data-align="left" data-sortable="true"  >SUITE NAME
+                        <th data-field="suite_name" data-formatter="suiteNameFormatter" data-align="left"
+                            data-sortable="true">SUITE NAME
                         </th>
-                        <th data-field="create_date" data-align="left" data-sortable="true" >CREATE DATE
+                        <th data-field="suite_label" data-formatter="suiteLabelFormatter" data-align="left"
+                            data-sortable="true">SUITE LABEL
                         </th>
-                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>
+                        <th data-field="create_date" data-align="left" data-sortable="true">CREATE DATE
+                        </th>
+                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">
+                            OPERATION
+                        </th>
 
                     </tr>
                     </thead>
@@ -125,182 +136,304 @@
 
 
     <!-- 模态窗口 -->
-        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="/upload_excel" enctype="multipart/form-data">
-                            <input type="file" name="file" accept=".xlsx, .xls">
-                            <button type="submit" class="btn btn-primary">Upload File</button>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/upload_excel" enctype="multipart/form-data">
+                        <input type="file" name="file" accept=".xlsx, .xls">
+                        <button type="submit" class="btn btn-primary">Upload File</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
+    </div>
 
 
 
 
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '/upload_excel',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (!response.success) {
+                            $('#uploadModal').modal('hide');
+                            toastr.error(response.message);
+                            // 存储失败消息
+                            sessionStorage.setItem('uploadFailureMessage', response.message);
+                            location.reload(); // 刷新页面
+                        } else {
+                            // 存储成功消息
+                            sessionStorage.setItem('uploadSuccessMessage', 'Upload successfully!');
+
+                            $('#uploadModal').modal('hide');
+                            location.reload(); // 刷新页面
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while uploading the file.');
+                        // 存储失败消息
+                        sessionStorage.setItem('uploadFailureMessage', 'An error occurred while uploading the file.');
+                        location.reload(); // 刷新页面
+                    }
+                });
+            });
+
+            // 页面加载时检查是否有存储的消息
+            var storedSuccessMessage = sessionStorage.getItem('uploadSuccessMessage');
+            var storedFailureMessage = sessionStorage.getItem('uploadFailureMessage');
+
+            if (storedSuccessMessage) {
+                toastr.success(storedSuccessMessage);
+                sessionStorage.removeItem('uploadSuccessMessage');
+            }
+
+            if (storedFailureMessage) {
+                toastr.error(storedFailureMessage);
+                sessionStorage.removeItem('uploadFailureMessage');
+            }
+        });
+    </script>
 
 
+    <script>
 
+        $(document).ready(function () {
+            // 监听按钮点击事件
+            $('#btnImport').on('click', function () {
+                // 显示模态框
+                $('#uploadModal').modal('show');
+            });
 
+            $('#btnDown').on('click', function () {
+                //创建一个虚拟的下载链接
+                var downloadLink = document.createElement('a');
 
-<script>
+                // 设置下载链接的属性
+                downloadLink.href = '/static/api_suite_sample.xlsx';
+                downloadLink.download = 'api_suite_sample.xlsx';
 
-    $(document).ready(function () {
-        // 监听按钮点击事件
-        $('#btnImport').on('click', function () {
-            // 显示模态框
-            $('#uploadModal').modal('show');
+                // 将下载链接追加到文档中
+                document.body.appendChild(downloadLink);
+
+                // 模拟点击下载链接
+                downloadLink.click();
+
+                // 删除创建的下载链接元素
+                document.body.removeChild(downloadLink);
+
+            });
         });
 
-        $('#btnDown').on('click', function () {
-            //创建一个虚拟的下载链接
-            var downloadLink = document.createElement('a');
-
-            // 设置下载链接的属性
-            downloadLink.href = '/static/api_suite_sample.xlsx';
-            downloadLink.download = 'api_suite_sample.xlsx';
-
-            // 将下载链接追加到文档中
-            document.body.appendChild(downloadLink);
-
-            // 模拟点击下载链接
-            downloadLink.click();
-
-            // 删除创建的下载链接元素
-            document.body.removeChild(downloadLink);
-
-        });
-    });
-
-    function buttons() {
-        return {
-            btnImport: {
-                text: 'Add new row',
-                icon: 'fas fa-file-arrow-up',
-                render: true,
-                event: function () {
-                     $('#uploadModal').modal('show');
-                    // 跳转到指定页面
-                    {#window.location.href = "/api_batch_test_data";#}
-                },
-                attributes: {
-                    class: 'Add a new row to the table',
-                    style: 'width: 120px; height:40px; margin-left:40px;display: flex; justify-content: center; align-items: center;',
-                    iconAlignment: 'center',
+        function buttons() {
+            return {
+                btnImport: {
+                    text: 'Add new row',
+                    icon: 'fas fa-file-arrow-up',
+                    render: true,
+                    event: function () {
+                        $('#uploadModal').modal('show');
+                        // 跳转到指定页面
+                        {#window.location.href = "/api_batch_test_data";#}
+                    },
+                    attributes: {
+                        class: 'Add a new row to the table',
+                        style: 'width: 120px; height:40px; margin-left:40px;display: flex; justify-content: center; align-items: center;',
+                        iconAlignment: 'center',
+                    }
                 }
             }
         }
-    }
 
 
+    </script>
 
 
-</script>
+    <script>
 
+        const $table = $('#table');
 
-<script>
+        $(document).ready(function () {
+            // Assuming you have a specific class for SUITE NAME cells, e.g., 'suite-name-cell'
+            $table.on('click', '.suite-name-cell', function () {
+                // Get the suite_id from the row data
+                var suite_id = $(this).closest('tr').find('td[data-field="suite_id"]').text();
 
-    const $table = $('#table');
-
-    $(document).ready(function () {
-        // Assuming you have a specific class for SUITE NAME cells, e.g., 'suite-name-cell'
-        $table.on('click', '.suite-name-cell', function () {
-            // Get the suite_id from the row data
-            var suite_id = $(this).closest('tr').find('td[data-field="suite_id"]').text();
-
-            // Redirect to the specified page with the suite_id
-            window.location.href = '/batch_search_case?id=' + suite_id;
+                // Redirect to the specified page with the suite_id
+                window.location.href = '/batch_search_case?id=' + suite_id;
+            });
         });
-    });
 
-
-    // Formatter for "action" column
-    function actionFormatter(value, row, index) {
-        return '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>'
-
-    }
 
         // Formatter for "action" column
-    {#function suiteFormatter(value, row, index) {#}
-    {#    return '<a href="javascript:;" onclick="window.location.href=(\'/batch_search_case?id='+ row.id + '\')">suite_name</a> '#}
-    {##}
+        function actionFormatter(value, row, index) {
+            return ' <button  class="btn btn-sm btn-primary edit-row" > <i class="fa-regular fa-pen-to-square"></i> </button>' +
+                '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>'
 
-    function suiteNameFormatter(value, row) {
-        return '<a href="/batch_search_case?id=' + row.suite_id + '">' + value + '</a>';
-    }
+        }
 
+        // Formatter for "action" column
+        {#function suiteFormatter(value, row, index) {#}
+        {#    return '<a href="javascript:;" onclick="window.location.href=(\'/batch_search_case?id='+ row.id + '\')">suite_name</a> '#}
+        {##}
 
+        function suiteNameFormatter(value, row) {
+            return '<a href="/batch_search_case?id=' + row.suite_id + '">' + value + '</a>';
+        }
 
-    /////delete function
-    function deleteRow($tr) {
-        const id = $tr.find('td:eq(1)').text();
-        console.log({id: id})
-        $.ajax({
-            url: '/delete_api_batch_suite',
-            type: 'POST',
-            data: JSON.stringify({"id": id, "act": "del"}),
-            contentType: 'application/json',
-            success: function () {
-                toastr.success('delete successfully!');
-                $('#table').bootstrapTable('refresh');
-            },
-            error: function (error) {
-                console.log(error);
-                toastr.error('failed to delete the suite. Please try again.');
-            }
-        });
-    }
+        function suiteLabelFormatter(value, row, index) {
+            return '<input id="hostinput"  type="text" class="form-control" value="' + value + '" disabled>';
+        }
 
 
-    $table.on('click', '.delete-row', function () {
-        const $tr = $(this).closest('tr');
-
-        let dialog = bootbox.dialog({
-            title: 'Delete item!',
-            message: "<p>Please confirm if you want to delete? </p>",
-            centerVertical: true,
-            buttons:
-                {
-                    cancel: {
-                        label: "No",
-                        className: 'btn-danger',
-                        callback:
-                            function () {
-                                console.log('Custom cancel clicked');
-                            }
-                    },
-
-                    ok: {
-                        label: "Yes",
-                        className: 'btn-success',
-                        callback:
-                            function () {
-                                deleteRow($tr)
-                            }
-                    }
+        /////delete function
+        function deleteRow($tr) {
+            const id = $tr.find('td:eq(1)').text();
+            console.log({id: id})
+            $.ajax({
+                url: '/delete_api_batch_suite',
+                type: 'POST',
+                data: JSON.stringify({"id": id, "act": "del"}),
+                contentType: 'application/json',
+                success: function () {
+                    toastr.success('delete successfully!');
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function (error) {
+                    console.log(error);
+                    toastr.error('failed to delete the suite. Please try again.');
                 }
+            });
+        }
+
+
+        $table.on('click', '.delete-row', function () {
+            const $tr = $(this).closest('tr');
+
+            let dialog = bootbox.dialog({
+                title: 'Delete item!',
+                message: "<p>Please confirm if you want to delete? </p>",
+                centerVertical: true,
+                buttons:
+                    {
+                        cancel: {
+                            label: "No",
+                            className: 'btn-danger',
+                            callback:
+                                function () {
+                                    console.log('Custom cancel clicked');
+                                }
+                        },
+
+                        ok: {
+                            label: "Yes",
+                            className: 'btn-success',
+                            callback:
+                                function () {
+                                    deleteRow($tr)
+                                }
+                        }
+                    }
+            });
+
         });
 
-    });
+
+        /////edit function
+
+        function saveRow($tr) {
+            const connect_id = $tr.find('td:eq(0)').text();
+            const connect_name = $tr.find('input[id="nameinput"]').val();
+            const dbtype = $tr.find('select[id="typedbinput"]').val();
+            const connect_type = $tr.find('select[id="typeinput"]').val();
+            const username = $tr.find('input[id="userinput"]').val();
+            const pwd = $tr.find('input[id="pwdinput"]').val();
+            const db_library = $tr.find('input[id="libraryinput"]').val();
+            const host = $tr.find('input[id="hostinput"]').val();
+            const port = $tr.find('input[id="portinput"]').val();
+
+            console.log($tr.data('unique-id'));
+            console.log($tr.find('.editable:eq(0)').val());
+
+            const data = {
+                'connect_id': connect_id,
+                'connect_name': connect_name,
+                'dbtype': dbtype,
+                'connect_type': connect_type,
+                'host': host,
+                'db_library': db_library,
+                'username': username,
+                'pwd': pwd,
+                'port': port
+            };
+
+            console.log(data)
+
+            $.ajax({
+                url: '/update_connect',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function () {
+                    $('#table').bootstrapTable('refresh');
+                    toastr.success('update successfully!');
+
+                },
+                error: function (error) {
+                    console.log(error);
+                    toastr.error('failed to save. Please try again.');
+                }
+            });
+        }
+
+        $table.on('click', '.edit-row', function () {
+            const $tr = $(this).closest('tr');
+            const $editBtn = $(this);
+            const $saveBtn = $('<button class="btn btn-sm btn-success save-row">Save</button>');
+            $editBtn.replaceWith($saveBtn);
+            $tr.find('input, select').prop('disabled', false);
+            $tr.find('input, select').addClass('editable');
+            $tr.addClass('editing');
+        });
+
+        $table.on('click', '.save-row', function () {
+            const $tr = $(this).closest('tr');
+            const $saveBtn = $(this);
+            const $editBtn = $('<button class="btn btn-sm btn-primary edit-row">Edit</button>');
+            $saveBtn.replaceWith($editBtn);
+            $tr.find('input, select').prop('disabled', true);
+            $tr.find('input, select').removeClass('editable');
+            $tr.removeClass('editing');
+            // 调用 saveRow 保存编辑状态
+            console.log($tr)
+            saveRow($tr);
+        });
 
 
-</script>
+    </script>
 
 
 
 
-{% if message %}
+    {% if message %}
 
-{% endif %}
+    {% endif %}
 
 {% endblock %}
