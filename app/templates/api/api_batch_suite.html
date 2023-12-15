@@ -295,11 +295,12 @@
         {##}
 
         function suiteNameFormatter(value, row) {
-            return '<a href="/batch_search_case?id=' + row.suite_id + '">' + value + '</a>';
+            return '<span id="suiteName" ><a href="/batch_search_case?id=' + row.suite_id + '">' + value + '</a></span>';
+
         }
 
         function suiteLabelFormatter(value, row, index) {
-            return '<input id="hostinput"  type="text" class="form-control" value="' + value + '" disabled>';
+            return '<input id="suiteLabel"  type="text" class="form-control" value="' + value + '" disabled>';
         }
 
 
@@ -356,38 +357,26 @@
         });
 
 
-        /////edit function
+        /////edit function suite_id,suite_name,suite_label
 
         function saveRow($tr) {
-            const connect_id = $tr.find('td:eq(0)').text();
-            const connect_name = $tr.find('input[id="nameinput"]').val();
-            const dbtype = $tr.find('select[id="typedbinput"]').val();
-            const connect_type = $tr.find('select[id="typeinput"]').val();
-            const username = $tr.find('input[id="userinput"]').val();
-            const pwd = $tr.find('input[id="pwdinput"]').val();
-            const db_library = $tr.find('input[id="libraryinput"]').val();
-            const host = $tr.find('input[id="hostinput"]').val();
-            const port = $tr.find('input[id="portinput"]').val();
+            const suite_id = $tr.find('td:eq(1)').text();
+            const suite_name = $tr.find('span#suiteName a').text();
+            const suite_label = $tr.find('input[id="suiteLabel"]').val();
 
             console.log($tr.data('unique-id'));
             console.log($tr.find('.editable:eq(0)').val());
 
             const data = {
-                'connect_id': connect_id,
-                'connect_name': connect_name,
-                'dbtype': dbtype,
-                'connect_type': connect_type,
-                'host': host,
-                'db_library': db_library,
-                'username': username,
-                'pwd': pwd,
-                'port': port
+                'suite_id': suite_id,
+                'suite_name': suite_name,
+                'suite_label': suite_label,
             };
 
             console.log(data)
 
             $.ajax({
-                url: '/update_connect',
+                url: '/update_batch_suite_info',
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: 'application/json',
@@ -411,6 +400,10 @@
             $tr.find('input, select').prop('disabled', false);
             $tr.find('input, select').addClass('editable');
             $tr.addClass('editing');
+
+            // 找到包含可编辑内容的<span>元素并添加contenteditable属性
+            const $editableSpan = $tr.find('span');
+            $editableSpan.attr('contenteditable', 'true');
         });
 
         $table.on('click', '.save-row', function () {
@@ -422,6 +415,10 @@
             $tr.find('input, select').removeClass('editable');
             $tr.removeClass('editing');
             // 调用 saveRow 保存编辑状态
+
+            const $editableSpan = $tr.find('span');
+            $editableSpan.attr('contenteditable', 'false');
+
             console.log($tr)
             saveRow($tr);
         });

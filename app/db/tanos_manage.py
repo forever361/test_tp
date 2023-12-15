@@ -603,6 +603,10 @@ class tanos_manage():
             print(f"Error checking if sheet exists: {str(e)}")
             return False
 
+    def update_batch_suite_info(self, suite_id,suite_name,suite_label):
+        sql = "UPDATE tanos.api_batch_suite set suite_name='{}',suite_label='{}' WHERE suite_id = '{}';".format(
+            suite_name,suite_label,suite_id)
+        useDB.useDB().executesql(sql)
 
 if __name__ == '__main__':
     testcase = tanos_manage()

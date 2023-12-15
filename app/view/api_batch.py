@@ -585,3 +585,12 @@ def get_data_by_job_id():
         except Exception as e:
             print('Error:', e)
             return jsonify({"error": "Something went wrong"}), 500
+
+
+@web.route('/update_batch_suite_info', methods=['POST'])
+def update_batch_suite_info():
+    data = request.json
+    print(1111,data)
+    # TODO: Update data in the database  suite_id,suite_name,suite_label
+    tanos_manage().update_batch_suite_info(data['suite_id'],data['suite_name'],data['suite_label'])
+    return jsonify(success=True, message='Data updated successfully')
