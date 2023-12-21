@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block js %}
+    <script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+    <link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+
+    <script src="/static/tanos/bootbox.all.min.js"></script>
+    <script src="/static/tanos/popper.js"></script>
+    <script src="/static/tanos/toastr.min.js"></script>
+    <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+
+    <!-- Bootstrap Font Icon CSS -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
+
+    <!--<script src="/static/tanos/data_connect.js"></script>-->
+
+
+{% endblock %}
+
+{% block content %}
+
+    <style>
+        .panel-info {
+            border-color: #eee;
+        }
+
+        .panel-info > .panel-heading {
+            color: #000;
+            background-color: #fff;
+            border-color: #eee;
+        }
+
+        .panel-info > .panel-heading + .panel-collapse > .panel-body {
+            border-top-color: #000;
+        }
+
+        .panel-info > .panel-heading .badge {
+            color: #d9edf7;
+            background-color: #31708f;
+        }
+
+        .panel-info > .panel-footer + .panel-collapse > .panel-body {
+            border-bottom-color: #000;
+        }
+
+
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #fff;
+        }
+
+        .form-control-input.has-value {
+            background-color: #eee; /* 填入内容后的背景色 */
+        }
+
+
+    </style>
+
+
+    {#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
+
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="/api_batch_suite_opp">API Suite Management</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="/api_batch_case_opp">API case Management</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/api_batch_job_opp">Job Management</a>
+        </li>
+        {#        <li class="nav-item">#}
+        {#            <a class="nav-link active" href="/api_batch_result">Job detail</a>#}
+        {#        </li>#}
+    </ul>
+
+    <div style=" margin: 20px; margin-bottom: 100px " class="card">
+        <div class="card-body" style="padding:10px;">
+            <!-- Default panel contents -->
+            <h5 class="card-title">Trigger job</h5>
+            <div class="card-text">
+                <p>On this page, you can run job and check test result.</p>
+
+                <!-- Token Options -->
+                <div class="border p-3 mb-4" style="width: 50%">
+
+                    <div class="form-group">
+                        <label for="testRule">Test Rule:</label>
+                        <select class="form-control" id="testRule" name="testRule">
+                            <option value="onlyRetAndBody">Only Check 'Ret' and 'Body'</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tokenOptions">Token Options:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tokenOptions" id="noToken"
+                                   value="noToken" checked>
+                            <label class="form-check-label" for="noToken">
+                                No Token
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tokenOptions" id="withToken"
+                                   value="withToken">
+                            <label class="form-check-label" for="withToken">
+                                Include Token
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <!-- Token Input -->
+                    <div class="form-group" id="tokenInput" style="display: none;">
+                        <label for="tokenUrl">Input URL:</label>
+                        <input type="text" class="form-control" id="tokenUrl" name="tokenUrl">
+                        <label for="tokenBody">Input Body (JSON format):</label>
+                        <textarea class="form-control" id="tokenBody" name="tokenBody" rows="4"></textarea>
+
+                        <div style="margin-top: 30px; display: flex; align-items: center;  width: 180px">
+                            <button class="btn btn-primary" type="button" id="testTokenBtn" style="width: 100%;">
+                                Test Getting Token
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px; display: flex; align-items: center;  width: 180px">
+                        <button class="btn btn-primary" type="button" id="saveTokenBtn" style="width: 100%;">
+                            Save setting
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <button class="btn btn-success" type="button" id="btnRunjob"
+                        style="margin-left:15px;width: 180px;  margin-top:20px;display: none; justify-content: center; align-items: center;"
+                        iconalignment="center">Run job
+                </button>
+
+                <table class="table table-striped"
+                       id="table"
+                       data-toggle="table"
+                       data-url="/batch_search_result_json_opp?id={{ job_id }}"
+                       data-pagination="true"
+                       data-search="true"
+                       data-buttons-class="primary"
+                       data-sort-name="case_id"
+                        {#                       data-sort-order="desc"#}
+                       data-page-list="[10, 25, 50, 100, all]"
+                        {#                        data-multiple-select-row="true"#}
+                        {#                        data-click-to-select="true"#}
+
+                >
+                    <thead>
+                    <tr>
+                        {#                        <th data-field="state" data-checkbox="true"></th>#}
+                        {#                        <th data-field="state" data-checkbox="true"></th>#}
+                        {#                        <th data-field="user_id" data-width="15" data-width-unit="%">USER ID#}
+                        {#                        </th>#}
+
+                        <th data-field="job_id" data-align="center" data-sortable="true" data-width="5"
+                            data-width-unit="%">JOB ID
+                        </th>
+                        <th data-field="case_id" data-align="center" data-sortable="true" data-width="5"
+                            data-width-unit="%">CASE ID
+                        </th>
+
+                        <th data-field="url" data-align="left" data-sortable="true">URL
+                        </th>
+                        <th data-field="methods" data-align="left" data-sortable="true">Method
+                        </th>
+                        <th data-field="request_body" data-align="left" data-sortable="true">Request_body
+                        </th>
+                        <th data-field="headers" data-align="left" data-sortable="true">Headers
+                        </th>
+                        <th data-field="expected_result" data-align="left" data-sortable="true">Expected_result
+                        </th>
+                        <th data-field="test_result" data-align="left" data-sortable="true">Creat date
+                        </th>
+                        {#                        <th data-formatter="actionFormatter" data-align="center" data-width="15" data-width-unit="%">OPERATION</th>#}
+
+                    </tr>
+                    </thead>
+                </table>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="loading"
+         style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center;">
+        <img src="./static/loading.gif" height="150" align="middle">
+        <div style="color:#00b4ef; font-weight: bold;">Testing...please wait a moment</div>
+    </div>
+
+
+    <script>
+        // Handle radio button change to show/hide token input
+        $('input[name="tokenOptions"]').change(function () {
+            if ($(this).val() === 'withToken') {
+                $('#tokenInput').show();
+            } else {
+                $('#tokenInput').hide();
+            }
+        });
+
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var job_id = urlParams.get('id');
+
+        // 向后端请求数据
+        $.ajax({
+            url: '/get_data_by_job_id_opp?id=' + job_id,
+            type: 'GET',
+            success: function (data) {
+                // 根据后端返回的数据填充到对应的输入框
+                console.info(data)
+                if (data) {
+                    // 检查元素是否存在，然后将数据填充到前端页面的相应元素中
+                    if ($('#tokenUrl').length) {
+                        $('#tokenUrl').val(data[0] || '');
+                    }
+                    if ($('#tokenBody').length) {
+                        $('#tokenBody').val(data[1] || '');
+                    }
+                    if ($('#testRule').length) {
+                        $('#testRule').val(data[2] || 'default');
+                    }
+                    if (data[0]) {
+                        $('input[name="tokenOptions"][value="withToken"]').prop('checked', true);
+                        $('#tokenInput').show();
+                    } else {
+                        $('input[name="tokenOptions"][value="noToken"]').prop('checked', true);
+                        $('#tokenInput').hide();
+                    }
+
+                } else {
+                    console.error('Failed to fetch data by job_id:', job_id);
+                }
+            },
+            error: function (error) {
+                console.error('Error fetching data by job_id:', job_id);
+            }
+        });
+
+
+        // Handle testing token button click
+        $(document).ready(function () {
+            $('#testTokenBtn').on('click', function () {
+                var url = $('#tokenUrl').val();
+                var body = $('#tokenBody').val();
+
+                var data = {
+                    url: url,
+                    body: JSON.parse(body),
+                };
+
+                $.ajax({
+                    url: '/get_api_token_detail_opp',
+                    type: 'POST',
+                    data: JSON.stringify(data), // Serialize the entire data object
+                    contentType: 'application/json',
+                    success: function (data) {
+                        //toastr.success('get token successfully!');
+                        if (data && data.token) {
+                            // If data has a token, show alert
+                            alert(data.token);
+                        } else {
+                            // If data doesn't have a token, show error message
+                            toastr.error('failed to get token, please check the URL or Body.');
+                        }
+                    },
+                    error: function (error) {
+                        toastr.error('failed to get token.');
+                    }
+                });
+            });
+        });
+
+
+        // Handle testing token button click
+        $(document).ready(function () {
+            $('#saveTokenBtn').on('click', function () {
+                var urlParams = new URLSearchParams(window.location.search);
+                // 获取名为 "id" 的参数值
+                var job_id = urlParams.get('id');
+
+                var url = $('#tokenUrl').val();
+                var body = $('#tokenBody').val();
+                var testRule = $('#testRule').val();
+
+                if (!url && !body && testRule) {
+                    var data = {
+                        url: "",
+                        body: {},
+                        job_id: job_id,
+                        test_rule: testRule
+                    };
+
+                } else {
+
+                    var data = {
+                        url: url,
+                        body: JSON.parse(body),
+                        job_id: job_id,
+                        test_rule: testRule
+                    };
+
+                }
+
+
+                $.ajax({
+                    url: '/save_api_token_opp',
+                    type: 'POST',
+                    data: JSON.stringify(data), // Serialize the entire data object
+                    contentType: 'application/json',
+                    success: function (data) {
+                        toastr.success('save token successfully!');
+                        $('#btnRunjob').show();
+                        {#alert(data.token)#}
+                    },
+                    error: function (error) {
+                        toastr.error('failed to save token.');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#btnRunjob').on('click', function () {
+                var urlParams = new URLSearchParams(window.location.search);
+                // 获取名为 "id" 的参数值
+                var jobid = urlParams.get('id');
+
+                $('#loading').show();
+
+                $.ajax({
+                    url: '/run_api_batch_job_opp',
+                    type: 'POST',
+                    data: JSON.stringify({jobid: jobid}),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        {#window.location.href = '/batch_search_result?id=' + job_id;#}
+                        $('#loading').hide();
+                        const url = `/search_api_batch_result_opp?jobid=${jobid}`;
+                        window.open(url, '_blank');
+                        {#toastr.success('generate job successfully!');#}
+
+                    },
+                    error: function (error) {
+                        $('#loading').hide();
+                        toastr.error('failed to generate job.');
+                    }
+                });
+
+            });
+        });
+
+
+    </script>
+
+
+    <script>
+
+        const $table = $('#table');
+
+
+        // Formatter for "action" column
+        function actionFormatter(value, row, index) {
+            return '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>'
+
+        }
+
+        {#function actionFormatter(value, row, index) {#}
+        {#    return '<button class="btn btn-sm btn-primary edit-row" onclick="window.location.href=(\'/data_edit_test_case_tanos?id=' + row.id + '\')"><i class="fa-regular fa-pen-to-square"></i></button> ' +#}
+        {#        '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +#}
+        {#        '<button class="btn btn-sm btn-success report-row" style="margin-left: 10px;" onclick="window.location.href=(\'/data_search_report?id=' + row.id + '\')"><i class="fa-sharp fa-regular fa-eye"></i></button> '#}
+        {##}
+        {#}#}
+
+
+            /////delete function
+            function deleteRow($tr) {
+                const id = $tr.find('td:eq(1)').text();
+                console.log({id: id})
+                $.ajax({
+                    url: '/delete_api_batch_suite_opp',
+                    type: 'POST',
+                    data: JSON.stringify({"id": id, "act": "del"}),
+                    contentType: 'application/json',
+                    success: function () {
+                        toastr.success('delete successfully!');
+                        $('#table').bootstrapTable('refresh');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        toastr.error('failed to delete the suite. Please try again.');
+                    }
+                });
+            }
+
+
+            $table.on('click', '.delete-row', function () {
+                const $tr = $(this).closest('tr');
+
+                let dialog = bootbox.dialog({
+                    title: 'Delete item!',
+                    message: "<p>Please confirm if you want to delete? </p>",
+                    centerVertical: true,
+                    buttons:
+                        {
+                            cancel: {
+                                label: "No",
+                                className: 'btn-danger',
+                                callback:
+                                    function () {
+                                        console.log('Custom cancel clicked');
+                                    }
+                            },
+
+                            ok: {
+                                label: "Yes",
+                                className: 'btn-success',
+                                callback:
+                                    function () {
+                                        deleteRow($tr)
+                                    }
+                            }
+                        }
+                });
+
+            });
+
+
+    </script>
+
+
+
+
+    {% if message %}
+
+    {% endif %}
+
+{% endblock %}
