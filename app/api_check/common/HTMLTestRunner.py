@@ -554,7 +554,7 @@ a.popup_link:hover {
     HEADING_TMPL = """<div class='heading card'>
 <h1>%(title)s</h1>
 %(parameters)s
-<p class='description'>%(description)s</p>
+
 </div>
 <div style="float:left; margin-left: 10px; margin-top: 20px;">
 	<p> Test Case Pie charts </p>
@@ -606,7 +606,7 @@ var myNewChart = new Chart(ctx).Pie(data,newopts);
 </script>
 	"""
 
-    HEADING_ATTRIBUTE_TMPL = """<p class='attribute'><strong>%(name)s:</strong> %(value)s</p>
+    HEADING_ATTRIBUTE_TMPL = """<p class='attribute'><strong>%(name)s:</strong> <br/> %(value)s</p>
 """  # variables: (name, value)
 
     # ------------------------------------------------------------------------
@@ -619,7 +619,6 @@ var myNewChart = new Chart(ctx).Pie(data,newopts);
 <a href='javascript:showCase(1, %(channel)s)' class="btn btn-success btn-sm">Pass</a>
 <a href='javascript:showCase(2, %(channel)s)' class="btn btn-warning btn-sm">Failed</a>
 <a href='javascript:showCase(3, %(channel)s)' class="btn btn-danger btn-sm">Error</a>
-<a href='javascript:showCase(4, %(channel)s)' class="btn btn-light btn-sm">Skip</a>
 <a href='javascript:showCase(5, %(channel)s)' class="btn btn-info btn-sm">All</a>
 </p>
 <table id='result_table'>
@@ -634,12 +633,11 @@ var myNewChart = new Chart(ctx).Pie(data,newopts);
 </colgroup>
 <tr id='header_row' class="panel-title">
     <td>Test Group/Test case</td>
-    <td>Count</td>
+    <td>CaseNumber</td>
     <td>Pass</td>
     <td>Fail</td>
     <td>Error</td>
     <td>View</td>
-    <td>Screenshots</td>
 </tr>
 %(test_list)s
 <tr id='total_row'>
@@ -648,7 +646,6 @@ var myNewChart = new Chart(ctx).Pie(data,newopts);
     <td class="text text-success">%(Pass)s</td>
     <td class="text text-danger">%(fail)s</td>
     <td class="text text-warning">%(error)s</td>
-    <td>&nbsp;</td>
     <td>&nbsp;</td>
 </tr>
 </table>
@@ -662,7 +659,6 @@ var myNewChart = new Chart(ctx).Pie(data,newopts);
     <td>%(fail)s</td>
     <td>%(error)s</td>
     <td><a href="javascript:showClassDetail('%(cid)s',%(count)s)">Detail</a></td>
-    <td>&nbsp;</td>
 </tr>
 """  # variables: (style, desc, count, Pass, fail, error, cid)
 
@@ -684,7 +680,7 @@ var myNewChart = new Chart(ctx).Pie(data,newopts);
     </div>
     <!--css div popup end-->
     </td>
-    <td>%(img)s</td>
+
 </tr>
 """  # variables: (tid, Class, style, desc, status)
 
@@ -925,6 +921,7 @@ class HTMLTestRunner(Template_mixin):
         """
         startTime = str(self.startTime)[:19]
         duration = str(self.stopTime - self.startTime)
+        duration = duration[:11]
         status = []
         if result.success_count:
             status.append('Pass:%s' % result.success_count)
@@ -935,13 +932,13 @@ class HTMLTestRunner(Template_mixin):
         if result.skip_count:
             status.append('Skip:%s' % result.skip_count)
         if status:
-            status = ' '.join(status)
+            status = ' \u00A0\u00A0'.join(status)
         else:
             status = 'none'
         return [
             ('Start Time', startTime),
             ('Duration', duration),
-            ('Status', status),
+            ('Result', status),
         ]
 
     def generateReport(self, test, result):

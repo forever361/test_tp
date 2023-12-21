@@ -22,49 +22,49 @@ basePath = os.path.join(os.path.join(os.path.dirname(__file__)))
 configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 sys.path.append(configPath)
 
-web = Blueprint('api_batch', __name__, template_folder='templates/api')
+web = Blueprint('api_batch_opp', __name__, template_folder='templates/api')
 
-@web.route('/api_batch', methods=['GET', 'POST'])
+@web.route('/api_batch_opp', methods=['GET', 'POST'])
 @user.login_required
 # @permission_required(session.get('groupname'))
-def api_batch():
-    return render_template('api/api_batch.html',)
+def api_batch_opp():
+    return render_template('api/api_batch_opp/api_batch_opp.html',)
 
-@web.route('/api_batch_suite', methods=['GET', 'POST'])
+@web.route('/api_batch_suite_opp', methods=['GET', 'POST'])
 @user.login_required
 # @permission_required(session.get('groupname'))
-def api_batch_suite():
-    return render_template('api/api_batch_suite.html',)
+def api_batch_suite_opp():
+    return render_template('api/api_batch_opp/api_batch_suite_opp.html',)
 
 
-@web.route('/api_batch_case', methods=['GET', 'POST'])
+@web.route('/api_batch_case_opp', methods=['GET', 'POST'])
 @user.login_required
 # @permission_required(session.get('groupname'))
-def api_batch_case():
-    return render_template('api/api_batch_case.html',)
+def api_batch_case_opp():
+    return render_template('api/api_batch_opp/api_batch_case_opp.html',)
 
 
-@web.route('/api_batch_job', methods=['GET', 'POST'])
+@web.route('/api_batch_job_opp', methods=['GET', 'POST'])
 @user.login_required
 # @permission_required(session.get('groupname'))
-def api_batch_job():
-    return render_template('api/api_batch_job.html',)
+def api_batch_job_opp():
+    return render_template('api/api_batch_opp/api_batch_job_opp.html',)
 
 
-@web.route('/api_batch_result', methods=['GET', 'POST'])
+@web.route('/api_batch_result_opp', methods=['GET', 'POST'])
 @user.login_required
 # @permission_required(session.get('groupname'))
-def api_batch_result():
-    return render_template('api/api_batch_result.html',)
+def api_batch_result_opp():
+    return render_template('api/api_batch_opp/api_batch_result_opp.html',)
 
 
 # 定义允许的文件扩展名检查函数
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'xlsx', 'xls'}
 
-@web.route('/upload_excel', methods=['POST'])
+@web.route('/upload_excel_opp', methods=['POST'])
 # @permission_required(session.get('groupname'))
-def upload_file():
+def upload_file_opp():
     if 'file' not in request.files:
         return jsonify({'success': False, 'message': 'No file part'})
 
@@ -146,8 +146,8 @@ def upload_file():
     return jsonify({'success': True, 'message': 'upload successfully'})
 
 
-@web.route('/batch_api_suite_search.json', methods=['GET'])
-def show_batch():
+@web.route('/batch_api_suite_search_opp.json', methods=['GET'])
+def show_batch_opp():
     rows = tanos_manage().show_api_batch_suite()
     print(rows)
     keys=('user_id','suite_id','suite_name','create_date','suite_label')
@@ -172,8 +172,8 @@ def show_batch():
     return jsonify(result_list)
 
 
-@web.route('/delete_api_batch_suite', methods=['POST'])
-def delete_data():
+@web.route('/delete_api_batch_suite_opp', methods=['POST'])
+def delete_data_opp():
     data = request.json
     # TODO: Update data in the database
     tanos_manage().delete_api_batch_suite(data["id"])
@@ -184,8 +184,8 @@ def delete_data():
 
 
 
-@web.route('/batch_api_case_search.json', methods=['GET'])
-def show_case():
+@web.route('/batch_api_case_search_opp.json', methods=['GET'])
+def show_case_opp():
     rows = tanos_manage().show_api_batch_case()
     keys=('user_id','case_id','suite_id','url','methods','request_body','headers','expected_result','create_date')
     result_list=[]
@@ -205,46 +205,14 @@ def show_case():
     return jsonify(result_list)
 
 
-@app.route('/batch_search_case',methods=['GET'])
-def batch_search_case():
+@app.route('/batch_search_case_opp',methods=['GET'])
+def batch_search_case_opp():
     # 获取请求参数中的id
     suite_id = request.args.get('id')
-    return render_template('api/api_batch_case.html', suite_id=suite_id)
+    return render_template('api/api_batch_opp/api_batch_case_opp.html', suite_id=suite_id)
 
-@app.route('/batch_search_case_json', methods=['GET'])
-def batch_search_case_json():
-    # 获取请求参数中的id
-    suite_id = request.args.get('id')
-
-    rows = tanos_manage().show_api_batch_case_in_suite_id(suite_id)
-    keys = (
-        'user_id', 'case_id', 'suite_id', 'url', 'methods', 'request_body', 'headers', 'expected_result', 'create_date')
-    result_list = []
-    for row in rows:
-        # Assuming create_date is the fourth element in the row
-        create_date_str = row[8].strftime("%a, %d %b %Y %H:%M:%S GMT")
-        # Convert create_date string to datetime object
-        create_date_datetime = datetime.strptime(create_date_str, "%a, %d %b %Y %H:%M:%S GMT")
-        # Format datetime object as needed
-        formatted_create_date = create_date_datetime.strftime("%Y-%m-%d %H:%M:%S")
-        # Update the row with the formatted create_date
-        row_with_formatted_date = (*row[:8], formatted_create_date)
-        # Create a dictionary from keys and updated row
-        result_dict = dict(zip(keys, row_with_formatted_date))
-        # Append the result dictionary to the list
-        result_list.append(result_dict)
-
-    return jsonify(result_list)
-
-
-@app.route('/batch_search_job',methods=['GET'])
-def batch_search_job():
-    # 获取请求参数中的id
-    suite_id = request.args.get('id')
-    return render_template('api/api_batch_case.html', suite_id=suite_id)
-
-@app.route('/batch_search_job_json', methods=['GET'])
-def batch_search_job_json():
+@app.route('/batch_search_case_json_opp', methods=['GET'])
+def batch_search_case_json_opp():
     # 获取请求参数中的id
     suite_id = request.args.get('id')
 
@@ -269,9 +237,41 @@ def batch_search_job_json():
     return jsonify(result_list)
 
 
+@app.route('/batch_search_job_opp',methods=['GET'])
+def batch_search_job_opp():
+    # 获取请求参数中的id
+    suite_id = request.args.get('id')
+    return render_template('api/api_batch_opp/api_batch_case_opp.html', suite_id=suite_id)
 
-@app.route('/gen_api_batch_job',methods=['POST'])
-def gen_api_batch_job():
+@app.route('/batch_search_job_json_opp', methods=['GET'])
+def batch_search_job_json_opp():
+    # 获取请求参数中的id
+    suite_id = request.args.get('id')
+
+    rows = tanos_manage().show_api_batch_case_in_suite_id(suite_id)
+    keys = (
+        'user_id', 'case_id', 'suite_id', 'url', 'methods', 'request_body', 'headers', 'expected_result', 'create_date')
+    result_list = []
+    for row in rows:
+        # Assuming create_date is the fourth element in the row
+        create_date_str = row[8].strftime("%a, %d %b %Y %H:%M:%S GMT")
+        # Convert create_date string to datetime object
+        create_date_datetime = datetime.strptime(create_date_str, "%a, %d %b %Y %H:%M:%S GMT")
+        # Format datetime object as needed
+        formatted_create_date = create_date_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        # Update the row with the formatted create_date
+        row_with_formatted_date = (*row[:8], formatted_create_date)
+        # Create a dictionary from keys and updated row
+        result_dict = dict(zip(keys, row_with_formatted_date))
+        # Append the result dictionary to the list
+        result_list.append(result_dict)
+
+    return jsonify(result_list)
+
+
+
+@app.route('/gen_api_batch_job_opp',methods=['POST'])
+def gen_api_batch_job_opp():
     data = request.json
     print(data)
     print(data['caseIds'])
@@ -311,8 +311,8 @@ def gen_api_batch_job():
 
     return jsonify({'job_id':job_id})
 
-@web.route('/batch_api_job_search.json', methods=['GET'])
-def show_batch_job():
+@web.route('/batch_api_job_search_opp.json', methods=['GET'])
+def show_batch_job_opp():
     rows = tanos_manage().show_api_batch_job()
     keys=('user_id','job_id','job_name','create_date')
     result_list=[]
@@ -332,15 +332,15 @@ def show_batch_job():
     return jsonify(result_list)
 
 
-@app.route('/batch_search_result',methods=['GET'])
-def batch_search_result():
+@app.route('/batch_search_result_opp',methods=['GET'])
+def batch_search_result_opp():
     # 获取请求参数中的id
     job_id = request.args.get('id')
     # print(2222,job_id)
-    return render_template('api/api_batch_result.html', job_id=job_id)
+    return render_template('api/api_batch_opp/api_batch_result_opp.html', job_id=job_id)
 
-@app.route('/batch_search_result_json', methods=['GET'])
-def batch_search_result_json():
+@app.route('/batch_search_result_json_opp', methods=['GET'])
+def batch_search_result_json_opp():
     # 获取请求参数中的id
     job_id = request.args.get('id')
 
@@ -366,9 +366,9 @@ def batch_search_result_json():
 
 
 
-@app.route('/run_api_batch_job',methods=['POST'])
+@app.route('/run_api_batch_job_opp',methods=['POST'])
 @user.login_required
-def run_api_batch_job():
+def run_api_batch_job_opp():
     data = request.json
     job_id= data['jobid']
     user_id = session.get('userid', None)
@@ -378,7 +378,7 @@ def run_api_batch_job():
 
     try:
         result = subprocess.run(Constant_cmd_api(user_id,job_id).cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        print('result:',result.stdout.decode('gbk'))
+        # print('result:',result.stdout.decode('gbk'))
 
 
 
@@ -396,9 +396,9 @@ def run_api_batch_job():
 
 
 
-@web.route('/search_api_batch_result', methods=['POST', 'GET'])
+@web.route('/search_api_batch_result_opp', methods=['POST', 'GET'])
 @user.login_required
-def search_api_batch_result():
+def search_api_batch_result_opp():
     if request.method == 'GET':
         job_id = request.args.get('jobid')
         print(1111234,job_id)
@@ -410,110 +410,9 @@ def search_api_batch_result():
         return send_from_directory(folder_path+'/html',"{}_apibatch_report.html".format(job_id))
 
 
-@app.route('/apitest111',methods=['GET'])
-def apitest111():
-    data = [
-            {
-                "connect_id": 1,
-                "connect_name": 'Item 1',
-                "dbtype": 'PostgreSQL',
-                "connect_type": "My connection",
-                "username": 'hsh',
-                "pwd": '54uru',
-                "host": 'host1',
-                "dblibrary": "test1"
-            },
-            {
-                "connect_id": 2,
-                "connect_name": 'Item 2',
-                "dbtype": 'AliCloud',
-                "connect_type": "My connection",
-                "username": 'hsh',
-                "pwd": 'we643w623',
-                "host": 'host2',
-                "dblibrary": "test2"
-            },
-    ]
-    return jsonify(data)
 
-
-@app.route('/apitest222',methods=['GET'])
-def apitest222():
-    data = [
-            {
-                "connect_id": 100,
-                "connect_name": 'Item 1',
-                "dbtype": 'PostgreSQL',
-                "connect_type": "My connection",
-                "username": 'hsh',
-                "pwd": '54uru',
-                "host": 'host1',
-                "dblibrary": "test1"
-            },
-            {
-                "connect_id": 200,
-                "connect_name": 'Item 2',
-                "dbtype": 'AliCloud',
-                "connect_type": "My connection",
-                "username": 'hsh',
-                "pwd": 'we643w623',
-                "host": 'host2',
-                "dblibrary": "test2"
-            },
-    ]
-    return jsonify(data)
-
-
-@app.route('/apitest333', methods=['POST'])
-def apitest333():
-    data1 = request.json
-    if data1 is None:
-        return jsonify({'success': False, 'error': 'Invalid JSON data'}), 400
-    print(data1)
-    job_id = data1['jobid']
-    print(111,data1)
-    if job_id=='10031':
-        data = {
-            "connect_id": 100,
-            "connect_name": 'Item1',
-            "dbtype": 'PostgreSQL',
-            "connect_type": "My connection",
-            "username": 'hsh',
-            "pwd": '54uru',
-            "host": 'host1',
-            "dblibrary": "test1",
-            "sysHead":{
-                "clientNo": "CNHBBJ421111",
-                "ret": [
-                    {"retCode": "000000",
-                     'retMsg': "SUCCESS"}
-                ],
-            },
-            "body":{
-                "clientNo":"CNHBBJ421023052",
-                "contactlist":[
-                    {
-                        "addressId":"P2",
-                        "address1":"GUANGZHOU"
-                    },
-                    {
-                        "addressId": "P0",
-                        "address1": "SHANXI"
-                    },
-                    {
-                        "addressId": "P1",
-                        "address1": "SICHUAN"
-                    },
-                ]
-            }
-        }
-        return jsonify(data)
-    else:
-        return jsonify({'success': False,'error': 'data is empty'})
-
-
-@app.route('/apitestgettoken', methods=['POST'])
-def apitestgettoken():
+@app.route('/apitestgettoken_opp', methods=['POST'])
+def apitestgettoken_opp():
     data1 = request.json
     print(333333, data1)
 
@@ -533,8 +432,8 @@ def apitestgettoken():
         return jsonify({'success': False, 'error': 'data is empty'})
 
 
-@web.route('/get_api_token_detail', methods=['POST'])
-def get_api_token_detail():
+@web.route('/get_api_token_detail_opp', methods=['POST'])
+def get_api_token_detail_opp():
     data = request.json
 
     url = data.get('url')
@@ -555,8 +454,8 @@ def get_api_token_detail():
         return jsonify({"error": "Something went wrong"}), 500
 
 
-@web.route('/save_api_token', methods=['POST'])
-def save_api_token():
+@web.route('/save_api_token_opp', methods=['POST'])
+def save_api_token_opp():
     data = request.json
 
     job_id = data.get('job_id')
@@ -574,8 +473,8 @@ def save_api_token():
         return jsonify({"error": "Something went wrong"}), 500
 
 
-@app.route('/get_data_by_job_id', methods=['GET'])
-def get_data_by_job_id():
+@app.route('/get_data_by_job_id_opp', methods=['GET'])
+def get_data_by_job_id_opp():
     job_id = request.args.get('id')
     if job_id:
         try:
@@ -587,20 +486,20 @@ def get_data_by_job_id():
             return jsonify({"error": "Something went wrong"}), 500
 
 
-@web.route('/update_batch_suite_info', methods=['POST'])
-def update_batch_suite_info():
+@web.route('/update_batch_suite_info_opp', methods=['POST'])
+def update_batch_suite_info_opp():
     data = request.json
     print(1111,data)
     # TODO: Update data in the database  suite_id,suite_name,suite_label
     tanos_manage().update_batch_suite_info(data['suite_id'],data['suite_name'],data['suite_label'])
     return jsonify(success=True, message='Data updated successfully')
 
-@web.route('/delete_api_batch_job', methods=['POST'])
-def delete_data_job():
+
+@web.route('/delete_api_batch_job_opp', methods=['POST'])
+def delete_data_job_opp():
     data = request.json
     # TODO: Update data in the database
     tanos_manage().delete_api_batch_job(data["id"])
     #这里文件最好也能删掉
     logger_all.info('delete connection：{}'.format(data["id"]))
     return jsonify(success=True, message='Job deleted successfully')
-

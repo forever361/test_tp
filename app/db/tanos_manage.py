@@ -608,6 +608,10 @@ class tanos_manage():
             suite_name,suite_label,suite_id)
         useDB.useDB().executesql(sql)
 
+    def delete_api_batch_job(self, id):
+        sql = "DELETE FROM tanos.api_batch_job WHERE job_id = '{}';".format(id)
+        useDB.useDB().executesql(sql)
+
 if __name__ == '__main__':
     testcase = tanos_manage()
     # a= testcase.search_by_connect_id(10002)

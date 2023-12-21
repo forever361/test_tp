@@ -226,17 +226,17 @@
         const id = $tr.find('td:eq(1)').text();
         console.log({id: id})
         $.ajax({
-            url: '/delete_api_batch_suite',
+            url: '/delete_api_batch_job',
             type: 'POST',
             data: JSON.stringify({"id": id, "act": "del"}),
             contentType: 'application/json',
             success: function () {
-                toastr.success('delete successfully!');
+                toastr.success('Delete successfully!');
                 $('#table').bootstrapTable('refresh');
             },
             error: function (error) {
                 console.log(error);
-                toastr.error('failed to delete the suite. Please try again.');
+                toastr.error('Failed to delete the job. Please try again.');
             }
         });
     }
