@@ -447,8 +447,12 @@ class tanos_manage():
 
     def show_api_batch_suite(self):
         user_id = session.get('userid', None)
-        sql = """select user_id,suite_id,suite_name,create_date,suite_label from tanos.api_batch_suite where user_id= '{}'  """ \
-            .format(user_id)
+        sql = """
+                SELECT u.username, s.suite_id, s.suite_name, s.create_date, s.suite_label
+                FROM tanos.api_batch_suite s
+                INNER JOIN tanos."user" u ON s.user_id = CAST(u.user_id AS VARCHAR)
+                WHERE s.user_id = '{}'
+            """.format(user_id)
         # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from tanos.connection_management """
         result = useDB.useDB().executesql_fetch(sql)
 
