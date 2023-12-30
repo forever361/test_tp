@@ -62,5 +62,5 @@ logger_all = LoggerHandler(name=yaml_data['logger']['name'],
 # logger_all.info([222,ALL_LOG_PATH])
 
 if __name__ == '__main__':
-    logger_all.info('*'*88)
+    logger_all.info('*'*88,123)
     logger_all.info('ha' * 88)

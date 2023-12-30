@@ -271,7 +271,7 @@ def login_callback():
         r'<Attribute Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"><AttributeValue>(.*?)</AttributeValue>',
         auth.get_last_response_xml())
 
-    logger_all.info(111, match2.group(1))
+    logger_all.info(match2.group(1))
 
     if len(errors) == 0 and auth.is_authenticated():
 
