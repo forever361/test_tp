@@ -31,11 +31,19 @@ class Constant_cmd():
 #         self.cmd_td = '/Users/kun/miniconda3/envs/myenv/bin/python3.6 {}/api_check/runapi.py {} {}'.format(configPath,
 #                                                                                                        job_id, user_id)
 
+# class Constant_cmd_api():
+#     def __init__(self,user_id,job_id):
+#         self.user_id = user_id
+#         self.job_id = job_id
+#         self.cmd_td = 'D:/software/miniconda3/envs/tanos/python.exe {}/api_check/runapi.py {} {}'.format(configPath, job_id,user_id)
+
+
 class Constant_cmd_api():
     def __init__(self,user_id,job_id):
         self.user_id = user_id
         self.job_id = job_id
-        self.cmd_td = 'D:/software/miniconda3/envs/tanos/python.exe {}/api_check/runapi.py {} {}'.format(configPath, job_id,user_id)
+        self.cmd_td = '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/api_check/runapi.py {} {}'.format(configPath, job_id,user_id)
+
 
 
 class Constant_db():
