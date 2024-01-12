@@ -255,7 +255,7 @@ class test_case_manage():
         results = []
 
         # sql = 'select ' + '*' + ' from xcheck.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
-        sql = 'select * from xcheck.data_test_case where {} and user_id={} order by case_id desc limit {};'.format(
+        sql = 'select * from tanos.data_test_case where {} and user_id={} order by case_id desc limit {};'.format(
             str(condition), user_id, str(rows))
 
         cases = useDB.useDB().search(sql)
@@ -269,6 +269,38 @@ class test_case_manage():
 
             results.append(result)
         return results
+
+    def data_batch_show_test_cases(self,conditionList,valueList,fieldlist,rows):
+        user_id = session.get('userid', None)
+        codelist = []
+        newlist = []
+        if len(fieldlist)==0:
+            fieldlist = ['case_id', 'case_name',]
+        search_value = fieldlist[0]
+        for i in range(1,len(fieldlist)):
+            search_value = search_value + ','+fieldlist[i]
+
+        if conditionList[0] == 'case_id':
+            condition = "{} = '{}'".format(str(conditionList[0]), str(valueList[0]))
+        else:
+            condition = "{} like '%{}%'".format(str(conditionList[0]),str(valueList[0]))
+
+        results = []
+
+        # sql = 'select ' + '*' + ' from xcheck.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
+        sql = 'select * from tanos.data_batch_test_case where {} and user_id={} order by case_id desc limit {};'.format(
+            str(condition), user_id, str(rows))
+
+        cases = useDB.useDB().search(sql)
+        for i in range(len(cases)):
+            result = {}
+            result['id'] = str(cases[i][0]).strip()
+            result['name'] = cases[i][1].strip()
+            result['user_id'] = str(cases[i][2]).strip()
+
+            results.append(result)
+        return results
+
 
     def data_show_test_cases_f2t(self, conditionList, valueList, fieldlist, rows):
         user_id = session.get('userid', None)

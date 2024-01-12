@@ -36,7 +36,7 @@ web = Blueprint("data_connect_management", __name__)
 @web.route('/data_connect_management', methods=['GET'])
 @user.login_required
 def data_connect_page():
-    return permission_required(session.get('groupname'))(render_template)('/data_connect_management.html')
+    return permission_required(session.get('groupname'))(render_template)('/data/data_connect_management.html')
 
 
 @web.route('/connect_search.json', methods=['GET'])
@@ -97,6 +97,7 @@ def add_row():
 @web.route('/test_connect', methods=['POST'])
 def test_connect():
     data = request.json
+    print(data)
     # TODO:
     rows = tanos_manage().search_connections_id(data['id'])
     keys = ('dbtype', 'connect_type', 'host', 'dblibrary', 'username', 'pwd','port')
@@ -107,8 +108,9 @@ def test_connect():
         result_list.append(result_dict)
     r_dict= dict(result_list[0])
 
+    print(r_dict)
+
     if r_dict['dbtype']== 'AliCloud-PostgreSQL':
-        print(r_dict['dbtype'])
         try:
             # TODO: connect function
             conn = psycopg2.connect(database=r_dict['dblibrary'], user=r_dict['username'], password=r_dict['pwd'],
@@ -125,7 +127,6 @@ def test_connect():
             return jsonify(success=False, message='connect error')
 
     elif r_dict['dbtype']== 'AliCloud-Maxcompute':
-        print(r_dict['dbtype'])
         try:
             # TODO: connect function
 
@@ -138,7 +139,8 @@ def test_connect():
             print(print_exc())
             logger_all.error('error connection：{}'.format(traceback.format_exc()))
             return jsonify(success=False, message='connect error')
-
+    else:
+        return jsonify(success=False, message='connect error')
 
 
 

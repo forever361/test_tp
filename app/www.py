@@ -1,7 +1,7 @@
 from app.application import app
 from app.view import user, data_test, batch, testcase, compare, normal_compare, web_testcase, web_test_compare, \
-    data_batch_new, data_testcase, othertools,data_batch_new_f2t,data_testcase_f2t,data_point_management,\
-    data_connect_management,data_testcase_tanos,api_new,access_config,docs,api_batch,api_batch_opp
+    data_batch_new, data_testcase_management, othertools,data_batch_new_f2t,data_testcase_f2t,data_point_management,\
+    data_connect_management,data_job_management,api_new,access_config,docs,api_batch,api_batch_opp
 
 app.register_blueprint(user.web)
 app.register_blueprint(data_test.web)
@@ -12,13 +12,13 @@ app.register_blueprint(compare.web)
 app.register_blueprint(normal_compare.web)
 app.register_blueprint(web_testcase.web)
 app.register_blueprint(web_test_compare.web)
-app.register_blueprint(data_testcase.web)
+app.register_blueprint(data_testcase_management.web)
 app.register_blueprint(othertools.web)
 app.register_blueprint(data_batch_new_f2t.web)
 app.register_blueprint(data_testcase_f2t.web)
 app.register_blueprint(data_point_management.web)
 app.register_blueprint(data_connect_management.web)
-app.register_blueprint(data_testcase_tanos.web)
+app.register_blueprint(data_job_management.web)
 app.register_blueprint(api_new.web)
 app.register_blueprint(access_config.web)
 app.register_blueprint(docs.web)

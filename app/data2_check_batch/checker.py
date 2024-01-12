@@ -1,11 +1,11 @@
-from app.data2_check.commom.Constant_t import Constant_id, Testreport
-from app.data2_check.commom.write_excel_data import ExcelUtilAll
+from app.data2_check_batch.commom.Constant_t import Constant_id, Testreport
+from app.data2_check_batch.commom.write_excel_data import ExcelUtilAll
 from datetime import datetime
 import configparser
 
-import app.data2_check.validator as v
+import app.data2_check_batch.validator as v
 from itertools import zip_longest
-import app.data2_check.mapping as m
+import app.data2_check_batch.mapping as m
 import os
 import sys
 from traceback import print_exc
@@ -124,7 +124,7 @@ class BatchChecker(Checker):
             Excel_write.get_target_table_name(
                 self.t_validator.table, int(times))
             Excel_write.get_value_detail('http://{}:{}/static/user_files/{}/csv/{}_{}.csv'.format(
-                Constant().ip, Constant().port, user_id, self.t_validator.table, caseid), int(times))
+                Constant().ip, Constant().port, user_id, self.t_validator.table, self.t_validator.job_id), int(times))
 
             if self.s_validator.count[key] != self.t_validator.count[key]:
                 count_check_flag = False
@@ -303,7 +303,7 @@ class BatchChecker(Checker):
 
         elif Testreport().report_type=='UAT':
             #之前结果样式
-            with open(f"{userPath}/{self.t_validator.verify_tablename}_{caseid}.csv", "w", encoding='utf-8-sig') as writers:
+            with open(f"{userPath}/{self.t_validator.verify_tablename}_{self.t_validator.job_id}.csv", "w", encoding='utf-8-sig') as writers:
                 writers.write(f"TITLE,{self.t_validator.pi_str},{self.t_validator.pi_split},{self.t_validator.col_str}\n")
                 batch_valueflag = True
                 for source_str_old, target_str_old, source_str, target_str, source_md5, target_md5 in zip_longest(

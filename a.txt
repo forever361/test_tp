@@ -164,3 +164,17 @@ CREATE TABLE xcheck.api_batch_token
 	test_rule character varying COLLATE pg_catalog."default",
     create_date timestamp without time zone
 )
+
+
+
+
+CREATE TABLE IF NOT EXISTS tanos.data_batch_test_case
+(
+    case_id integer NOT NULL DEFAULT nextval('tanos.generator_room_id'::regclass),
+    case_name character(100) COLLATE pg_catalog."default",
+    user_id integer,
+    create_date timestamp without time zone,
+    CONSTRAINT test_case_pkey4 PRIMARY KEY (case_id)
+)
+
+

@@ -18,7 +18,7 @@ web = Blueprint("data_ponint_management", __name__)
 @user.login_required
 # @permission_required(session.get('groupname'))
 def encrypt_page():
-        return permission_required(session.get('groupname'))(render_template)('/data_point_management.html')
+        return permission_required(session.get('groupname'))(render_template)('/data/data_point_management.html')
 
 
 @web.route('/add_point', methods=['POST'])

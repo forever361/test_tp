@@ -66,7 +66,7 @@ class ConnectSQL():
         self.cursor = self.conn.cursor()
 
     def create_table(self):
-        create_test_case = "create table xcheck.test_case(" \
+        create_test_case = "create table tanos.test_case(" \
                            "userid INTEGER NOT NULL," \
                            "name CHARACTER VARYING," \
                            "description text," \
@@ -74,7 +74,7 @@ class ConnectSQL():
                            "status INTEGER," \
                            "id INTEGER NOT NULL DEFAULT nextval('id_seq'::regclass)," \
                            "PRIMARY KEY(id))"
-        create_config_target_info = "create table xcheck.config_target_info(" \
+        create_config_target_info = "create table tanos.config_target_info(" \
                                     "target_id INTEGER NOT NULL DEFAULT nextval('target_id_seq'::regclass)," \
                                     "user_id INTEGER NOT NULL," \
                                     "database_type CHARACTER(50)," \
@@ -84,7 +84,7 @@ class ConnectSQL():
                                     "target_endpoint CHARACTER(100)," \
                                     "create_date timestamp without time zone," \
                                     "PRIMARY KEY(target_id))"
-        create_config_source_info = "create table xcheck.config_source_info(" \
+        create_config_source_info = "create table tanos.config_source_info(" \
                                     "source_id INTEGER NOT NULL DEFAULT nextval('source_id_seq'::regclass)," \
                                     "user_id INTEGER NOT NULL," \
                                     "database_type CHARACTER(50)," \
@@ -93,14 +93,14 @@ class ConnectSQL():
                                     "source_password CHARACTER(100)," \
                                     "create_date timestamp without time zone," \
                                     "PRIMARY KEY(source_id))"
-        create_user = "create table xcheck.user(" \
+        create_user = "create table tanos.user(" \
                       "user_id INTEGER NOT NULL," \
                       "username CHARACTER(32)," \
                       "password CHARACTER VARYING(32)," \
                       "status INTEGER," \
                       "create_date timestamp without time zone," \
                       "CONSTRAINT user_key PRIMARY KEY(user_id))"
-        create_source_target_parameter = "create table xcheck.source_target_parameter(" \
+        create_source_target_parameter = "create table tanos.source_target_parameter(" \
                                          "param_id INTEGER NOT NULL DEFAULT nextval('sou_tar_param_id_seq'::regclass)," \
                                          "user_id INTEGER NOT NULL," \
                                          "source_tablename CHARACTER(100)," \
@@ -121,7 +121,7 @@ class ConnectSQL():
     def write_register_sql(self, username, password):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         user_id = ''.join(map(str, np.random.randint(0, 9, 6)))
-        register_info = """INSERT INTO xcheck.user values('{}','{}','{}','{}','{}')""".format(user_id, username,
+        register_info = """INSERT INTO tanos.user values('{}','{}','{}','{}','{}')""".format(user_id, username,
                                                                                               password, 0, create_date)
         self.cursor.execute(register_info)
         self.conn.commit()
@@ -131,7 +131,7 @@ class ConnectSQL():
     # def write_register_sql_new(self, username, staffid):
     #     create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     #     # user_id = ''.join(map(str, np.random.randint(0, 9, 6)))
-    #     register_info = """INSERT INTO xcheck.user(username,password,status,create_date,staffid,team_ids) values('{}','{}','{}','{}','{}','{}')""".format(
+    #     register_info = """INSERT INTO tanos.user(username,password,status,create_date,staffid,team_ids) values('{}','{}','{}','{}','{}','{}')""".format(
     #         username.strip(), "", 0, create_date, staffid,"{3001}")
     #     self.cursor.execute(register_info)
     #     self.conn.commit()
@@ -141,7 +141,7 @@ class ConnectSQL():
     def write_register_sql_new(self, username, staffid):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         register_info = """
-            INSERT INTO xcheck.user (username, password, status, create_date, staffid)
+            INSERT INTO tanos.user (username, password, status, create_date, staffid)
             VALUES ('{}', '', 0, '{}', '{}')
             RETURNING user_id
         """.format(username.strip(), create_date, staffid)
@@ -152,7 +152,7 @@ class ConnectSQL():
         # 将用户和团队的关联关系插入到关系表中
         team_id = 3001  # 假设要关联的团队ID为3001
         insert_user_team = """
-            INSERT INTO xcheck.user_teams (userid, teamid)
+            INSERT INTO tanos.user_teams (userid, teamid)
             VALUES (%s, %s)
         """
         self.cursor.execute(insert_user_team, (user_id, team_id))
@@ -161,13 +161,13 @@ class ConnectSQL():
         self.cursor.close()
 
     def get_register_username(self, username):
-        register_infos = """SELECT username FROM xcheck.user where username = '{}'""".format(username)
+        register_infos = """SELECT username FROM tanos.user where username = '{}'""".format(username)
         self.cursor.execute(register_infos)
         rows = self.cursor.fetchall()
         return rows
 
     def get_password(self, username):
-        password = """select password from xcheck.user where username = '{}'""".format(username)
+        password = """select password from tanos.user where username = '{}'""".format(username)
         self.cursor.execute(password)
         rows = self.cursor.fetchall()
         return rows
@@ -176,7 +176,7 @@ class ConnectSQL():
         pass
 
     def get_login_userid(self, username):
-        user_id_sql = "select user_id from xcheck.user where username='{}'".format(username)
+        user_id_sql = "select user_id from tanos.user where username='{}'".format(username)
         self.cursor.execute(user_id_sql)
         user_id = self.cursor.fetchall()[0][0]
         # print("user_id......",user_id)
@@ -184,83 +184,89 @@ class ConnectSQL():
 
     def write_source_config(self, user_id, database_type, source_host, source_username, source_password):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        register_info = """INSERT INTO xcheck.config_source_info(user_id,database_type,source_host,source_username,source_password,create_date) values('{}','{}','{}','{}','{}','{}')""" \
+        register_info = """INSERT INTO tanos.config_source_info(user_id,database_type,source_host,source_username,source_password,create_date) values('{}','{}','{}','{}','{}','{}')""" \
             .format(user_id, database_type, source_host, source_username, source_password, create_date)
         self.cursor.execute(register_info)
         self.conn.commit()
         # self.cursor.close()
 
     def get_source_config_value(self, user_id, database_type):
-        source_ora_config = """select source_host,source_username,source_password from xcheck.config_source_info where user_id = {} and database_type = '{}' order by create_date desc limit 1 """.format(
+        source_ora_config = """select source_host,source_username,source_password from tanos.config_source_info where user_id = {} and database_type = '{}' order by create_date desc limit 1 """.format(
             user_id, database_type)
         self.cursor.execute(source_ora_config)
         rows = self.cursor.fetchall()
         return rows
 
     def get_infor_value(self, user_id, case_name):
-        infor_value = """select * from xcheck.test_case where user_id = {} and case_name = '{}' """.format(user_id,
+        infor_value = """select * from tanos.test_case where user_id = {} and case_name = '{}' """.format(user_id,
                                                                                                            case_name)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def web_get_infor_value(self, user_id, case_name):
-        infor_value = """select * from xcheck.web_test_case where user_id = {} and case_name = '{}' """.format(user_id,
+        infor_value = """select * from tanos.web_test_case where user_id = {} and case_name = '{}' """.format(user_id,
                                                                                                                case_name)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def data_get_infor_value(self, case_name):
-        infor_value = """select * from xcheck.data_test_case where case_name = '{}' """.format(case_name)
+        infor_value = """select * from tanos.data_test_case where case_name = '{}' """.format(case_name)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def data_f2t_get_infor_value(self, case_name):
-        infor_value = """select * from xcheck.data_test_case_f2t where case_name = '{}' """.format(case_name)
+        infor_value = """select * from tanos.data_test_case_f2t where case_name = '{}' """.format(case_name)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def get_infor_value_id(self, case_id):
-        infor_value = """select * from xcheck.test_case where case_id = {}  """.format(case_id)
+        infor_value = """select * from tanos.test_case where case_id = {}  """.format(case_id)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def web_get_infor_value_id(self, case_id):
-        infor_value = """select * from xcheck.web_test_case where case_id = {}  """.format(case_id)
+        infor_value = """select * from tanos.web_test_case where case_id = {}  """.format(case_id)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def data_get_infor_value_id(self, case_id):
-        infor_value = """select * from xcheck.data_test_case where case_id = {}  """.format(case_id)
+        infor_value = """select * from tanos.data_test_case where case_id = {}  """.format(case_id)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def data_f2t_get_infor_value_id(self, case_id):
-        infor_value = """select * from xcheck.data_test_case_f2t where case_id = {}  """.format(case_id)
+        infor_value = """select * from tanos.data_test_case_f2t where case_id = {}  """.format(case_id)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def data_get_case_id(self, case_name):
-        infor_value = """select case_id from xcheck.data_test_case where case_name= '{}'  """.format(case_name)
+        infor_value = """select case_id from tanos.data_test_case where case_name= '{}'  """.format(case_name)
+        self.cursor.execute(infor_value)
+        rows = self.cursor.fetchall()
+        return rows
+
+    def data_batch_get_case_id(self, case_name):
+        infor_value = """select case_id from tanos.data_batch_test_case where case_name= '{}'  """.format(case_name)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def data_f2t_get_case_id(self, case_name):
-        infor_value = """select case_id from xcheck.data_test_case_f2t where case_name= '{}'  """.format(case_name)
+        infor_value = """select case_id from tanos.data_test_case_f2t where case_name= '{}'  """.format(case_name)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
 
     def get_infor_value_name(self, case_name):
-        infor_value = """select * from xcheck.test_case where case_name = '{}'  """.format(case_name)
+        infor_value = """select * from tanos.test_case where case_name = '{}'  """.format(case_name)
         self.cursor.execute(infor_value)
         rows = self.cursor.fetchall()
         return rows
@@ -268,7 +274,7 @@ class ConnectSQL():
     def write_target_config(self, user_id, target_access_id, target_secret_access_key, target_project, target_endpoint):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         database_type = 'max'
-        register_info = """INSERT INTO xcheck.config_target_info(user_id,database_type,target_access_id,target_secret_access_key,target_project,target_endpoint,create_date) values('{}','{}','{}','{}','{}','{}','{}')""" \
+        register_info = """INSERT INTO tanos.config_target_info(user_id,database_type,target_access_id,target_secret_access_key,target_project,target_endpoint,create_date) values('{}','{}','{}','{}','{}','{}','{}')""" \
             .format(user_id, database_type, target_access_id, target_secret_access_key, target_project, target_endpoint,
                     create_date)
         self.cursor.execute(register_info)
@@ -280,7 +286,7 @@ class ConnectSQL():
                            database_type, source_tablename, target_tablename, td_columndb, source_db, target_db, pi,
                            source_where_condition, target_where_condition):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        register_info = """INSERT INTO xcheck._test_case(user_id,case_name,s_host,s_username,s_pwd,ali_accessid,ali_secret_key,ali_project,ali_endpoint,
+        register_info = """INSERT INTO tanos._test_case(user_id,case_name,s_host,s_username,s_pwd,ali_accessid,ali_secret_key,ali_project,ali_endpoint,
                            database_type,s_tablename,t_tablename,td_columndb,source_db,target_db,pi,s_where_condition,t_where_condition,create_date) values('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')""" \
             .format(user_id, case_name, host, username, pwd, access_id, secret_access_key, project, endpoint,
                     database_type, source_tablename, target_tablename, td_columndb, source_db, target_db, pi,
@@ -292,7 +298,7 @@ class ConnectSQL():
 
     def write_config_value_all(self, user_id, case_name, testinfor):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        register_info = """INSERT INTO xcheck.test_case(user_id,case_name,testinfor,create_date) values('{}','{}','{}','{}')""" \
+        register_info = """INSERT INTO tanos.test_case(user_id,case_name,testinfor,create_date) values('{}','{}','{}','{}')""" \
             .format(user_id, case_name, testinfor, create_date)
         print(register_info)
         self.cursor.execute(register_info)
@@ -301,7 +307,7 @@ class ConnectSQL():
 
     def web_write_config_value_all(self, user_id, case_name, testinfor):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        register_info = """INSERT INTO xcheck.web_test_case(user_id,case_name,testinfor,create_date) values('{}','{}','{}','{}')""" \
+        register_info = """INSERT INTO tanos.web_test_case(user_id,case_name,testinfor,create_date) values('{}','{}','{}','{}')""" \
             .format(user_id, case_name, testinfor, create_date)
         print(register_info)
         self.cursor.execute(register_info)
@@ -309,7 +315,7 @@ class ConnectSQL():
 
     def data_write_config_value_all(self, user_id, case_name, testinfor, testinfor_db):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        register_info = """INSERT INTO xcheck.data_test_case(user_id,case_name,testinfor,testinfor_db,create_date) values('{}','{}','{}','{}','{}')""" \
+        register_info = """INSERT INTO tanos.data_test_case(user_id,case_name,testinfor,testinfor_db,create_date) values('{}','{}','{}','{}','{}')""" \
             .format(user_id, case_name, testinfor, testinfor_db, create_date)
         print(register_info)
         self.cursor.execute(register_info)
@@ -317,14 +323,14 @@ class ConnectSQL():
 
     def data_f2t_write_config_value_all(self, user_id, case_name, testinfor, testinfor_db):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        register_info = """INSERT INTO xcheck.data_test_case_f2t(user_id,case_name,testinfor,testinfor_db,create_date) values('{}','{}','{}','{}','{}')""" \
+        register_info = """INSERT INTO tanos.data_test_case_f2t(user_id,case_name,testinfor,testinfor_db,create_date) values('{}','{}','{}','{}','{}')""" \
             .format(user_id, case_name, testinfor, testinfor_db, create_date)
         print(register_info)
         self.cursor.execute(register_info)
         self.conn.commit()
 
     def get_target_config_value(self, user_id, database_type):
-        target_ora_config = """select target_access_id,target_secret_access_key,target_project,target_endpoint from xcheck.config_target_info where user_id = {} and database_type = '{}' order by create_date desc limit 1 """.format(
+        target_ora_config = """select target_access_id,target_secret_access_key,target_project,target_endpoint from tanos.config_target_info where user_id = {} and database_type = '{}' order by create_date desc limit 1 """.format(
             user_id, database_type)
         self.cursor.execute(target_ora_config)
         rows = self.cursor.fetchall()
@@ -334,7 +340,7 @@ class ConnectSQL():
                                       target_db, pi, source_where_condition, target_where_condition):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         # user_id = '675330' #获取当前登录的id
-        source_target_info = """INSERT INTO xcheck.source_target_parameter(user_id,database_type,source_tablename,target_tablename,source_db,target_db,pi,source_where_condition,target_where_condition) values('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')""" \
+        source_target_info = """INSERT INTO tanos.source_target_parameter(user_id,database_type,source_tablename,target_tablename,source_db,target_db,pi,source_where_condition,target_where_condition) values('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')""" \
             .format(user_id, database_type, source_tablename, target_tablename, source_db, target_db, pi,
                     source_where_condition, target_where_condition, create_date)
         self.cursor.execute(source_target_info)
@@ -342,9 +348,9 @@ class ConnectSQL():
         # self.cursor.close()
 
     def get_source_target_parameter(self, user_id, database_type):
-        source_target_parameter = """select source_tablename,target_tablename,source_db,target_db,pi,source_where_condition,target_where_condition from xcheck.source_target_parameter where user_id = {} and database_type = '{}' order by create_date desc limit 1 """.format(
+        source_target_parameter = """select source_tablename,target_tablename,source_db,target_db,pi,source_where_condition,target_where_condition from tanos.source_target_parameter where user_id = {} and database_type = '{}' order by create_date desc limit 1 """.format(
             user_id, database_type)
-        # source_target_parameter = """select source_tablename,target_tablename,source_db,target_db,pi,source_where_condition,target_where_condition from xcheck.source_target_parameter where user_id = {} and database_type = '{}'""".format(user_id, database_type)
+        # source_target_parameter = """select source_tablename,target_tablename,source_db,target_db,pi,source_where_condition,target_where_condition from tanos.source_target_parameter where user_id = {} and database_type = '{}'""".format(user_id, database_type)
         self.cursor.execute(source_target_parameter)
         rows = self.cursor.fetchall()
         return rows
@@ -354,14 +360,14 @@ class ConnectSQL():
 
     def get_cookie_userid(self):
         cookies = request.cookies.get('Name')
-        user_id = """select user_id from xcheck.user where username = '{}'""".format(cookies)
+        user_id = """select user_id from tanos.user where username = '{}'""".format(cookies)
         self.cursor.execute(user_id)
         rows = self.cursor.fetchall()
         cookies_user_id = rows[0][0]
         return cookies_user_id
 
     def get_tablename(self, user_id, database_type):
-        table_name_sql = """select source_tablename from xcheck.source_target_parameter where user_id = {} and database_type = '{}' order by create_date desc limit 1 """.format(
+        table_name_sql = """select source_tablename from tanos.source_target_parameter where user_id = {} and database_type = '{}' order by create_date desc limit 1 """.format(
             user_id, database_type)
         self.cursor.execute(table_name_sql)
         rows = self.cursor.fetchall()
@@ -386,7 +392,7 @@ class ConnectSQL():
 
     def data_write_connecion_all(self, user_id, case_name, testinfor, testinfor_db):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        register_info = """INSERT INTO xcheck.data_test_case(user_id,case_name,testinfor,testinfor_db,create_date) values('{}','{}','{}','{}','{}')""" \
+        register_info = """INSERT INTO tanos.data_test_case(user_id,case_name,testinfor,testinfor_db,create_date) values('{}','{}','{}','{}','{}')""" \
             .format(user_id, case_name, testinfor, testinfor_db, create_date)
         print(register_info)
         self.cursor.execute(register_info)
@@ -394,18 +400,18 @@ class ConnectSQL():
 
     def data_update_connecion_all(self, user_id, case_name, testinfor, testinfor_db):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        register_info = """INSERT INTO xcheck.data_test_case(user_id,case_name,testinfor,testinfor_db,create_date) values('{}','{}','{}','{}','{}')""" \
+        register_info = """INSERT INTO tanos.data_test_case(user_id,case_name,testinfor,testinfor_db,create_date) values('{}','{}','{}','{}','{}')""" \
             .format(user_id, case_name, testinfor, testinfor_db, create_date)
         print(register_info)
         self.cursor.execute(register_info)
         self.conn.commit()
 
     # def get_user_group(self, username):
-    #     group_query = """SELECT xcheck.group.name
-    #                     FROM xcheck.user
-    #                     JOIN xcheck.team ON xcheck.team.team_id = ANY (xcheck.user.team_ids)
-    #                     JOIN xcheck.group ON xcheck.group.group_id = ANY (xcheck.team.group_ids)
-    #                     WHERE xcheck.user.username = '{}' """.format(username)
+    #     group_query = """SELECT tanos.group.name
+    #                     FROM tanos.user
+    #                     JOIN tanos.team ON tanos.team.team_id = ANY (tanos.user.team_ids)
+    #                     JOIN tanos.group ON tanos.group.group_id = ANY (tanos.team.group_ids)
+    #                     WHERE tanos.user.username = '{}' """.format(username)
     #     self.cursor.execute(group_query)
     #     rows = self.cursor.fetchall()
     #     group_names = [row[0].rstrip() for row in rows]
@@ -414,10 +420,10 @@ class ConnectSQL():
     def get_user_group(self, username):
         group_query = """
             SELECT g.name
-            FROM xcheck.user_teams ut
-            JOIN xcheck.team t ON t.team_id = ut.teamid
-            JOIN xcheck.group g ON g.group_id = ANY (t.group_ids)
-            JOIN xcheck.user u ON u.user_id = ut.userid
+            FROM tanos.user_teams ut
+            JOIN tanos.team t ON t.team_id = ut.teamid
+            JOIN tanos.group g ON g.group_id = ANY (t.group_ids)
+            JOIN tanos.user u ON u.user_id = ut.userid
             WHERE u.username = %s
         """
         self.cursor.execute(group_query, (username,))
@@ -427,8 +433,8 @@ class ConnectSQL():
 
     # def get_team(self, username):
     #     team_query = """SELECT t.name
-    #                     FROM xcheck.team t
-    #                     JOIN xcheck.user u ON u.team_ids @> ARRAY[t.team_id]
+    #                     FROM tanos.team t
+    #                     JOIN tanos.user u ON u.team_ids @> ARRAY[t.team_id]
     #                     WHERE u.username = '{}'; """.format(username)
     #     self.cursor.execute(team_query)
     #     rows = self.cursor.fetchall()
@@ -438,9 +444,9 @@ class ConnectSQL():
     def get_team(self, username):
         team_query = """
             SELECT t.name
-            FROM xcheck.team t
-            JOIN xcheck.user_teams ut ON ut.teamid = t.team_id
-            JOIN xcheck.user u ON u.user_id = ut.userid
+            FROM tanos.team t
+            JOIN tanos.user_teams ut ON ut.teamid = t.team_id
+            JOIN tanos.user u ON u.user_id = ut.userid
             WHERE u.username = %s
         """
         self.cursor.execute(team_query, (username,))
@@ -451,7 +457,7 @@ class ConnectSQL():
     def get_team_from_teamid(self, teamid):
         team_query = """
             SELECT t.name
-            FROM xcheck.team t
+            FROM tanos.team t
             WHERE t.team_id = %s
         """
         self.cursor.execute(team_query, (teamid,))
@@ -462,7 +468,7 @@ class ConnectSQL():
 
     def get_avatar(self, username):
         avatar_query = """ SELECT avatar_url 
-                     from xcheck.user 
+                     from tanos.user 
                      where username = '{}' """.format(username)
         self.cursor.execute(avatar_query)
         rows = self.cursor.fetchall()
@@ -471,6 +477,6 @@ class ConnectSQL():
 
 
 if __name__ == '__main__':
-    sql = 'select id,module,name,description from xcheck.test_case where status = 1 order by id desc limit 1000;'
+    sql = 'select id,module,name,description from tanos.test_case where status = 1 order by id desc limit 1000;'
     cases = useDB().search(sql)
     print(cases)

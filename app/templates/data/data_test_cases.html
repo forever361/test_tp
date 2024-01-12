@@ -21,7 +21,21 @@
 {% endblock %}
 
 {% block content %}
-{#<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex; ">#}
+
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link " aria-current="page" href="/data_connect_management">Step1:  Connection Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="/data_point_management">Step2:  Point Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="/api_data_test_cases">Step3:  Test Case Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data_batch_test_cases">Batch Validation</a>
+      </li>
+    </ul>
 
     <div style=" margin: 20px; margin-bottom: 100px " class="card">
         <div class="card-body" style="padding:10px; ">

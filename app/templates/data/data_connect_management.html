@@ -1,0 +1,610 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block js %}
+<script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+<link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+
+<script src="/static/tanos/bootbox.all.min.js"></script>
+<script src="/static/tanos/popper.js"></script>
+<script src="/static/tanos/toastr.min.js"></script>
+<link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+
+<!-- Bootstrap Font Icon CSS -->
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
+
+<!--<script src="/static/tanos/data_connect.js"></script>-->
+
+
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .panel-info {
+        border-color: #eee;
+    }
+
+    .panel-info > .panel-heading {
+        color: #000;
+        background-color: #fff;
+        border-color: #eee;
+    }
+
+    .panel-info > .panel-heading + .panel-collapse > .panel-body {
+        border-top-color: #000;
+    }
+
+    .panel-info > .panel-heading .badge {
+        color: #d9edf7;
+        background-color: #31708f;
+    }
+
+    .panel-info > .panel-footer + .panel-collapse > .panel-body {
+        border-bottom-color: #000;
+    }
+
+
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: #fff;
+    }
+
+    .form-control-input.has-value {
+        background-color: #eee; /* 填入内容后的背景色 */
+    }
+
+
+</style>
+
+
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/data_connect_management">Step1:  Connection Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="/data_point_management">Step2:  Point Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/api_data_test_cases">Step3:  Test Case Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/data_batch_test_cases">Batch Validation</a>
+      </li>
+    </ul>
+
+    <div style=" margin: 20px; margin-bottom: 100px " class="card">
+        <div class="card-body" style="padding:10px; ">
+            <!-- Default panel contents -->
+            <h5 class="card-title">Data Connection Management</h5>
+            <div class="card-text">
+                <p>On this page, you can configure the connection server information,
+                    and of course you can directly obtain the server information of the
+                    external API. This page will manage all connection information.
+                </p>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="add-row-modal"
+                     aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasRightLabel">Add new connection</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="new-row-name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="new-row-name"
+                                       placeholder="example:pg-servcer1-example">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-row-dbtype" class="col-form-label">Connection Type:</label>
+                                <select class="form-select" id="new-row-dbtype">
+                                    <option>AliCloud-PostgreSQL</option>
+                                    <option>AliCloud-Maxcompute</option>
+                                    <option>DB-Oracle</option>
+                                    <option>DB-DB2</option>
+                                    <option>GCP-BigQuery</option>
+                                    <option>API</option>
+                                    <option>Fileserver</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-row-type" class="col-form-label">Type:</label>
+                                <select class="form-select" id="new-row-type">
+                                    <option>private</option>
+                                    <option>public</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-row-host" class="col-form-label">Host:</label>
+                                <input type="text" class="form-control" id="new-row-host">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-row-port" class="col-form-label">Port:</label>
+                                <input type="text" class="form-control" id="new-row-port">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-row-library" class="col-form-label">Library:</label>
+                                <input type="text" class="form-control" id="new-row-library">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-row-username" class="col-form-label">Username:</label>
+                                <input type="text" class="form-control" id="new-row-username">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-row-pwd" class="col-form-label">Password:</label>
+                                <input type="password" class="form-control" id="new-row-pwd">
+                            </div>
+
+                        </form>
+
+                        <div style="margin-top:20px">
+                            <div style="width:80%; margin:auto; text-align:center">
+                                <button style="float:left" type="button" class="btn btn-danger"
+                                        data-bs-dismiss="modal">Close
+                                </button>
+                                <button style="float:right" type="button" class="btn btn-success" id="save-new-row">
+                                    Save
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="modal fade" id="loadingModal" tabIndex="-1" aria-labelledby="loadingModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p>Please wait while testing the connection.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--                <input type="text" class="form-control form-control-input" id="exampleFormControlInput1"-->
+                <!--                       placeholder="输入内容">-->
+
+
+                <table class="table table-striped"
+                       id="table"
+                       data-toggle="table"
+{#                       data-height="600"#}
+                       data-url="connect_search.json"
+                       data-pagination="true"
+                       data-search="true"
+                       data-buttons-class="primary"
+                       data-buttons="buttons"
+                       data-sort-name="connect_id"
+                       data-sort-order="desc"
+
+                >
+                    <thead>
+                    <tr>
+                        <th data-field="connect_id" data-sortable="true" data-width="5" data-width-unit="%">ID
+                        </th>
+                        <th data-field="connect_name" data-formatter="nameFormatter" data-align="center">
+                            Connection Name
+                        </th>
+                        <th data-field="connect_type" data-formatter="typeFormatter" data-align="center" data-width="8"
+                            data-width-unit="%">Type
+                        </th>
+                        <th data-field="dbtype" data-formatter="typeFormatter_db" data-width="12"
+                            data-width-unit="%"
+                            data-align="center">
+                            Connection Type
+                        </th>
+                        <th data-field="host" data-formatter="hostFormatter" data-align="center">Host
+                        </th>
+                        <th data-field="port" data-formatter="portFormatter" data-width="5" data-width-unit="%">
+                            Port
+                        </th>
+                        <th data-field="dblibrary" data-formatter="libraryFormatter" data-align="center">Library
+                        </th>
+                        <th data-field="username" data-formatter="userFormatter" data-align="center">Username
+                        </th>
+                        <th data-field="pwd" data-formatter="pwdFormatter" data-align="center">Password</th>
+                        <th data-formatter="actionFormatter">Operation</th>
+                        <th data-formatter="testFormatter" data-align="center">Test Connection</th>
+                    </tr>
+                    </thead>
+                </table>
+
+            </div>
+        </div>
+
+        <div style="position: absolute; right: 15px;bottom: 15px;">
+            <button id='next' type="button" class="btn btn-secondary" style="width: 120px;"> NEXT>>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // 获取按钮元素
+    var button = document.getElementById("next");
+
+    // 给按钮添加点击事件的监听器
+    button.addEventListener("click", function () {
+        // 跳转到指定页面
+        window.location.href = "/data_point_management";
+    });
+</script>
+
+
+<script>
+
+    function buttons() {
+        return {
+            btnAdd: {
+                text: 'Add new row',
+                icon: 'fa-regular fa-plus',
+                render: true,
+                event: function () {
+                    $('#add-row-modal').offcanvas('show');
+                },
+                attributes: {
+                    class: 'Add a new row to the table',
+                    style: 'width: 80px; height:38px; margin-left:40px;display: flex; justify-content: center; align-items: center;',
+                }
+            }
+        }
+    }
+
+    // Formatter for "name" column
+    function nameFormatter(value, row, index) {
+        return '<input id="nameinput" type="text" class="form-control " value="' + value + '" disabled>';
+    }
+
+    // Define options for select input
+    const typeOptions_db = [
+        {value: "AliCloud-PostgreSQL", text: "AliCloud-PostgreSQL"},
+        {value: "AliCloud-Maxcompute", text: "AliCloud-Maxcompute"},
+        {value: "DB-Oracle", text: "DB-Oracle"},
+        {value: "DB-DB2", text: "DB-DB2"},
+        {value: "GCP-BigQuery", text: "GCP-BigQuery"},
+        {value: "API", text: "API"},
+        {value: "Fileserver", text: "Fileserver"},
+    ];
+
+    // Formatter for "type" column
+    function typeFormatter_db(value, row, index) {
+        let optionsHtml = '';
+        typeOptions_db.forEach(option => {
+            optionsHtml += '<option value="' + option.value + '"';
+            if (option.value === value) {
+                optionsHtml += ' selected';
+            }
+            optionsHtml += '>' + option.text + '</option>';
+        });
+        return '<select id="typedbinput" class="form-select " disabled>' + optionsHtml + '</select>';
+    }
+
+
+    // Define options for select input
+    const typeOptions = [
+        {value: "private", text: "private"},
+        {value: "public", text: "public"}
+    ];
+
+    // Formatter for "type" column
+    function typeFormatter(value, row, index) {
+        let optionsHtml = '';
+        typeOptions.forEach(option => {
+            optionsHtml += '<option value="' + option.value + '"';
+            if (option.value === value) {
+                optionsHtml += ' selected';
+            }
+            optionsHtml += '>' + option.text + '</option>';
+        });
+        return '<select id="typeinput" class="form-select" disabled>' + optionsHtml + '</select>';
+    }
+
+
+    function hostFormatter(value, row, index) {
+        return '<input id="hostinput"  type="text" class="form-control" value="' + value + '" disabled>';
+    }
+
+    function portFormatter(value, row, index) {
+        return '<input id="portinput"  type="text" class="form-control" value="' + value + '" disabled>';
+    }
+
+
+    function libraryFormatter(value, row, index) {
+        return '<input id="libraryinput"  type="text" class="form-control" value="' + value + '" disabled>';
+    }
+
+    function userFormatter(value, row, index) {
+        return '<input id="userinput"  type="text" class="form-control" value="' + value + '" disabled>';
+    }
+
+
+    function pwdFormatter(value, row, index) {
+        return '<input type="password" id="pwdinput"  type="text" class="form-control" value="' + value + '" disabled>';
+    }
+
+    // Formatter for "action" column
+    function actionFormatter(value, row, index) {
+        return ' <div class="btn-group" role="group" aria-label="...">' +
+            '<button  class="btn btn-sm btn-primary edit-row" > <i class="fa-regular fa-pen-to-square"></i> </button>' +
+            '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +
+            '</div>'
+    }
+
+    function testFormatter(value, row, index) {
+        return '<button  class="btn btn-sm btn-success test-connect" > Connect </button>'
+    }
+
+
+    const $table = $('#table');
+
+    $table.on('click', '.test-connect', function () {
+        const $btn = $(this);
+        const $tr = $(this).closest('tr');
+        const id = $tr.find('td:eq(0)').text();
+        const $loadingBtn = $('<button class="btn btn-sm btn-primary"><span class="spinner-border spinner-border-sm" disabled></span> \n' +
+            '&nbsp; Connecting...</button>');
+        $btn.replaceWith($loadingBtn);
+        console.info(id)
+        // $('#dialog').modal('show');
+        $.ajax({
+            url: '/test_connect',
+            type: 'POST',
+            data: JSON.stringify({id: id}),
+            contentType: 'application/json',
+            success: function (data) {
+                // $('#loadingModal').modal('hide');
+                $loadingBtn.replaceWith($btn);
+                if (data.success) {
+                    toastr.success('connect successfully!');
+                } else {
+                    toastr.error('failed to connect. Please check the parameters.');
+                }
+            },
+            error: function (error) {
+                // $('#loadingModal').modal('hide');
+                $loadingBtn.replaceWith($btn);
+                toastr.error('failed to connect. Please check the parameters.');
+            }
+        });
+    });
+
+
+    /////delete function
+    function deleteRow($tr) {
+        const id = $tr.find('td:eq(0)').text();
+        console.log({id: id})
+        $.ajax({
+            url: '/delete_connect',
+            type: 'POST',
+            data: JSON.stringify({id: id}),
+            contentType: 'application/json',
+            success: function () {
+                toastr.success('delete successfully!');
+                $tr.remove();
+                $('#table').bootstrapTable('refresh');
+            },
+            error: function (error) {
+                console.log(error);
+                toastr.error('failed to delete the connection. Please try again.');
+            }
+        });
+    }
+
+
+    $table.on('click', '.delete-row', function () {
+        const $tr = $(this).closest('tr');
+
+        let dialog = bootbox.dialog({
+            title: 'Delete item!',
+            message: "<p>Please confirm if you want to delete? </p>",
+            centerVertical: true,
+            buttons:
+                {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback:
+                            function () {
+                                console.log('Custom cancel clicked');
+                            }
+                    },
+
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback:
+                            function () {
+                                deleteRow($tr)
+                            }
+                    }
+                }
+        });
+
+    });
+
+
+    /////edit function
+
+    function saveRow($tr) {
+        const connect_id = $tr.find('td:eq(0)').text();
+        const connect_name = $tr.find('input[id="nameinput"]').val();
+        const dbtype = $tr.find('select[id="typedbinput"]').val();
+        const connect_type = $tr.find('select[id="typeinput"]').val();
+        const username = $tr.find('input[id="userinput"]').val();
+        const pwd = $tr.find('input[id="pwdinput"]').val();
+        const db_library = $tr.find('input[id="libraryinput"]').val();
+        const host = $tr.find('input[id="hostinput"]').val();
+        const port = $tr.find('input[id="portinput"]').val();
+
+        console.log($tr.data('unique-id'));
+        console.log($tr.find('.editable:eq(0)').val());
+
+        const data = {
+            'connect_id': connect_id,
+            'connect_name': connect_name,
+            'dbtype': dbtype,
+            'connect_type': connect_type,
+            'host': host,
+            'db_library': db_library,
+            'username': username,
+            'pwd': pwd,
+            'port': port
+        };
+
+        console.log(data)
+
+        $.ajax({
+            url: '/update_connect',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function () {
+                $('#table').bootstrapTable('refresh');
+                toastr.success('update successfully!');
+
+            },
+            error: function (error) {
+                console.log(error);
+                toastr.error('failed to save. Please try again.');
+            }
+        });
+    }
+
+    $table.on('click', '.edit-row', function () {
+        const $tr = $(this).closest('tr');
+        const $editBtn = $(this);
+        const $saveBtn = $('<button class="btn btn-sm btn-success save-row">Save</button>');
+        $editBtn.replaceWith($saveBtn);
+        $tr.find('input, select').prop('disabled', false);
+        $tr.find('input, select').addClass('editable');
+        $tr.addClass('editing');
+    });
+
+    $table.on('click', '.save-row', function () {
+        const $tr = $(this).closest('tr');
+        const $saveBtn = $(this);
+        const $editBtn = $('<button class="btn btn-sm btn-primary edit-row">Edit</button>');
+        $saveBtn.replaceWith($editBtn);
+        $tr.find('input, select').prop('disabled', true);
+        $tr.find('input, select').removeClass('editable');
+        $tr.removeClass('editing');
+        // 调用 saveRow 保存编辑状态
+        console.log($tr)
+        saveRow($tr);
+    });
+
+
+    ////Add row function
+
+    <!--    $('#add-new-row').click(function () {-->
+    // $('#add-row-modal').modal('show'); // 显示弹窗
+    <!--    })-->
+
+
+    $('#save-new-row').click(function () {
+        // Get the values of the new row from the form fields
+        const connect_id = $table.bootstrapTable('getData').length + 1;
+        const connect_name = $('#new-row-name').val();
+        const dbtype = $('#new-row-dbtype').val();
+        const connect_type = $('#new-row-type').val();
+        const username = $('#new-row-username').val();
+        const pwd = $('#new-row-pwd').val();
+        const db_library = $('#new-row-library').val();
+        const host = $('#new-row-host').val();
+        const port = $('#new-row-port').val();
+
+        // Create a new row object with the values
+        const newRow = {
+            'connect_id': connect_id,
+            'connect_name': connect_name,
+            'dbtype': dbtype,
+            'connect_type': connect_type,
+            'host': host,
+            'db_library': db_library,
+            'username': username,
+            'pwd': pwd,
+            'port': port,
+        };
+
+        // Add the new row to the table
+        $table.bootstrapTable('append', newRow);
+
+        // Hide the modal dialog
+        $('#add-row-modal').offcanvas('hide');
+
+        // addRow function
+        $.ajax({
+            url: '/add_connetion',
+            type: 'POST',
+            data: JSON.stringify({
+                'connect_id': connect_id,
+                'connect_name': connect_name,
+                'dbtype': dbtype,
+                'connect_type': connect_type,
+                'host': host,
+                'dblibrary': db_library,
+                'username': username,
+                'pwd': pwd,
+                'port': port,
+            }),
+            contentType: 'application/json',
+            success: function (data) {
+                data = String(data);
+                if (data.startsWith('<!DOCTYPE permission html>')) {
+                    // data以<!DOCTYPE html>开头
+                    $('#add-row-modal').offcanvas('hide');
+                    // toastr.error('Sorry, you do not have permission to access!');
+                    $('#table').bootstrapTable('refresh');
+                    let dialog = bootbox.dialog({
+                        title: 'Permission denied!',
+                        message: "<p>Sorry, you do not have permission to operate! </p>",
+                        centerVertical: true,
+                        buttons:
+                            {
+                                ok: {
+                                    label: "Yes",
+                                    className: 'btn-danger',
+                                    callback:
+                                        function () {
+                                        }
+                                }
+                            }
+                    });
+
+
+                } else {
+                    console.info(data)
+                    toastr.success('new connection added successfully!');
+                    $('#add-row-modal').offcanvas('hide');
+                    $('#table').bootstrapTable('refresh');
+
+                }
+            },
+            error: function () {
+                $('#add-row-modal').offcanvas('hide');
+                toastr.error('failed to add new connection!');
+                $('#table').bootstrapTable('refresh');
+
+            }
+        });
+
+    });
+
+
+</script>
+
+
+{% if message %}
+
+{% endif %}
+
+{% endblock %}

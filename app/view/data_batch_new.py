@@ -1,9 +1,11 @@
 import configparser
 import json
 import traceback
-from datetime import timedelta
+from datetime import timedelta, datetime
 from time import sleep
+import time
 
+import pandas as pd
 import requests
 from flask import Blueprint, render_template, request, redirect, jsonify, session
 import subprocess
@@ -11,11 +13,13 @@ import os
 import sys
 from werkzeug.utils import secure_filename
 
+from app.db import test_case_manage
 from app.db.tanos_manage import tanos_manage
 from app.useDB import ConnectSQL
-from app.util.Constant_setting import Constant_cmd
+from app.util.Constant_setting import Constant_cmd, Constant_cmd_data_batch
 from app.util.IP_PORT import Constant
 from app.util.crypto_ECB import AEScoder
+from app.util.permissions import permission_required
 from app.view import viewutil, user
 
 
@@ -30,317 +34,236 @@ configP2 = configparser.ConfigParser()
 
 web = Blueprint("batch_new", __name__)
 
-@web.route('/api_batch_test_data',methods=['GET'])
+
+
+@web.route('/data_batch_test_cases')
 @user.login_required
-def batch_test_compare():
-    return render_template("/code_mode/batch_tanos_data_new.html" )
+# @permission_required(session.get('groupname'))
+def test_cases():
+    return (render_template)("/data/data_batch_test_cases.html")
 
 
-@web.route('/api_batch_test_data',methods=['POST'])
-def batch_test_compare1():
-    user_id = session.get('userid', None)
+# 定义允许的文件扩展名检查函数
+def allowed_file_data_batch(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'xlsx', 'xls'}
 
-    user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-    ini_path = user_path + '/' + 'config.ini'
-    # now_time = datetime.now()
-    # str_time = now_time.strftime("%Y%m%d%H%M%S")
-    # case_name = 'testcase_'+str_time
+# 构建 job_str 字典时将 'nan' 转换为空字符串
+def nan_to_empty(value):
+    return '' if pd.isna(value) or value == 'nan' else value
 
-    if 'Save' in request.form:
+@web.route('/data_batch_upload_excel', methods=['POST'])
+def data_batch_upload_excel():
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'message': 'No file part'})
 
-        info = request.values
-        code_str = viewutil.getInfoAttribute(info, 'code')
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'success': False, 'message': 'No selected file'})
 
-        code_str1 = viewutil.getInfoAttribute(info, 'code1')
+    id = session['userid']
+    user_folder_path = os.path.join(app.root_path, 'static', 'user_files', str(id))
 
-        code = request.form['code']
-        code1 =  request.form['code1']
+    filename = file.filename
 
-        list = code.split("\r\n")
+    excel_path = f'{user_folder_path}/upload/{filename}'
 
-        newlist = []
-        for i in list:
-            if i.startswith('Case_name'):
-                print (i)
-                newlist.append(i.strip().split('=')[-1].strip())
-        case_name = newlist[0]
-
-        # user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-        # file = open(user_path + 'config.ini', 'w')
-        # file.writelines(case_name)
-        # file.close()
-
-        #加判断库里面case_name是否存在，如果存在就提示
-        rows= ConnectSQL().data_get_infor_value( case_name)
-        print ('rows:',rows)
-
-        if  rows == [] or rows == None:
-
-            code = AEScoder().encrypt(code)
-            code1 = AEScoder().encrypt(code1)
-            ConnectSQL().data_write_config_value_all(user_id, case_name, code, code1)
-
-            case_id = ConnectSQL().data_get_case_id(case_name)[0][0]
-            configP2.clear()
-            configP2.add_section("default")
-            # 添加option并设置值，只能是string
-            configP2.set("default", "userid", str(user_id))
-            configP2.set("default", "caseid", str(case_id))
-            configP2.set("default", "times", str(2))
-            configP2.set("default", "returncode", 'NULL')
-            # 写入ini文件，注意写入的mode会影响是否覆盖ini文件
-            with open(ini_path, "w", encoding="utf8") as f:
-                configP2.write(f)
-
-            return render_template('code_mode/data_test_compare_save.html'  ,
-                                   message='Save success!',code_str=code_str, code_str1=code_str1)
+    if file and allowed_file_data_batch(file.filename):
+        if not os.path.exists(f'{user_folder_path}/upload/{filename}'):
+            if not os.path.exists(f'{user_folder_path}/upload'):
+                os.makedirs(os.path.join(user_folder_path, 'upload'))
+            file.save(f'{user_folder_path}/upload/{filename}')
         else:
-            return render_template('code_mode/data_test_compare_save.html'  ,
-                                   message='Case name already exists!',code_str=code_str,code_str1=code_str1)
+            os.remove(excel_path)
+            return jsonify({'success': False, 'message': 'file existed'})
 
 
-    elif 'Report' in request.form:
+    #这里excel名字作为test_case_name加上时间戳，避免重名
+    now = int(round(time.time() * 1000))
+    formatted_timestamp =  time.strftime('%Y%m%d%H%M%S',time.localtime(now/1000))
+    now_ms = int(round(time.time() * 1000))
+    formatted_timestamp_ms = time.strftime('%Y%m%d%H%M%S', time.localtime(now_ms / 1000)) + f"{now_ms % 1000:03d}"
+    newfilename = f'{filename}_{formatted_timestamp}'
 
-        config = configparser.ConfigParser()
-        config.read(ini_path)  # 读取 ini 文件
-        case_id = config.get('default', 'caseid')
-
-        # print("enter report.....")
-        # print("retcode.returncode.....",retcode.returncode)
-        # print("case_id.....", case_id)
-
-        # print("user_id:", user_id)
-        return render_template('data_test_finish.html', user_id=user_id,
-                               case_id=case_id)
+    try:
+        tanos_manage().add_data_batch_test_case(newfilename)
 
 
-@web.route('/runtest3.json', methods=['POST', 'GET'])
+    except Exception as e:
+        os.remove(excel_path)
+        return jsonify({'success': False, 'message': f'Error insert suite: {str(e)}'})
+
+    print(111111,newfilename)
+
+    case_id = ConnectSQL().data_batch_get_case_id(newfilename.strip())[0][0]
+    print(case_id)
+
+    try:
+        with pd.ExcelFile(excel_path, engine='openpyxl') as xls:
+            sheet_names = xls.sheet_names
+            print(sheet_names)
+
+            nan_replacements = {
+                'Type': '',
+                'Connection Type': '',
+                'Host': '',
+                'Port': '',
+                'Library': '',
+                'Username': '',
+                'Password': '',
+            }
+
+            # 处理第一个 sheet "connection config"
+            if 'connection config' in sheet_names:
+                df = pd.read_excel(xls, 'connection config', engine='openpyxl').fillna(nan_replacements)
+
+                s_connect_ids = []  # 用于存储第一次循环的 connect_id
+                t_connect_ids = []  # 用于存储第二次循环的 connect_id
+
+                for index, row in df.iterrows():
+
+                    Type = str(row['Connection Type'])
+                    Connection_Type = str(row['Type'])
+                    Host = str(row['Host'])
+                    Port = str(row['Port'])
+                    Library = str(row['Library'])
+                    Username = str(row['Username'])
+                    Password = str(row['Password'])
+
+                    if index == 0:
+                        # 第一次循环，使用前缀 s_
+                        connectname = f's_b_{Host}_{formatted_timestamp}'
+                    else:
+                        # 第二次循环以及其他迭代，使用前缀 t_
+                        connectname = f't_b_{Host}_{formatted_timestamp}'
+
+                    tanos_manage().new_connection(connectname, Type, Connection_Type,
+                                                  Host, Library, Username,
+                                                  Password,Port)
+                    # 获取每次插入表后的 connect_id
+                    connect_id = tanos_manage().get_connections_id_by_name(connectname)
+
+                    if index == 0:
+                        s_connect_ids.append(connect_id)
+                    else:
+                        t_connect_ids.append(connect_id)
+
+            print("s_connect_ids:", s_connect_ids)
+            print("t_connect_ids:", t_connect_ids)
+
+            # 处理第二个 sheet "job config"
+            if 'job config' in sheet_names:
+                job_df = pd.read_excel(xls, 'job config', engine='openpyxl').fillna(nan_replacements)
+
+                for index, row in job_df.iterrows():
+
+                    Source_Table = str(row['Source Table'])
+                    Source_Condition = str(row['Source Condition'])
+                    Target_Table = str(row['Target Table'])
+                    Target_Condition = str(row['Target Condition'])
+                    By_fields = str(row['By fields'])
+                    s_pointname = f'b_{Source_Table}_{formatted_timestamp_ms}'
+                    t_pointname = f'b_{Target_Table}_{formatted_timestamp_ms}'
+
+                    jobname = f'b_{Source_Table}_{Target_Table}_{formatted_timestamp}'
+
+                    tanos_manage().new_point2(s_pointname, s_connect_ids[0], Source_Table)
+                    tanos_manage().new_point2(t_pointname, t_connect_ids[0], Target_Table)
+
+                    job_str = {
+                        "source_point": s_pointname,
+                        "target_point": t_pointname,
+                        "source_condition": nan_to_empty(Source_Condition),
+                        "target_condition": nan_to_empty(Target_Condition),
+                        "select_rules": 'Default',
+                        "custom_rules": '',
+                        "fields": By_fields,
+                    }
+
+                    job_str_json = json.dumps(job_str)
+
+                    tanos_manage().new_job(jobname, job_str_json, case_id)
+
+                # 处理 job_config_df 中的数据，可以使用循环遍历每一行
+
+            os.remove(excel_path)
+
+            # 其他处理逻辑...
+    except Exception as e:
+        os.remove(excel_path)
+        print(e)
+        return jsonify({'success': False, 'message': f'Error reading Excel file: {str(e)}'})
+
+    return jsonify({'success': True, 'message': 'upload successfully'})
+
+
+@app.route('/run_data_batch_job',methods=['POST'])
 @user.login_required
-def runtest3():
-    if request.method == 'POST':
-
-        info = request.values
-        code = viewutil.getInfoAttribute(info, 'code')
-        code1 = viewutil.getInfoAttribute(info, 'code1')
-        # 将连接参数保存为字典的键值对，就不怕顺序乱了
-        list = code.split("\n")
-        list1 = []
-        list2 = []
-        for i in list:
-            if (i.startswith('#')): #不要注释行
-                pass
-            else:
-                m = i.strip().find('=')
-                list1.append(i.strip().split('=')[0].strip())
-                list2.append(i[m + 1:].strip())  # 取第一个出现的=后面的
-        d = zip(list1, list2)
-        dict1 = dict(d)
-
-
-
-        user_id = session.get('userid', None)
-        user_path = '{}/userinfo/{}/'.format(configPath, user_id)
-
-        file = open(user_path + 'data_conn.txt', 'w')
-        file.write(str(dict1))
-        file.close()
-
-        file = open(user_path + 'data_db.csv', 'w')
-        file.write(code1)
-        file.close()
-
-        ini_path = user_path + '/' + 'config.ini'
-        # # 清空日志
-        with open(user_path + "log.log", 'w') as file:
-            # file.writelines("11111")
-            file.close()
-
-        get_log(True)
-        # info = request.form
-        # code = viewutil.getInfoAttribute(info,'code')
-        # code1 = viewutil.getInfoAttribute(info,'code1')
-        #
-        # print(111,code)
-
-        file = open(user_path + 'log.log', 'a')
-        file.writelines(
-            "|||||||||||||||||||||||||||||||||||||||Start checking|||||||||||||||||||||||||||||||||||||||" + '\n')
-        file.writelines("Prepare data..." + '\n')
-        file.close()
-
-        # cmd_td = 'python {}/data2_check/run_or_mx.py {}'.format(configPath, user_id)
-        # retcode = subprocess.Popen(cmd_td, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        retcode = Constant_cmd(user_id).retcode
-
-        # cmd_td = '/hsbc/tac/app/anaconda3/bin/python3.6 {}/data2_check/run_or_mx.py {}'.format(configPath,user_id)
-        # retcode = subprocess.Popen(cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        stdout, stderr = retcode.communicate()
-
-        if stderr:
-            print(str(stderr, "utf-8") + '111111')
-            # file = open(user_path + 'log.log', 'a')
-            # file.writelines(str(stderr, "utf-8") + '\n')
-            # file.close()
-        else:
-            print(str(stdout, "utf-8") + '222222')
-        #
-        # # 添加section
-        # configP.set("default", "returncode", str(retcode.returncode))
-        # # 写入ini文件，注意写入的mode会影响是否覆盖ini文件
-        # with open(ini_path, "w+", encoding="utf8") as f:
-        #     configP.write(f)
-
-        # from app.data2_check.run_or_mx import method_main
-        # from app.util.log_util.new_log import logger
-        # # from app.data2_check.test import testrun
-        #
-        # try:
-        #     method_main()
-        #     # testrun()
-        #     print("Run 按钮执行成功！！")
-        #     result = jsonify({'code': 200, 'msg': 'run success!', 'returncode': 0})
-        #     print(result)
-        #     sleep(1.5)
-        #     return result
-        # except:
-        #     s= traceback.format_exc()
-        #     # checker.logger.info(s)
-        #     logger.info(s)
-        #     print("执行失败！！")
-        #     result = jsonify({'code': 400, 'msg': 'run failed', 'returncode': 1})
-        #     print(result)
-        #     sleep(1.5)
-        #     return result, {'Content-Type': 'application/json'}
-
-        if retcode.returncode == 0:
-            print("Run 按钮执行成功！！")
-            sleep(1.6)
-            result = jsonify({'code': 200, 'msg': 'run success!', 'returncode': 0})
-            print(result)
-            return result
-
-        else:
-            print("执行失败！！")
-            file = open(user_path + 'log.log', 'a')
-            file.writelines(str(stderr, "utf-8") + '\n')
-            file.close()
-            sleep(1.6)
-            result = jsonify({'code': 400, 'msg': 'run failed', 'returncode': 1})
-            print(result)
-            return result, {'Content-Type': 'application/json'}
-
-
-line_number = [0] #存放当前日志行数
-log_data = []
-# 定义接口把处理日志并返回到前端
-@web.route('/get_log',methods=['GET','POST'])
-# @user.login_required
-def get_log(flag=False):
-    if flag==False:
-        log_data = red_logs() # 获取日志
-        # print(len(log_data),11111)
-        # print(line_number[0],222222)
-        # 判断如果此次获取日志行数减去上一次获取日志行数大于0，代表获取到新的日志
-        if len(log_data) - line_number[0] > 0:
-            log_type = 2 # 当前获取到日志
-            log_difference = len(log_data) - line_number[0] # 计算获取到少行新日志
-            log_list = [] # 存放获取到的新日志
-            # 遍历获取到的新日志存放到log_list中
-            for i in range(log_difference):
-                log_i = log_data[-(i+1)].decode('utf-8') # 遍历每一条日志并解码
-                log_list.insert(0,log_i) # 将获取的日志存放log_list中
-        else:
-            log_type = 3
-            log_list = ''
-        # 已字典形式返回前端
-        _log = {
-            'log_type' : log_type,
-            'log_list' : log_list
-        }
-        # print(_log, 7777777777777777777)
-        line_number.pop() # 删除上一次获取行数
-        line_number.append(len(log_data)) # 添加此次获取行数
-        # print(line_number)
-        return _log
-    else:
-        log_data = red_logs() # 获取日志
-        # print(len(log_data),11111)
-        # print(line_number[0],222222)
-        # 判断如果此次获取日志行数减去上一次获取日志行数大于0，代表获取到新的日志
-        if len(log_data) - line_number[0] > 0:
-            log_type = 2 # 当前获取到日志
-            log_difference = len(log_data) - line_number[0] # 计算获取到少行新日志
-            log_list = [] # 存放获取到的新日志
-            # 遍历获取到的新日志存放到log_list中
-            for i in range(log_difference):
-                log_i = log_data[-(i+1)].decode('utf-8') # 遍历每一条日志并解码
-                log_list.insert(0,log_i) # 将获取的日志存放log_list中
-        else:
-            log_type = 3
-            log_list = ''
-        # 已字典形式返回前端
-        _log = {
-            'log_type' : log_type,
-            'log_list' : log_list
-        }
-        line_number.clear() # 删除上一次获取行数
-        line_number.append(0) # 添加此次获取行数
-        # print(line_number)
-        return _log
-
-
-def red_logs():
-    user_id = session.get('userid', None)
-    _path = '{}/userinfo/{}/'.format(configPath, user_id)
-    log_path = f'{_path}log.log'  # 获取日志文件路径
-    with open(log_path, 'rb') as f:
-        log_size = os.path.getsize(log_path)  # 获取日志大小
-        offset = -100
-        # 如果文件大小为0时返回空
-        if log_size == 0:
-            return ''
-        while True:
-            # 判断offset是否大于文件字节数,是则读取所有行,并返回
-            if (abs(offset) >= log_size):
-                f.seek(-log_size, 2)
-                data = f.readlines()
-                return data
-            # 游标移动倒数的字节数位置
-            data = f.readlines()
-            # 判断读取到的行数，如果大于1则返回最后一行，否则扩大offset
-            if (len(data) > 1):
-                return data
-            else:
-                offset *= 2
-
-
-@web.route('/clear_log',methods=['GET','POST'])
-def clear_log():
-    get_log(flag=True)
-    return ''
-
-
-@web.route('/saveCase', methods=['POST'])
-def saveCase():
-    # TODO: Update data in the database
+def run_data_batch_job():
     data = request.json
-    print(data)
-    # 新建case
+    case_id= data['caseid']
     user_id = session.get('userid', None)
-    case_name = data['case_name']
-    code=""
-    code1=""
-    ConnectSQL().data_write_config_value_all(user_id, case_name, code, code1)
 
-    case_id = ConnectSQL().data_get_case_id(case_name)[0][0]
+    print(user_id)
+    print(case_id)
 
-    # # 新建job
-    # data_str = json.dumps(data['job'])
-    # print(data_str)
-    # # TODO: Update data in the database
-    # tanos_manage().new_job(data['job_name'],data_str,case_id)
-    #查询case#查询job，跳转到http://127.0.0.1:8889/data_edit_test_case_tanos?id=10074，前端实现
+    try:
+        result = subprocess.run(Constant_cmd_data_batch(user_id,case_id).cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        print('result:',result.stdout.decode('utf-8'))
 
-    return jsonify(success=True, message='run job successfully',case_id=case_id)
+
+    # 检查命令是否成功执行
+        if result.returncode == 0:
+            # 返回命令执行结果
+            return jsonify({'success': True, 'message':'success' }),200
+        else:
+            # 返回错误信息
+            return jsonify({'success': False, 'message':'fail','result':result.stdout.decode('utf-8') }), 200
+
+    except Exception as e:
+        return jsonify({'success': False,'message': str(e)}), 500
+
+
+# 点击search后查询库中case列表
+@web.route('/data_batch_test_case.json', methods=['POST', 'GET'])
+# @user.login_required
+def search_test_cases():
+    if request.method == 'POST':
+        pass
+        # logger.info("2222222222222222222")
+    if request.method == 'GET':
+        # log().logger.info("1111111111111111111")
+        # print("tiaoshi", "get 请求")
+        info = request.values
+        limit = info.get('limit', 1000)  # 每页显示的条数
+        offset = info.get('offset', 0)  # 分片数，(页码-1)*limit, 它表示一段数据的起点
+        type = viewutil.getInfoAttribute(info, 'type')
+        id = viewutil.getInfoAttribute(info, 'id')
+        name = viewutil.getInfoAttribute(info, 'name')
+        # database_type = viewutil.getInfoAttribute(info,'database_type')
+
+        valueList = [name]
+        conditionList = ['case_name']
+        conditionList.append('case_id')
+        valueList.append(id)
+        fieldlist = []
+        rows = 1000
+        caseList = test_case_manage.test_case_manage().data_batch_show_test_cases(conditionList, valueList, fieldlist, rows)
+        data = caseList
+
+        # print('1111',type)
+        # print (data , "tiaoshi...")
+
+        if type == 'case_one':  # 这种情况就是进入某一个用例，只需要查询一条
+            active_id = viewutil.getInfoAttribute(info, 'id')
+            print('222', active_id)
+            for i in range(len(data)):
+                # print (data[i]['id'])
+                if data[i]['id'] == active_id:
+                    print(data[i]['id'])
+                    data1 = jsonify({'total': len(data), 'rows': data[i]})
+                    print(data[i])
+        else:
+            data1 = jsonify({'total': len(data), 'rows': data[int(offset):int(offset) + int(limit)]})
+        # log.log().logger.info('data1: %s' %data1)
+        print(111,data)
+        return data1, {'Content-Type': 'application/json'}

@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}UI自动化 测试平台 - test suite{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block js %}
+<!--<script src="/static/scripts/core/data_test_case_tanos.js"></script>-->
+<script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+<link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+
+<script src="/static/tanos/bootbox.all.min.js"></script>
+<script src="/static/tanos/popper.js"></script>
+<script src="/static/tanos/toastr.min.js"></script>
+<link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+
+<!-- Bootstrap Font Icon CSS -->
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">-->
+
+{% endblock %}
+
+{% block content %}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link " aria-current="page" href="/data_connect_management">Step1: Connection Management</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " href="/data_point_management">Step2: Point Management</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " href="/api_data_test_cases">Step3: Test Case Management</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="/data_batch_test_cases">Batch Validation</a>
+    </li>
+</ul>
+
+<div style=" margin: 20px; margin-bottom: 100px " class="card">
+    <div class="card-body" style="padding:10px; ">
+        <!-- Default panel contents -->
+        <h5 class="card-title">Data Batch Test Cases</h5>
+        <div class="card-text">
+
+            <p>On this page, you can import the information of the "Test Cases", which can include multiple jobs in
+                batch for validation.</p>
+
+            <div style="display: flex; justify-content: flex-start;">
+                <button class="btn btn-primary" id="btnImport" type="button"
+                        style="width: 180px; height: 40px; margin-top: 20px; margin-right: 50px;">Import File
+                </button>
+                <button class="btn btn-primary" id="btnDown" type="button"
+                        style="width: 180px; height: 40px; margin-top: 20px;">Download Sample
+                </button>
+            </div>
+
+
+            <table class="table table-striped"
+                   id="table"
+                   data-toggle="table"
+                   {# data-height="600" #}
+                   data-url="data_batch_test_case.json"
+                   data-pagination="true"
+                   data-search="true"
+                   data-buttons-class="primary"
+                   data-buttons="buttons"
+                   data-sort-name="id"
+                   data-sort-order="desc"
+
+            >
+                <thead>
+                <tr>
+                    <th data-field="user_id" data-width="5" data-width-unit="%">USER ID
+                    </th>
+                    <th data-field="id" data-align="center" data-sortable="true">CASE ID
+                    </th>
+                    <th data-field="name" data-align="left" data-sortable="true">TEST CASE NAME
+                    </th>
+                    <th data-formatter="actionFormatter" data-align="center">OPERATION</th>
+
+                </tr>
+                </thead>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+
+    <!-- 模态窗口 -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/data_batch_upload_excel" enctype="multipart/form-data">
+                        <input type="file" name="file" accept=".xlsx, .xls">
+                        <button type="submit" class="btn btn-primary">Upload File</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<script>
+        $(document).ready(function () {
+            $('form').submit(function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '/data_batch_upload_excel',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (!response.success) {
+                            $('#uploadModal').modal('hide');
+                            toastr.error(response.message);
+                            // 存储失败消息
+                            sessionStorage.setItem('uploadFailureMessage', response.message);
+                            location.reload(); // 刷新页面
+                        } else {
+                            // 存储成功消息
+                            sessionStorage.setItem('uploadSuccessMessage', 'Upload successfully!');
+
+                            $('#uploadModal').modal('hide');
+                            location.reload(); // 刷新页面
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while uploading the file.');
+                        // 存储失败消息
+                        sessionStorage.setItem('uploadFailureMessage', 'An error occurred while uploading the file.');
+                        location.reload(); // 刷新页面
+                    }
+                });
+            });
+
+            // 页面加载时检查是否有存储的消息
+            var storedSuccessMessage = sessionStorage.getItem('uploadSuccessMessage');
+            var storedFailureMessage = sessionStorage.getItem('uploadFailureMessage');
+
+            if (storedSuccessMessage) {
+                toastr.success(storedSuccessMessage);
+                sessionStorage.removeItem('uploadSuccessMessage');
+            }
+
+            if (storedFailureMessage) {
+                toastr.error(storedFailureMessage);
+                sessionStorage.removeItem('uploadFailureMessage');
+            }
+        });
+    </script>
+
+
+<script>
+
+     $(document).ready(function () {
+            // 监听按钮点击事件
+            $('#btnImport').on('click', function () {
+                // 显示模态框
+                $('#uploadModal').modal('show');
+            });
+
+            $('#btnDown').on('click', function () {
+                //创建一个虚拟的下载链接
+                var downloadLink = document.createElement('a');
+
+                // 设置下载链接的属性
+                downloadLink.href = '/static/api_suite_sample.xlsx';
+                downloadLink.download = 'api_suite_sample.xlsx';
+
+                // 将下载链接追加到文档中
+                document.body.appendChild(downloadLink);
+
+                // 模拟点击下载链接
+                downloadLink.click();
+
+                // 删除创建的下载链接元素
+                document.body.removeChild(downloadLink);
+
+            });
+        });
+
+
+    function buttons() {
+        return {
+            btnAdd: {
+                text: 'Add new row',
+                icon: 'fa-regular fa-plus',
+                render: true,
+                event: function () {
+                    // 跳转到指定页面
+                    window.location.href = "/api_batch_test_data";
+                },
+                attributes: {
+                    class: 'Add a new row to the table',
+                    style: 'width: 80px; height:38px; margin-left:40px;display: flex; justify-content: center; align-items: center;',
+                    iconAlignment: 'center',
+                }
+            }
+        }
+    }
+</script>
+
+
+<script>
+
+    const $table = $('#table');
+
+
+    // Formatter for "action" column
+    function actionFormatter(value, row, index) {
+        return '<button class="btn btn-sm btn-primary edit-row" onclick="window.location.href=(\'/data_edit_test_case_tanos?id=' + row.id + '\')"><i class="fa-regular fa-pen-to-square"></i></button> ' +
+            '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +
+            '<button class="btn btn-sm btn-success report-row" style="margin-left: 10px;" onclick="window.location.href=(\'/data_search_report?id=' + row.id + '\')"><i class="fa-sharp fa-regular fa-eye"></i></button> '
+
+    }
+
+
+    /////delete function
+    function deleteRow($tr) {
+        const id = $tr.find('td:eq(1)').text();
+        console.log({id: id})
+        $.ajax({
+            url: '/data_delete_test_case',
+            type: 'POST',
+            data: JSON.stringify({"id": id, "act": "del"}),
+            contentType: 'application/json',
+            success: function () {
+                toastr.success('delete successfully!');
+                $('#table').bootstrapTable('refresh');
+            },
+            error: function (error) {
+                console.log(error);
+                toastr.error('failed to delete the case. Please try again.');
+            }
+        });
+    }
+
+
+    $table.on('click', '.delete-row', function () {
+        const $tr = $(this).closest('tr');
+
+        let dialog = bootbox.dialog({
+            title: 'Delete item!',
+            message: "<p>Please confirm if you want to delete? </p>",
+            centerVertical: true,
+            buttons:
+                {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback:
+                            function () {
+                                console.log('Custom cancel clicked');
+                            }
+                    },
+
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback:
+                            function () {
+                                deleteRow($tr)
+                            }
+                    }
+                }
+        });
+
+    });
+
+
+</script>
+{% endblock %}

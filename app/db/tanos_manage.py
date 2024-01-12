@@ -57,6 +57,13 @@ class tanos_manage():
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
+    def get_connections_id_by_name(self,connect_name):
+        sql = """select connect_id from tanos.connection_management where connect_name ='{}'  """.format(connect_name)
+        result = useDB.useDB().executesql_fetch(sql)
+        connect_id = str(result[0][0]).strip()
+        return connect_id
+
+
 
     def search_point_id(self, connect_id):
         user_id = session.get('userid', None)
@@ -70,6 +77,14 @@ class tanos_manage():
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         user_id = session.get('userid', None)
         connect_id = self.search_by_connect_name(connect_name)
+        sql = """INSERT INTO tanos.point_management (user_id,point_name,connect_id,_table_name,create_date)\
+        VALUES ('{}','{}','{}','{}','{}')""" \
+            .format(user_id, point_name.strip(), connect_id, table_name.strip(), create_date)
+        useDB.useDB().executesql(sql)
+
+    def new_point2(self, point_name, connect_id, table_name):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        user_id = session.get('userid', None)
         sql = """INSERT INTO tanos.point_management (user_id,point_name,connect_id,_table_name,create_date)\
         VALUES ('{}','{}','{}','{}','{}')""" \
             .format(user_id, point_name.strip(), connect_id, table_name.strip(), create_date)
@@ -615,6 +630,27 @@ class tanos_manage():
     def delete_api_batch_job(self, id):
         sql = "DELETE FROM tanos.api_batch_job WHERE job_id = '{}';".format(id)
         useDB.useDB().executesql(sql)
+
+    def add_data_batch_test_case(self, case_name):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        user_id = session.get('userid', None)
+        sql = """INSERT INTO tanos.data_batch_test_case (case_name,user_id,create_date)\
+          VALUES ('{}','{}','{}')""" \
+            .format(case_name.strip(),user_id,create_date)
+        useDB.useDB().executesql(sql)
+
+
+    def get_data_batch(self, case_id):
+        # user_id = session.get('userid', None)
+        sql = """select job_id,job_name,job from tanos.job_management where case_id= '{}'  """ \
+            .format(case_id)
+        # print(sql)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from tanos.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+
+        return result
+
+
 
 if __name__ == '__main__':
     testcase = tanos_manage()
