@@ -384,6 +384,7 @@ def login():
         session['current_url'] = current_path
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
+    print(auth)
     return redirect(auth.login())  # Redirect to SSO login page
     # return render_template('index.html')
 
