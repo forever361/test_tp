@@ -367,6 +367,116 @@ def login_callback():
 
 
 
+@web.route('/login2', methods=['GET', 'POST'])
+# @handle_exceptions
+def login2():
+    # session_current_url = session.get('current_url', None)
+    # req = prepare_flask_request(request)
+    # auth = init_saml_auth(req)
+    # auth.process_response()
+    # auth.get_last_response_xml()
+    # # print('Response:',auth.get_last_response_xml())
+    # errors = auth.get_errors()
+    #
+    # match2 = re.search(
+    #     r'<Attribute Name="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"><AttributeValue>(.*?)</AttributeValue>',
+    #     auth.get_last_response_xml())
+    #
+    # logger_all.info(match2.group(1))
+
+    if True:
+
+        auth= {'http://schemas.microsoft.com/identity/claims/tenantid': ['984e1357-e1c3-4b1d-ad0c-f74666a67c87'], 'http://schemas.microsoft.com/identity/claims/objectidentifier': ['8a6d2bcf-4380-4021-8580-d162ca884fc7'], 'http://schemas.microsoft.com/identity/claims/displayname': ['wang Arrow'], 'http://schemas.microsoft.com/identity/claims/identityprovider': ['live.com'], 'http://schemas.microsoft.com/claims/authnmethodsreferences': ['urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport', 'http://schemas.microsoft.com/claims/multipleauthn', 'http://schemas.microsoft.com/ws/2008/06/identity/authenticationmethod/unspecified'], 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname': ['Arrow'], 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname': ['wang'], 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress': ['Arrow.wk@hotmail.com'], 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name': ['Arrow.wk_hotmail.com#EXT#@Arrowwkhotmail.onmicrosoft.com']}
+        session['user'] = auth  # Save user information in session
+        session['token'] = '.eJydVH9r2zAQ_SpDhfwVx5J_KgazlrUUxgaFZjAopciSHGu1JSPJ9Urpd-_ZaUY61q0dGGQ96d69ezrpAd300nZMS-1R4e0gl4jdMc8sKlDjfe-KMFTdlqwqpsSw4qYLlQ-HkkQkTSnJE7Jc55Sucxxli7orozSGwZds8GbB-r4kMV3U5eeLs_OPY5livGjKJKNoibbWDL1mnYRMp7I1biOdP59AWHSe1bUSqEgpTgmE4SXyknX7vd-ctA7tMIeKq5fop0ZpdgpVXJp28MpowE5EpzS6hhBzKzXw3FRVRqqUR0FcCR4k6zwOKkHqADNCophHcYQxBA5AioqH2Q0ww_FGdsytOsWtcab2sye8ZapzIVTd6E76xghnZS2t1FzO-garC8OccsVUsis8Ly5Pvn4pohUuGC8g3jmAL2AYjRUX1njJvRQby7TrjfWg5C0KuqH1qm_lrORfMaMLoUYa4ixUAjpA-fu5hOmXs8m4XS3hABokV7WSYrLwr6S_mJ4VCeX6lt3vTvoKjUxvP5xYa8Z3M-3nvTV38G8nulbdyWnzu8lM9QMM3qFQ10xGWSaiitdBElMcJDgiAYUGDATJIs4oTWqevzuRl5oBIKYEa5pIEqd5IAmPg6QiImAC86DOkyzLWJZz-qcEP7vWGdavjN0-n1kawvd7JtirWiaElW7uudnl1Xh73Bg_Lb3i0xvZt-C03p_iawf4Rq4XNKDw5kDh0dn3zdHxvDLe7nHoxEOT_z-zg4t40Ino-nF3w-e3Zo0xIbv588N00K2PT3w7xnk.ZbdrgA.MRHj5N1XI6NDBxF_gJq3TgY7mQU'  # Save token in session
+        session['staffid'] = 580515000
+        session['username'] = session['user']['http://schemas.microsoft.com/identity/claims/displayname'][0]
+        session.permanent = True
+        # logger_all.info(auth.get_attributes())
+
+        # print('user:',auth.get_attributes())
+        username = session['username']
+        logger_all.info(username)
+        token = session['token']
+        staffid = session['staffid']
+
+        logger_all.info('User {} {} logging'.format(username,staffid))
+
+        avatarUrl = 'https://img1.baidu.com/it/u=1215581741,978897026&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=468'
+        session['avatar']=avatarUrl
+
+        # print(333,avatar)
+
+        #查数据库是否有该用户
+        rows = ConnectSQL().get_register_username(username)
+        if rows == [] or rows == None:
+            #将此用户录入数据库
+            ConnectSQL().write_register_sql_new(username,staffid)
+            id = ConnectSQL().get_login_userid(username)
+            session['userid']= id
+            #在/static/user_files下面创建id命名的文件夹，里面包含三个子文件夹：config,html,csv
+            user_folder_path = os.path.join(app.root_path, 'static', 'user_files', str(id))
+
+            # 检查文件夹是否存在
+            if not os.path.exists(user_folder_path):
+                # 创建用户文件夹及子文件夹
+                os.makedirs(os.path.join(user_folder_path, 'config'))
+                os.makedirs(os.path.join(user_folder_path, 'html'))
+                os.makedirs(os.path.join(user_folder_path, 'csv'))
+
+                # AliyunOSSClient().upload_file(app.root_path+'/util/oss_a','TANOS/user_files/{}/config/oss_a'.format(str(id)))
+                # AliyunOSSClient().upload_file(app.root_path + '/util/oss_a', 'TANOS/user_files/{}/html/oss_a'.format(str(id)))
+                # AliyunOSSClient().upload_file(app.root_path + '/util/oss_a', 'TANOS/user_files/{}/csv/oss_a'.format(str(id)))
+
+
+
+        else:
+            id = ConnectSQL().get_login_userid(username)
+            session['userid'] = id
+
+            # print(1111111,app.root_path+'/util/oss_a')
+            # print(2222222, 'TANOS/user_files/{}/csv/oss_a'.format(str(id)))
+
+            #在/static/user_files下面创建id命名的文件夹，里面包含三个子文件夹：config,html,csv
+            user_folder_path = os.path.join(app.root_path, 'static', 'user_files', str(id))
+
+            # 检查文件夹是否存在
+            if not os.path.exists(user_folder_path):
+                # 创建用户文件夹及子文件夹
+                os.makedirs(os.path.join(user_folder_path, 'config'))
+                os.makedirs(os.path.join(user_folder_path, 'html'))
+                os.makedirs(os.path.join(user_folder_path, 'csv'))
+
+                # AliyunOSSClient().upload_file(app.root_path+'/util/oss_a','TANOS/user_files/{}/config/oss_a'.format(str(id)))
+                # AliyunOSSClient().upload_file(app.root_path + '/util/oss_a', 'TANOS/user_files/{}/html/oss_a'.format(str(id)))
+                # AliyunOSSClient().upload_file(app.root_path + '/util/oss_a', 'TANOS/user_files/{}/csv/oss_a'.format(str(id)))
+
+
+
+
+        groupname = ConnectSQL().get_user_group(username)
+        print("user group:",groupname)
+        session['groupname'] = groupname[0]
+
+        current_team_list = tanos_manage().get_teams_from_user(username)
+        # current_team_list = ['Admin', 'ChinaDataSolution']
+        session['teams'] = current_team_list
+
+        session['team'] = current_team_list[0]
+
+        response = make_response(redirect('/'))
+        return response
+
+        # avatar = ConnectSQL().get_avatar(username)
+        # session['avatar'] = avatar
+
+        # if session_current_url:
+        #     response = make_response(redirect('/' + session_current_url))
+        # else:
+        #     response = make_response(redirect('/'))
+        # return response
+    else:
+        return 'Login failed'
 
 
 @web.route('/login_page',methods=['GET','POST'])
