@@ -19,5 +19,5 @@ if __name__ == '__main__':
 
     # socketio.run(app,host='chinadataplatform.cds.dev.ali.cloud.cn.hsbc', port=8889,allow_unsafe_werkzeug=True,ssl_context=("chinadataplatform_cds_dev_ali_cloud_cn_hsbc.pem","chinadataplatform_cds_dev_ali_cloud_cn_hsbc.key"))
     # socketio.run(app,host='0.0.0.0', port=port,allow_unsafe_werkzeug=True)
-    socketio.run(app,host='0.0.0.0', port=8889,allow_unsafe_werkzeug=True,ssl_context=("kund.fun_bundle.pem","kund.fun.key"))
-    # socketio.run(app, host='0.0.0.0', port=8889, allow_unsafe_werkzeug=True)
+    # socketio.run(app,host='0.0.0.0', port=8889,allow_unsafe_werkzeug=True,ssl_context=("kund.fun_bundle.pem","kund.fun.key"))
+    socketio.run(app, host='0.0.0.0', port=8889, allow_unsafe_werkzeug=True)
