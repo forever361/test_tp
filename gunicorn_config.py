@@ -18,5 +18,5 @@ errorlog = startup_log_file  # 指定启动日志输出文件
 accesslog = "-"  # 指定访问日志输出，这里设置为 "-" 表示输出到标准输出
 
 # 添加 SSL 配置
-# certfile = certfile_path
-# keyfile = keyfile_path
+certfile = "./aixint.cn_bundle.pem"
+keyfile = "./aixint.cn.key"
