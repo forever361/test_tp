@@ -57,7 +57,7 @@ class Constant_cmd_data_batch():
 class Constant_db():
     def __init__(self):
         self.db = psycopg2.connect(database="test_frame", user="postgres",password="postgres",
-                                     host="8.134.189.98", port="3433")
+                                     host="127.0.0.1", port="3433")
 # class Constant_db():
 #     def __init__(self):
 #         self.db = psycopg2.connect(database="test_frame", user="cdi", password="Cdi2021@",
