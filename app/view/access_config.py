@@ -328,3 +328,13 @@ def convert_data_format(data):
 
     return converted_data
 
+
+@web.route('/add_new_team', methods=['POST'])
+def add_new_team():
+    data = request.get_json()
+
+    team_name = data['team_name']
+
+    tanos_manage().add_team(team_name)
+
+    return jsonify({'message': 'Add success'})

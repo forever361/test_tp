@@ -1079,3 +1079,32 @@
 2024-01-12 08:50:16,266 [checker.py-136] INFO: count check successfully
 2024-01-12 08:50:16,276 [run_or_mx.py-576] INFO: S:pg,T:pg
 2024-01-12 08:50:16,520 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-02-18 16:21:21,582 [run_or_mx.py-167] INFO:  check rule is : Default
+2024-02-18 16:21:21,712 [run_or_mx.py-576] INFO: S:pg,T:pg
+2024-02-18 16:21:21,917 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-02-18 16:21:22,017 [checker.py-338] INFO: value check sucessfully
+2024-02-18 16:21:22,133 [checker.py-115] INFO: |total_count   check|source:200 target:200
+2024-02-18 16:21:22,179 [checker.py-136] INFO: count check successfully
+2024-02-18 16:21:22,189 [run_or_mx.py-576] INFO: S:pg,T:pg
+2024-02-18 16:21:22,374 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-02-18 16:21:22,459 [checker.py-338] INFO: value check sucessfully
+2024-02-18 16:21:22,610 [checker.py-115] INFO: |total_count   check|source:200 target:200
+2024-02-18 16:21:22,659 [checker.py-136] INFO: count check successfully
+2024-02-18 16:21:22,669 [run_or_mx.py-576] INFO: S:pg,T:pg
+2024-02-18 16:21:22,866 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-02-18 16:22:03,215 [run_or_mx.py-167] INFO:  check rule is : Default
+2024-02-18 16:22:03,354 [run_or_mx.py-576] INFO: S:pg,T:pg
+2024-02-18 16:22:03,544 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-02-18 16:22:03,636 [checker.py-338] INFO: value check sucessfully
+2024-02-18 16:22:03,755 [checker.py-115] INFO: |total_count   check|source:200 target:200
+2024-02-18 16:22:03,801 [checker.py-136] INFO: count check successfully
+2024-02-18 16:22:03,811 [run_or_mx.py-576] INFO: S:pg,T:pg
+2024-02-18 16:22:04,012 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-02-18 16:22:04,106 [checker.py-338] INFO: value check sucessfully
+2024-02-18 16:22:04,262 [checker.py-115] INFO: |total_count   check|source:200 target:200
+2024-02-18 16:22:04,309 [checker.py-136] INFO: count check successfully
+2024-02-18 16:22:04,319 [run_or_mx.py-576] INFO: S:pg,T:pg
+2024-02-18 16:22:04,526 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-02-18 16:22:04,623 [checker.py-338] INFO: value check sucessfully
+2024-02-18 16:22:04,739 [checker.py-115] INFO: |total_count   check|source:200 target:200
+2024-02-18 16:22:04,787 [checker.py-136] INFO: count check successfully

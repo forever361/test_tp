@@ -21,11 +21,52 @@
 
 
 {% block content %}
-{#<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex; ">#}
+{#
+<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex; ">#}
     <div style=" margin: 20px; margin-bottom: 100px " class="card">
-         <div class="card-body" style="padding:10px;">
+        <div class="card-body" style="padding:10px;">
             <div class="container">
-                <h4>Team Management</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4>Team Management</h4>
+
+                    <button class="btn btn-primary new-team-button">Add New Team
+                    </button>
+
+                </div>
+
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="add-team-modal"
+                     aria-labelledby="offcanvasRightLabel_new">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasRightLabel_new">Add new team</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="new-team-name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="new-team-name"
+                                       placeholder="team name">
+                            </div>
+
+                        </form>
+
+                        <div style="margin-top:20px">
+                            <div style="width:80%; margin:auto; text-align:center">
+                                <button style="float:left" type="button" class="btn btn-danger"
+                                        data-bs-dismiss="modal">Close
+                                </button>
+                                <button style="float:right" type="button" class="btn btn-success" id="save-new-team">
+                                    Save
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
 
                 <!-- Permission Form -->
                 <div style="margin-top: 10px" class="row">
@@ -288,9 +329,9 @@
         });
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         // 为所有的 Switch 控件添加点击事件监听器
-        $(document).on('change', '.form-check-input', function() {
+        $(document).on('change', '.form-check-input', function () {
             var isChecked = $(this).prop('checked');
             var row = $(this).closest('tr');
             var staffId = row.find('td:eq(0)').text(); // 获取当前行的 teamId，根据具体数据结构进行修改
@@ -312,11 +353,11 @@
             method: 'POST',
             data: JSON.stringify(bodydata),
             contentType: 'application/json',
-            success: function(response) {
+            success: function (response) {
                 // 处理请求成功的情况
                 console.log(response);
             },
-            error: function(error) {
+            error: function (error) {
                 // 处理请求失败的情况
                 console.error(error);
             }
@@ -355,6 +396,47 @@
 </script>
 
 
+<script>
+
+     $(document).on('click', '.new-team-button', function () {
+         $('#add-team-modal').offcanvas('show');
+     })
+
+     $('#save-new-team').click(function () {
+        // Get the values of the new row from the form fields
+        const team_name = $('#new-team-name').val();
+
+        // Hide the modal dialog
+        $('#add-team-modal').offcanvas('hide');
+
+        // addRow function
+        $.ajax({
+            url: '/add_new_team',
+            type: 'POST',
+            data: JSON.stringify({
+                'team_name': team_name,
+            }),
+            contentType: 'application/json',
+            success: function (data) {
+                    console.info(data)
+                    toastr.success('new team added successfully!');
+                    $('#add-row-modal').offcanvas('hide');
+                    $('#table').bootstrapTable('refresh');
+
+            },
+            error: function () {
+                $('#add-row-modal').offcanvas('hide');
+                toastr.error('failed to add new team!');
+                $('#table').bootstrapTable('refresh');
+
+            }
+        });
+
+    });
+
+
+
+</script>
 
 
 

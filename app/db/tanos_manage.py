@@ -650,6 +650,11 @@ class tanos_manage():
 
         return result
 
+    def add_team(self,team_name):
+        sql = """INSERT INTO tanos.team (name,group_ids)\
+          VALUES ('{}','{}')""" \
+            .format(team_name, '{1005}')
+        useDB.useDB().executesql(sql)
 
 
 if __name__ == '__main__':
