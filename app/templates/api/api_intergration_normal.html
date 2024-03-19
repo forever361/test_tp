@@ -50,9 +50,14 @@
 
     /* Tab content styles */
     .tab-pane {
-        padding: 1rem;
+        padding-left: 5px;
+        padding-top: 5px;
         border: 1px solid #dee2e6;
         border-top: none;
+    }
+
+    .col-8{
+        padding: 0;
     }
 
     .custom-toast {
@@ -73,7 +78,7 @@
 {% block content %}
 
 <div style="background-color: #eee; height:100%; width:100%; overflow-y:auto;  ">
-    <div class="row" style="margin: 0 auto; width:85%; ">
+    <div class="row" style="margin: 0 auto; width:95%; ">
         <!--        <div class="row" style="margin: 0 auto; margin-top: 10px">-->
         <!--            <div class="card" id="card_getname">-->
         <!--                <div class="card-body" style="padding:7px">-->
@@ -160,14 +165,14 @@
                 <ul class="nav nav-tabs mb-3" role="tablist" style="margin-bottom: 0.1px!important">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#input"
-                                style="height: 30px; display: flex; align-items: center;"
-                                type="button" role="tab" aria-controls="input" aria-selected="true">Input
+                                style="height: 35px; width:200px; text-align: center;  "
+                                type="button" role="tab" aria-controls="input" aria-selected="true">INPUT
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output"
-                                style="height: 30px; display: flex; align-items: center;"
-                                type="button" role="tab" aria-controls="output" aria-selected="false">Output
+                                style="height: 35px; width:200px;  text-align: center;"
+                                type="button" role="tab" aria-controls="output" aria-selected="false">OUTPUT
                         </button>
                     </li>
                 </ul>
@@ -232,7 +237,7 @@
                                 <hr style="margin: 5px"/>
                                 <form>
                                     <div class="row">
-                                        <div class="col-md-7">
+                                        <div class="col-md-11">
                                             <label>Body Type:</label>
                                             <div class="form-check form-check-inline" style="margin-left: 20px">
                                                 <input class="form-check-input" type="radio"
