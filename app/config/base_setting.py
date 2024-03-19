@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = "nerver guess"
 #session life time
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=1200)
 
-app.config['SAML_PATH'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'saml')
+app.config['SAML_PATH'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'saml_test')
 
 # DOMAIN = {
 #     "WWW":"https://chinadataplatform.cds.dev.ali.cloud.cn.hsbc:8889",

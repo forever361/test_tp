@@ -179,4 +179,3 @@ CREATE TABLE IF NOT EXISTS tanos.data_batch_test_case
 
 test
 
-

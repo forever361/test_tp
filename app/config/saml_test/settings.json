@@ -4,11 +4,11 @@
     "sp": {
         "entityId": "testapp03-dev",
         "assertionConsumerService": {
-            "url": "https://www.aixint.cn:8889/login/callback",
+            "url": "https://www.kund.fun:8889/login/callback",
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
         },
         "singleLogoutService": {
-            "url": "https://127.0.0.1:8100/logout/callback",
+            "url": "https://www.kund.fun:8889/logout/callback",
             "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
         },
         "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
