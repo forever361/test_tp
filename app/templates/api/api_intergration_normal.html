@@ -1,28 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}UI自动化 测试平台 - test suite{% endblock %}
+
+{% block head %}
+{% endblock %}
 
 {% block js %}
-<script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
-<link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+    <script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+    <link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
 
-<script src="/static/tanos/bootbox.all.min.js"></script>
-<script src="/static/tanos/popper.js"></script>
-<script src="/static/tanos/toastr.min.js"></script>
-<link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+    <script src="/static/tanos/bootbox.all.min.js"></script>
+    <script src="/static/tanos/popper.js"></script>
+    <script src="/static/tanos/toastr.min.js"></script>
+    <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
 
-<!-- Bootstrap Font Icon CSS -->
-<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
+    <!-- Bootstrap Font Icon CSS -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
 
-<!--<script src="/static/tanos/data_connect.js"></script>-->
-<link rel="stylesheet" href="./static/codemirror/lib/codemirror.css"/>
-<script src="./static/codemirror/lib/codemirror.js"></script>
-<script src=./static/codemirror/mode/shell/shell.js></script>
+    <!--<script src="/static/tanos/data_connect.js"></script>-->
+    <link rel="stylesheet" href="./static/codemirror/lib/codemirror.css"/>
+    <script src="./static/codemirror/lib/codemirror.js"></script>
+    <script src=./static/codemirror/mode/shell/shell.js></script>
 
-<!-- clipboard.js -->
-<script src="/static/tanos/clipboard.min.js"></script>
-<!--    <script src={{buildStaticUrl('/tanos/clipboard.min.js')}}></script>-->
+    <!-- clipboard.js -->
+    <script src="/static/tanos/clipboard.min.js"></script>
+    <!--    <script src={{buildStaticUrl('/tanos/clipboard.min.js')}}></script>-->
 
+
+{% endblock %}
 
 <style>
     /* Active tab styles */
@@ -56,7 +61,7 @@
         border-top: none;
     }
 
-    .col-8{
+    .col-8 {
         padding: 0;
     }
 
@@ -71,594 +76,598 @@
     }
 
 
-</style>
 
-{% endblock %}
+
+
+</style>
 
 {% block content %}
 
-<div style="background-color: #eee; height:100%; width:100%; overflow-y:auto;  ">
-    <div class="row" style="margin: 0 auto; width:95%; ">
-        <!--        <div class="row" style="margin: 0 auto; margin-top: 10px">-->
-        <!--            <div class="card" id="card_getname">-->
-        <!--                <div class="card-body" style="padding:7px">-->
-        <!--                    <form class="d-flex align-items-center" style="display: flex;">-->
-
-        <!--                        <input style="width: 400px;height: 28px"  type="text" class="form-control" id="apiName"-->
-        <!--                               value={{ api_name }}>-->
-        <!--                        <button id="get-api-btn" type="button" class="btn btn-primary "-->
-        <!--                                style="margin-left: 10px; height: 30px; display: flex; align-items: center;">-->
-        <!--                            Get API-->
-        <!--                            information-->
-        <!--                        </button>-->
-        <!--                    </form>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-
-        <div class="row" style="margin: 0 auto; margin-top: 15px">
-            <div class="card" id="card_sendAPI">
-                <div class="card-body" style="padding:7px">
-                    <form class="d-flex align-items-center" style="display: flex;">
-                        <select style="width: 100px; margin-right: 10px;height: 30px;font-size: 14px;"
-                                class="form-select" id="type_option">
-                            <option>POST</option>
-                            <option>GET</option>
-                        </select>
-                        <input style="height: 30px" type="text" class="form-control" id="apiurl"
-                               placeholder="Enter your Request URL"
-                        >
-                        <button id="run_api_btn" type="button" class="btn btn-success "
-                                style="margin-left: 10px;height: 30px; display: flex; align-items: center;">Send
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" style="margin: 0 auto; ">
-
-            <div id=1 style=" margin-top: 15px; height: 350px"
-                 class="card col-4">
-                <div class="card-body" style="padding:10px; overflow-y: auto; max-height: calc(100% - 10px);">
-                    <form>
-                        <!--                        <div class="mb-3" style="display: flex;">-->
-                        <!--                            <label class="form-label">Token:</label>-->
-                        <!--                            <div style="margin-left: 20px; width: 100%">-->
-                        <!--                                <input style="height: 30px" type="text" class="form-control" id="userToken" placeholder="Enter your token">-->
-                        <!--                            </div>-->
-
-                        <!--                        </div>-->
-                        <div class="mb-3" style="display: flex;">
-                            <label class="form-label">Response Format:</label>
-                            <div style="display: flex; margin-left: 20px">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                           id="flexRadioDefault1" checked>
-                                    <label style="font-size:12px" class="form-check-label" for="flexRadioDefault1">
-                                        JSON
-                                    </label>
-                                </div>
-                                <div class="form-check" style="margin-left: 20px">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                           id="flexRadioDefault2">
-                                    <label style="font-size:12px" class="form-check-label" for="flexRadioDefault2">
-                                        XML
-                                    </label>
-                                </div>
-                            </div>
 
 
+
+
+
+    <div style=" margin: 20px; margin-bottom: 100px " class="card">
+
+        <div style="background-color: #eee;  overflow-y:auto;  ">
+            <div class="row" style="margin: 0 auto; width:95%; ">
+                <!--        <div class="row" style="margin: 0 auto; margin-top: 10px">-->
+                <!--            <div class="card" id="card_getname">-->
+                <!--                <div class="card-body" style="padding:7px">-->
+                <!--                    <form class="d-flex align-items-center" style="display: flex;">-->
+
+                <!--                        <input style="width: 400px;height: 28px"  type="text" class="form-control" id="apiName"-->
+                <!--                               value={{ api_name }}>-->
+                <!--                        <button id="get-api-btn" type="button" class="btn btn-primary "-->
+                <!--                                style="margin-left: 10px; height: 30px; display: flex; align-items: center;">-->
+                <!--                            Get API-->
+                <!--                            information-->
+                <!--                        </button>-->
+                <!--                    </form>-->
+                <!--                </div>-->
+                <!--            </div>-->
+                <!--        </div>-->
+
+                <div class="row" style="margin: 0 auto; margin-top: 15px">
+                    <div class="card" id="card_sendAPI">
+                        <div class="card-body" style="padding:7px">
+                            <form class="d-flex align-items-center" style="display: flex;">
+                                <select style="width: 100px; margin-right: 10px;height: 30px;font-size: 14px;"
+                                        class="form-select" id="type_option">
+                                    <option>POST</option>
+                                    <option>GET</option>
+                                </select>
+                                <input style="height: 30px" type="text" class="form-control" id="apiurl"
+                                       placeholder="Enter your Request URL"
+                                >
+                                <button id="run_api_btn" type="button" class="btn btn-success "
+                                        style="margin-left: 10px;height: 30px;width:200px;  display: flex;align-items: center;justify-content: center;">
+                                    Send
+                                </button>
+                            </form>
                         </div>
-
-                        <button style="height: 30px; display: flex; align-items: center;"
-                                type="submit" class="btn btn-primary " id="resetBtn">Reset
-                        </button>
-                    </form>
+                    </div>
                 </div>
 
+                <div class="row" style="margin: 0 auto; ">
 
-            </div>
+                    <div id=1 style=" margin-top: 15px; " class="card col-12">
+                        <div class="card-body" style="padding:7px; ">
+                            <form>
+                                <div class="d-flex align-items-center" style="display: flex; ">
+                                    <label class="form-label"
+                                           style="margin-right: 10px; margin-bottom: 0; line-height: 30px;">Token:</label>
+                                    <input style="height: 30px" type="text" class="form-control" id="userToken"
+                                           placeholder="Enter your token">
 
-            <div class="col-8" style="margin-top: 15px">
-
-                <ul class="nav nav-tabs mb-3" role="tablist" style="margin-bottom: 0.1px!important">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#input"
-                                style="height: 35px; width:200px; text-align: center;  "
-                                type="button" role="tab" aria-controls="input" aria-selected="true">INPUT
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output"
-                                style="height: 35px; width:200px;  text-align: center;"
-                                type="button" role="tab" aria-controls="output" aria-selected="false">OUTPUT
-                        </button>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="input" role="tabpanel" aria-labelledby="input-tab">
-                        <div id="2" style=" margin-bottom: 5px" class="card">
-                            <div class="card-body" style="padding:7px">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h6>Headers</h6>
-                                    <button style="height: 30px; display: flex; align-items: center;"
-                                            type="button" class="btn btn-primary" id="add-header-row">Add
+                                    <button style="margin-left: 10px; height: 30px; display: flex; align-items: center;"
+                                            type="submit" class="btn btn-primary " id="resetBtn">Reset
                                     </button>
                                 </div>
-                                <hr style="margin: 0.1px"/>
-                                <form>
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-hover align-middle">
-                                            <thead style="background-color: #b0bec5">
-                                            <tr>
-                                                <th scope="col">Header Name</th>
-                                                <th scope="col">Header Value</th>
-                                                <th scope="col"></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="headers-table-body">
-                                            <tr>
-                                                <td><input style="height: 30px" type="text" class="form-control"
-                                                           placeholder="content-type" value="content-type"></td>
-                                                <td><input style="height: 30px" type="text" class="form-control"
-                                                           placeholder="application/json" value="application/json"></td>
-                                                <td>
-                                                    <button style="margin-left: 10px;height: 30px; display: flex; align-items: center;"
-                                                            type="button" class="btn btn-primary delete-header-row">
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <!--                                            <tr>-->
-                                            <!--                                                <td><input style="height: 30px" type="text" class="form-control"-->
-                                            <!--                                                           placeholder="Header Name"></td>-->
-                                            <!--                                                <td><input style="height: 30px" type="text" class="form-control"-->
-                                            <!--                                                           placeholder="Header Value"></td>-->
-                                            <!--                                                <td>-->
-                                            <!--                                                    <button style="height: 30px; display: flex; align-items: center;"-->
-                                            <!--                                                            type="button" class="btn btn-primary delete-header-row">-->
-                                            <!--                                                        Delete-->
-                                            <!--                                                    </button>-->
-                                            <!--                                                </td>-->
-                                            <!--                                            </tr>-->
-                                            <!-- add more rows here as needed -->
-                                            </tbody>
-                                        </table>
-                                    </div>
 
-                                </form>
-                            </div>
+
+                            </form>
                         </div>
-                        <div id="3" style="  margin-bottom: 1px" class="card">
-                            <div class="card-body" style="padding: 7px">
-                                <h6>Request Parameters</h6>
-                                <hr style="margin: 5px"/>
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-11">
-                                            <label>Body Type:</label>
-                                            <div class="form-check form-check-inline" style="margin-left: 20px">
-                                                <input class="form-check-input" type="radio"
-                                                       name="request-body-type"
-                                                       id="json" value="json" checked>
-                                                <label style="font-size:12px" class="form-check-label"
-                                                       for="json">JSON</label>
+
+
+                    </div>
+
+                    <div style="margin-top: 15px" class="card col-12">
+
+                        <ul class="nav nav-tabs mb-3" role="tablist" style="margin-bottom: 0.1px!important">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="input-tab" data-bs-toggle="tab"
+                                        data-bs-target="#input"
+                                        style="height: 35px; width:200px; text-align: center; display: flex;align-items: center;justify-content: center; background-color: #007bff; color: #fff;"
+                                        type="button" role="tab" aria-controls="input" aria-selected="true">
+                                    <i class="fas fa-arrow-circle-down" style="margin-right: 5px;"></i> Input
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="output-tab" data-bs-toggle="tab" data-bs-target="#output"
+                                        style="height: 35px; width:200px;  text-align: center; display: flex;align-items: center;justify-content: center; background-color: #28a745; color: #fff;"
+                                        type="button" role="tab" aria-controls="output" aria-selected="false">
+                                    <i class="fas fa-arrow-circle-up" style="margin-right: 5px;"></i> Output
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="input" role="tabpanel"
+                                 aria-labelledby="input-tab">
+                                <div id="2" style=" margin-bottom: 5px" class="card">
+                                    <div class="card-body" style="padding:7px">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h6>Headers</h6>
+                                            <button style="height: 30px; display: flex; align-items: center; width:65px;justify-content: center;"
+                                                    type="button" class="btn btn-primary" id="add-header-row">Add
+                                            </button>
+                                        </div>
+                                        <hr style="margin: 0.1px"/>
+                                        <form>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-hover align-middle">
+                                                    <thead style="background-color: #b0bec5">
+                                                    <tr>
+                                                        <th scope="col">Header Name</th>
+                                                        <th scope="col">Header Value</th>
+                                                        <th scope="col"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="headers-table-body">
+                                                    <tr>
+                                                        <td><input style="height: 30px" type="text" class="form-control"
+                                                                   placeholder="content-type" value="content-type"></td>
+                                                        <td><input style="height: 30px" type="text" class="form-control"
+                                                                   placeholder="application/json"
+                                                                   value="application/json">
+                                                        </td>
+                                                        <td>
+                                                            <button style="margin-left: 10px;height: 30px; display: flex; align-items: center;"
+                                                                    type="button"
+                                                                    class="btn btn-primary delete-header-row">
+                                                                Delete
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <!--                                            <tr>-->
+                                                    <!--                                                <td><input style="height: 30px" type="text" class="form-control"-->
+                                                    <!--                                                           placeholder="Header Name"></td>-->
+                                                    <!--                                                <td><input style="height: 30px" type="text" class="form-control"-->
+                                                    <!--                                                           placeholder="Header Value"></td>-->
+                                                    <!--                                                <td>-->
+                                                    <!--                                                    <button style="height: 30px; display: flex; align-items: center;"-->
+                                                    <!--                                                            type="button" class="btn btn-primary delete-header-row">-->
+                                                    <!--                                                        Delete-->
+                                                    <!--                                                    </button>-->
+                                                    <!--                                                </td>-->
+                                                    <!--                                            </tr>-->
+                                                    <!-- add more rows here as needed -->
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="request-body-type"
-                                                       id="xml" value="xml">
-                                                <label style="font-size:12px" class="form-check-label"
-                                                       for="xml">XML</label>
+
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="3" style="  margin-bottom: 1px" class="card">
+                                    <div class="card-body" style="padding: 7px; ">
+                                        <h6>Request Parameters</h6>
+                                        <hr style="margin: 5px"/>
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-11 d-flex align-items-center">
+                                                    <label>Body Type:</label>
+                                                    <div class="form-check form-check-inline d-flex align-items-center"
+                                                         style="margin-left: 20px">
+                                                        <input class="form-check-input" type="radio"
+                                                               name="request-body-type"
+                                                               id="json" value="json" checked>
+                                                        <label style="font-size:12px" class="form-check-label"
+                                                               for="json">JSON</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline d-flex align-items-center"
+                                                         style="margin-left: 20px">
+                                                        <input class="form-check-input" type="radio"
+                                                               name="request-body-type"
+                                                               id="xml" value="xml">
+                                                        <label style="font-size:12px" class="form-check-label"
+                                                               for="xml">XML</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline d-flex align-items-center"
+                                                         style="margin-left: 20px">
+                                                        <input class="form-check-input" type="radio"
+                                                               name="request-body-type"
+                                                               id="form-data" value="form-data">
+                                                        <label style="font-size:12px" class="form-check-label"
+                                                               for="form-data">Form-Data</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline d-flex align-items-center"
+                                                         style="margin-left: 20px">
+                                                        <input class="form-check-input" type="radio"
+                                                               name="request-body-type"
+                                                               id="text" value="text">
+                                                        <label style="font-size:12px" class="form-check-label"
+                                                               for="text">Text</label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="request-body-type"
-                                                       id="form-data" value="form-data">
-                                                <label style="font-size:12px" class="form-check-label" for="form-data">Form-Data</label>
+
+                                            <div class="row" style="margin-top: 15px;">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="request-body-content" style="margin-bottom: 10px">Body
+                                                            Content:</label>
+                                                        <textarea class="form-control" id="request-body-content"
+                                                                  rows="1"></textarea>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                       name="request-body-type"
-                                                       id="text" value="text">
-                                                <label style="font-size:12px" class="form-check-label"
-                                                       for="text">Text</label>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="output" role="tabpanel" aria-labelledby="output-tab">
+                                <div id="4" style=" margin-bottom: 10px" class="card">
+                                    <div class="card-body">
+                                        <h5>Response</h5>
+                                        <hr/>
+                                        <div class="form-group" style="margin-bottom: 20px; display: flex;">
+                                            <label for="response-code" style="width: 150px">Response Code:</label>
+                                            <input type="text" class="form-control" id="response-code"
+                                                   placeholder="Response code">
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 15px; display: flex;">
+                                            <label for="response-time" style="width: 150px">Response Time:</label>
+                                            <input type="text" class="form-control" id="response-time"
+                                                   placeholder="Response time">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="response-body" style="margin-bottom: 10px">Response
+                                                Body:</label>
+                                            <textarea class="form-control" id="response-body" rows="20"></textarea>
+                                            <div style="display: flex;">
+                                                <button class="btn btn-outline-secondary" style="margin-top: 15px"
+                                                        type="button" id="copyButton"
+                                                        data-clipboard-target="#response-body"
+                                                        data-clipboard-action="copy">
+                                                    Copy
+                                                </button>
+                                                <div class="toast-container align-items-center custom-toast "
+                                                     style="z-index: 5; margin-left: 70px"></div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="row" style="margin-top: 15px">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="request-body-content" style="margin-bottom: 10px">Body
-                                                    Content:</label>
-                                                <textarea class="form-control" id="request-body-content"
-                                                          rows="20"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="output" role="tabpanel" aria-labelledby="output-tab">
-                        <div id="4" style=" margin-bottom: 10px" class="card">
-                            <div class="card-body">
-                                <h5>Response</h5>
-                                <hr/>
-                                <div class="form-group" style="margin-bottom: 20px; display: flex;">
-                                    <label for="response-code" style="width: 150px">Response Code:</label>
-                                    <input type="text" class="form-control" id="response-code"
-                                           placeholder="Response code">
-                                </div>
-                                <div class="form-group" style="margin-bottom: 15px; display: flex;">
-                                    <label for="response-time" style="width: 150px">Response Time:</label>
-                                    <input type="text" class="form-control" id="response-time"
-                                           placeholder="Response time">
-                                </div>
-                                <div class="form-group">
-                                    <label for="response-body" style="margin-bottom: 10px">Response Body:</label>
-                                    <textarea class="form-control" id="response-body" rows="20"></textarea>
-                                    <div style="display: flex;">
-                                        <button class="btn btn-outline-secondary" style="margin-top: 15px"
-                                                type="button" id="copyButton"
-                                                data-clipboard-target="#response-body" data-clipboard-action="copy">
-                                            Copy
-                                        </button>
-                                        <div class="toast-container align-items-center custom-toast "
-                                             style="z-index: 5; margin-left: 70px"></div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
+
                 </div>
-
             </div>
 
-
         </div>
+
     </div>
 
-</div>
-
-<script>
+    <script>
 
 
-    var req_CodeMirror
-    $(document).ready(function () {
-        req_CodeMirror = CodeMirror.fromTextArea(document.getElementById("request-body-content"), {
-            lineNumbers: true,
-            mode: "shell",
+        var req_CodeMirror
+        $(document).ready(function () {
+            req_CodeMirror = CodeMirror.fromTextArea(document.getElementById("request-body-content"), {
+                lineNumbers: true,
+                mode: "shell",
+
+            });
+
         });
 
-    });
 
-
-    var res_CodeMirror
-    $(document).ready(function () {
-        res_CodeMirror = CodeMirror.fromTextArea(document.getElementById("response-body"), {
-            lineNumbers: true,
-            mode: "shell",
-            readOnly: true,
+        var res_CodeMirror
+        $(document).ready(function () {
+            res_CodeMirror = CodeMirror.fromTextArea(document.getElementById("response-body"), {
+                lineNumbers: true,
+                mode: "shell",
+                readOnly: true,
+            });
         });
-    });
 
 
-</script>
+    </script>
 
-<script>
+    <script>
 
-    //复制功能
-    var copyButton = document.getElementById('copyButton');
-    var clipboard = new ClipboardJS(copyButton, {
-        text: function () {
-            return res_CodeMirror.getValue();
-        }
-    });
-
-
-    clipboard.on('success', function (e) {
-        console.info("成功")
-        const toast = document.createElement("div");
-        toast.classList.add("toast", "bg-secondary");
-        toast.setAttribute("role", "alert");
-        toast.setAttribute("aria-live", "assertive");
-        toast.setAttribute("aria-atomic", "true");
-        toast.setAttribute("data-bs-delay", "700");  // 设置 toast 弹出时长为 3 秒
-        toast.innerHTML = '<div class="toast-body text-white">Copied to clipboard</div>';
-        const toastContainer = document.querySelector(".toast-container");
-        toastContainer.appendChild(toast);
-        const bootstrapToast = new bootstrap.Toast(toast);
-        bootstrapToast.show();
-
-    });
-
-
-    $(document).ready(function () {
-        // 绑定重置按钮的点击事件
-        $('#resetBtn').click(function () {
-            window.location.href = 'http://127.0.0.1:8889/api_intergration';
+        //复制功能
+        var copyButton = document.getElementById('copyButton');
+        var clipboard = new ClipboardJS(copyButton, {
+            text: function () {
+                return res_CodeMirror.getValue();
+            }
         });
-    });
 
 
-</script>
+        clipboard.on('success', function (e) {
+            console.info("成功")
+            const toast = document.createElement("div");
+            toast.classList.add("toast", "bg-secondary");
+            toast.setAttribute("role", "alert");
+            toast.setAttribute("aria-live", "assertive");
+            toast.setAttribute("aria-atomic", "true");
+            toast.setAttribute("data-bs-delay", "700");  // 设置 toast 弹出时长为 3 秒
+            toast.innerHTML = '<div class="toast-body text-white">Copied to clipboard</div>';
+            const toastContainer = document.querySelector(".toast-container");
+            toastContainer.appendChild(toast);
+            const bootstrapToast = new bootstrap.Toast(toast);
+            bootstrapToast.show();
+
+        });
 
 
-<script>
+        $(document).ready(function () {
+            // 绑定重置按钮的点击事件
+            $('#resetBtn').click(function () {
+                window.location.href = 'http://127.0.0.1:8889/api_intergration';
+            });
+        });
 
-    $(document).ready(function () {
 
-        $("#get-api-btn").click(function () {
+    </script>
 
-            var apiName = $('#apiName').val().trim();
 
-            if (apiName === '') {
-                toastr.error('Please enter API name!');
-            } else {
-                // 获取按钮元素
-                var btn = $('#get-api-btn');
+    <script>
 
-                // 禁用按钮并添加旋转加载器
-                btn.prop('disabled', true);
-                btn.html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Loading...');
+        $(document).ready(function () {
 
-                // 在这里使用 userToken 变量，如将其发送给服务器等
+            $("#get-api-btn").click(function () {
+
+                var apiName = $('#apiName').val().trim();
+
+                if (apiName === '') {
+                    toastr.error('Please enter API name!');
+                } else {
+                    // 获取按钮元素
+                    var btn = $('#get-api-btn');
+
+                    // 禁用按钮并添加旋转加载器
+                    btn.prop('disabled', true);
+                    btn.html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Loading...');
+
+                    // 在这里使用 userToken 变量，如将其发送给服务器等
+                    var data = {
+                        APIname: apiName,
+                        Authorization: userToken,
+                    };
+
+                    // 发起POST请求
+                    $.ajax({
+                        url: "/get_api_detail2",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            btn.prop('disabled', false);
+                            btn.html('Get API information');
+
+                            // console.info(data.headers)
+                            var response = data
+
+                            if (response === 'Something wrong!') {
+                                toastr.error('Please check API name!');
+                            } else {
+
+                                // 将响应的Headers填充到前端UI中
+                                var headersTable = $("#input #2 table tbody");
+                                headersTable.empty();
+                                $.each(response['headers'], function (key, value) {
+                                    var newRow = $("<tr><td><input style='height: 30px' type='text' class='form-control' value='" + key + "'></td><td><input style='height: 30px' type='text' class='form-control' value='" + value + "'></td><td><button style='height: 30px; display: flex; align-items: center;' type='button' class='btn btn-primary delete-header-row'>Delete</button></td></tr>");
+                                    headersTable.append(newRow);
+                                });
+
+
+                                // 切换到Input选项卡
+                                $("#input-tab").tab("show");
+
+                                req_CodeMirror.setValue(JSON.stringify(response['request_params'], null, 2));
+                                req_CodeMirror.refresh();
+
+
+                                // 将响应的Request Parameters填充到前端UI中
+                                var apiurl = $("#apiurl");
+                                apiurl.val(response['apiurl']);
+
+
+                                const headersTableBody = document.querySelector('#headers-table-body');
+                                const rows = headersTableBody.querySelectorAll('tr');
+                                for (let i = 0; i < rows.length; i++) {
+                                    const cells = rows[i].querySelectorAll('td');
+                                    if (cells[0].querySelector('input').value === 'Authorization') {
+                                        const input_token = cells[1].querySelector('input');
+                                        input_token.value = userToken;
+                                        input_token.classList.add('disabled-input');
+                                        input_token.setAttribute('readonly', 'readonly');
+                                        input_token.style.pointerEvents = 'none'; // 禁用点击事件
+                                        break;
+                                    }
+                                }
+
+
+                                toastr.success('get API successfully!');
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            // 将响应的Request Parameters填充到前端UI中
+                        }
+                    });
+
+                }
+
+            });
+        });
+
+
+        $(document).ready(function () {
+
+            $(document).on('click', '#run_api_btn', function () {
+                var request_type = $('#type_option').val();
+
+                var send_url = $("#apiurl").val();
+                var send_body = req_CodeMirror.getValue();
+
+                if (send_body) {
+                    send_body = JSON.stringify(JSON.parse(send_body));
+                } else {
+                    send_body = '';
+                }
+
+
+                var res_code = $("#response-code");
+                var res_body = $("#response-body")
+
+                console.info(request_type)
+                const $btn = $(this);
+                const $loadingBtn = $('<button class="btn  btn-warning h-100" style="width: 70px; margin-left: 10px"><span class="spinner-border spinner-border-sm" disabled></button>');
+
+
+                const responseStartTime = performance.now();
+
+
+                const headersTableBody = document.querySelector('#headers-table-body');
+                const rows = headersTableBody.querySelectorAll('tr');
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].querySelectorAll('td');
+                    if (cells[0].querySelector('input').value === 'Authorization') {
+                        cells[1].querySelector('input').value = userToken;
+                        break;
+                    }
+                }
+
+                var send_headers = {};
+                $("tbody tr").each(function () {
+                    var headerName = $(this).find("td:first-child input").val();
+                    var headerValue = $(this).find("td:nth-child(2) input").val();
+                    send_headers[headerName] = headerValue;
+                });
+                send_headers = JSON.stringify(send_headers);
+
                 var data = {
-                    APIname: apiName,
-                    Authorization: userToken,
+                    send_url: send_url,
+                    send_headers: send_headers === "" ? "" : JSON.parse(send_headers),
+                    send_body: send_body === "" ? "" : JSON.parse(send_body),
                 };
 
-                // 发起POST请求
-                $.ajax({
-                    url: "/get_api_detail2",
-                    type: "POST",
-                    data: JSON.stringify(data),
-                    contentType: 'application/json',
-                    success: function (data) {
-                        btn.prop('disabled', false);
-                        btn.html('Get API information');
 
-                        // console.info(data.headers)
-                        var response = data
+                $btn.replaceWith($loadingBtn);
+                if (request_type === "POST") {
+                    // 发起POST请求
+                    $.ajax({
+                        url: "/run_api_post",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $("#output-tab").tab("show");
+                            $btn.prop('disabled', false);
+                            $loadingBtn.replaceWith($btn);
 
-                        if (response === 'Something wrong!') {
-                            toastr.error('Please check API name!');
-                        } else {
+                            if (data['response_code'] === 200) {
+                                res_code.val(data['response_code'] + " OK").css({
+                                    'color': 'green',
+                                });
+                                toastr.success('test successfully!');
+                                res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
+                                res_CodeMirror.refresh();
+                            } else {
+                                res_code.val(data['response_code']).css({'color': 'red',});
+                                toastr.error('fail to test!');
 
-                            // 将响应的Headers填充到前端UI中
-                            var headersTable = $("#input #2 table tbody");
-                            headersTable.empty();
-                            $.each(response['headers'], function (key, value) {
-                                var newRow = $("<tr><td><input style='height: 30px' type='text' class='form-control' value='" + key + "'></td><td><input style='height: 30px' type='text' class='form-control' value='" + value + "'></td><td><button style='height: 30px; display: flex; align-items: center;' type='button' class='btn btn-primary delete-header-row'>Delete</button></td></tr>");
-                                headersTable.append(newRow);
-                            });
-
-
-                            // 切换到Input选项卡
-                            $("#input-tab").tab("show");
-
-                            req_CodeMirror.setValue(JSON.stringify(response['request_params'], null, 2));
-                            req_CodeMirror.refresh();
-
-
-                            // 将响应的Request Parameters填充到前端UI中
-                            var apiurl = $("#apiurl");
-                            apiurl.val(response['apiurl']);
-
-
-
-                            const headersTableBody = document.querySelector('#headers-table-body');
-                            const rows = headersTableBody.querySelectorAll('tr');
-                            for (let i = 0; i < rows.length; i++) {
-                                const cells = rows[i].querySelectorAll('td');
-                                if (cells[0].querySelector('input').value === 'Authorization') {
-                                    const input_token = cells[1].querySelector('input');
-                                    input_token.value = userToken;
-                                    input_token.classList.add('disabled-input');
-                                    input_token.setAttribute('readonly', 'readonly');
-                                    input_token.style.pointerEvents = 'none'; // 禁用点击事件
-                                    break;
+                                try {
+                                    res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
+                                } catch (error) {
+                                    res_CodeMirror.setValue(data['response_text'])
                                 }
+
+                                res_CodeMirror.refresh();
                             }
 
+                            const responseTime = performance.now() - responseStartTime;
+                            const responseTimeInput = document.getElementById("response-time");
+                            responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
 
-                            toastr.success('get API successfully!');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            $("#output-tab").tab("show");
+                            $btn.prop('disabled', false);
+                            $loadingBtn.replaceWith($btn);
+
+                            res_code.val(data['response_code'])
+                            res_CodeMirror.setValue(data['response_text'])
+                            res_CodeMirror.refresh();
+                            toastr.error('fail to test!');
+
+                            const responseTime = performance.now() - responseStartTime;
+                            const responseTimeInput = document.getElementById("response-time");
+                            responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
                         }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
-                        // 将响应的Request Parameters填充到前端UI中
-                    }
-                });
+                    });
 
-            }
+                } else if (request_type === "GET") {
+                    // 发起POST请求
+                    $.ajax({
+                        url: "/run_api_get",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $("#output-tab").tab("show");
+                            $btn.prop('disabled', false);
+                            $loadingBtn.replaceWith($btn);
 
-        });
-    });
+                            if (data['response_code'] === 200) {
+                                res_code.val(data['response_code'] + " OK").css({
+                                    'color': 'green',
+                                });
+                                toastr.success('test successfully!');
+                                res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
+                                res_CodeMirror.refresh();
+                            } else {
+                                res_code.val(data['response_code']).css({'color': 'red'});
+                                toastr.error('fail to test!');
+
+                                try {
+                                    res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
+                                } catch (error) {
+                                    res_CodeMirror.setValue(data['response_text'])
+                                }
+                                res_CodeMirror.refresh();
+                            }
+
+                            const responseTime = performance.now() - responseStartTime;
+                            const responseTimeInput = document.getElementById("response-time");
+                            responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
 
 
-    $(document).ready(function () {
-
-        $(document).on('click', '#run_api_btn', function () {
-            var request_type = $('#type_option').val();
-
-            var send_url = $("#apiurl").val();
-            var send_body = req_CodeMirror.getValue();
-
-            if (send_body) {
-                send_body = JSON.stringify(JSON.parse(send_body));
-            } else {
-                send_body = '';
-            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            $("#output-tab").tab("show");
+                            $btn.prop('disabled', false);
+                            $loadingBtn.replaceWith($btn);
 
 
-            var res_code = $("#response-code");
-            var res_body = $("#response-body")
+                            res_code.val(data['response_code'])
+                            res_CodeMirror.setValue(data['response_text'])
+                            res_CodeMirror.refresh();
+                            toastr.error('fail to test!');
 
-            console.info(request_type)
-            const $btn = $(this);
-            const $loadingBtn = $('<button class="btn  btn-warning h-100" style="width: 70px; margin-left: 10px"><span class="spinner-border spinner-border-sm" disabled></button>');
-
-
-            const responseStartTime = performance.now();
-
-
-            const headersTableBody = document.querySelector('#headers-table-body');
-            const rows = headersTableBody.querySelectorAll('tr');
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].querySelectorAll('td');
-                if (cells[0].querySelector('input').value === 'Authorization') {
-                    cells[1].querySelector('input').value = userToken;
-                    break;
+                            const responseTime = performance.now() - responseStartTime;
+                            const responseTimeInput = document.getElementById("response-time");
+                            responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
+                        }
+                    });
                 }
-            }
 
-            var send_headers = {};
-            $("tbody tr").each(function () {
-                var headerName = $(this).find("td:first-child input").val();
-                var headerValue = $(this).find("td:nth-child(2) input").val();
-                send_headers[headerName] = headerValue;
+
             });
-            send_headers = JSON.stringify(send_headers);
-
-            var data = {
-                send_url: send_url,
-                send_headers: send_headers === "" ? "" : JSON.parse(send_headers),
-                send_body: send_body === "" ? "" : JSON.parse(send_body),
-            };
-
-
-            $btn.replaceWith($loadingBtn);
-            if (request_type === "POST") {
-                // 发起POST请求
-                $.ajax({
-                    url: "/run_api_post",
-                    type: "POST",
-                    data: JSON.stringify(data),
-                    contentType: 'application/json',
-                    success: function (data) {
-                        $("#output-tab").tab("show");
-                        $btn.prop('disabled', false);
-                        $loadingBtn.replaceWith($btn);
-
-                        if (data['response_code'] === 200) {
-                            res_code.val(data['response_code'] + " OK").css({
-                                'color': 'green',
-                            });
-                            toastr.success('test successfully!');
-                            res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
-                            res_CodeMirror.refresh();
-                        } else {
-                            res_code.val(data['response_code']).css({'color': 'red',});
-                            toastr.error('fail to test!');
-
-                            try {
-                                res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
-                            } catch (error) {
-                                res_CodeMirror.setValue(data['response_text'])
-                            }
-
-                            res_CodeMirror.refresh();
-                        }
-
-                        const responseTime = performance.now() - responseStartTime;
-                        const responseTimeInput = document.getElementById("response-time");
-                        responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
-
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
-                        $("#output-tab").tab("show");
-                        $btn.prop('disabled', false);
-                        $loadingBtn.replaceWith($btn);
-
-                        res_code.val(data['response_code'])
-                        res_CodeMirror.setValue(data['response_text'])
-                        res_CodeMirror.refresh();
-                        toastr.error('fail to test!');
-
-                        const responseTime = performance.now() - responseStartTime;
-                        const responseTimeInput = document.getElementById("response-time");
-                        responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
-                    }
-                });
-
-            } else if (request_type === "GET") {
-                // 发起POST请求
-                $.ajax({
-                    url: "/run_api_get",
-                    type: "POST",
-                    data: JSON.stringify(data),
-                    contentType: 'application/json',
-                    success: function (data) {
-                        $("#output-tab").tab("show");
-                        $btn.prop('disabled', false);
-                        $loadingBtn.replaceWith($btn);
-
-                        if (data['response_code'] === 200) {
-                            res_code.val(data['response_code'] + " OK").css({
-                                'color': 'green',
-                            });
-                            toastr.success('test successfully!');
-                            res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
-                            res_CodeMirror.refresh();
-                        } else {
-                            res_code.val(data['response_code']).css({'color': 'red'});
-                            toastr.error('fail to test!');
-
-                            try {
-                                res_CodeMirror.setValue(JSON.stringify(JSON.parse(data['response_text']), null, 2));
-                            } catch (error) {
-                                res_CodeMirror.setValue(data['response_text'])
-                            }
-                            res_CodeMirror.refresh();
-                        }
-
-                        const responseTime = performance.now() - responseStartTime;
-                        const responseTimeInput = document.getElementById("response-time");
-                        responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
-
-
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
-                        $("#output-tab").tab("show");
-                        $btn.prop('disabled', false);
-                        $loadingBtn.replaceWith($btn);
-
-
-                        res_code.val(data['response_code'])
-                        res_CodeMirror.setValue(data['response_text'])
-                        res_CodeMirror.refresh();
-                        toastr.error('fail to test!');
-
-                        const responseTime = performance.now() - responseStartTime;
-                        const responseTimeInput = document.getElementById("response-time");
-                        responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
-                    }
-                });
-            }
-
-
         });
-    });
 
 
-</script>
+    </script>
 
 
-<script>
-    const addHeaderRowButton = document.querySelector('#add-header-row');
-    const headersTableBody = document.querySelector('#headers-table-body');
+    <script>
+        const addHeaderRowButton = document.querySelector('#add-header-row');
+        const headersTableBody = document.querySelector('#headers-table-body');
 
-    addHeaderRowButton.addEventListener('click', () => {
-        const newRow = `
+        addHeaderRowButton.addEventListener('click', () => {
+            const newRow = `
                           <tr>
                             <td><input  style="height: 30px"  type="text" class="form-control" placeholder="Header Name"></td>
                             <td><input  style="height: 30px"  type="text" class="form-control" placeholder="Header Value"></td>
@@ -666,22 +675,17 @@
                               <button style="margin-left: 10px;height: 30px; display: flex; align-items: center;" type="button" class="btn btn-primary delete-header-row">Delete</button>
                             </td>
                           </tr>`;
-        headersTableBody.insertAdjacentHTML('beforeend', newRow);
-    });
+            headersTableBody.insertAdjacentHTML('beforeend', newRow);
+        });
 
-    headersTableBody.addEventListener('click', (event) => {
-        const target = event.target;
-        if (target.classList.contains('delete-header-row')) {
-            target.closest('tr').remove();
-        }
-    });
-
-
-</script>
+        headersTableBody.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('delete-header-row')) {
+                target.closest('tr').remove();
+            }
+        });
 
 
-{% if message %}
-
-{% endif %}
+    </script>
 
 {% endblock %}
