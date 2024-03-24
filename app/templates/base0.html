@@ -18,6 +18,7 @@
     {%- endblock styles %}
     {%- endblock head %}
 
+
     <title>TANOS</title>
 
 
@@ -28,7 +29,9 @@
 
     <!--    <script src="/static/tanos/all-fontawesome.js" crossorigin="anonymous"></script>-->
     <link href="/static/tanos/fontawesome-free-6.4.0-web/css/all.min.css" rel="stylesheet" type="text/css">
-{#    <link rel="stylesheet" href="/static/tanos/bootstrap-icons.css">#}
+    {#
+    <link rel="stylesheet" href="/static/tanos/bootstrap-icons.css">
+    #}
 
     <link href="/static/sb-admin-2.css" rel="stylesheet">
 
@@ -45,11 +48,40 @@
 
 
     <style>
+
+        @font-face {
+            font-family: 'HSBCMedium';
+            src: url('http://127.0.0.1:8889/static/fonts/HSBCMedium.ttf') format('truetype');
+
+        }
+
+        @font-face {
+            font-family: 'HSBCLight';
+            src: url('http://127.0.0.1:8889/static/fonts/HSBCLight.ttf') format('truetype');
+
+        }
+
+        @font-face {
+            font-family: 'HSBCThin';
+            src: url('http://127.0.0.1:8889/static/fonts/HSBCThin.ttf') format('truetype');
+
+        }
+
+                @font-face {
+            font-family: 'HSBCBold';
+            src: url('http://127.0.0.1:8889/static/fonts/HSBCBold.ttf') format('truetype');
+
+        }
+
+
+
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
             overflow: hidden;
+            /*定义菜单栏字体*/
+            font-family: 'HSBCLight';
         }
 
         .body_content {
@@ -58,12 +90,9 @@
             height: 100%;
             background-color: #eee;
             /*定义所有内容字体*/
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-family: 'HSBCThin';
 
         }
-
-
-
 
 
     </style>
