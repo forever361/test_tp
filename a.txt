@@ -10,6 +10,22 @@ _：匹配下划线。
 +：匹配前面的字符（方括号内的字符）一次或多次。
 
 
+Function Design:
+
+1.Create a New Team:
+
+Provide UI for admin to create new teams.
+Input the team name and information, then save it to the database.
+
+2.Configure Access Permissions:
+
+Provide UI for admin to define different permission settings.
+Different permission levels can be set, with corresponding permissions defined for each level.
+
+3.Member Management:
+
+Provide an interface for team owners or admin to invite new members to join the team.
+Members can be removed or leave the team.
 
 -- 创建用户团队关联表
 CREATE TABLE xcheck.user_teams (
