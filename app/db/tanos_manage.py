@@ -650,11 +650,17 @@ class tanos_manage():
 
         return result
 
-    def add_team(self,team_name):
+    def add_team(self,team_name,team_role):
         sql = """INSERT INTO tanos.team (name,group_ids)\
           VALUES ('{}','{}')""" \
-            .format(team_name, '{1005}')
+            .format(team_name, team_role)
         useDB.useDB().executesql(sql)
+
+    def delete_team(self, team_id):
+
+        sql = "DELETE FROM tanos.team WHERE team_id = '{}';".format(team_id)
+        result = useDB.useDB().executesql(sql)
+        return result
 
 
 if __name__ == '__main__':

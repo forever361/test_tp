@@ -37,10 +37,27 @@ def access_page():
     if "Admin" == team:
         teams_list = tanos_manage().get_teams()
 
+        role_mapping = {
+            "[1000]": "AdminGroup",
+            "[1001]": "Guest",
+            "[1002]": "DataTestGroup",
+            "[1003]": "APITestGroup",
+            "[1004]": "WebTestGroup",
+            "[1005]": "DelosTestGroup",
+        }
+
         for team_data in teams_list:
-            team = {"id": team_data[0], "name": team_data[1].strip()}
+
+            role_key = str(team_data[2])
+
+            if role_key in role_mapping:
+                role_name = role_mapping[role_key]
+            else:
+                role_name = "Unknown"  # 如果角色未在映射中定义，默认使用 "Unknown"
+
+            team = {"id": team_data[0], "name": team_data[1].strip(), "role":role_name}
             teams.append(team)
-        return render_template('access/access_config.html', teams=teams)
+        return render_template('access/admin_access_config.html', teams=teams)
     else:
         if is_owner:
             teams_list = tanos_manage().get_teams_owner(team)
@@ -51,6 +68,8 @@ def access_page():
             return render_template('access/access_config.html', teams=teams)
         else:
             return render_template('access/access_config_normal.html', teams=teams)
+
+
 
 @web.route('/kunkun', methods=['GET', 'POST'])
 @user.login_required
@@ -339,7 +358,21 @@ def add_new_team():
     data = request.get_json()
 
     team_name = data['team_name']
+    team_role = data['team_role']
 
-    tanos_manage().add_team(team_name)
+    tanos_manage().add_team(team_name,team_role)
 
     return jsonify({'message': 'Add success'})
+
+
+@web.route('/team/delete', methods=['POST'])
+def deleteteam():
+
+    team_id = request.form.get('teamId')
+
+
+    print(1111111,team_id)
+    # 根据team_id从数据库中读取user
+    userlist = tanos_manage().delete_team(team_id)
+
+    return jsonify({'message': 'Delete success'})

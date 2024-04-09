@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+
+{% block title %}UI自动化 测试平台 - new test cases{% endblock %}
+
+{% block js %}
+    <script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+    <link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+
+    <script src="/static/tanos/bootbox.all.min.js"></script>
+    <script src="/static/tanos/popper.js"></script>
+    <script src="/static/tanos/toastr.min.js"></script>
+    <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+
+    <!-- Bootstrap Font Icon CSS -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
+
+    <!--<script src="/static/tanos/data_connect.js"></script>-->
+
+
+{% endblock %}
+
+
+{% block content %}
+    {#
+<div style="background-color: #eee; height:100%; width:100%; align-items: center; display:flex; ">#}
+    <div style=" margin: 20px; margin-bottom: 100px " class="card">
+        <div class="card-body" style="padding:10px;">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4>Team Management</h4>
+
+                    <button class="btn btn-primary new-team-button">Add New Team
+                    </button>
+
+                </div>
+
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="add-team-modal"
+                     aria-labelledby="offcanvasRightLabel_new">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasRightLabel_new">Add new team</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="new-team-name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="new-team-name"
+                                       placeholder="team name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="new-team-role" class="col-form-label">Role:</label>
+                                <select class="form-control" id="new-team-role">
+                                    <option value="{1000}">AdminGroup</option>
+                                    <option value="{1001}" selected>Guest</option>
+                                    <option value="{1002}">DataTestGroup</option>
+                                    <option value="{1003}">APITestGroup</option>
+                                    <option value="{1004}">WebTestGroup</option>
+                                    <option value="{1005}">DelosTestGroup</option>
+                                </select>
+                            </div>
+
+                        </form>
+
+                        <div style="margin-top:20px">
+                            <div style="width:80%; margin:auto; text-align:center">
+                                <button style="float:left" type="button" class="btn btn-danger"
+                                        data-bs-dismiss="modal">Close
+                                </button>
+                                <button style="float:right" type="button" class="btn btn-success" id="save-new-team">
+                                    Save
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- Permission Form -->
+                <div style="margin-top: 10px" class="row">
+                    <div class="d-flex justify-content-between mb-3">
+                        <!--                        <button class="btn btn-primary">-->
+                        <!--                            Add Team-->
+                        <!--                        </button>-->
+                    </div>
+                    <div class="col">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Team Name</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                                <th>Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for team in teams %}
+                                <tr>
+                                    <td>{{ team.name }}</td>
+                                    <td>
+                                        <button class="btn btn-primary edit-button" data-bs-toggle="offcanvas"
+                                                data-bs-target="#team-profile-modal" data-team-id="{{ team.id }}">Edit
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary delete-button"
+                                                data-team-id="{{ team.id }}">Delete
+                                        </button>
+                                    </td>
+                                   <td>{{ team.role }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+
+                <div class="card" style="margin-top: 20px; padding: 10px;">
+                    <div class="row">
+                        <div class="col">
+                            <div style="font-size: 15px; margin-top: 5px;">Current Team:</div>
+                            <div style="font-size: 15px; margin-top: 10px; padding: 8px; background-color: #e1f0ff; color: #1b5fcc; display: inline-block; border-radius: 5px;">
+                                {{ session.get('team', {}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Team Section -->
+                <div class="card" style="margin-top: 20px; padding: 10px;">
+                    <div class="row">
+                        <div class="col">
+                            <div style="font-size: 15px; margin-top: 5px;">Available Team:</div>
+                            {% for team_name in session.get('teams', {}) %}
+                                <div style="font-size: 15px; margin-top: 10px; padding: 8px; background-color: #e1f0ff; color: #1b5fcc; display: inline-block; border-radius: 5px;">
+                                    {{ team_name }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Offcanvas for Team Profile -->
+    <div style="width: 550px" class="offcanvas offcanvas-end" tabindex="-1" id="team-profile-modal"
+         aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasRightLabel">Team Profile</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- Team profile information and management functionality -->
+            <h5>Current team users</h5>
+            <!-- User List -->
+            <div>
+                <table class="table table-striped"
+                       id="table1"
+                       data-toggle="table"
+                       data-height="350"
+                       data-url="team/getAllUsers.json"
+                       data-pagination="true"
+                       data-search="true"
+                       data-sort-name="is_owner"
+                       data-sort-order="desc"
+                >
+                    <thead>
+                    <tr>
+                        <th data-field="staffid" data-sortable="true" data-width="20" data-width-unit="%">StaffID</th>
+                        <th data-field="name" data-sortable="true" data-align="center">User Name</th>
+                        <th data-field="is_owner" data-formatter="switchFormatter" data-sortable="true"
+                            data-align="center">
+                            Is Owner
+                        </th>
+                        <th data-formatter="actionFormatter1" data-width="7" data-width-unit="%" data-align="center">
+                            Operation
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+
+
+            </div>
+
+            <hr/>
+            <h5>Add user</h5>
+
+
+            <table class="table table-striped"
+                   id="table2"
+                   data-toggle="table"
+                   data-height="350"
+                   data-url="team/getAllUsers.json"
+                   data-pagination="true"
+                   data-search="true"
+                   data-sort-name="id"
+
+            >
+                <thead>
+                <tr>
+                    <th data-field="staffid" data-sortable="true" data-width="20" data-width-unit="%">StaffID</th>
+                    <th data-field="name" data-align="center">Uer Name</th>
+                    <th data-formatter="actionFormatter2" data-width="7" data-width-unit="%" data-align="center">
+                        Operation
+                    </th>
+                </tr>
+                </thead>
+            </table>
+
+
+        </div>
+    </div>
+
+
+    <script>
+
+        $(document).on('click', '.edit-button', function () {
+            let teamId = $(this).data('team-id'); // 获取当前点击按钮对应的团队ID
+            console.info(teamId);
+
+            $.ajax({
+                url: '/team/getUserList', // 替换为你的后端接口地址
+                method: 'GET',
+                data: {teamId: teamId}, // 传递团队ID给后端
+                success: function (response) {
+                    // 这里根据后端返回的数据来更新表格内容
+                    var table1 = $('#table1');
+                    // var table2 = $('#table2');
+                    table1.bootstrapTable('refresh', {url: '/team/getUserList?teamId=' + teamId}); // 刷新表格1的数据并更新数据源URL
+                    // table2.bootstrapTable('refresh', {url: '/team/getUserList'});
+
+                    // 设置当前团队ID的全局变量
+                    window.currentTeamId = teamId;
+                },
+                error: function (error) {
+                    // 处理请求失败的情况
+                }
+            });
+        });
+
+        //删除
+        var $table1 = $('#table1');
+
+        function deleteRow($tr) {
+            const id = $tr.find('td:eq(0)').text();
+            const teamId = window.currentTeamId; // 获取当前团队ID
+            console.log({id: id, teamId: teamId});
+            $.ajax({
+                url: '/delete_from_team',
+                type: 'POST',
+                data: JSON.stringify({id: id, team: teamId}),
+                contentType: 'application/json',
+                success: function () {
+                    toastr.success('Delete successfully!');
+                    $tr.remove();
+                    $('#table1').bootstrapTable('refresh');
+                },
+                error: function (error) {
+                    console.log(error);
+                    toastr.error('Failed to delete the connection. Please try again.');
+                }
+            });
+        }
+
+        $(document).on('click', '.delete-row', function () {
+            const $tr = $(this).closest('tr');
+
+            let dialog = bootbox.dialog({
+                title: 'Delete user!',
+                message: "<p>Please confirm if you want to delete?</p>",
+                centerVertical: true,
+                buttons: {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback: function () {
+                            console.log('Custom cancel clicked');
+                        }
+                    },
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback: function () {
+                            deleteRow($tr);
+                        }
+                    }
+                }
+            });
+        });
+
+        //添加
+        var $table2 = $('#table2');
+
+
+        function addRow($tr) {
+            const id = $tr.find('td:eq(0)').text();
+            const teamId = window.currentTeamId; // 获取当前团队ID
+            console.log({id: id, teamId: teamId});
+            $.ajax({
+                url: '/add_to_team',
+                type: 'POST',
+                data: JSON.stringify({id: id, team: teamId}),
+                contentType: 'application/json',
+                success: function () {
+                    toastr.success('Add successfully!');
+                    // 刷新前端表格数据
+                    $table1.bootstrapTable('refresh');
+
+                },
+                error: function (error) {
+                    console.log(error);
+                    toastr.error('Failed to delete the connection. Please try again.');
+                }
+            });
+        }
+
+        $(document).on('click', '.add-row', function () {
+            const $tr = $(this).closest('tr');
+
+            let dialog = bootbox.dialog({
+                title: 'Add user!',
+                message: "<p>Please confirm if you want to add the user?</p>",
+                centerVertical: true,
+                buttons: {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback: function () {
+                            console.log('Custom cancel clicked');
+                        }
+                    },
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback: function () {
+                            addRow($tr);
+                        }
+                    }
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            // 为所有的 Switch 控件添加点击事件监听器
+            $(document).on('change', '.form-check-input', function () {
+                var isChecked = $(this).prop('checked');
+                var row = $(this).closest('tr');
+                var staffId = row.find('td:eq(0)').text(); // 获取当前行的 teamId，根据具体数据结构进行修改
+                updateOwnerInfo(staffId, isChecked);
+            });
+        });
+
+        function updateOwnerInfo(staffId, isChecked) {
+            // 发送 AJAX 请求到后端，传递 teamId 和 isChecked 参数
+            const teamId = window.currentTeamId; // 获取当前团队ID
+            console.info(teamId)
+            bodydata = {
+                staffId: staffId,
+                isChecked: isChecked,
+                team: teamId
+            }
+            $.ajax({
+                url: '/team/updateOwnerInfo', // 替换为您的后端接口地址
+                method: 'POST',
+                data: JSON.stringify(bodydata),
+                contentType: 'application/json',
+                success: function (response) {
+                    // 处理请求成功的情况
+                    console.log(response);
+                },
+                error: function (error) {
+                    // 处理请求失败的情况
+                    console.error(error);
+                }
+            });
+        }
+
+
+    </script>
+
+
+    <script>
+        function actionFormatter1(value, row, index) {
+            return ' <div class="btn-group" role="group" aria-label="...">' +
+                '<button class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +
+                '</div>';
+        }
+
+        function actionFormatter2(value, row, index) {
+            return ' <div class="btn-group" role="group" aria-label="...">' +
+                '<button class="btn btn-sm btn-danger add-row" style="margin-left: 10px;"><i class="fa-regular fa-plus"></i></button>' +
+                '</div>';
+        }
+
+        function switchFormatter(value, row, index) {
+            // 根据 value 的值判断当前的状态，例如根据 0 或 1 切换 checked 属性
+            var checked = (value === 'yes') ? 'checked' : '';
+
+            // 构建 Switch 控件的 HTML 结构
+            var html = '<div class="form-check form-switch d-flex justify-content-center align-items-center">';
+            html += '<input class="form-check-input" type="checkbox" id="switch-' + index + '" ' + checked + '>';
+            html += '<label class="form-check-label mx-2" for="switch-' + index + '"></label>';
+            html += '</div>';
+
+            return html;
+        }
+    </script>
+
+
+    <script>
+
+        $(document).on('click', '.new-team-button', function () {
+            $('#add-team-modal').offcanvas('show');
+        })
+
+        $('#save-new-team').click(function () {
+            // Get the values of the new row from the form fields
+            const team_name = $('#new-team-name').val();
+            const team_role = $('#new-team-role').val();
+
+            // Hide the modal dialog
+            $('#add-team-modal').offcanvas('hide');
+
+            // addRow function
+            $.ajax({
+                url: '/add_new_team',
+                type: 'POST',
+                data: JSON.stringify({
+                    'team_name': team_name,
+                    'team_role': team_role,
+                }),
+                contentType: 'application/json',
+                success: function (data) {
+                    {#console.info(data)#}
+                    location.reload();
+                    toastr.success('new team added successfully!');
+                    $('#add-row-modal').offcanvas('hide');
+                    {#$('#table').bootstrapTable('refresh');#}
+
+
+                },
+                error: function () {
+                    $('#add-row-modal').offcanvas('hide');
+                    toastr.error('failed to add new team!');
+                    {#$('#table').bootstrapTable('refresh');#}
+
+                }
+            });
+
+        });
+
+
+    </script>
+
+
+    <script>
+
+        $(document).on('click', '.delete-button', function () {
+            let teamId = $(this).data('team-id'); // 获取当前点击按钮对应的团队ID
+            console.info(teamId);
+
+            let dialog = bootbox.dialog({
+                title: 'Delete team!',
+                message: "<p>Please confirm if you want to delete?</p>",
+                centerVertical: true,
+                buttons: {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback: function () {
+                            console.log('Custom cancel clicked');
+                        }
+                    },
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback: function () {
+                            $.ajax({
+                                url: '/team/delete',// 替换为你的后端接口地址
+                                method: 'POST',
+                                data: {teamId: teamId}, // 传递团队ID给后端
+                                success: function (response) {
+                                    // 这里根据后端返回的数据来更新表格内容
+                                    location.reload(true);
+                                    toastr.success('success to delete new team!');
+                                },
+                                error: function (error) {
+                                    // 处理请求失败的情况
+                                    toastr.error('failed to delete new team!');
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+
+
+        });
+
+    </script>
+
+
+{% endblock %}
