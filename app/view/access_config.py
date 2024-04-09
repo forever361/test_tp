@@ -52,6 +52,11 @@ def access_page():
         else:
             return render_template('access/access_config_normal.html', teams=teams)
 
+@web.route('/kunkun', methods=['GET', 'POST'])
+@user.login_required
+# @permission_required(session.get('groupname'))
+def admin_page():
+    return render_template('access/admin_page.html')
 
 @web.route('/save_permissions', methods=['POST'])
 def save_permission():
