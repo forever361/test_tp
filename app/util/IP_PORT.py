@@ -1,8 +1,10 @@
 
+from app.application import app
+
 class Constant():
     def __init__(self):
-        self.ip = "127.0.0.1"
-        self.port = "8889"
+        self.ip = app.config['DOMAIN']
+        self.port = app.config['DOMAIN_PORT']
 
 
 # class Constant():

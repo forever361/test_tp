@@ -23,4 +23,9 @@ DOMAIN = {
     "WWW2":"http://10.189.164.60:8899",
 }
 
+DOMAIN1 = '127.0.0.1'
+
+DOMAIN_PORT = 8889
+
+
 #RELEASE_PATH =  (HomePath)+'/release_version'

@@ -1,10 +1,24 @@
+import os
+
 from flask import Flask
 from flask_socketio import SocketIO
 
 
 app = Flask(__name__)
-app.config.from_pyfile("config/base_setting.py")
-app.debug = True
+
+
+env = os.environ.get('APP_ENV', 'dev')
+
+if env == 'uat':
+    app.config.from_pyfile('config/config_uat.py')
+elif env == 'dev':
+    app.config.from_pyfile('config/config_dev.py')
+elif env == 'prod':
+    app.config.from_pyfile('config/config_prod.py')
+
+
+# app.config.from_pyfile("config/config_dev.py")
+app.debug = app.config['DEBUG']
 # socketio = SocketIO(app, async_mode='gevent')
 socketio = SocketIO(app, async_mode='threading')
 

@@ -1,9 +1,40 @@
-from app.application import app
-from app.view import user, data_test, batch, testcase, compare, normal_compare, web_testcase, web_test_compare, \
+from app.application import app, env
+
+
+
+
+
+
+
+from app.view import  data_test, batch, testcase, compare, normal_compare, web_testcase, web_test_compare, \
     data_batch_new, data_testcase_management, othertools,data_batch_new_f2t,data_testcase_f2t,data_point_management,\
     data_connect_management,data_job_management,api_new,access_config,docs,api_batch,api_batch_opp
 
-app.register_blueprint(user.web)
+# 定义蓝图变量
+user_dev = None
+user_uat = None
+user_prod = None
+
+if env == 'dev':
+    from app.view import user_dev
+    user_dev = user_dev.web
+elif env == 'uat':
+    from app.view import user_uat
+    user_uat = user_uat.web
+elif env == 'prod':
+    from app.view import user_prod
+    user_prod = user_prod.web
+
+
+# 注册蓝图
+if user_dev:
+    app.register_blueprint(user_dev)
+if user_uat:
+    app.register_blueprint(user_uat)
+if user_prod:
+    app.register_blueprint(user_prod)
+
+# app.register_blueprint(user.web)
 app.register_blueprint(data_test.web)
 app.register_blueprint(batch.web)
 app.register_blueprint(data_batch_new.web)

@@ -6,8 +6,7 @@ from app.common.libs.DateHelper import getCurrentTime
 class UrlManager(object):
     @staticmethod
     def buildUrl(path):
-        config_domain = app.config['DOMAIN']
-        return "%s%s" % (config_domain['WWW'], path)
+        return "%s%s" % ('http://127.0.0.1:8889', path)
 
     @staticmethod
     def buildStaticUrl(path):

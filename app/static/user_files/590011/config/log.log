@@ -1108,3 +1108,21 @@
 2024-02-18 16:22:04,623 [checker.py-338] INFO: value check sucessfully
 2024-02-18 16:22:04,739 [checker.py-115] INFO: |total_count   check|source:200 target:200
 2024-02-18 16:22:04,787 [checker.py-136] INFO: count check successfully
+2024-04-10 18:27:56,718 [run_or_mx.py-77] INFO:  check rule is : Default
+2024-04-10 18:27:56,977 [run_or_mx.py-471] INFO: S:pg,T:pg
+2024-04-10 18:27:57,361 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-04-10 18:27:57,585 [checker.py-338] INFO: value check sucessfully
+2024-04-10 18:27:57,756 [checker.py-115] INFO: |total_count   check|source:200 target:200
+2024-04-10 18:27:57,820 [checker.py-136] INFO: count check successfully
+2024-04-10 18:30:20,812 [run_or_mx.py-77] INFO:  check rule is : Default
+2024-04-10 18:30:21,075 [run_or_mx.py-471] INFO: S:pg,T:pg
+2024-04-10 18:30:21,618 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-04-10 18:30:21,853 [checker.py-338] INFO: value check sucessfully
+2024-04-10 18:30:22,027 [checker.py-115] INFO: |total_count   check|source:200 target:200
+2024-04-10 18:30:22,082 [checker.py-136] INFO: count check successfully
+2024-04-10 18:36:36,117 [run_or_mx.py-77] INFO:  check rule is : Default
+2024-04-10 18:36:36,353 [run_or_mx.py-471] INFO: S:pg,T:pg
+2024-04-10 18:36:36,753 [checker.py-383] INFO: different columns between Source and Target are: None
+2024-04-10 18:36:36,943 [checker.py-338] INFO: value check sucessfully
+2024-04-10 18:36:37,127 [checker.py-115] INFO: |total_count   check|source:200 target:200
+2024-04-10 18:36:37,182 [checker.py-136] INFO: count check successfully
