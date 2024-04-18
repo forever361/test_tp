@@ -496,6 +496,16 @@
                 var send_url = $("#apiurl").val();
                 var send_body = req_CodeMirror.getValue();
 
+                send_body = send_body.replace(/'/g, '"');
+
+                try {
+                    JSON.parse(send_body);
+
+                } catch (error) {
+                     toastr.error('Please enter ritht JSON structure!');
+
+                }
+
                 if (send_body) {
                     send_body = JSON.stringify(JSON.parse(send_body));
                 } else {

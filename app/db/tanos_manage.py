@@ -662,6 +662,16 @@ class tanos_manage():
         result = useDB.useDB().executesql(sql)
         return result
 
+    def get_login_para(self):
+        sql = "SELECT login_type FROM tanos.admin_config;"
+        result = useDB.useDB().executesql_fetch(sql)
+        return result[0][0]
+
+    def update_login_type(self,new_login_type):
+        sql = "UPDATE tanos.admin_config set login_type='{}';".format(new_login_type)
+        useDB.useDB().executesql(sql)
+
+
 
 if __name__ == '__main__':
     testcase = tanos_manage()

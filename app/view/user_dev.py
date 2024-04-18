@@ -484,7 +484,9 @@ def login2():
 @web.route('/login_page',methods=['GET','POST'])
 def login_page():
     if request.method == 'GET':
-        return render_template('auth/login_sso.html'  )
+        redirect_url = tanos_manage().get_login_para()
+        return render_template('auth/login_sso.html',redirect_url=redirect_url  )
+
 
 
 @web.route('/login',methods=['GET','POST'])

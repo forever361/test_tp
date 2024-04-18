@@ -329,55 +329,55 @@
 
 
 
-<script>
-$(document).ready(function(){
-    $('#saveScreenshotBtn').click(function(){
-        // Capture screenshot of the content
-        html2canvas($('#content')[0], { scale: 2 }).then(function(canvas) {
-            // Add watermark to the canvas
-            var ctx = canvas.getContext('2d');
-            var timestamp = new Date().toLocaleString(); // 获取当前时间戳
-            var fontSize = 30;
-            var text = timestamp + ' for DELOS';
-            var textWidth = 0;
-            var textX = (canvas.width - ctx.measureText(text).width) / 2.5; // 水平居中显示
-            var textY = canvas.height / 3.3; // 垂直位置
-            var rainbow = ctx.createLinearGradient(textX, 0, textX + ctx.measureText(text).width, 0); // 线性渐变起始和结束位置根据文本宽度调整
+    <script>
+        $(document).ready(function () {
+            $('#saveScreenshotBtn').click(function () {
+                // Capture screenshot of the content
+                html2canvas($('#content')[0], {scale: 2}).then(function (canvas) {
+                    // Add watermark to the canvas
+                    var ctx = canvas.getContext('2d');
+                    var timestamp = new Date().toLocaleString(); // 获取当前时间戳
+                    var fontSize = 30;
+                    var text = timestamp + ' for DELOS';
+                    var textWidth = 0;
+                    var textX = (canvas.width - ctx.measureText(text).width) / 2.5; // 水平居中显示
+                    var textY = canvas.height / 3.3; // 垂直位置
+                    var rainbow = ctx.createLinearGradient(textX, 0, textX + ctx.measureText(text).width, 0); // 线性渐变起始和结束位置根据文本宽度调整
 
-            // 设置渐变颜色
-            rainbow.addColorStop(0, 'red');
-            rainbow.addColorStop(1/6, 'orange');
-            rainbow.addColorStop(2/6, 'yellow');
-            rainbow.addColorStop(3/6, 'green');
-            rainbow.addColorStop(4/6, 'blue');
-            rainbow.addColorStop(5/6, 'indigo');
-            rainbow.addColorStop(1, 'violet');
-            ctx.font = fontSize + 'px Arial';
+                    // 设置渐变颜色
+                    rainbow.addColorStop(0, 'red');
+                    rainbow.addColorStop(1 / 6, 'orange');
+                    rainbow.addColorStop(2 / 6, 'yellow');
+                    rainbow.addColorStop(3 / 6, 'green');
+                    rainbow.addColorStop(4 / 6, 'blue');
+                    rainbow.addColorStop(5 / 6, 'indigo');
+                    rainbow.addColorStop(1, 'violet');
+                    ctx.font = fontSize + 'px Arial';
 
-            // 应用渐变颜色到每个字
-            for (var i = 0; i < text.length; i++) {
-                ctx.fillStyle = rainbow;
-                ctx.fillText(text[i], textX + textWidth, textY);
-                textWidth += ctx.measureText(text[i]).width;
-            }
+                    // 应用渐变颜色到每个字
+                    for (var i = 0; i < text.length; i++) {
+                        ctx.fillStyle = rainbow;
+                        ctx.fillText(text[i], textX + textWidth, textY);
+                        textWidth += ctx.measureText(text[i]).width;
+                    }
 
-            // Convert canvas to blob
-            canvas.toBlob(function(blob) {
-                // Create a temporary link element
-                var link = document.createElement('a');
-                var fileName = 'screenshot_' + timestamp.replace(/[\/\\:]/g, '_') + '.png'; // 文件名为 screenshot_当前时间.png
-                link.href = URL.createObjectURL(blob);
-                link.setAttribute('download', fileName);
+                    // Convert canvas to blob
+                    canvas.toBlob(function (blob) {
+                        // Create a temporary link element
+                        var link = document.createElement('a');
+                        var fileName = 'screenshot_' + timestamp.replace(/[\/\\:]/g, '_') + '.png'; // 文件名为 screenshot_当前时间.png
+                        link.href = URL.createObjectURL(blob);
+                        link.setAttribute('download', fileName);
 
-                // Prompt user to select save location
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                        // Prompt user to select save location
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    });
+                });
             });
         });
-    });
-});
-</script>
+    </script>
 
 
     <script>
@@ -548,6 +548,16 @@ $(document).ready(function(){
 
                 var send_url = $("#apiurl").val();
                 var send_body = req_CodeMirror.getValue();
+
+                send_body = send_body.replace(/'/g, '"');
+
+                try {
+                    JSON.parse(send_body);
+
+                } catch (error) {
+                     toastr.error('Please enter ritht JSON structure!');
+
+                }
 
                 if (send_body) {
                     send_body = JSON.stringify(JSON.parse(send_body));

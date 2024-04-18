@@ -8,7 +8,7 @@ from app.application import app, env
 
 from app.view import  data_test, batch, testcase, compare, normal_compare, web_testcase, web_test_compare, \
     data_batch_new, data_testcase_management, othertools,data_batch_new_f2t,data_testcase_f2t,data_point_management,\
-    data_connect_management,data_job_management,api_new,access_config,docs,api_batch,api_batch_opp
+    data_connect_management,data_job_management,api_new,access_config,docs,api_batch,api_batch_opp,admin
 
 # 定义蓝图变量
 user_dev = None
@@ -55,6 +55,7 @@ app.register_blueprint(access_config.web)
 app.register_blueprint(docs.web)
 app.register_blueprint(api_batch.web)
 app.register_blueprint(api_batch_opp.web)
+app.register_blueprint(admin.web)
 
 from common.libs.UrlManager import UrlManager
 app.add_template_global(UrlManager.buildStaticUrl, 'buildStaticUrl')
