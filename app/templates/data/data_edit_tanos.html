@@ -642,6 +642,10 @@
                             };
                             let jsonData = JSON.stringify(formData);
 
+                            var urlParams = new URLSearchParams(window.location.search);
+                            // 获取名为 "id" 的参数值
+                            var caseid = urlParams.get('id');
+
                             let dialog = bootbox.dialog({
                                 title: 'Run job!',
                                 message: "<p>Please confirm if you want to run " + job_name + " by rule: " + selectRule + " ? </p>",
@@ -673,6 +677,8 @@
                                                         term.writeln(data.data);
                                                         $loadingBtn.replaceWith($reportBtn.show());
                                                         toastr.success('run job successfully!');
+                                                        const url_result = `/data_search_report?id=${caseid}`;
+                                                        window.open(url_result, '_blank');
                                                     });
 
                                                     // 前端代码

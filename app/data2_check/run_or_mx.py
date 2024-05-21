@@ -567,6 +567,8 @@ def configure_validator(
     # _args.value = True
     if S_TYPE == 'landingserver_file':
         c = checker.BatchChecker2(job_configure, True, True)
+    elif rule=='Check-count':
+        c = checker.BatchChecker_count(job_configure, True, True)
     else:
         c = checker.BatchChecker1(job_configure, True, True)
 

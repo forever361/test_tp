@@ -23,13 +23,13 @@ class test_case_manage():
     def new_test_case(self,module,name,description):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         user_id = session.get('userid', None)
-        sql = "INSERT INTO xcheck.test_case (userid,module,name,description,status) VALUES ('{}','{}','{}','{}','1')".format(user_id,module,name,description)
+        sql = "INSERT INTO tanos.test_case (userid,module,name,description,status) VALUES ('{}','{}','{}','{}','1')".format(user_id,module,name,description)
         useDB.useDB().executesql(sql)
 
     def web_new_test_case(self,module,name,description):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         user_id = session.get('userid', None)
-        sql = "INSERT INTO xcheck.web_test_case (userid,module,name,description,status) VALUES ('{}','{}','{}','{}','1')".format(user_id,module,name,description)
+        sql = "INSERT INTO tanos.web_test_case (userid,module,name,description,status) VALUES ('{}','{}','{}','{}','1')".format(user_id,module,name,description)
         useDB.useDB().executesql(sql)
 
     def copy_test_case(self,id):
@@ -59,7 +59,7 @@ class test_case_manage():
             newcode = codelist[0].replace(case_name,case_name+' of copy')
             newcode = AEScoder().encrypt(newcode)
 
-            sql = "INSERT INTO xcheck.test_case (case_name,user_id,testinfor,create_date) " \
+            sql = "INSERT INTO tanos.test_case (case_name,user_id,testinfor,create_date) " \
                   "VALUES ('{}','{}','{}','{}')".format(
                 result['name']+' of copy', user_id, newcode,create_date)
             useDB.useDB().executesql(sql)
@@ -74,7 +74,7 @@ class test_case_manage():
         for i in range(0,len(fieldlist)):
             update_value = "{} = '{}'".format(fieldlist[i],valueList[i])
             # print(update_value,'tiaoshi...update_value')
-            sql = "update xcheck.test_case set {} where case_id = '{}';".format(update_value,id)
+            sql = "update tanos.test_case set {} where case_id = '{}';".format(update_value,id)
             useDB.useDB().executesql(sql)
 
     def web_update_test_case(self,id,fieldlist,valueList):
@@ -82,7 +82,7 @@ class test_case_manage():
         for i in range(0,len(fieldlist)):
             update_value = "{} = '{}'".format(fieldlist[i],valueList[i])
             # print(update_value,'tiaoshi...update_value')
-            sql = "update xcheck.web_test_case set {} where case_id = '{}';".format(update_value,id)
+            sql = "update tanos.web_test_case set {} where case_id = '{}';".format(update_value,id)
             useDB.useDB().executesql(sql)
 
     def data_update_test_case(self,id,fieldlist,valueList):
@@ -90,7 +90,7 @@ class test_case_manage():
         for i in range(0,len(fieldlist)):
             update_value = "{} = '{}'".format(fieldlist[i],valueList[i])
             # print(update_value,'tiaoshi...update_value')
-            sql = "update xcheck.data_test_case set {} where case_id = '{}';".format(update_value,id)
+            sql = "update tanos.data_test_case set {} where case_id = '{}';".format(update_value,id)
             useDB.useDB().executesql(sql)
 
 
@@ -101,26 +101,26 @@ class test_case_manage():
         for i in range(0,len(fieldlist)):
             update_value = "{} = '{}'".format(fieldlist[i],valueList[i])
             # print(update_value,'tiaoshi...update_value')
-            sql = "update xcheck.data_test_case_f2t set {} where case_id = '{}';".format(update_value,id)
+            sql = "update tanos.data_test_case_f2t set {} where case_id = '{}';".format(update_value,id)
             useDB.useDB().executesql(sql)
 
     def delete_test_case(self,id):
-        sql = "DELETE FROM xcheck.test_case WHERE case_id = {};".format(id)
+        sql = "DELETE FROM tanos.test_case WHERE case_id = {};".format(id)
         print(sql)
         useDB.useDB().executesql(sql)
 
     def web_delete_test_case(self,id):
-        sql = "DELETE FROM xcheck.web_test_case WHERE case_id = {};".format(id)
+        sql = "DELETE FROM tanos.web_test_case WHERE case_id = {};".format(id)
         print(sql)
         useDB.useDB().executesql(sql)
 
     def data_delete_test_case(self,id):
-        sql = "DELETE FROM xcheck.data_test_case WHERE case_id = {};".format(id)
+        sql = "DELETE FROM tanos.data_test_case WHERE case_id = {};".format(id)
         print(sql)
         useDB.useDB().executesql(sql)
 
     def data_f2t_delete_test_case(self,id):
-        sql = "DELETE FROM xcheck.data_test_case_f2t WHERE case_id = {};".format(id)
+        sql = "DELETE FROM tanos.data_test_case_f2t WHERE case_id = {};".format(id)
         print(sql)
         useDB.useDB().executesql(sql)
 
@@ -157,7 +157,7 @@ class test_case_manage():
 
         results = []
 
-        sql = 'select ' + search_value + ' from xcheck.test_case where ' + str(condition) + ' and status = 1 order by id desc limit '+ str(rows)+';'
+        sql = 'select ' + search_value + ' from tanos.test_case where ' + str(condition) + ' and status = 1 order by id desc limit '+ str(rows)+';'
 
         cases = useDB.useDB().search(sql)
 
@@ -187,8 +187,8 @@ class test_case_manage():
 
         results = []
 
-        # sql = 'select ' + '*' + ' from xcheck.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
-        sql = 'select * from xcheck.test_case where {} and user_id={} order by case_id desc limit {};'.format(
+        # sql = 'select ' + '*' + ' from tanos.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
+        sql = 'select * from tanos.test_case where {} and user_id={} order by case_id desc limit {};'.format(
             str(condition), user_id, str(rows))
 
         cases = useDB.useDB().search(sql)
@@ -220,8 +220,8 @@ class test_case_manage():
 
         results = []
 
-        # sql = 'select ' + '*' + ' from xcheck.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
-        sql = 'select * from xcheck.web_test_case where {} and user_id={} order by case_id desc limit {};'.format(
+        # sql = 'select ' + '*' + ' from tanos.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
+        sql = 'select * from tanos.web_test_case where {} and user_id={} order by case_id desc limit {};'.format(
             str(condition), user_id, str(rows))
 
         cases = useDB.useDB().search(sql)
@@ -254,7 +254,7 @@ class test_case_manage():
 
         results = []
 
-        # sql = 'select ' + '*' + ' from xcheck.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
+        # sql = 'select ' + '*' + ' from tanos.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
         sql = 'select * from tanos.data_test_case where {} and user_id={} order by case_id desc limit {};'.format(
             str(condition), user_id, str(rows))
 
@@ -287,7 +287,7 @@ class test_case_manage():
 
         results = []
 
-        # sql = 'select ' + '*' + ' from xcheck.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
+        # sql = 'select ' + '*' + ' from tanos.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
         sql = 'select * from tanos.data_batch_test_case where {} and user_id={} order by case_id desc limit {};'.format(
             str(condition), user_id, str(rows))
 
@@ -319,8 +319,8 @@ class test_case_manage():
 
         results = []
 
-        # sql = 'select ' + '*' + ' from xcheck.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
-        sql = 'select * from xcheck.data_test_case_f2t where {} and user_id={} order by case_id desc limit {};'.format(
+        # sql = 'select ' + '*' + ' from tanos.test_case where ' + str(condition) + 'user_id=user_id' + '  order by case_id desc limit '+ str(rows)+';'
+        sql = 'select * from tanos.data_test_case_f2t where {} and user_id={} order by case_id desc limit {};'.format(
             str(condition), user_id, str(rows))
 
         cases = useDB.useDB().search(sql)

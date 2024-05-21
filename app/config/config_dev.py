@@ -22,21 +22,21 @@ CERTIFICATE_PATH = '/path/to/uat_certificate.pem'
 
 DOMAIN = '127.0.0.1'
 
-DOMAIN_PORT = 7777
+DOMAIN_PORT = 8899
 
 
 class Config:
     @staticmethod
     def get_cmd_path(user_id):
-        return '/Users/kun/miniconda3/envs/myenv/bin/python3.6 {}/data2_check/run_or_mx.py {}'.format(HomePath, user_id)
+        return '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/data2_check/run_or_mx.py {}'.format(HomePath, user_id)
 
     @staticmethod
     def get_cmd_path_api(job_id,user_id):
-        return '/Users/kun/miniconda3/envs/myenv/bin/python3.6 {}/api_check/runapi.py {} {}'.format(HomePath, job_id,user_id)
+        return '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/api_check/runapi.py {} {}'.format(HomePath, job_id,user_id)
 
     @staticmethod
     def get_cmd_path_batch(user_id,case_id):
-        return '/Users/kun/miniconda3/envs/myenv/bin/python3.6 {}/data2_check_batch/run_or_mx.py  {} {}'.format(HomePath, user_id, case_id)
+        return '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/data2_check_batch/run_or_mx.py  {} {}'.format(HomePath, user_id, case_id)
 
 
 
