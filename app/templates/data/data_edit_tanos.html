@@ -64,7 +64,7 @@
 
 <!-- 添加控制台元素 -->
 <div id="console-container"
-     style="height:30px; overflow-y:hidden; overflow-x:hidden; position: fixed; bottom:2px; width:85%; z-index:100;justify-content: center;">
+     style="margin-left:30px;height:30px; overflow-y:hidden; overflow-x:hidden; position: fixed; bottom:2px; width:85%; z-index:100;justify-content: center;">
     <div id="console"></div>
     <div id="console-minimize-button"
          style="text-align: center; width:40px; position: absolute; top:3px; right:30px;color:#FFF;cursor:pointer;font-size:18px;font-weight:bold;">
@@ -179,7 +179,7 @@
 
                             <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
                                 <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
-                                    <span style="color:red; ">*&nbsp</span> <span>By fields </span></div>
+                                    <span style="color:red; ">*&nbsp</span> <span>Order by </span></div>
                                 <input style="width:85.5%; " type="text" class=" form-control "
                                        placeholder="the columns used as the checking basis"
                                        aria-describedby="basic-addon1" id="new-field-name">
@@ -391,7 +391,7 @@
 
                                              <div class="row">
                                                 <div class="col-md-2">
-                                                    <button type="button" class="btn btn-primary card-toggle" style="width: 100px ;margin-top: 15px" id="card-toggle" data-bs-toggle="collapse" data-bs-target="#card-content-${item.job_id}">Toggle</button>
+                                                    <button type="button" class="btn btn-primary card-toggle" style="width: 160px ;margin-top: 15px" id="card-toggle" data-bs-toggle="collapse" data-bs-target="#card-content-${item.job_id}">Expand/Collapse</button>
                                                 </div>
                                                 <div class="col-md-10" style="display: flex; align-items: center; ">
                                                     <div class='card-title'> ${item.job_name} </div>
@@ -405,7 +405,7 @@
                                                  <form class="card  mb-3"  method="POST"  >
                                                  <div class="row g-0" >
 
-                                                     <div class="col-md-11">
+                                                     <div class="col-md-10">
 
                                                         <div class="card-body " style="text-align: center;" >
                                                             <h5 class='card-title' > ${item.job_name} </h5>
@@ -460,23 +460,46 @@
                                                                             </div>
                                                                             <select class="form-select select_rules" name="select_rules" id="select_rules" style="width:90.5%">
                                                                                 <option ${selectRule === "Default" ? "selected" : ""}>Default</option>
-                                                                                <option ${selectRule === "Check-table-header" ? "selected" : ""}>Check-table-header</option>
-                                                                                <option ${selectRule === "Check-count" ? "selected" : ""}>Check-count</option>
-                                                                                <option ${selectRule === "Check-the-first-200-rows" ? "selected" : ""}>Check-the-first-200-rows</option>
-                                                                                <option ${selectRule === "Check-the-first-500-rows" ? "selected" : ""}>Check-the-first-500-rows</option>
-                                                                                <option ${selectRule === "Check-the-first-1000-rows" ? "selected" : ""}>Check-the-first-1000-rows</option>
+
+                                                                                <option ${selectRule === "Empty-check" ? "selected" : ""}>Empty-check</option>
+
                                                                                 </select>
                                                                         </div>
                                                                         <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
                                                                             <div style="width:13.8%; display:flex; align-items:center; padding-left:40px">
                                                                                 <p>Custom rules</p>
                                                                             </div>
-                                                                            <input style="width:85.5%; " type="text" class="form-control custom_rules" id="custom_rules"
-                                                                            placeholder="undefined" aria-describedby="basic-addon1" value=${item.job.custom_rules}>
+
+                                                                            <div style=" margin-top: 30px; " class="card">
+                                                                                    <div class="card-body"  ">
+
+                                                                                         <div class="row">
+                                                                                                            <div class="col-md-4">
+                                                                                                                <input type="text" class="form-control" placeholder="Source para">
+                                                                                                            </div>
+                                                                                                            <div class="col-md-4">
+                                                                                                                <select class="form-select">
+                                                                                                                    <option selected>Select an comparator</option>
+                                                                                                                    <option value="1">==</option>
+                                                                                                                    <option value="2">contain</option>
+                                                                                                                    <option value="3">notContain</option>
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-4">
+                                                                                                                <input type="text" class="form-control" placeholder="Target para">
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+
+
+
+                                                                            </div>
+
+
                                                                         </div>
                                                                         <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
                                                                             <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
-                                                                                <span style="color:red; ">*&nbsp</span> <span>By fields </span></div>
+                                                                                <span style="color:red; ">*&nbsp</span> <span>Order by </span></div>
                                                                                 <input name="field" style="width:85.5%; " type="text" class=" form-control fields" id="fields"
                                                                                      placeholder="the columns used as the checking basis" aria-describedby="basic-addon1" value=${item.job.fields}>
                                                                         </div>
@@ -485,7 +508,7 @@
                                                             </div>
                                                        </div>
                                                      </div>
-                                                     <div class="col-md-1">
+                                                     <div class="col-md-2 ">
                                                         <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
                                                           <button type="button" class="btn btn-primary card-edit" style="width: 100px;margin-top: 15px" id="card-edit" > Save</button>
                                                           <button type="button" class="btn btn-danger card-delete" style="width: 100px;margin-top: 15px" id="card-delete" > Delete</button>
@@ -512,6 +535,7 @@
                             $(".no-job").html("There are no jobs under this case. Please click the button on the right to create a new job.");
                             console.log(1111111)
                         }
+
 
 
                         // 绑定点击事件
@@ -675,10 +699,43 @@
                                                     // 监听 "task_complete" 事件，将消息显示在xterm.js终端控制台上
                                                     socket.on('task_complete', data => {
                                                         term.writeln(data.data);
-                                                        $loadingBtn.replaceWith($reportBtn.show());
-                                                        toastr.success('run job successfully!');
-                                                        const url_result = `/data_search_report?id=${caseid}`;
-                                                        window.open(url_result, '_blank');
+
+                                                        if (data.rule === 'Empty-check') {
+
+                                                                $loadingBtn.replaceWith($btn.show());
+
+                                                                var message = "<p>Source count: " + data.source_count + ",  Target count: " + data.target_count + " </p>";
+                                                                if (data.source_count === 0) {
+                                                                    message += "<p>The table is Empty!</p>";
+                                                                } else {
+                                                                    message += "<p>The table is not Empty!</p>";
+                                                                }
+
+                                                                let dialog_result = bootbox.dialog({
+                                                                    title: 'Test Result',
+                                                                    message: message,
+                                                                    centerVertical: true,
+                                                                    buttons:
+                                                                        {
+                                                                            cancel: {
+                                                                                label: "OK",
+                                                                                className: 'btn-danger',
+                                                                                callback:
+                                                                                    function () {
+                                                                                        console.log('Custom cancel clicked');
+                                                                                    }
+                                                                            }
+                                                                        }
+                                                                });
+
+                                                        } else {
+                                                            $loadingBtn.replaceWith($btn.show());
+                                                            toastr.success('run job successfully!');
+                                                            const url_result = `/data_search_report?id=${caseid}`;
+                                                            window.open(url_result, '_blank');
+                                                        }
+
+
                                                     });
 
                                                     // 前端代码

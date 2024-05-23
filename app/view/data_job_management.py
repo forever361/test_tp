@@ -353,20 +353,53 @@ def runJob(jsonData):
         # 创建子进程并异步捕捉其输出
         retcode = Constant_cmd(user_id).retcode
 
+        json_started = False
+        json_lines = []
+
         # 实时读取子进程的输出并发送至前端
         while True:
             output = retcode.stdout.readline().decode()
             if not output:
                 break
-            emit('task_log', {'data': output})
+            if output:
+                if "JSON_RESULT_START" in output:
+                    json_started = True
+                    continue
+                elif "JSON_RESULT_END" in output:
+                    json_started = False
+                    try:
+                        json_output = json.loads(''.join(json_lines))
+                        json_lines = []  # 清空 json_lines 以处理未来可能的 JSON 输出
+                    except json.JSONDecodeError:
+                        print('Failed to decode JSON output from subprocess')
+                        json_output = None
+                    continue
+
+                if json_started:
+                    json_lines.append(output)
+                else:
+                    emit('task_log', {'data': output.strip()})
 
         # 等待子进程执行完毕，并根据其状态发送事件
         retcode.wait()
-        if retcode.returncode == 0:
-            emit('task_complete', {'data': '||||||||||||||||||Job completed successfully!!||||||||||||||||||'})
-            return 'run success!'
-        else:
-            emit('task_error', {'data': '||||||||||||||||||Job execution failed!!||||||||||||||||||'})
-            return 'run failed'
+
+
+        if json_output:
+            source_count = json_output['source_count']
+            target_count = json_output['target_count']
+            rule = json_output['rule']
+
+            print(source_count)
+            print(target_count)
+            print(rule)
+
+
+            if retcode.returncode == 0:
+                emit('task_complete', {'data': '||||||||||||||||||Job completed successfully!!||||||||||||||||||', 'rule':rule,'source_count': source_count, 'target_count': target_count,})
+                return 'run success!'
+            else:
+                emit('task_error', {'data': '||||||||||||||||||Job execution failed!!||||||||||||||||||'})
+                return 'run failed'
+
     except subprocess.CalledProcessError as e:
-        emit('task_error', {'data': '||||||||||||||||||Job execution failed!!||||||||||||||||||'})
+        emit('task_error', {'data': f'||||||||||||||||||{e}||||||||||||||||||'})

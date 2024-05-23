@@ -131,16 +131,16 @@ class BatchChecker(Checker):
 
         # Excel_write.get_check_count(count_check_flag)
 
-        if count_check_flag:
-            # logger.info("count check successfully")
-            logger.info("count check successfully")
-            Excel_write.get_count_result_pass2(count_check_flag, int(times))
-            return m.ValidateStatue.SUCCESS
-        else:
-            # logger.error("count check failed")
-            logger.info("count check failed")
-            Excel_write.get_count_result_pass2(count_check_flag, int(times))
-            return m.ValidateStatue.FAIL
+            if count_check_flag:
+                # logger.info("count check successfully")
+                logger.info("count check successfully")
+                Excel_write.get_count_result_pass2(count_check_flag, int(times))
+                return m.ValidateStatue.SUCCESS,self.s_validator.count[key],self.t_validator.count[key]
+            else:
+                # logger.error("count check failed")
+                logger.info("count check failed")
+                Excel_write.get_count_result_pass2(count_check_flag, int(times))
+                return m.ValidateStatue.FAIL,self.s_validator.count[key],self.t_validator.count[key]
 
     def value_check(self):
         self.s_validator.shipping_value_container()
@@ -391,12 +391,12 @@ class BatchChecker1(BatchChecker):
 
 
             # self.s_validator.col_str = self.decorate_col_str(self.s_validator.col_str, 'trim(', ")")
-            c_status = self.count_check()
+            c_status,s_count,t_count = self.count_check()
 
             v_statuts = self.value_check()
 
 
-        return s_count_sql, t_count_sql, v_statuts, c_status
+        return s_count_sql, t_count_sql, v_statuts, c_status,t_count,s_count
 
     def decorate_col_str(self, col_str, sql_prefix, sql_suffix):
         columns = col_str.split(',')
@@ -438,9 +438,9 @@ class BatchChecker2(BatchChecker):
             # self.s_validator.col_str = self.decorate_col_str(self.s_validator.col_str, 'trim(', ")")
 
             v_statuts = self.value_check()
-            c_status = self.count_check()
+            c_status,s_count,t_count = self.count_check()
 
-        return s_count_sql, t_count_sql, v_statuts, c_status
+        return s_count_sql, t_count_sql, v_statuts, c_status,t_count,s_count
 
     def get_newcol_name(self):
         source_col_set = set(self.s_validator.col_str.split(','))
@@ -520,9 +520,9 @@ class BatchChecker_count(BatchChecker):
             # self.s_validator.col_str = self.decorate_col_str(self.s_validator.col_str, 'trim(', ")")
 
             v_statuts = None
-            c_status = self.count_check()
+            c_status,s_count,t_count = self.count_check()
 
-        return s_count_sql, t_count_sql, v_statuts, c_status
+        return s_count_sql, t_count_sql, v_statuts, c_status,t_count,s_count
 
     def decorate_col_str(self, col_str, sql_prefix, sql_suffix):
         columns = col_str.split(',')

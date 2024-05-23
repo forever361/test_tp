@@ -1,6 +1,9 @@
 import configparser
+import json
 import os
 import sys
+
+from app.util.MyEncoder import MyEncoder
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 
@@ -567,13 +570,13 @@ def configure_validator(
     # _args.value = True
     if S_TYPE == 'landingserver_file':
         c = checker.BatchChecker2(job_configure, True, True)
-    elif rule=='Check-count':
+    elif rule=='Empty-check':
         c = checker.BatchChecker_count(job_configure, True, True)
     else:
         c = checker.BatchChecker1(job_configure, True, True)
 
-    s_count_sql, t_count_sql, v_satuts, c_status = c.check()
-    return s_count_sql, t_count_sql, v_satuts, c_status, source_table
+    s_count_sql, t_count_sql, v_satuts, c_status,c_count,s_count  = c.check()
+    return s_count_sql, t_count_sql, v_satuts, c_status, source_table,c_count,s_count
 
 
 
@@ -621,7 +624,7 @@ def method_main():
                 config.write(f)
             # print("times:", times)
             # 进入核心算法
-            s_count_sql, t_count_sql, v_status, c_status, tablename = configure_validator(*parameter)
+            s_count_sql, t_count_sql, v_status, c_status, tablename,c_count,s_count = configure_validator(*parameter)
 
             s_count_sql_list.append(s_count_sql)  # 这两句也是为optimize_count_check服务，可以不要
             t_count_sql_list.append(t_count_sql)
@@ -657,6 +660,19 @@ def method_main():
         logger.info(f"count check fail please check table:{str(count_check_error_list)}")
     GenReport().gen_html()
     # print('生成报告。。。。。。。。。。。。。。。。。。。。。。')
+
+
+    result_data = {
+        'rule':rule,
+        'source_count': c_count,
+        'target_count': s_count
+    }
+
+    print("JSON_RESULT_START")
+    print(json.dumps(result_data,cls=MyEncoder))
+    print("JSON_RESULT_END")
+
+
 
 
 if __name__ == "__main__":
