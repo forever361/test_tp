@@ -3,7 +3,9 @@ import json
 import os
 import sys
 
+from app.db.tanos_manage import tanos_manage
 from app.util.MyEncoder import MyEncoder
+from app.util.crypto_ECB import AEScoder
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 
@@ -18,6 +20,102 @@ user_id = sys.argv[1]
 # user_id = '580515'
 global_manager._init()
 global_manager.set_value('user_id', user_id)
+
+#对batch的处理，直接从数据库拿数据
+if len(sys.argv) > 2 and sys.argv[2]:
+    case_id = sys.argv[2]
+    global_manager.set_value('case_id', case_id)
+else:
+    case_id = None  # or any default value you want
+
+connect_info = []
+table_info = []
+
+if case_id:
+    rows = tanos_manage().get_data_batch(case_id)
+
+
+    for row in rows:
+        job_id, job_name, job = row # 不关心元组的前两个元素，将第三个元素赋值给 data
+        source_point = job.get('source_point')  # 使用 get 方法以确保键存在
+        target_point = job.get('target_point')
+        if source_point or target_point:
+            source_connect_id = tanos_manage().get_connectid_by_point_name(source_point)
+            target_connect_id = tanos_manage().get_connectid_by_point_name(target_point)
+
+            connect_info_s = tanos_manage().search_all_by_connect_id(source_connect_id)
+            keys_s = (
+            'connect_id', 'connect_name', 'dbtype', 'connect_type', 'host', 'dblibrary', 'username', 'pwd', "port")
+            result_list_s = []
+            for row2 in connect_info_s:
+                values_s = [value.strip() if isinstance(value, str) else value for value in row2]
+                result_dict2 = dict(zip(keys_s, values_s))
+                result_list_s.append(result_dict2)
+            r_dict_conn_s = dict(result_list_s[0])
+
+            connect_info_t = tanos_manage().search_all_by_connect_id(target_connect_id)
+            keys_t = (
+            'connect_id', 'connect_name', 'dbtype', 'connect_type', 'host', 'dblibrary', 'username', 'pwd', "port")
+            result_list_t = []
+            for row2 in connect_info_t:
+                values_t = [value.strip() if isinstance(value, str) else value for value in row2]
+                result_dict = dict(zip(keys_t, values_t))
+                result_list_t.append(result_dict)
+            r_dict_conn_t = dict(result_list_t[0])
+
+
+            type_mapping = {
+                'AliCloud-PostgreSQL': 'pg',
+                'DB-Oracle': 'orl',
+                'AliCloud-Maxcompute': 'ali',
+                'Fileserver': 'landingserver_file',
+                '456': '456'
+            }
+            s_type = type_mapping.get(r_dict_conn_s['dbtype'], 'default_value')
+            t_type = type_mapping.get(r_dict_conn_t['dbtype'], 'default_value')
+
+            connt = {
+                'Source TYPE': s_type,
+                'Target TYPE': t_type,
+                'Source conn': '{},{},{},{},{}'.format(r_dict_conn_s['host'], r_dict_conn_s['port'],
+                                                       r_dict_conn_s['dblibrary'], r_dict_conn_s['username'],
+                                                       r_dict_conn_s['pwd']),
+                'Target conn': '{},{},{},{},{}'.format(r_dict_conn_t['host'], r_dict_conn_t['port'],
+                                                       r_dict_conn_t['dblibrary'], r_dict_conn_t['username'],
+                                                       r_dict_conn_t['pwd']),
+                'select_rules': 'Default'
+            }
+
+            s_tablename = tanos_manage().get_tablename_by_point_name(source_point)
+            t_tablename = tanos_manage().get_tablename_by_point_name(target_point)
+
+            if '.' in s_tablename:
+                first_half_s_tablename, second_half_s_tablename = s_tablename.split('.')
+
+            if '.' in t_tablename:
+                first_half_t_tablename, second_half_t_tablename = t_tablename.split('.')
+
+            table = [
+                [job_id,second_half_s_tablename, second_half_t_tablename, '', first_half_s_tablename, job.get('fields'),
+                 job.get('source_condition'), job['target_condition']]]
+
+
+            connect_info.append(connt)
+            table_info.append(table[0])
+
+
+connect_info = connect_info[0]
+
+print(12121212,table_info)
+
+
+
+
+
+
+
+
+
 
 from app.data2_check.commom.Constant_t import Constant_id
 
@@ -68,20 +166,29 @@ Excel_write = ExcelUtilAll()
 userid = Constant_id().cookie_id
 
 
-P_common = Parameter_common()
-# print(P_common)
-S_TYPE = P_common.source_type.strip().split('=')[-1].strip()  # orl,ali,pg
+# P_common = Parameter_common()
+# # print(P_common)
+# S_TYPE = P_common.source_type.strip().split('=')[-1].strip()  # orl,ali,pg
+# print("source: " + S_TYPE)
+# T_TYPE = P_common.target_type.strip().split('=')[-1].strip()  # orl,ali,pg
+# print("target: " + T_TYPE)
+#
+#
+# rule = P_common.select_rules
+# logger.info(" check rule is : {}".format(rule))
+#
+#
+# # db config
+# P_db = Parameter_db()
+
+S_TYPE = connect_info['Source TYPE']  # orl,ali,pg
 print("source: " + S_TYPE)
-T_TYPE = P_common.target_type.strip().split('=')[-1].strip()  # orl,ali,pg
+T_TYPE = connect_info['Target TYPE']   # orl,ali,pg
 print("target: " + T_TYPE)
 
 
-rule = P_common.select_rules
+rule = connect_info['select_rules']
 logger.info(" check rule is : {}".format(rule))
-
-
-# db config
-P_db = Parameter_db()
 
 
 if S_TYPE == 'orl' and T_TYPE == 'ali':
@@ -156,19 +263,25 @@ elif S_TYPE == 'pg' and T_TYPE == 'ali':
 
 
 elif S_TYPE == 'pg' and T_TYPE == 'pg':
-    P = Parameter_pg_pg()
+    source_conn_value = connect_info['Source conn']
+    source_conn_parts = source_conn_value.split(',')
 
-    DB_S = P.db_s
-    USER_S = P.user_s
-    PASSWORD_S = P.pwd_s
-    HOST_S = P.host_s
-    PORT_S = P.port_s
+    DB_S = source_conn_parts[2]
+    USER_S = source_conn_parts[3]
+    PASSWORD_S =  AEScoder().decrypt(source_conn_parts[4])
+    HOST_S = source_conn_parts[0]
+    PORT_S =  source_conn_parts[1]
 
-    DB_T = P.db_t
-    USER_T = P.user_t
-    PASSWORD_T = P.pwd_t
-    HOST_T = P.host_t
-    PORT_T = P.port_t
+
+
+    target_conn_value = connect_info['Target conn']
+    target_conn_parts = target_conn_value.split(',')
+
+    DB_T = target_conn_parts[2]
+    USER_T = target_conn_parts[3]
+    PASSWORD_T = AEScoder().decrypt(target_conn_parts[4])
+    HOST_T = target_conn_parts[0]
+    PORT_T = target_conn_parts[1]
 
     # logger.info(["HOST_S:", HOST_S])
     # logger.info(["username:",USER_S])
@@ -211,11 +324,12 @@ elif S_TYPE == 'landingserver_file_batch' and T_TYPE == 'ali_batch':
     odps_t = ODPS(access_id=ACCESS_ID_T, secret_access_key=SECRET_ACCESS_KEY_T, project=PROJECT_T,
                   endpoint=ENDPOINT_T)
 
+
 # cx_Oracle.init_oracle_client(lib_dir="C:\swdtools\instantclient_19_12")
 
-PARAMETER_FILE_PATH = basePath + '/config/config_info_or_p.csv'
+# PARAMETER_FILE_PATH = basePath + '/config/config_info_or_p.csv'
 # PARAMETER_FILE_PATH = ConnectSQL().get_source_target_parameter(user_id,'ora')
-REM_LIST_PATH = basePath + '/config/remove_list.csv'
+# REM_LIST_PATH = basePath + '/config/remove_list.csv'
 
 def parse_parameter_files(parameter_value):
     for f in parameter_value:
@@ -329,6 +443,7 @@ def convert_count_result(counts: list) -> dict:
     return d
 
 def configure_validator(
+        job_id= '',
         source_table: str = '',
         target_table: str = '',
         columndb='',
@@ -336,7 +451,7 @@ def configure_validator(
         pi: str = '',
         s_where_condition='',
         t_where_condition='',
-        remove_col_list=''
+        remove_col_list='',
 ):
     # pi = pi.replace("|",",") or get_pi(f"{source_table}", columndb)
     pi = pi.replace("|", ",")
@@ -586,7 +701,7 @@ def method_main():
     v_flag = True
     c_flag = True
     # p_list = parse_parameter_file(PARAMETER_FILE_PATH)
-    p_list = P_db.parse_parameter_file()
+    p_list = table_info
     # logger.info(p_list)
     # p_lists = p_list
     # print(p_list)

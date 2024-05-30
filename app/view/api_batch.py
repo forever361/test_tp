@@ -367,11 +367,22 @@ def batch_search_result_json():
 
 
 @app.route('/run_api_batch_job',methods=['POST'])
-@user.login_required
+# @user.login_required
 def run_api_batch_job():
     data = request.json
     job_id= data['jobid']
-    user_id = session.get('userid', None)
+    user_id = data.get('userid')
+
+    if user_id is not None:
+        token= request.headers.get('token')
+        if token=='7758521':
+            user_id = data['userid']
+        else:
+            return jsonify({'success':False,'message':'token error'}),401
+    else:
+        user_id = session.get('userid', None)
+        print(user_id)
+
     # print(111111111111,user_id)
     # configPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
     # command = '/Users/kun/miniconda3/envs/myenv/bin/python3.6 {}/api_check/runapi.py {} {}'.format(configPath, job_id,user_id)

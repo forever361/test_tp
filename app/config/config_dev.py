@@ -36,7 +36,7 @@ class Config:
 
     @staticmethod
     def get_cmd_path_batch(user_id,case_id):
-        return '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/data2_check_batch/run_or_mx.py  {} {}'.format(HomePath, user_id, case_id)
+        return '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/data2_check/run_or_mx.py  {} {}'.format(HomePath, user_id, case_id)
 
 
 

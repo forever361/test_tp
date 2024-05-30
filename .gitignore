@@ -7,7 +7,7 @@
 /app/data2_check/Log
 /app/data_f2t_check/Log
 /app/templates/report
-/app/static/user_files
+/app/static/user_files/
 /app/templates/userinfo
 /app/userinfo
 /app/templates/personal/personal_center.html
@@ -15,6 +15,7 @@
 /*.key
 /*.pem
 /*.log
+
 
 
 

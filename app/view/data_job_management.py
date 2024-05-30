@@ -22,7 +22,7 @@ from app.view import user, viewutil
 import os
 
 
-from app.util.Constant_setting import Constant_cmd
+from app.util.Constant_setting import Constant_cmd, Constant_cmd_data_batch
 from app.application import app
 
 import csv
@@ -263,95 +263,14 @@ def runJob(jsonData):
     emit('task_start', {'data': "||||||||||||||||||Start checking||||||||||||||||||"})
 
     data = json.loads(jsonData)
-    source_point_name = (data['job']['source_point'])
-    target_point_name = (data['job']['target_point'])
 
-    source_connect_id =  tanos_manage().get_connectid_by_point_name(source_point_name)
-    target_connect_id = tanos_manage().get_connectid_by_point_name(target_point_name)
+    case_id= "10116"
+    user_id = "590011"
 
-
-    connect_info_s= tanos_manage().search_all_by_connect_id(source_connect_id)
-    keys_s=('connect_id','connect_name','dbtype','connect_type','host','dblibrary','username','pwd',"port")
-    result_list_s = []
-    for row2 in connect_info_s:
-        values_s = [value.strip() if isinstance(value, str) else value for value in row2]
-        result_dict2 = dict(zip(keys_s, values_s))
-        result_list_s.append(result_dict2)
-    r_dict_conn_s= dict(result_list_s[0])
-
-
-    connect_info_t= tanos_manage().search_all_by_connect_id(target_connect_id)
-    keys_t=('connect_id','connect_name','dbtype','connect_type','host','dblibrary','username','pwd',"port")
-    result_list_t = []
-    for row2 in connect_info_t:
-        values_t = [value.strip() if isinstance(value, str) else value for value in row2]
-        result_dict = dict(zip(keys_t, values_t))
-        result_list_t.append(result_dict)
-    r_dict_conn_t= dict(result_list_t[0])
-
-    print(r_dict_conn_s)
-    print(r_dict_conn_t)
-
-    # if r_dict_conn_s['dbtype']=='AliCloud-PostgreSQL':
-    #     s_type='pg'
-    # elif  r_dict_conn_s['dbtype']=='123':
-    #     s_type = '123'
-    # if r_dict_conn_t['dbtype']=='AliCloud-PostgreSQL':
-    #     t_type='pg'
-
-    # TYPE:
-    # orl,pg,ali,landingserver_file,landingserver_file_batch
-
-    type_mapping = {
-        'AliCloud-PostgreSQL': 'pg',
-        'DB-Oracle': 'orl',
-        'AliCloud-Maxcompute': 'ali',
-        'Fileserver': 'landingserver_file',
-        '456': '456'
-    }
-    s_type = type_mapping.get(r_dict_conn_s['dbtype'], 'default_value')
-    t_type = type_mapping.get(r_dict_conn_t['dbtype'], 'default_value')
-
-    # s_type = type_mapping.get('DB-Oracle', 'default_value')
-    # t_type = type_mapping.get('AliCloud-Maxcompute', 'default_value')
-
-    connt= {
-        'Source TYPE': s_type,
-        'Target TYPE': t_type,
-        'Source conn': '{},{},{},{},{}'.format(r_dict_conn_s['host'],r_dict_conn_s['port'],r_dict_conn_s['dblibrary'],r_dict_conn_s['username'],r_dict_conn_s['pwd']),
-        'Target conn': '{},{},{},{},{}'.format(r_dict_conn_t['host'],r_dict_conn_t['port'],r_dict_conn_t['dblibrary'],r_dict_conn_t['username'],r_dict_conn_t['pwd']),
-        'select_rules': data['job']['select_rules']
-    }
-
-
-
-    s_tablename= tanos_manage().get_tablename_by_point_name(source_point_name)
-    t_tablename = tanos_manage().get_tablename_by_point_name(target_point_name)
-
-
-    if '.' in s_tablename:
-        first_half_s_tablename, second_half_s_tablename = s_tablename.split('.')
-
-    if '.' in t_tablename:
-        first_half_t_tablename, second_half_t_tablename = t_tablename.split('.')
-
-    table=[[second_half_s_tablename,second_half_t_tablename,'',first_half_s_tablename,data['job']['fields'],data['job']['source_condition'],data['job']['target_condition']]]
-
-    user_id = session.get('userid', None)
-    folder_path = os.path.join(app.root_path, 'static', 'user_files', str(user_id))
-    user_path = folder_path + '/config/' 
-
-    file = open(user_path + 'data_conn.txt', 'w')
-    file.write(str(connt))
-    file.close()
-
-    with open(user_path +'data_db.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(table)
 
     try:
         # 创建子进程并异步捕捉其输出
-        retcode = Constant_cmd(user_id).retcode
+        retcode = Constant_cmd_data_batch(user_id,case_id).retcode
 
         json_started = False
         json_lines = []
@@ -403,3 +322,34 @@ def runJob(jsonData):
 
     except subprocess.CalledProcessError as e:
         emit('task_error', {'data': f'||||||||||||||||||{e}||||||||||||||||||'})
+
+
+
+
+@app.route('/run_data_job',methods=['POST'])
+def run_data_job():
+    data = request.json
+    # case_id= data['caseid']
+    # user_id = session.get('userid', None)
+
+    case_id= "10116"
+    user_id = "590011"
+
+    print(user_id)
+    print(case_id)
+
+    try:
+        result = subprocess.run(Constant_cmd_data_batch(user_id,case_id).cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        print('result:',result.stdout.decode('utf-8'))
+
+
+    # 检查命令是否成功执行
+        if result.returncode == 0:
+            # 返回命令执行结果
+            return jsonify({'success': True, 'message':'success' }),200
+        else:
+            # 返回错误信息
+            return jsonify({'success': False, 'message':'fail','result':result.stdout.decode('utf-8') }), 200
+
+    except Exception as e:
+        return jsonify({'success': False,'message': str(e)}), 500

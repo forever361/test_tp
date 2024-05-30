@@ -47,28 +47,29 @@ web.send_file_max_age_default = timedelta(seconds=1)
 #     return wrapper
 
 #设置登录认证
-def login_required(fn):
-    @wraps(fn)
-    def wrapper():
-        user = session.get('userid', None)
-        # print(11111,user)
-        if user:
-            return fn()
-        else:
-            return render_template("auth/login_sso.html")
-    return wrapper
+# def login_required(fn):
+#     @wraps(fn)
+#     def wrapper():
+#         user = session.get('userid', None)
+#         # print(11111,user)
+#         if user:
+#             return fn()
+#         else:
+#             redirect_url = tanos_manage().get_login_para()
+#             return render_template('auth/login_sso.html', redirect_url=redirect_url)
+#     return wrapper
 
 #捕捉异常
 #用法：@handle_exceptions
-def handle_exceptions(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        try:
-            return fn(*args, **kwargs)
-        except Exception as e:
-            logger_all.info(f"An error occurred: {str(e)}",exc_info=True)
-            return jsonify({"error": "An error occurred"}), 500
-    return wrapper
+# def handle_exceptions(fn):
+#     @wraps(fn)
+#     def wrapper(*args, **kwargs):
+#         try:
+#             return fn(*args, **kwargs)
+#         except Exception as e:
+#             logger_all.info(f"An error occurred: {str(e)}",exc_info=True)
+#             return jsonify({"error": "An error occurred"}), 500
+#     return wrapper
 
 # @web.route('/login',methods=['GET','POST'])
 # def login():

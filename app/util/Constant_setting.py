@@ -33,6 +33,7 @@ class Constant_cmd_data_batch():
         self.user_id = user_id
         self.case_id = case_id
         self.cmd_td = Config.get_cmd_path_batch(user_id,case_id)
+        self.retcode = subprocess.Popen(self.cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
 
 
