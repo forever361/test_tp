@@ -42,16 +42,19 @@ def test_api_normal():
 @web.route('/get_api_detail', methods=['POST'])
 def get_api_detail():
     data = request.json
-    response_data = {
-        "apiurl": "https://chinadataplatform.cds.dev.ali.cloud.cn.hsbc/v1/getToken",
-        "headers": {
-            "content-type": "application/json",
-        },
-        "request_params": {
-            "username": "45157276",
-            "password": ""
-        }
+    response_data={
+        "issued_token":"43kngdsigh8943nyger9g8e"
     }
+    # response_data = {
+    #     "apiurl": "https://chinadataplatform.cds.dev.ali.cloud.cn.hsbc/v1/getToken",
+    #     "headers": {
+    #         "content-type": "application/json",
+    #     },
+    #     "request_params": {
+    #         "username": "45157276",
+    #         "password": ""
+    #     }
+    # }
 
     return jsonify(response_data)
 
