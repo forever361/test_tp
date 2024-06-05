@@ -51,8 +51,12 @@ class ExcelUtilAll:
         # print(111111,basepath + "/userinfo/{}".format(userid))
         userPath = os.path.join(basepath + "/userinfo/{}".format(userid))
         folder_path = os.path.join(app.root_path, 'static', 'user_files', user_id)
-        open_excel = openpyxl.load_workbook(folder_path + '/config/verification_result.xlsx')
-        return open_excel
+        try:
+            open_excel = openpyxl.load_workbook(folder_path + '/config/verification_result.xlsx')
+            return open_excel
+
+        except Exception as e:
+            print("访问 sheetnames 时出错：", e)
 
     def get_data(self,index=None):
         '''Load the all content '''

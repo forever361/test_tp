@@ -6,7 +6,7 @@ from app.application import app, env
 
 
 
-from app.view import  data_test, batch, testcase, compare, normal_compare, web_testcase, web_test_compare, \
+from app.view import user,data_test, batch, testcase, compare, normal_compare, web_testcase, web_test_compare, \
     data_batch_new, data_testcase_management, othertools,data_batch_new_f2t,data_testcase_f2t,data_point_management,\
     data_connect_management,data_job_management,api_new,access_config,docs,api_batch,api_batch_opp,admin
 
@@ -34,7 +34,7 @@ if user_uat:
 if user_prod:
     app.register_blueprint(user_prod)
 
-# app.register_blueprint(user.web)
+app.register_blueprint(user.web)
 app.register_blueprint(data_test.web)
 app.register_blueprint(batch.web)
 app.register_blueprint(data_batch_new.web)

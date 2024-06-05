@@ -633,6 +633,9 @@
                         });
 
                         $(document).on('click', '.card-run', function () {
+                            var urlParams2 = new URLSearchParams(window.location.search);
+                            // 获取名为 "id" 的参数值
+                            var caseid2 = urlParams2.get('id');
                             const $btn = $(this);
                             const $reportBtn = $('#Report');
                             const $loadingBtn = $('<button type="button" class="btn btn-warning" style="width: 120px;margin-top: 15px"><span class="spinner-border spinner-border-sm" disabled ></span> \n' +
@@ -652,6 +655,7 @@
 
                             // 3.将数据转换为JSON格式
                             let formData = {
+                                'caseid':caseid2,
                                 'job_name': job_name,
                                 'job_id': cardId,
                                 'job': {

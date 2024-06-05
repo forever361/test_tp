@@ -447,7 +447,7 @@
                 // 跳转到：http://127.0.0.1:8889/data_edit_test_case_tanos?id=10074
                 case_id = response.case_id;
                 // var domain = '{{ domain }}';
-                window.location.href = `http://127.0.0.1:8889/data_edit_test_case_tanos?id=${case_id}`;
+                window.location.href = `/data_edit_test_case_tanos?id=${case_id}`;
                 toastr.success('save test case successfully!');
 
             },
