@@ -771,16 +771,22 @@
 
 
     <script>
+
     document.getElementById('submitBtn').addEventListener('click', function () {
         var dropdown = document.getElementById('dropdown').value;
         var username = document.getElementById('input1').value;
         var password = document.getElementById('input2').value;
 
         if (dropdown === 'DSP' && username && password) {
-            var tokenData = {
-                token_type: dropdown,
-                username: username,
-                password: password
+           var tokenData = {
+                input_token_state: {
+                    token_type: 'cct',
+                    username: username,
+                    password: password
+                },
+                output_token_state: {
+                    token_type: 'JWT'
+                }
             };
 
             fetch('/get_api_detail', {
