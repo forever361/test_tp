@@ -21,18 +21,24 @@ user_id = sys.argv[1]
 global_manager._init()
 global_manager.set_value('user_id', user_id)
 
+
 #对batch的处理，直接从数据库拿数据
-if len(sys.argv) > 2 and sys.argv[2]:
+if len(sys.argv) > 3 and sys.argv[3]:
     case_id = sys.argv[2]
     global_manager.set_value('case_id', case_id)
+
+    job_id = sys.argv[3]
+    global_manager.set_value('job_id', job_id)
 else:
     case_id = None  # or any default value you want
+    job_id = None
+
 
 connect_info = []
 table_info = []
 
 if case_id:
-    rows = tanos_manage().get_data_batch(case_id)
+    rows = tanos_manage().get_data_batch_job(job_id)
 
 
     for row in rows:
@@ -83,7 +89,7 @@ if case_id:
                 'Target conn': '{},{},{},{},{}'.format(r_dict_conn_t['host'], r_dict_conn_t['port'],
                                                        r_dict_conn_t['dblibrary'], r_dict_conn_t['username'],
                                                        r_dict_conn_t['pwd']),
-                'select_rules': 'Default'
+                # 'select_rules': 'Default'
             }
 
             s_tablename = tanos_manage().get_tablename_by_point_name(source_point)
@@ -96,17 +102,20 @@ if case_id:
                 first_half_t_tablename, second_half_t_tablename = t_tablename.split('.')
 
             table = [
-                [job_id,second_half_s_tablename, second_half_t_tablename, '', first_half_s_tablename, job.get('fields'),
-                 job.get('source_condition'), job['target_condition']]]
-
+                [job_id, second_half_s_tablename, second_half_t_tablename, '', first_half_s_tablename,
+                 job.get('fields'),
+                 job.get('source_condition'), job.get('target_condition'), job.get('select_rules')]]
 
             connect_info.append(connt)
             table_info.append(table[0])
 
+try:
+    connect_info = connect_info[0]
+    # rule = table_info[0][8]
+except Exception as e:
+    print("wrong parameter,please check input body     ")
+    raise e
 
-connect_info = connect_info[0]
-
-print(12121212,table_info)
 
 
 
@@ -139,7 +148,7 @@ import math
 import cx_Oracle
 import csv
 from app.data2_check.parameter import Parameter_or_ali, Parameter_or_or,Parameter_ali_ali,Parameter_common,Parameter_db,Parameter_pg_ali
-from app.data2_check.commom.main_Gen import Parser as GenReport
+from app.data2_check.commom.main_Gen_db import Parser as GenReport
 from app.data2_check.commom.write_excel_data import ExcelUtilAll
 from app.util.log_util.new_log import logger
 from app.application import app
@@ -182,13 +191,14 @@ userid = Constant_id().cookie_id
 # P_db = Parameter_db()
 
 S_TYPE = connect_info['Source TYPE']  # orl,ali,pg
-print("source: " + S_TYPE)
+# print("source: " + S_TYPE)
 T_TYPE = connect_info['Target TYPE']   # orl,ali,pg
-print("target: " + T_TYPE)
+# print("target: " + T_TYPE)
 
 
-rule = connect_info['select_rules']
-logger.info(" check rule is : {}".format(rule))
+
+# rule = connect_info['select_rules']
+# logger.info(" check rule is : {}".format(rule))
 
 
 if S_TYPE == 'orl' and T_TYPE == 'ali':
@@ -451,12 +461,15 @@ def configure_validator(
         pi: str = '',
         s_where_condition='',
         t_where_condition='',
+        rule='',
         remove_col_list='',
 ):
     # pi = pi.replace("|",",") or get_pi(f"{source_table}", columndb)
     pi = pi.replace("|", ",")
     # remove_col_list = parse_parameter_file_re(REM_LIST_PATH)
     remove_col_list = remove_col_list.replace("|", ",")
+
+    print("rule:" + rule)
 
     if S_TYPE == 'orl' and T_TYPE == 'ali':
         logger.info("S:orl,T:ali")
@@ -690,8 +703,8 @@ def configure_validator(
     else:
         c = checker.BatchChecker1(job_configure, True, True)
 
-    s_count_sql, t_count_sql, v_satuts, c_status,c_count,s_count  = c.check()
-    return s_count_sql, t_count_sql, v_satuts, c_status, source_table,c_count,s_count
+    s_count_sql, t_count_sql, v_satuts, c_status,s_count,t_count,v_detail_link  = c.check()
+    return s_count_sql, t_count_sql, v_satuts, c_status, source_table,target_table,s_count,t_count,rule,v_detail_link
 
 
 
@@ -700,6 +713,7 @@ def method_main():
     # global parameter
     v_flag = True
     c_flag = True
+    result_detail = []
     # p_list = parse_parameter_file(PARAMETER_FILE_PATH)
     p_list = table_info
     # logger.info(p_list)
@@ -710,6 +724,7 @@ def method_main():
     page_count = math.ceil(len(p_list) / n_jobs)
     value_check_error_list = []
     count_check_error_list = []
+
     config = configparser.ConfigParser()
     folder_path = os.path.join(app.root_path, 'static', 'user_files', user_id)
 
@@ -739,49 +754,51 @@ def method_main():
                 config.write(f)
             # print("times:", times)
             # 进入核心算法
-            s_count_sql, t_count_sql, v_status, c_status, tablename,c_count,s_count = configure_validator(*parameter)
+            s_count_sql, t_count_sql, v_status, c_status, source_table,target_table,s_count,t_count,rule,v_detail_link = configure_validator(*parameter)
 
             s_count_sql_list.append(s_count_sql)  # 这两句也是为optimize_count_check服务，可以不要
             t_count_sql_list.append(t_count_sql)
 
             if v_status == "FAIL":
                 v_flag = False
-                value_check_error_list.append(tablename)
+                value_check_error_list.append(source_table)
 
             if c_status == "FAIL":
                 c_flag = False
-                count_check_error_list.append(tablename)
+                count_check_error_list.append(source_table)
 
-            # if c_status == "FAIL":
-            #     flag, error_list = optimize_count_check(s_count_sql_list,t_count_sql_list)  # s_count_sql_list和t_count_sql_list就是查count的两句sql
-            #     if not flag:
-            #         count_check_error_list.extend(error_list)
-            #         c_flag = False
+            result_detail.append([source_table,target_table,s_count,t_count,c_status,v_status,rule,v_detail_link])
 
-        # if _args.count:
-        #     flag, error_list = optimize_count_check(s_count_sql_list, t_count_sql_list) #s_count_sql_list和t_count_sql_list就是查count的两句sql
-        #     if not flag:
-        #         count_check_error_list.extend(error_list)
-        #         c_flag = False
-    # print('v_flag',v_flag,'c_flag',c_flag)
-    # print(count_check_error_list)
-    # if v_flag:
-    #     pass
-    # else:
-    #     logger.info(f"{'*'*30}value check fail, please check table:{str(value_check_error_list)}")
+
+    if v_flag:
+        pass
+    else:
+        logger.info(f"{'*'*30}value check fail, please check table:{str(value_check_error_list)}")
     if c_flag:
         pass
     else:
         logger.info(f"count check fail please check table:{str(count_check_error_list)}")
-    GenReport().gen_html()
+    # GenReport().gen_html()
     # print('生成报告。。。。。。。。。。。。。。。。。。。。。。')
 
-
     result_data = {
-        'rule':rule,
-        'source_count': c_count,
-        'target_count': s_count
+        "test result": "pass" if all(item[3] == "success" and item[4] == "success" for item in result_detail) else "fail",
+        "test detail": [
+            {
+                "Source Table": item[0],
+                "Target Table":item[1],
+                "Source Count": item[2],
+                "Target Count": item[3],
+                "Count Result": item[4],
+                "Value Result": item[5],
+                "Rule": item[6],
+                "Value detail":item[7]
+            }
+            for item in result_detail
+        ]
     }
+
+    GenReport().gen_html(result_data=result_data)
 
     print("JSON_RESULT_START")
     print(json.dumps(result_data,cls=MyEncoder))

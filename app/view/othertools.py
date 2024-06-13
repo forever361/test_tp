@@ -8,7 +8,7 @@ web = Blueprint("othertools", __name__)
 
 @web.route('/encrypt',methods=['GET'])
 def encrypt_page():
-        return render_template('encrypt.html',domain=app.config['URL'])
+        return render_template('encrypt.html')
 
 
 @web.route('/encrypt.json',methods=['POST'])

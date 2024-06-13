@@ -27,8 +27,8 @@ DOMAIN_PORT = 8899
 
 class Config:
     @staticmethod
-    def get_cmd_path(user_id):
-        return '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/data2_check/run_or_mx.py {}'.format(HomePath, user_id)
+    def get_cmd_path(user_id,case_id,job_id):
+        return '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/data2_check/run_or_mx.py {} {} {}'.format(HomePath, user_id,case_id,job_id)
 
     @staticmethod
     def get_cmd_path_api(job_id,user_id):
@@ -36,7 +36,7 @@ class Config:
 
     @staticmethod
     def get_cmd_path_batch(user_id,case_id):
-        return '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/data2_check/run_or_mx.py  {} {}'.format(HomePath, user_id, case_id)
+        return '/Users/ventura/miniconda3/envs/myenvn/bin/python3.6 {}/data2_check_batch/run_or_mx.py  {} {}'.format(HomePath, user_id, case_id)
 
 
 

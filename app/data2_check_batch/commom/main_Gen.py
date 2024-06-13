@@ -24,8 +24,7 @@ class Parser(object):
     def deal_excel(self, title='Test Report'):
 
         STYLESHEET_TMPL = """
-            <link href="{{ buildStaticUrl('/bootstrap-5.2.3/css/bootstrap.min.css') }}" rel="stylesheet"/>
-            <script src="{{buildStaticUrl('/bootstrap-5.2.3/js/bootstrap.bundle.min.js') }}"></script>
+
             <style type="text/css" media="screen">
             body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
             table       { font-size: 100%; }

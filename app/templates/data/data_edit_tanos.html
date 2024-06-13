@@ -18,7 +18,7 @@
 <!--<script src="/static/tanos/data_connect.js"></script>-->
 
 <!-- 引入socket.io.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>-->
 
 <!-- 引入xterm.js的相关文件 -->
 <link rel="stylesheet" href="/static/tanos/xterm.css"/>
@@ -408,7 +408,7 @@
                                                      <div class="col-md-10">
 
                                                         <div class="card-body " style="text-align: center;" >
-                                                            <h5 class='card-title' > ${item.job_name} </h5>
+                                                            <h5 class='card-title' > ${item.job_name} (JobId: ${item.job_id}) </h5>
                                                             <div class="card-text" style="text-align: left;">
                                                                 <div class="container text-center ">
                                                                     <div class="row">
@@ -522,7 +522,6 @@
                                          </form>
                                                      </td>
                                                 </tr>
-                                                <!-- 可以在这里添加更多的 tr 来显示其他的 card -->
                                 </tbody>
                                 </table>
                                 `
@@ -632,7 +631,9 @@
 
                         });
 
-                        $(document).on('click', '.card-run', function () {
+
+                        // 日志进程启动方式先禁掉，用card-run1，恢复就禁掉另外方式，重新开放本方法
+                        $(document).on('click', '.card-run1', function () {
                             var urlParams2 = new URLSearchParams(window.location.search);
                             // 获取名为 "id" 的参数值
                             var caseid2 = urlParams2.get('id');
@@ -777,6 +778,74 @@
 
                         });
 
+                        // 这种启动方式和批量的一致，但是以case为单位，而不是job.
+                      $(document).on('click', '.card-run', function () {
+
+                                var urlParams = new URLSearchParams(window.location.search);
+                                // 获取名为 "id" 的参数值
+                                var caseid = urlParams.get('id');
+
+                                const $btn = $(this);
+
+                                $btn.prop('disabled', true).text('Running...');
+
+                                var form = $(this).closest('form');
+                                var cardId = form.find('.card-id').text();
+
+
+                                $.ajax({
+                                    url: '/run_data_job',
+                                    type: 'POST',
+                                    data: JSON.stringify({caseid: caseid,jobid:cardId}),
+                                    contentType: 'application/json',
+                                    success: function (data) {
+                                        $btn.prop('disabled', false).text('Run');
+                                        if (data.status === 'true') {
+                                            const url = `/data_search_report?id=${caseid}`;
+                                            window.open(url, '_blank');
+                                        } else {
+                                            toastr.error('Failed to run batch job!');
+
+                                            // 假设 data.result 是包含错误信息的字符串
+
+                                            // 找到 Traceback (most recent call last) 的位置
+                                            const startIndex = data.result.indexOf('Traceback (most recent call last)');
+
+                                            // 如果找到了，将其标记为起始位置
+                                            if (startIndex !== -1) {
+                                                // 截取 Traceback (most recent call last) 之后的部分
+                                                const tracebackText = data.result.substring(startIndex);
+
+                                                // 高亮显示的 HTML 标签
+                                                const highlightedText = `<span style="color: red; font-weight: bold;">${tracebackText}</span>`;
+
+                                                // 替换原始字符串
+                                                data.result = data.result.replace(tracebackText, highlightedText);
+                                            }else {
+                                                // 如果没有找到 Traceback, 将整个错误信息显示出来
+                                                const highlightedText = `<span style="color: red; font-weight: bold;">${data.result}</span>`;
+                                                data.result = highlightedText;
+                                            }
+
+                                                // 现在 data.result 中包含了高亮显示的部分
+                                            let dialog = bootbox.dialog({
+                                                title: 'Error information!',
+                                                message: `<pre>${data.result}</pre>`,
+                                                centerVertical: true,
+                                                size: 'large',
+                                            });
+
+                                            // console.info(data.result)
+                                        }
+
+                                    },
+                                    error: function (error) {
+                                         $btn.prop('disabled', false).text('Run');
+                                        toastr.error('Failed to run batch job!');
+                                    }
+                                });
+                        });
+
                         $(document).on('click', '.report', function () {
                             // 跳转到指定页面
                             const url = `/data_search_report?id=${case_id}`;
@@ -857,11 +926,11 @@
                 success: function (data) {
                     $('#run-all').prop('disabled', false).text('Run All');
                     // toastr.success('Run batch job successfully!');
-                    if (data.message === 'success') {
+                    if (data.status === 'true') {
                         const url = `/data_search_report?id=${caseid}`;
                         window.open(url, '_blank');
                     } else {
-                        toastr.error('Failed to run batch job!');
+                         toastr.error('Failed to run batch job!');
 
                         // 假设 data.result 是包含错误信息的字符串
 
@@ -878,6 +947,10 @@
 
                             // 替换原始字符串
                             data.result = data.result.replace(tracebackText, highlightedText);
+                        }else {
+                            // 如果没有找到 Traceback, 将整个错误信息显示出来
+                            const highlightedText = `<span style="color: red; font-weight: bold;">${data.result}</span>`;
+                            data.result = highlightedText;
                         }
 
                             // 现在 data.result 中包含了高亮显示的部分
@@ -887,6 +960,7 @@
                             centerVertical: true,
                             size: 'large',
                         });
+
 
                         // console.info(data.result)
                     }
@@ -902,6 +976,9 @@
     });
 
 </script>
+
+
+
 
 
 {% if message %}

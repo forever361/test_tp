@@ -264,8 +264,19 @@ def runJob(jsonData):
 
     data = json.loads(jsonData)
 
-    case_id= "10116"
-    user_id = "590011"
+    case_id= data['caseid']
+    user_id = data.get('userid')
+
+    if user_id is not None:
+        token= request.headers.get('token')
+        if token=='7758521':
+            user_id = data['userid']
+        else:
+            return jsonify({'success':False,'message':'token error'}),401
+    else:
+        user_id = session.get('userid', None)
+
+
 
 
     try:
@@ -332,24 +343,39 @@ def run_data_job():
     # case_id= data['caseid']
     # user_id = session.get('userid', None)
 
-    case_id= "10116"
-    user_id = "590011"
+    data = request.json
+    case_id= data['caseid']
+    user_id = data.get('userid')
+    job_id = data.get('jobid')
 
-    print(user_id)
-    print(case_id)
+
+    if user_id is not None:
+        token= request.headers.get('token')
+        if token=='7758521':
+            user_id = data['userid']
+        else:
+            return jsonify({'success':False,'message':'token error'}),401
+    else:
+        user_id = session.get('userid', None)
+        print(user_id)
 
     try:
-        result = subprocess.run(Constant_cmd_data_batch(user_id,case_id).cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        result = subprocess.run(Constant_cmd(user_id,case_id,job_id).cmd_td, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         print('result:',result.stdout.decode('utf-8'))
+        output = result.stdout.decode('utf-8')
 
 
-    # 检查命令是否成功执行
-        if result.returncode == 0:
-            # 返回命令执行结果
-            return jsonify({'success': True, 'message':'success' }),200
+        # 提取 JSON_RESULT_START 和 JSON_RESULT_END 之间的 JSON 数据
+        start_index = output.find("JSON_RESULT_START")
+        end_index = output.find("JSON_RESULT_END")
+
+        if start_index != -1 and end_index != -1:
+            json_result = output[start_index + len("JSON_RESULT_START"):end_index].strip()
+            result_data = json.loads(json_result)
+            return jsonify({'status': 'true', 'message':"run job success",'data':result_data }),200
         else:
             # 返回错误信息
-            return jsonify({'success': False, 'message':'fail','result':result.stdout.decode('utf-8') }), 200
+            return jsonify({'status': 'false', 'message':'run job fail','result':result.stdout.decode('utf-8') }), 200
 
     except Exception as e:
-        return jsonify({'success': False,'message': str(e)}), 500
+        return jsonify({'status': 'false','message':'run job fail','result': str(e)}), 200

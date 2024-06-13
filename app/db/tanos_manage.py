@@ -650,6 +650,16 @@ class tanos_manage():
 
         return result
 
+    def get_data_batch_job(self, job_id):
+        # user_id = session.get('userid', None)
+        sql = """select job_id,job_name,job from tanos.job_management where job_id= '{}'  """ \
+            .format(job_id)
+        # print(sql)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from tanos.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+
+        return result
+
     def add_team(self,team_name,team_role):
         sql = """INSERT INTO tanos.team (name,group_ids)\
           VALUES ('{}','{}')""" \

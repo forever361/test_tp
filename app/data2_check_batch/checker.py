@@ -96,7 +96,7 @@ class BatchChecker(Checker):
 
         return v_status,c_status
 
-    def count_check(self):  # 没有进这个功能块，值得研究, 因为要进入批量对比，所以还用后面的功能
+    def count_check(self):  # count核心校验
         self.s_validator.shipping_count_container()
         self.t_validator.shipping_count_container()
         count_check_flag = True
@@ -106,7 +106,8 @@ class BatchChecker(Checker):
         times = config.get('default', 'times')
         # print("111111111111111111111", times)
 
-        Excel_write.head_row()
+
+        # Excel_write.head_row()
 
         for key in self.s_validator.count:
             # logger.info(
@@ -115,32 +116,35 @@ class BatchChecker(Checker):
                 f"|{key:<13} check|source:{self.s_validator.count[key]} target:{self.t_validator.count[key]}")
             # print('self.s_validator.count[key]', self.s_validator.count[key])
 
-            Excel_write.get_source_count(
-                self.s_validator.count[key], int(times))
-            Excel_write.get_target_count(
-                self.t_validator.count[key], int(times))
-            Excel_write.get_source_table_name(
-                self.s_validator.table, int(times))
-            Excel_write.get_target_table_name(
-                self.t_validator.table, int(times))
-            Excel_write.get_value_detail('http://{}:{}/static/user_files/{}/csv/{}_{}.csv'.format(
-                Constant().ip, Constant().port, user_id, self.t_validator.table, self.t_validator.job_id), int(times))
+            # Excel_write.get_source_count(
+            #     self.s_validator.count[key], int(times))
+            # Excel_write.get_target_count(
+            #     self.t_validator.count[key], int(times))
+            # Excel_write.get_source_table_name(
+            #     self.s_validator.table, int(times))
+            # Excel_write.get_target_table_name(
+            #     self.t_validator.table, int(times))
+            # Excel_write.get_value_detail('http://{}:{}/static/user_files/{}/csv/{}_{}.csv'.format(
+            #     Constant().ip, Constant().port, user_id, self.t_validator.table, caseid), int(times))
 
             if self.s_validator.count[key] != self.t_validator.count[key]:
                 count_check_flag = False
 
         # Excel_write.get_check_count(count_check_flag)
 
-        if count_check_flag:
-            # logger.info("count check successfully")
-            logger.info("count check successfully")
-            Excel_write.get_count_result_pass2(count_check_flag, int(times))
-            return m.ValidateStatue.SUCCESS
-        else:
-            # logger.error("count check failed")
-            logger.info("count check failed")
-            Excel_write.get_count_result_pass2(count_check_flag, int(times))
-            return "FAIL"
+            v_detail_link = 'http://{}:{}/static/user_files/{}/csv/{}_{}.csv'.format(
+                Constant().ip, Constant().port, user_id, self.t_validator.table, caseid)
+
+            if count_check_flag:
+                # logger.info("count check successfully")
+                logger.info("count check successfully")
+                # Excel_write.get_count_result_pass2(count_check_flag, int(times))
+                return 'success',self.s_validator.count[key],self.t_validator.count[key],v_detail_link
+            else:
+                # logger.error("count check failed")
+                logger.info("count check failed")
+                # Excel_write.get_count_result_pass2(count_check_flag, int(times))
+                return 'fail',self.s_validator.count[key],self.t_validator.count[key],v_detail_link
 
     def value_check(self):
         self.s_validator.shipping_value_container()
@@ -156,7 +160,7 @@ class BatchChecker(Checker):
         value_check_flag = True
         # verify_result_log_file_path = f"{LOG_PATH}/{self.s_validator.table}"
         # userid = ConnectSQL().get_personal_user_id()
-        userPath = folder_path + '/csv/' 
+        userPath = folder_path + '/csv/'
         verify_result_log_file_path = LOG_PATH+'/Log'
         date_str = datetime.strftime(datetime.now(), '%Y%m%d%H%M')
 
@@ -303,7 +307,7 @@ class BatchChecker(Checker):
 
         elif Testreport().report_type=='UAT':
             #之前结果样式
-            with open(f"{userPath}/{self.t_validator.verify_tablename}_{self.t_validator.job_id}.csv", "w", encoding='utf-8-sig') as writers:
+            with open(f"{userPath}/{self.t_validator.verify_tablename}_{caseid}.csv", "w", encoding='utf-8-sig') as writers:
                 writers.write(f"TITLE,{self.t_validator.pi_str},{self.t_validator.pi_split},{self.t_validator.col_str}\n")
                 batch_valueflag = True
                 for source_str_old, target_str_old, source_str, target_str, source_md5, target_md5 in zip_longest(
@@ -336,12 +340,12 @@ class BatchChecker(Checker):
 
         if batch_valueflag:
             logger.info("value check sucessfully")
-            Excel_write.get_value_result_pass2(batch_valueflag, int(times))
-            return m.ValidateStatue.SUCCESS
+            # Excel_write.get_value_result_pass2(batch_valueflag, int(times))
+            return 'success'
         else:
             logger.error("value check failed")
-            Excel_write.get_value_result_pass2(batch_valueflag, int(times))
-            return "FAIL"
+            # Excel_write.get_value_result_pass2(batch_valueflag, int(times))
+            return 'fail'
 
 
 class BatchChecker1(BatchChecker):
@@ -391,11 +395,12 @@ class BatchChecker1(BatchChecker):
 
 
             # self.s_validator.col_str = self.decorate_col_str(self.s_validator.col_str, 'trim(', ")")
+            c_status,s_count,t_count,v_detail_link = self.count_check()
 
             v_statuts = self.value_check()
-            c_status = self.count_check()
 
-        return s_count_sql, t_count_sql, v_statuts, c_status
+
+        return s_count_sql, t_count_sql, v_statuts, c_status,s_count,t_count,v_detail_link
 
     def decorate_col_str(self, col_str, sql_prefix, sql_suffix):
         columns = col_str.split(',')
@@ -437,9 +442,9 @@ class BatchChecker2(BatchChecker):
             # self.s_validator.col_str = self.decorate_col_str(self.s_validator.col_str, 'trim(', ")")
 
             v_statuts = self.value_check()
-            c_status = self.count_check()
+            c_status,s_count,t_count,v_detail_link = self.count_check()
 
-        return s_count_sql, t_count_sql, v_statuts, c_status
+        return s_count_sql, t_count_sql, v_statuts, c_status,s_count,t_count,v_detail_link
 
     def get_newcol_name(self):
         source_col_set = set(self.s_validator.col_str.split(','))
@@ -464,6 +469,64 @@ class BatchChecker2(BatchChecker):
             config.write(f)
         print('SOURCE COL:', self.s_validator.col_str)
         print('TARGET COL:', self.t_validator.col_str)
+
+    def decorate_col_str(self, col_str, sql_prefix, sql_suffix):
+        columns = col_str.split(',')
+        for index in range(len(columns)):
+            columns[index] = sql_prefix + columns[index] + sql_suffix
+        col_str = ','.join(columns)
+        return col_str
+
+class BatchChecker_count(BatchChecker):
+    def __init__(self, job_configure: dict, c_check_flag=False, v_check_flag=False) -> None:
+        super().__init__(job_configure)
+        self.c_check_flag = c_check_flag
+        self.v_check_flag = v_check_flag
+        self.columns_dict = {}
+
+    def check(self):
+        s_count_sql = None
+        t_count_sql = None
+        statuts = None
+
+        # logger.info(
+        #     f"{'=' * 20}{self.s_validator.tablename:}:start check{'=' * 20}")
+        # logger.info(
+        #     f"{'=' * 20}{self.s_validator.tablename:}:start check{'=' * 20}")
+        if self.c_check_flag:
+            s_count_sql = self.s_validator.get_batch_count_check_sql(
+                self.s_validator.verify_tablename, self.s_validator.verifydb)
+            t_count_sql = self.t_validator.get_batch_count_check_sql(
+                self.t_validator.verify_tablename, self.t_validator.verifydb)
+            print("**sql_s_count:", s_count_sql)
+            print("**sql_t_count:", t_count_sql)
+            # self.count_check()
+        if self.v_check_flag:
+            # 核心校验
+            td_col_set = set(self.s_validator.col_str.split(','))
+            # print('SOURCE COL:', td_col_set)
+            ali_col_set = set(self.t_validator.col_str.split(','))
+            # print('TARGET COL:', ali_col_set)
+            final_col_set = td_col_set.intersection(ali_col_set)
+            diff = td_col_set.symmetric_difference(ali_col_set)
+            # logger.info(
+            #     'different columns between Source and Target are: ' + (str(diff) if len(diff) != 0 else 'None'))
+            logger.info(
+                'different columns between Source and Target are: ' + (str(diff) if len(diff) != 0 else 'None'))
+            final_col_list = list(final_col_set)
+            final_col_list.sort()
+            self.s_validator.col_str = ','.join(final_col_list)
+            self.t_validator.col_str = self.s_validator.col_str
+
+            print('SOURCE COL:', self.s_validator.col_str)
+            print('TARGET COL:', self.t_validator.col_str)
+
+            # self.s_validator.col_str = self.decorate_col_str(self.s_validator.col_str, 'trim(', ")")
+
+            v_statuts = None
+            c_status,s_count,t_count,v_detail_link = self.count_check()
+
+        return s_count_sql, t_count_sql, v_statuts, c_status,t_count,s_count,v_detail_link
 
     def decorate_col_str(self, col_str, sql_prefix, sql_suffix):
         columns = col_str.split(',')
