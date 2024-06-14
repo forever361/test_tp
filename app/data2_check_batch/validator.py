@@ -579,7 +579,7 @@ class PgValidator(Validator):
 
 
     def get_batch_value_check_sql(self, pi_str, col_str, pi, verifydb, verify_tablename):
-        P_common = Parameter_common()
+        # P_common = Parameter_common()
         rule = 'Default'
         # print(11111,pi)
         if verifydb == '':
@@ -594,8 +594,8 @@ class PgValidator(Validator):
             return f"select {pi_str},'{self.pi_split}',{col_str} from {verifydb}.{verify_tablename}  {self.where_condition} order by {pi}   \n"
 
     def get_batch_count_check_sql(self, verify_tablename, verifydb):
-        P_common = Parameter_common()
-        rule = P_common.select_rules
+        # P_common = Parameter_common()
+        rule = 'Default'
         if verifydb == '':
             sql = f"select cast('{verify_tablename}' as varchar(100)) tablename, cast('total_count' as varchar(20)) as count_type, count(1) as c from {verify_tablename} {self.where_condition}\n"
         elif rule == "Check-the-first-200-rows":

@@ -3,15 +3,17 @@ import json
 import os
 import sys
 
-from app.db.tanos_manage import tanos_manage
-from app.util.MyEncoder import MyEncoder
-from app.util.crypto_ECB import AEScoder
+
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 
 import psycopg2
 
 sys.path.append('..')
+
+from app.db.tanos_manage import tanos_manage
+from app.util.MyEncoder import MyEncoder
+from app.util.crypto_ECB import AEScoder
 
 from app.util import global_manager
 from app.util.log_util.all_new_log import logger_all
@@ -728,9 +730,9 @@ def method_main():
     config = configparser.ConfigParser()
     folder_path = os.path.join(app.root_path, 'static', 'user_files', user_id)
 
-    user_path = '{}/userinfo/{}/'.format(configPath, userid)
-    ini_path = folder_path + '/config/config.ini'
-    config.read(ini_path)
+    # user_path = '{}/userinfo/{}/'.format(configPath, userid)
+    # ini_path = folder_path + '/config/config.ini'
+    # config.read(ini_path)
     # clear excel
     excel_path = folder_path + '/config/verification_result.xlsx'
     if os.path.exists(excel_path):
@@ -748,10 +750,10 @@ def method_main():
         t_count_sql_list = []
         times = 1
         for parameter in p_list:  # 多批次处理list
-            times = times + 1
-            config.set("default", "times", str(times))
-            with open(ini_path, "w+", encoding="utf8") as f:
-                config.write(f)
+            # times = times + 1
+            # config.set("default", "times", str(times))
+            # with open(ini_path, "w+", encoding="utf8") as f:
+            #     config.write(f)
             # print("times:", times)
             # 进入核心算法
             s_count_sql, t_count_sql, v_status, c_status, source_table,target_table,s_count,t_count,rule,v_detail_link = configure_validator(*parameter)

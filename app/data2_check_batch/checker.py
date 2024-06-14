@@ -33,9 +33,9 @@ iniPath = os.path.join(user_path + "/config.ini")
 logPath = os.path.join(user_path + "/log.log")
 
 
-config = configparser.ConfigParser()
-config.read(iniPath)  # 读取 ini 文件
-caseid = config.get('default', 'caseid')
+# config = configparser.ConfigParser()
+# config.read(iniPath)  # 读取 ini 文件
+caseid = Constant_id().case_id
 
 
 # def get_logger(logger_name):
@@ -101,9 +101,9 @@ class BatchChecker(Checker):
         self.t_validator.shipping_count_container()
         count_check_flag = True
 
-        config = configparser.ConfigParser()
-        config.read(iniPath)  # 读取 ini 文件
-        times = config.get('default', 'times')
+        # config = configparser.ConfigParser()
+        # config.read(iniPath)  # 读取 ini 文件
+        # times = config.get('default', 'times')
         # print("111111111111111111111", times)
 
 
@@ -132,7 +132,7 @@ class BatchChecker(Checker):
 
         # Excel_write.get_check_count(count_check_flag)
 
-            v_detail_link = 'http://{}:{}/static/user_files/{}/csv/{}_{}.csv'.format(
+            v_detail_link = 'https://{}:{}/static/user_files/{}/csv/{}_{}.csv'.format(
                 Constant().ip, Constant().port, user_id, self.t_validator.table, caseid)
 
             if count_check_flag:
@@ -150,9 +150,9 @@ class BatchChecker(Checker):
         self.s_validator.shipping_value_container()
         self.t_validator.shipping_value_container()
 
-        config = configparser.ConfigParser()
-        config.read(iniPath)  # 读取 ini 文件
-        times = config.get('default', 'times')
+        # config = configparser.ConfigParser()
+        # config.read(iniPath)  # 读取 ini 文件
+        # times = config.get('default', 'times')
         # print("2222222222222222222222", times)
 
         s_count = len(self.s_validator.md5_container)
@@ -459,14 +459,14 @@ class BatchChecker2(BatchChecker):
         final_col_list.sort()
         self.s_validator.col_str = ','.join(final_col_list)
         self.t_validator.col_str = ','.join(final_col_list)
-        config.clear()
-        config.add_section("ssh")
-        config.set("ssh", "colname", self.s_validator.col_str)
+        # config.clear()
+        # config.add_section("ssh")
+        # config.set("ssh", "colname", self.s_validator.col_str)
         # 写入ini文件，注意写入的mode会影响是否覆盖ini文件
         userid = Constant_id().cookie_id
         iniPath_ssh = os.path.join(LOG_PATH_NEW + "/userinfo/{}/config_ssh_col.ini".format(userid))
-        with open(iniPath_ssh, "w+", encoding="utf8") as f:
-            config.write(f)
+        # with open(iniPath_ssh, "w+", encoding="utf8") as f:
+        #     config.write(f)
         print('SOURCE COL:', self.s_validator.col_str)
         print('TARGET COL:', self.t_validator.col_str)
 
