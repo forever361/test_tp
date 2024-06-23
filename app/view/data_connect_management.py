@@ -1,6 +1,8 @@
 import traceback
 from traceback import print_exc
 
+import cx_Oracle
+import pymysql
 from flask import Blueprint, render_template, request, jsonify, session, g, current_app
 import json
 
@@ -8,6 +10,7 @@ from odps import ODPS
 
 from app.db.tanos_manage import tanos_manage
 from app.util import global_manager
+from app.util.SSH import mySSH
 from app.util.crypto_ECB import AEScoder
 from app.util.permissions import permission_required
 from app.view import viewutil, user
@@ -139,6 +142,52 @@ def test_connect():
             print(print_exc())
             logger_all.error('error connection：{}'.format(traceback.format_exc()))
             return jsonify(success=False, message='connect error')
+
+
+    elif r_dict['dbtype']== 'DB-Oralce':
+        try:
+            # TODO: connect function
+
+            conn = cx_Oracle.connect(r_dict['username'], r_dict['pwd'],r_dict['host'])
+            conn.close()
+            return jsonify(success=True, message='connect successfully')
+
+        except Exception:
+            print(print_exc())
+            logger_all.error('error connection：{}'.format(traceback.format_exc()))
+            return jsonify(success=False, message='connect error')
+
+    elif r_dict['dbtype']== 'Fileserver':
+        try:
+            # TODO: connect function
+
+            test = mySSH(host=r_dict['host'], username=r_dict['username'], password=r_dict['pwd'])
+            test.connect()
+            return jsonify(success=True, message='connect successfully')
+
+        except Exception:
+            logger_all.error('error connection：{}'.format(traceback.format_exc()))
+            return jsonify(success=False, message='connect error')
+
+    elif r_dict['dbtype'] == 'DB-MySQL':
+
+        try:
+            # MySQL connection
+            conn = pymysql.connect(database=r_dict['dblibrary'], user=r_dict['username'], password=r_dict['pwd'],
+                                  host=r_dict['host'], port=int(r_dict['port']))
+
+            cur = conn.cursor()
+            print(cur)
+            conn.close()
+            return jsonify(success=True, message='connect successfully')
+
+        except Exception:
+            logger_all.error('error connection：{}'.format(traceback.format_exc()))
+            return jsonify(success=False, message='connect error')
+
+
+
+
     else:
         return jsonify(success=False, message='connect error')
 

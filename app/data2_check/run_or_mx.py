@@ -3,6 +3,8 @@ import json
 import os
 import sys
 
+import pymysql
+
 from app.db.tanos_manage import tanos_manage
 from app.util.MyEncoder import MyEncoder
 from app.util.crypto_ECB import AEScoder
@@ -75,7 +77,7 @@ if case_id:
                 'DB-Oracle': 'orl',
                 'AliCloud-Maxcompute': 'ali',
                 'Fileserver': 'landingserver_file',
-                '456': '456'
+                'DB-MySQL':'mysql',
             }
             s_type = type_mapping.get(r_dict_conn_s['dbtype'], 'default_value')
             t_type = type_mapping.get(r_dict_conn_t['dbtype'], 'default_value')
@@ -96,13 +98,32 @@ if case_id:
             t_tablename = tanos_manage().get_tablename_by_point_name(target_point)
 
             if '.' in s_tablename:
-                first_half_s_tablename, second_half_s_tablename = s_tablename.split('.')
+                first_half_s_tablename, second_half_s_tablename = s_tablename.split('.', 1)
+                if second_half_s_tablename.lower() == 'csv' or second_half_s_tablename.lower() == 'txt':
+                    second_half_s_tablename = s_tablename
+                else:
+                    second_half_s_tablename = s_tablename.split('.', 1)[1]
+            else:
+                first_half_s_tablename = ''
+                second_half_s_tablename = s_tablename
 
+            print(111,t_tablename)
             if '.' in t_tablename:
-                first_half_t_tablename, second_half_t_tablename = t_tablename.split('.')
+                first_half_t_tablename, second_half_t_tablename = t_tablename.split('.', 1)
+                print(2222,t_tablename.split('.', 1))
+                print(3333,t_tablename)
+                if second_half_t_tablename.lower() == 'csv' or second_half_s_tablename.lower() == 'txt':
+                    second_half_t_tablename = t_tablename
+                else:
+                    second_half_t_tablename = t_tablename.split('.', 1)[1]
+
+            else:
+                first_half_t_tablename = ''
+                second_half_t_tablename = t_tablename
+
 
             table = [
-                [job_id, second_half_s_tablename, second_half_t_tablename, '', first_half_s_tablename,
+                [job_id, second_half_s_tablename, second_half_t_tablename, '', first_half_t_tablename,
                  job.get('fields'),
                  job.get('source_condition'), job.get('target_condition'), job.get('select_rules')]]
 
@@ -333,6 +354,61 @@ elif S_TYPE == 'landingserver_file_batch' and T_TYPE == 'ali_batch':
 
     odps_t = ODPS(access_id=ACCESS_ID_T, secret_access_key=SECRET_ACCESS_KEY_T, project=PROJECT_T,
                   endpoint=ENDPOINT_T)
+
+elif S_TYPE == 'mysql' and T_TYPE == 'pg':
+
+    source_conn_value = connect_info['Source conn']
+    source_conn_parts = source_conn_value.split(',')
+
+    DB_S = source_conn_parts[2]
+    USER_S = source_conn_parts[3]
+    PASSWORD_S =  source_conn_parts[4]
+    HOST_S = source_conn_parts[0]
+    PORT_S =  int(source_conn_parts[1])
+
+
+
+    target_conn_value = connect_info['Target conn']
+    target_conn_parts = target_conn_value.split(',')
+
+    DB_T = target_conn_parts[2]
+    USER_T = target_conn_parts[3]
+    PASSWORD_T = AEScoder().decrypt(target_conn_parts[4])
+    HOST_T = target_conn_parts[0]
+    PORT_T = target_conn_parts[1]
+
+    con_s = pymysql.connect(database=DB_S, user=USER_S, password=PASSWORD_S,
+                                  host=HOST_S, port=PORT_S )
+    con_t = psycopg2.connect(database=DB_T, user=USER_T, password=PASSWORD_T, host=HOST_T, port=PORT_T)
+
+
+elif S_TYPE == 'mysql' and T_TYPE == 'ali':
+
+    source_conn_value = connect_info['Source conn']
+    source_conn_parts = source_conn_value.split(',')
+
+    DB_S = source_conn_parts[2]
+    USER_S = source_conn_parts[3]
+    PASSWORD_S =  source_conn_parts[4]
+    HOST_S = source_conn_parts[0]
+    PORT_S =  int(source_conn_parts[1])
+
+
+
+    target_conn_value = connect_info['Target conn']
+    target_conn_parts = target_conn_value.split(',')
+
+    ACCESS_ID_T = target_conn_parts[3]
+    SECRET_ACCESS_KEY_T = target_conn_parts[4]
+    ENDPOINT_T = target_conn_parts[0]
+    PROJECT_T = target_conn_parts[2]
+
+    con_s = pymysql.connect(database=DB_S, user=USER_S, password=PASSWORD_S,
+                                  host=HOST_S, port=PORT_S )
+    odps_t = ODPS(access_id=ACCESS_ID_T, secret_access_key=SECRET_ACCESS_KEY_T, project=PROJECT_T,
+                  endpoint=ENDPOINT_T)
+
+
 
 
 # cx_Oracle.init_oracle_client(lib_dir="C:\swdtools\instantclient_19_12")
@@ -608,7 +684,7 @@ def configure_validator(
                 "password": PASSWORD_S,
                 "port": PORT_S,
                 "database": DB_S,
-                "tablename": source_table.split('_')[-1],
+                "tablename": source_table,
                 "pi": pi,
                 "verifydb": exportdb,
                 "remove_col_list": remove_col_list,
@@ -622,7 +698,7 @@ def configure_validator(
                 "password": PASSWORD_T,
                 "port": PORT_T,
                 "database": DB_T,
-                "tablename": target_table.split('_')[-1],
+                "tablename": target_table,
                 "pi": pi,
                 "verifydb": exportdb,
                 "remove_col_list": remove_col_list,
@@ -691,6 +767,73 @@ def configure_validator(
                 "verifydb": PROJECT_T,
                 "where_condition": t_where_condition,
                 "id_per_batch": []
+            }
+        }
+
+
+    elif S_TYPE == 'mysql' and T_TYPE == 'pg':
+        logger.info("S:mysql,T:pg")
+        job_configure = {
+            "source_validator": {
+                "name": "MysqlValidator",
+                "host": HOST_S,
+                "user": USER_S,
+                "password": PASSWORD_S,
+                "port": PORT_S,
+                "database": DB_S,
+                "tablename": source_table,
+                "pi": pi,
+                "verifydb": exportdb,
+                "remove_col_list": remove_col_list,
+                "table": source_table.upper().strip(),
+                "where_condition": s_where_condition
+            },
+            "target_validator": {
+                "name": "PgValidator",
+                "host": HOST_T,
+                "user": USER_T,
+                "password": PASSWORD_T,
+                "port": PORT_T,
+                "database": DB_T,
+                "tablename": target_table,
+                "pi": pi,
+                "verifydb": exportdb,
+                "remove_col_list": remove_col_list,
+                "table": target_table.upper().strip(),
+                "where_condition": t_where_condition
+            }
+        }
+
+
+    elif S_TYPE == 'mysql' and T_TYPE == 'ali':
+        logger.info("S:mysql,T:pg")
+        job_configure = {
+            "source_validator": {
+                "name": "MysqlValidator",
+                "host": HOST_S,
+                "user": USER_S,
+                "password": PASSWORD_S,
+                "port": PORT_S,
+                "database": DB_S,
+                "tablename": source_table,
+                "pi": pi,
+                "verifydb": exportdb,
+                "remove_col_list": remove_col_list,
+                "table": source_table.upper().strip(),
+                "where_condition": s_where_condition
+            },
+            "target_validator": {
+                "name": "AliValidator",
+                "access_id": ACCESS_ID_T,
+                "secret_access_key": SECRET_ACCESS_KEY_T,
+                "endpoint": ENDPOINT_T,
+                "ads_prj": PROJECT_T,
+                "tablename": target_table.split('_')[-1],
+                "pi": pi,
+                "remove_col_list": remove_col_list,
+                "table": target_table.upper().strip(),
+                "verifydb": PROJECT_T,
+                "where_condition": t_where_condition
             }
         }
 

@@ -33,7 +33,7 @@ class tanos_manage():
         useDB.useDB().executesql(sql)
 
     def update_connection(self, connect_id, connect_name, dbtype, connect_type, host, dblibrary, username, pwd, port):
-        sql = "UPDATE tanos.connection_management set connect_name='{}',dbtype='{}',connect_type='{}',host='{}',dblibrary='{}',username='{}',pwd='{}', port={} WHERE connect_id = {};".format(
+        sql = "UPDATE tanos.connection_management set connect_name='{}',dbtype='{}',connect_type='{}',host='{}',dblibrary='{}',username='{}',pwd='{}', port='{}' WHERE connect_id = {};".format(
             connect_name, dbtype, connect_type, host, dblibrary, username, pwd, port, connect_id)
         useDB.useDB().executesql(sql)
 

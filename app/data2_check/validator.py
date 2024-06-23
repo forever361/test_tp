@@ -8,6 +8,7 @@ import configparser
 import paramiko
 import psycopg2
 # import teradatasql
+import pymysql
 from odps import ODPS
 from hashlib import md5
 import argparse
@@ -490,7 +491,6 @@ class OraValidator(Validator):
         if self.error_str_list:
             return f"select {self.col_str} from {self.exportdb}.{self.verify_tablename} where {self.batch_check_column} = '{self.batch_dt}' and {pi_str} in ({','.join(self.error_str_list)})"
 
-
 class PgValidator(Validator):
     def __init__(self, host=None, user=None, password=None, database=None, port=None, columndb=None, sourcedb=None, mi_code=None, pi=None,
                  where_condition: str = None,**kwargs):
@@ -606,6 +606,102 @@ class PgValidator(Validator):
             sql = f"select cast('{verify_tablename}' as varchar(100)) tablename, cast('total_count' as varchar(20)) as count_type, count(1) as c from {verifydb}.{verify_tablename} {self.where_condition}\n"
         return sql
 
+class MysqlValidator(Validator):
+    def __init__(self, host=None, user=None, password=None, database=None, port=None, columndb=None, sourcedb=None, mi_code=None, pi=None, where_condition: str = None, **kwargs):
+        super().__init__(**kwargs)
+        self.columns_dict = {}
+        self.con = pymysql.connect(database=database, user=user, password=password, host=host, port=port)
+        self.columndb = columndb
+        self.sourcedb = sourcedb
+        self.database = database
+        self.pi = pi or self._getpi()
+        self.column_list = self._get_table_columns(self.verify_tablename.lower())
+        print(111,self.column_list)
+        self.column_list.sort()
+        self.pi_str = self._get_pi_str("TRIM(", ")")
+        self.col_str = self.get_table_columns_str2(self.remove_col_list, self.pi)
+
+        if where_condition == '' or where_condition == '\n':
+            self.where_condition = where_condition
+        else:
+            self.where_condition = f'WHERE {where_condition}'
+
+    def execute(self, sql):
+        print(sql)
+        cur = self.con.cursor()
+        cur.execute(sql)
+        return cur.fetchall()
+
+    def get_table_columns_str(self, sql_prefix, sql_suffix, remove_col_list):
+        columns = []
+        for columnName, columnType in self.column_list:
+            if columnName not in remove_col_list:
+                if columnType in ('CV', 'CF'):
+                    columns.append(f"{sql_prefix}{columnName}{sql_suffix}")
+                else:
+                    columns.append(columnName)
+        return ','.join(columns)
+
+    def get_table_columns_str2(self, remove_col_list, pi):
+        columns = []
+        for columnName in self.column_list:
+            if columnName not in remove_col_list and columnName != pi:
+                columns.append(columnName.upper())
+        return ','.join(columns)
+
+    def _getpi(self):
+        runsql = f"SELECT COLUMN_NAME FROM information_schema.columns WHERE TABLE_NAME = '{self.verify_tablename}' AND TABLE_SCHEMA = '{self.columndb}' "
+        pis = self.execute(runsql)
+        return ",".join([i[0] for i in pis])
+
+    def _get_pi_str(self, sql_prefix, sql_suffix):
+        pi_list = self.pi.split(",")
+        columns = []
+        for columnName in pi_list:
+            if columnName not in self.remove_col_list:
+                columns.append(columnName)
+        return ','.join(columns)
+
+
+    def _get_table_columns(self, table_name):
+        sql = f"SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_NAME = '{table_name}' AND TABLE_SCHEMA = '{self.database}';"
+        result = self.execute(sql)
+        columns = [row[0] for row in result]
+        return columns
+
+    def get_batch_error_sql(self):
+        pi_str = "||".join(self.pi.split(","))
+        if self.error_str_list:
+            return f"SELECT {self.col_str} FROM {self.sourcedb}.{self.verify_tablename} WHERE {self.batch_check_column} = '{self.batch_dt}' AND {pi_str} IN ({','.join(self.error_str_list)})"
+
+    def get_batch_value_check_sql(self, pi_str, col_str, pi, verifydb, verify_tablename):
+        P_common = Parameter_common()
+        rule = P_common.select_rules
+        if verifydb == '':
+            return f"SELECT {pi_str},'{self.pi_split}',{col_str} FROM {verify_tablename} {self.where_condition} ORDER BY {pi}\n"
+        elif rule == "Check-the-first-200-rows":
+            return f"SELECT {pi_str},'{self.pi_split}',{col_str} FROM {verifydb}.{verify_tablename} ORDER BY {pi} LIMIT 200\n"
+        elif rule == "Check-the-first-500-rows":
+            return f"SELECT {pi_str},'{self.pi_split}',{col_str} FROM {verifydb}.{verify_tablename} ORDER BY {pi} LIMIT 500\n"
+        elif rule == "Check-the-first-1000-rows":
+            return f"SELECT {pi_str},'{self.pi_split}',{col_str} FROM {verifydb}.{verify_tablename} ORDER BY {pi} LIMIT 1000\n"
+        else:
+            return f"SELECT {pi_str},'{self.pi_split}',{col_str} FROM {self.verify_tablename.lower()} {self.where_condition} ORDER BY {pi}\n"
+
+    def get_batch_count_check_sql(self, verify_tablename, verifydb):
+        P_common = Parameter_common()
+        rule = P_common.select_rules
+        if verifydb == '':
+            sql = f"SELECT CAST('{verify_tablename}' AS CHAR(100)) tablename, CAST('total_count' AS CHAR(20)) AS count_type, COUNT(1) AS c FROM {self.verify_tablename.lower()}\n"
+        elif rule == "Check-the-first-200-rows":
+            sql = f"SELECT CAST('{verify_tablename}' AS CHAR(100)) tablename, CAST('total_count' AS CHAR(20)) AS count_type, COUNT(1) AS c FROM (SELECT * FROM {self.verify_tablename.lower()} LIMIT 200) AS t\n"
+        elif rule == "Check-the-first-500-rows":
+            sql = f"SELECT CAST('{verify_tablename}' AS CHAR(100)) tablename, CAST('total_count' AS CHAR(20)) AS count_type, COUNT(1) AS c FROM (SELECT * FROM {self.verify_tablename.lower()} LIMIT 500) AS t\n"
+        elif rule == "Check-the-first-1000-rows":
+            sql = f"SELECT CAST('{verify_tablename}' AS CHAR(100)) tablename, CAST('total_count' AS CHAR(20)) AS count_type, COUNT(1) AS c FROM (SELECT * FROM {self.verify_tablename.lower()} LIMIT 1000) AS t\n"
+        else:
+            sql = f"SELECT CAST('{verify_tablename}' AS CHAR(100)) tablename, CAST('total_count' AS CHAR(20)) AS count_type, COUNT(1) AS c FROM {self.verify_tablename.lower()} {self.where_condition}\n"
+        return sql
 
 
 class FileValidator(Validator):

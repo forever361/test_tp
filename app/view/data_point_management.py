@@ -2,10 +2,12 @@ import traceback
 from traceback import print_exc
 
 import psycopg2
+import pymysql
 from flask import Blueprint, render_template, request, jsonify, session
 
 from app import useDB
 from app.db.tanos_manage import tanos_manage
+from app.util.SSH import mySSH
 from app.util.crypto_ECB import AEScoder
 from app.util.log_util.all_new_log import logger_all
 from app.util.permissions import permission_required
@@ -113,20 +115,85 @@ def test_connect_point():
         result_list2.append(result_dict2)
     r_dict_conn= dict(result_list2[0])
 
-    try:
-        # TODO: connect function
-        conn = psycopg2.connect(database=r_dict_conn['dblibrary'], user=r_dict_conn['username'], password=r_dict_conn['pwd'],
-                                 host=r_dict_conn['host'], port=r_dict_conn['port'])
-        cur = conn.cursor()
-        sql = f"select cast('{r_dict_point['table_name']}' as varchar(100)) tablename, cast('total_count' as varchar(20)) as count_type, count(1) as c from {r_dict_point['table_name']}\n"
-        cur.execute(sql)
-        rows = cur.fetchall()
-        cur.close()
-        return jsonify(success=True, message='connect successfully',count=rows[0][2])
+    print(r_dict_conn)
 
-    except Exception:
-        print(print_exc())
-        logger_all.error('error connection：{}'.format(traceback.format_exc()))
+    if r_dict_conn['dbtype'] == 'AliCloud-PostgreSQL':
+        try:
+            # PostgreSQL connection
+            conn = psycopg2.connect(database=r_dict_conn['dblibrary'], user=r_dict_conn['username'],
+                                    password=r_dict_conn['pwd'],
+                                    host=r_dict_conn['host'], port=r_dict_conn['port'])
+            cur = conn.cursor()
+            # Extract schema and table name
+            schema_name, table_name = r_dict_point['table_name'].split('.')
+
+            # Check if the table exists
+            check_table_sql = f"""
+                            SELECT EXISTS (
+                                SELECT 1
+                                FROM information_schema.tables 
+                                WHERE table_schema = '{schema_name}'
+                                AND table_name = '{table_name}'
+                            );
+                        """
+            cur.execute(check_table_sql)
+            table_exists = cur.fetchone()[0]
+            cur.close()
+            conn.close()
+
+            if table_exists:
+                return jsonify(success=True, message=f"Table '{table_name}' exists.")
+            else:
+                return jsonify(success=False, message=f"Table '{table_name}' does not exist.")
+
+        except Exception:
+            logger_all.error('error connection：{}'.format(traceback.format_exc()))
+            return jsonify(success=False, message='Connect error')
+
+
+    elif r_dict_conn['dbtype']== 'Fileserver':
+        try:
+            test = mySSH(host=r_dict_conn['host'], username=r_dict_conn['username'], password=r_dict_conn['pwd'])
+            test.connect()
+
+            return jsonify(success=True, message='connect successfully')
+
+        except Exception:
+            print(print_exc())
+            logger_all.error('error connection：{}'.format(traceback.format_exc()))
+            return jsonify(success=False, message='connect error')
+
+
+    elif r_dict_conn['dbtype']== 'DB-MySQL':
+        try:
+            # MySQL connection
+            conn = pymysql.connect(database=r_dict_conn['dblibrary'], user=r_dict_conn['username'],
+                                   password=r_dict_conn['pwd'],
+                                   host=r_dict_conn['host'], port=int(r_dict_conn['port']))
+            cur = conn.cursor()
+            # Check if the table exists
+            table_name = r_dict_point['table_name']
+            check_table_sql = f"""
+                       SELECT COUNT(*)
+                       FROM information_schema.tables 
+                       WHERE table_schema = '{r_dict_conn['dblibrary']}'
+                       AND table_name = '{table_name}';
+                   """
+            cur.execute(check_table_sql)
+            table_exists = cur.fetchone()[0] == 1
+            cur.close()
+            conn.close()
+
+            if table_exists:
+                return jsonify(success=True, message=f"Table '{table_name}' exists.")
+            else:
+                return jsonify(success=False, message=f"Table '{table_name}' does not exist.")
+
+        except Exception:
+            logger_all.error('error connection：{}'.format(traceback.format_exc()))
+            return jsonify(success=False, message='Connect error')
+
+    else:
         return jsonify(success=False, message='connect error')
 
 

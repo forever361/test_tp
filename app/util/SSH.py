@@ -35,12 +35,7 @@ class mySSH:
                     self.connection.exec_command('uname -a')
                 self.connection.sftp = paramiko.SFTPClient.from_transport(self.connection.get_transport())
         except Exception as e:
-            try:
-                print(str(e.args))
-                self.connection = None
-            finally:
-                e = None
-                del e
+            raise e
 
     def connect_ftp(self):
         self.connection = paramiko.SSHClient()
@@ -116,10 +111,11 @@ class mySSH:
                         line = f.readline().strip('\n').split("")
                         # print(type(f.readline()))
                         return line
-                except Exception:
+                except Exception as e:
                     print("An error occurred.")
                     traceback.print_exc()
                     sftp_client.close()
+                    raise e
                     # remote_file.close()
             else:
                 try:
@@ -227,60 +223,8 @@ class mySSH:
 
 
 def get_batch_data():
-    test = mySSH(host='hkl20147074', username='cst01adm', password='yW,EGts5I8%t',
-                  remote_path="/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/aps/bk"
-                              "/ln_applycust_inf_20210617.text",
-                  id='apply_nbr,customer_id')
-    dff = test.connect_ftp_batch()
-    for i in dff:
-        col_name = i.columns.values.tolist()
-        print(col_name)
-        dff_shape = i.shape[0]
-        print(dff_shape)
-        print(i)
-
+    pass
 
 if __name__ == '__main__':
-    #1
-    # test = mySSH(host='ht68-etl.hk.hsbc',username='gan02exe',password='ecZ,FDwtH2cN')
-    # test.connect()
-    # stdin1, stdout1, stderr1 = test.connection.exec_command(
-    #     '/ds/ht68/data/dpr_ht6806/dpr_ga_uat/scripts/tools/getuid.sh gan02ua1.twbcu.key gan02ua1.twbcu.uid')
-    # stdin2, stdout2, stderr2 = test.connection.exec_command(
-    #     '/ds/ht68/data/dpr_ht6806/dpr_ga_uat/scripts/tools/getpwd.sh gan02ua1.twbcu.key gan02ua1.twbcu.uid')
-    # uid_result = str(stdout1.read(), 'UTF-8')
-    # psw_result = str(stdout2.read(), 'UTF-8')
-    # print(uid_result.strip(),psw_result.strip())
-
-    #2
-    test = mySSH(host='hkl20147074',username='cst01adm',password='yW,EGts5I8%t')
-    test.connect()
-    stdin1, stdout1, stderr1 = test.connection.exec_command(
-        '/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/q_test/getuid.sh cdi.test.bcu.key cdi.test.bcu.uid')
-    stdin2, stdout2, stderr2 = test.connection.exec_command(
-        '/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/q_test/getpwd.sh cdi.test.bcu.key cdi.test.bcu.uid')
-    uid_result = str(stdout1.read(), 'UTF-8')
-    psw_result = str(stdout2.read(), 'UTF-8')
-    print(uid_result.strip(),psw_result.strip())
-
-
-    # test2 = mySSH(host='hkl20147074', username='cst01adm', password='yW,EGts5I8%t',
-    #              remote_path="/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/aps/bk/ln_applycust_inf_20210617.text",id='customer_id,apply_nbr')
-    # colname,dff,count = test2.connect_ftp()
-    # print(dff)
-
-
-    # test3 = mySSH(host='hkl20147074', username='cst01adm', password='yW,EGts5I8%t',
-    #              remote_path="/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/aps/bk/ln_applycredit_inf_business_20210617.text",id='apply_nbr,insuranc_no')
-    # colname,dff,count = test3.connect_ftp()
-    # print(dff)
-    # get_batch_data()
-
-    # test4 = mySSH(host='hkl20147074', username='cst01adm', password='yW,EGts5I8%t',
-    #              remote_path="/ds/ht57/data/dpr_ht5701/dpr_br2_dev/cst_aoc_gisu/landing/ccb/aps/bk/ln_applycredit_inf_business_20210617.text",id='apply_nbr,insuranc_no')
-    # count = test4.connect_get_count()
-    # print(count)
-
-
-
+    pass
 
