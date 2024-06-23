@@ -52,18 +52,18 @@ def edit_test_case():
         info = request.values
         id = viewutil.getInfoAttribute(info, 'id')
 
-        ini_path = folder_path + '/config/' + 'config.ini'
-        # 添加section
-        configP.clear()
-        configP.add_section("default")
-        # 添加option并设置值，只能是string
-        configP.set("default", "userid", str(user_id))
-        configP.set("default", "caseid", str(id))
-        configP.set("default", "times", str(2))
-        configP.set("default", "returncode", 'NULL')
-        # 写入ini文件，注意写入的mode会影响是否覆盖ini文件
-        with open(ini_path, "w", encoding="utf8") as f:
-            configP.write(f)
+        # ini_path = folder_path + '/config/' + 'config.ini'
+        # # 添加section
+        # configP.clear()
+        # configP.add_section("default")
+        # # 添加option并设置值，只能是string
+        # configP.set("default", "userid", str(user_id))
+        # configP.set("default", "caseid", str(id))
+        # configP.set("default", "times", str(2))
+        # configP.set("default", "returncode", 'NULL')
+        # # 写入ini文件，注意写入的mode会影响是否覆盖ini文件
+        # with open(ini_path, "w", encoding="utf8") as f:
+        #     configP.write(f)
 
         infor_value = ConnectSQL().data_get_infor_value_id(id)
         print(infor_value)
