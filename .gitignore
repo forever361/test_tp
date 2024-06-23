@@ -16,13 +16,12 @@
 /*.pem
 /*.log
 
-/app/common/libs/__pycache__/
-/app/config/__pycache__/
-/app/data2_check/commom/__pycache__/
-/app/data2_check_batch/commom/__pycache__/
-/app/db/__pycache__/
-/app/util/log_util/__pycache__/
-
+.DS_Store
+app/.DS_Store
+app/common/libs/__pycache__/
+app/config/__pycache__/
+app/db/__pycache__/
+app/util/log_util/__pycache__/
 
 
 
