@@ -892,9 +892,9 @@ def method_main():
         times = 1
         for parameter in p_list:  # 多批次处理list
             times = times + 1
-            config.set("default", "times", str(times))
-            with open(ini_path, "w+", encoding="utf8") as f:
-                config.write(f)
+            # config.set("default", "times", str(times))
+            # with open(ini_path, "w+", encoding="utf8") as f:
+            #     config.write(f)
             # print("times:", times)
             # 进入核心算法
             s_count_sql, t_count_sql, v_status, c_status, source_table,target_table,s_count,t_count,rule,v_detail_link = configure_validator(*parameter)
