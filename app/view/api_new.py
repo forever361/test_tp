@@ -6,6 +6,8 @@ from flask import Blueprint, render_template, request, jsonify, session
 import os
 import sys
 
+from werkzeug import local
+
 from app.util.permissions import permission_required
 from app.view import user
 
@@ -110,19 +112,21 @@ def get_api_detail2():
         return jsonify("Something wrong!")
 
 
-
-
 @web.route('/run_api_post', methods=['POST'])
 def run_api_post():
-    data = request.json
-    print(data)
+    local.data = request.json
+    print(local.data)
     print('POST')
-    url = data['send_url']
-    headers = data['send_headers']
-    payload = data['send_body']
+    url = local.data['send_url']
+    headers = local.data['send_headers']
+    payload = local.data['send_body']
     try:
         res = requests.post(url=url, headers=headers, data=json.dumps(payload),verify=False)
-        response = {'response_code': res.status_code, 'response_text': res.text,}
+        response = {
+            'response_code': res.status_code,
+            'response_text': res.text,
+            'response_headers': dict(res.headers)  # 提取响应头
+        }
         return jsonify(response)
     except Exception:
         return jsonify({'response_code': 404, 'response_text': "error!!"})
@@ -130,18 +134,23 @@ def run_api_post():
 
 @web.route('/run_api_get', methods=['POST'])
 def run_api_get():
-    data = request.json
-    print(data)
+    local.data = request.json
+    print(local.data)
     print('GET')
-    url = data['send_url']
-    headers = data['send_headers']
-    payload = data['send_body']
+    url = local.data['send_url']
+    headers = local.data['send_headers']
+    payload = local.data['send_body']
     try:
         res = requests.get(url=url, headers=headers, data=json.dumps(payload),verify=False)
-        response = {'response_code': res.status_code, 'response_text': res.text}
+        response = {
+            'response_code': res.status_code,
+            'response_text': res.text,
+            'response_headers': dict(res.headers)  # 提取响应头
+        }
         return jsonify(response)
     except Exception:
         return jsonify({'response_code': 404, 'response_text': "error!!"})
+
 
 
 @web.route('/test_api')

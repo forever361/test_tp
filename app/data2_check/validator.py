@@ -821,6 +821,117 @@ class FileValidator(Validator):
             else:
                 return s_str
 
+class FileValidator_no_col(Validator):
+    def __init__(self, where_condition='',verifydb='',verify_tablename='',tablename='', table='',host=None, user=None, password=None, port=22, pi=None,**kwargs):
+        # super().__init__(**kwargs)
+
+        self.str_container = []
+        self.md5_container = []
+        self.ori_data = []
+        self.count = {}
+        self.sums = []
+        self.error_str_list = []
+        self.pi_split = "@@@"
+
+        self.host = host
+        self.port = port
+        self.username = user
+        self.password = password
+        self.pi=pi
+        self.table=table
+        self.col_str = self.getcol()
+        self.tablename = tablename
+        self.verify_tablename=verify_tablename
+        self.verifydb=verifydb
+        self.where_condition=where_condition
+
+
+
+    def getcol(self):
+        pass
+
+    def ssh_value(self):
+        test2 = mySSH(host=self.host, username=self.username, password=self.password,
+                      remote_path=self.table)
+        records, count = test2.connect_ftp_no_col()
+        return [records,count]
+
+    def shipping_count_container(self):
+        test = mySSH(host=self.host, username=self.username, password=self.password,
+                     remote_path=self.table)
+        count = test.connect_get_count_no_col()
+        self.count = {'total_count': int(count)}
+
+    def shipping_value_container(self):
+        records, count = self.ssh_value()
+
+        # 自动生成列名
+        records.columns = [f'col{i + 1}' for i in range(records.shape[1])]
+
+        sort_col_name = list(records.columns)
+        # print(sort_col_name)
+        # # 假设你需要的列名中包含ID_NO和PI_SPLIT
+        # sort_col_name.insert(0, 'ID_NO')
+        # sort_col_name.insert(1, 'PI_SPLIT')
+        #
+        # print(sort_col_name)
+        # sort_col_name = list(records.columns)
+        # print(sort_col_name)
+
+        self.gen_md5(records[sort_col_name].values.tolist(), self.str_container, self.md5_container, self.ori_data)
+
+    def gen_md5(self, records, str_container:List, md5_container:List, ori_data:List ):
+        for record in records:
+            # print(record)
+            join_str = "".join([self.convert_to_str(i) for i in record])
+            join_str2 = ",".join([self.convert_to_str(i) for i in record])
+            # ori_str = join_str2.split("@@@,")[1]
+            ori_str = join_str2
+            md5_str = md5(join_str.encode('utf-8')).hexdigest()
+            # print(join_str)
+            str_container.append(join_str)
+            md5_container.append(md5_str)
+            ori_data.append(ori_str)
+
+    def convert_to_str(self, s):
+        """
+        convert values into string
+        :param s:
+        :return:
+        """
+        if isinstance(s, Decimal):
+            if str(s.to_integral() if s == s.to_integral() else s.normalize()).endswith('.0'):
+                return str(s.to_integral() if s == s.to_integral() else s.normalize()).split('.0')[0]
+            else:
+                return str(s.to_integral() if s == s.to_integral() else s.normalize())
+        elif s is None:
+            return ''
+        else:
+            # add 换行符和空格处理
+            s_str = str(s).replace('\n', '').replace('\r', '').replace(' ', '')
+            if s_str.endswith('.0'):
+                return s_str.split('.0')[0]
+            elif s_str.endswith('.00'):
+                return s_str.split('.00')[0]
+            elif s_str.endswith('.000'):
+                return s_str.split('.000')[0]
+            elif s_str.endswith('.0000'):
+                return s_str.split('.0000')[0]
+            elif s_str.endswith('.00000'):
+                return s_str.split('.00000')[0]
+            elif s_str.endswith('.000000'):
+                return s_str.split('.000000')[0]
+            elif s_str.endswith('.0000000'):
+                return s_str.split('.0000000')[0]
+            elif s_str.endswith('.00000000'):
+                return s_str.split('.00000000')[0]
+            elif s_str.endswith('.000000000'):
+                return s_str.split('.000000000')[0]
+            elif s_str.endswith('.0000000000'):
+                return s_str.split('.0000000000')[0]
+            else:
+                return s_str
+
 
 class AliValidator_batch(Validator):
     def __init__(self, ods_prj=None, ads_prj="", access_id="", secret_access_key="", endpoint="", pi=None,

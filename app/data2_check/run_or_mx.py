@@ -339,6 +339,27 @@ elif S_TYPE == 'landingserver_file' and T_TYPE == 'ali':
     odps_t = ODPS(access_id=ACCESS_ID_T, secret_access_key=SECRET_ACCESS_KEY_T, project=PROJECT_T,
                   endpoint=ENDPOINT_T)
 
+elif S_TYPE == 'landingserver_file' and T_TYPE == 'pg':
+
+    source_conn_value = connect_info['Source conn']
+    source_conn_parts = source_conn_value.split(',')
+
+    USER_S = source_conn_parts[3]
+    PASSWORD_S =  source_conn_parts[4]
+    HOST_S = source_conn_parts[0]
+
+    target_conn_value = connect_info['Target conn']
+    target_conn_parts = target_conn_value.split(',')
+
+    DB_T = target_conn_parts[2]
+    USER_T = target_conn_parts[3]
+    PASSWORD_T = AEScoder().decrypt(target_conn_parts[4])
+    HOST_T = target_conn_parts[0]
+    PORT_T = target_conn_parts[1]
+
+
+    con_t = psycopg2.connect(database=DB_T, user=USER_T, password=PASSWORD_T, host=HOST_T, port=PORT_T)
+
 
 elif S_TYPE == 'landingserver_file_batch' and T_TYPE == 'ali_batch':
     P = Parameter_file_ali()
@@ -737,6 +758,38 @@ def configure_validator(
             }
         }
 
+    elif S_TYPE == 'landingserver_file' and T_TYPE == 'pg':
+        logger.info("S:file,T:pg")
+        job_configure = {
+            "source_validator": {
+                "name": "FileValidator_no_col",
+                "table": source_table,
+                "host": HOST_S,
+                "user": USER_S,
+                "password": PASSWORD_S,
+                "port": 22,
+                "pi": pi,
+                "tablename": '',
+                "remove_col_list": remove_col_list,
+                "where_condition": s_where_condition
+            },
+            "target_validator": {
+                "name": "PgValidator",
+                "host": HOST_T,
+                "user": USER_T,
+                "password": PASSWORD_T,
+                "port": PORT_T,
+                "database": DB_T,
+                "tablename": target_table,
+                "pi": pi,
+                "verifydb": exportdb,
+                "remove_col_list": remove_col_list,
+                "table": target_table.upper().strip(),
+                "where_condition": t_where_condition
+            }
+        }
+
+
 
     elif S_TYPE == 'landingserver_file_batch' and T_TYPE == 'ali_batch':
         logger.info("S:file,T:ali_batch")
@@ -840,7 +893,7 @@ def configure_validator(
     # _args.count = True
     # _args.value = True
     if S_TYPE == 'landingserver_file':
-        c = checker.BatchChecker2(job_configure, True, True)
+        c = checker.BatchChecker_no_col(job_configure, True, True)
     elif rule=='Empty-check':
         c = checker.BatchChecker_count(job_configure, True, True)
     else:

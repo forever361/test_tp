@@ -71,7 +71,8 @@ VALIDATOR_MAPPING = {"AliValidator":v.AliValidator,
                       "FileValidator": v.FileValidator,
                      "AliValidator_batch":v.AliValidator_batch,
                      "FileValidator_batch":v.FileValidator_batch,
-                     "MysqlValidator":v.MysqlValidator
+                     "MysqlValidator":v.MysqlValidator,
+                     "FileValidator_no_col":v.FileValidator_no_col
                      }
 
 class ValidateStatue(Enum):

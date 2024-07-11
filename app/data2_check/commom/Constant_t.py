@@ -11,8 +11,8 @@ class Constant_id():
 
 class Testreport():
     def __init__(self):
-        # self.report_type = 'UAT'
-        self.report_type= 'PROD'
+        self.report_type = 'UAT'
+        # self.report_type= 'PROD'
 
 
 

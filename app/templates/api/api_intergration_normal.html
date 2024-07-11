@@ -305,6 +305,13 @@
                                             <input type="text" class="form-control" id="response-time"
                                                    placeholder="Response time">
                                         </div>
+
+                                        <!-- 新增响应头部分 -->
+                                        <div class="form-group">
+                                            <label for="response-headers" style="margin-bottom: 10px">Response Headers:</label>
+                                            <textarea class="form-control" id="response-headers" style="height: auto; min-height: 50px;" rows="5"></textarea>
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="response-body" style="margin-bottom: 10px">Response
                                                 Body:</label>
@@ -584,6 +591,10 @@
                                 res_CodeMirror.refresh();
                             }
 
+                            let responseHeaders = JSON.stringify(data['response_headers'], null, 2);
+                            $('#response-headers').val(responseHeaders);
+
+
                             const responseTime = performance.now() - responseStartTime;
                             const responseTimeInput = document.getElementById("response-time");
                             responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
@@ -637,6 +648,10 @@
                                 res_CodeMirror.refresh();
                             }
 
+                            let responseHeaders = JSON.stringify(data['response_headers'], null, 2);
+                            $('#response-headers').val(responseHeaders);
+
+
                             const responseTime = performance.now() - responseStartTime;
                             const responseTimeInput = document.getElementById("response-time");
                             responseTimeInput.value = `${responseTime.toFixed(2)} ms`;
@@ -654,6 +669,7 @@
                             res_CodeMirror.setValue(data['response_text'])
                             res_CodeMirror.refresh();
                             toastr.error('fail to test!');
+
 
                             const responseTime = performance.now() - responseStartTime;
                             const responseTimeInput = document.getElementById("response-time");
