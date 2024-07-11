@@ -23,6 +23,8 @@ app/config/__pycache__/
 app/db/__pycache__/
 app/util/log_util/__pycache__/
 
+app/config/config_dev.py
+
 
 
 

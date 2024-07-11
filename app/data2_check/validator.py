@@ -675,8 +675,8 @@ class MysqlValidator(Validator):
             return f"SELECT {self.col_str} FROM {self.sourcedb}.{self.verify_tablename} WHERE {self.batch_check_column} = '{self.batch_dt}' AND {pi_str} IN ({','.join(self.error_str_list)})"
 
     def get_batch_value_check_sql(self, pi_str, col_str, pi, verifydb, verify_tablename):
-        P_common = Parameter_common()
-        rule = P_common.select_rules
+        # P_common = Parameter_common()
+        rule = 'Default'
         if verifydb == '':
             return f"SELECT {pi_str},'{self.pi_split}',{col_str} FROM {verify_tablename} {self.where_condition} ORDER BY {pi}\n"
         elif rule == "Check-the-first-200-rows":
@@ -689,8 +689,8 @@ class MysqlValidator(Validator):
             return f"SELECT {pi_str},'{self.pi_split}',{col_str} FROM {self.verify_tablename.lower()} {self.where_condition} ORDER BY {pi}\n"
 
     def get_batch_count_check_sql(self, verify_tablename, verifydb):
-        P_common = Parameter_common()
-        rule = P_common.select_rules
+        # P_common = Parameter_common()
+        rule = 'Default'
         if verifydb == '':
             sql = f"SELECT CAST('{verify_tablename}' AS CHAR(100)) tablename, CAST('total_count' AS CHAR(20)) AS count_type, COUNT(1) AS c FROM {self.verify_tablename.lower()}\n"
         elif rule == "Check-the-first-200-rows":
