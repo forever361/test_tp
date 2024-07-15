@@ -682,6 +682,22 @@ class tanos_manage():
         useDB.useDB().executesql(sql)
 
 
+    def show_data_per_job(self):
+        user_id = session.get('userid', None)
+        sql = """select user_id,job_id,job_name,create_date from tanos.data_per_job where user_id= '{}'  """ \
+            .format(user_id)
+        # sql = """select connect_name,dbtype,connect_type,host,dblibrary,username,pwd from tanos.connection_management """
+        result = useDB.useDB().executesql_fetch(sql)
+
+        return result
+
+    def add_data_per_job(self,job_name):
+        create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        user_id = session.get('userid', None)
+        sql = """INSERT INTO tanos.data_per_job (user_id,job_name,create_date)\
+          VALUES ('{}','{}','{}')""" \
+            .format(user_id, job_name.strip(),create_date)
+        useDB.useDB().executesql(sql)
 
 if __name__ == '__main__':
     testcase = tanos_manage()

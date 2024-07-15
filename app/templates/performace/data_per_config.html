@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky{% endblock %}
+
+{% block js %}
+<script src="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.js"></script>
+<link href="/static/bootstrap-table-1.21.3/dist/bootstrap-table.min.css" rel="stylesheet"/>
+
+<script src="/static/tanos/bootbox.all.min.js"></script>
+<script src="/static/tanos/popper.js"></script>
+<script src="/static/tanos/toastr.min.js"></script>
+<link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
+
+    <!-- Latest Sortable -->
+
+
+
+<!-- Bootstrap Font Icon CSS -->
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">-->
+
+<!--<script src="/static/tanos/data_connect.js"></script>-->
+
+
+{% endblock %}
+
+{% block content %}
+
+<style>
+  .green-card {
+      background-color: #d4edda; /* Bootstrap success color */
+    }
+    .red-card {
+      background-color: #f5c6cb; /* Bootstrap danger color */
+    }
+
+     .btn-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+
+</style>
+
+{#<style>#}
+{#  .custom-table tbody tr {#}
+{#    height: 500px; /* 设置每一行的高度，根据需要调整值 */#}
+{#  }#}
+{#</style>#}
+
+
+{#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
+
+{##}
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="/data_per_search_case?id={{ job_id }}">Job Phases</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="/data_per_config?id={{ job_id }}">Job Configure</a>
+      </li>
+    </ul>
+
+    <div style=" margin: 20px; margin-bottom: 100px " class="card">
+         <div class="card-body" style="padding:10px;">
+            <!-- Default panel contents -->
+
+
+<div class="container mt-5">
+    <h2 class="mb-4">Job Configure</h2>
+    <div class="btn-container">
+      <!-- Left aligned buttons -->
+
+    </div>
+    <div class="row">
+      <div class="col-md-3 mb-4">
+        <div class="card ">
+          <div class="card-header ">
+            Phase 1: File Server
+          </div>
+          <div class="card-body green-card">
+            <!-- Display server log time -->
+              <p>Start Time: <span id="serverStartTime">---</span></p>
+            <p>End Time: <span id="serverEndTime">---</span></p>
+            <hr>
+            <!-- Display calculated Time -->
+            <p>Time: <span id="serverTimeDiff">---</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-4">
+        <div class="card">
+          <div class="card-header ">
+            Phase 2: Juniper
+          </div>
+          <div class="card-body green-card">
+            <!-- Display database 1 time -->
+            <p>Start Time: <span id="JuniperStartTime">---</span></p>
+            <p>End Time: <span id="JuniperEndTime">---</span></p>
+            <hr>
+            <!-- Display calculated Time -->
+            <p>Time: <span id="db1TimeDiff">---</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-4">
+        <div class="card">
+          <div class="card-header ">
+            Phase 3: ODS
+          </div>
+          <div class="card-body green-card">
+            <!-- Display database 2 time -->
+            <p>Start Time: <span id="ODSStartTime">---</span></p>
+            <p>End Time: <span id="ODSEndTime">---</span></p>
+            <hr>
+            <!-- Display calculated Time -->
+            <p>Time: <span id="db2TimeDiff">---</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-4">
+        <div class="card">
+          <div class="card-header ">
+            Phase 4: CDS
+          </div>
+          <div class="card-body green-card">
+            <!-- Display Juniper database time -->
+            <p>Start Time: <span id="CDSStartTime">---</span></p>
+            <p>End Time: <span id="CDSEndTime">---</span></p>
+            <hr>
+            <!-- Display calculated Time -->
+            <p>Time: <span id="juniperTimeDiff">---</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Function to fetch data from backend and update UI
+    function fetchDataAndUpdateUI() {
+      // Simulated AJAX request to backend (replace with actual fetch or AJAX call)
+      setTimeout(() => {
+        // Replace with actual fetched data
+        const serverData = {
+          startTime: "2024-07-15T08:00",
+          endTime: "2024-07-15T09:30"
+        };
+        const juniperData = {
+          startTime: "2024-07-15T09:00",
+          endTime: "2024-07-15T10:00"
+        };
+        const odsData = {
+          startTime: "2024-07-15T10:00",
+          endTime: "2024-07-15T11:00"
+        };
+        const cdsData = {
+          startTime: "2024-07-15T08:30",
+          endTime: "2024-07-15T09:45"
+        };
+
+        // Update Phase 1 card
+        document.getElementById("serverStartTime").textContent = serverData.startTime;
+        document.getElementById("serverEndTime").textContent = serverData.endTime;
+        document.getElementById("serverTimeDiff").textContent = calculateTimeDifference(serverData.startTime, serverData.endTime);
+
+        // Update Phase 2 card
+        document.getElementById("JuniperStartTime").textContent = juniperData.startTime;
+        document.getElementById("JuniperEndTime").textContent = juniperData.endTime;
+        document.getElementById("juniperTimeDiff").textContent = calculateTimeDifference(juniperData.startTime, juniperData.endTime);
+
+        // Update Phase 3 card
+        document.getElementById("ODSStartTime").textContent = odsData.startTime;
+        document.getElementById("ODSEndTime").textContent = odsData.endTime;
+        document.getElementById("db2TimeDiff").textContent = calculateTimeDifference(odsData.startTime, odsData.endTime);
+
+        // Update Phase 4 card
+        document.getElementById("CDSStartTime").textContent = cdsData.startTime;
+        document.getElementById("CDSEndTime").textContent = cdsData.endTime;
+        document.getElementById("db1TimeDiff").textContent = calculateTimeDifference(cdsData.startTime, cdsData.endTime);
+
+      }, 1000); // Simulated delay (1 second) for demonstration
+    }
+
+    // Function to calculate time difference (example)
+    function calculateTimeDifference(startTime, endTime) {
+      startTime = new Date(startTime);
+      endTime = new Date(endTime);
+      const diffMs = endTime - startTime;
+      const diffMinutes = Math.round(diffMs / (1000 * 60));
+      return `${diffMinutes} minutes`;
+    }
+
+    // Event listener for "Run Now" button click
+    document.getElementById("runButton").addEventListener("click", function() {
+      fetchDataAndUpdateUI();
+    });
+
+    // Event listener for "Configure" button click (placeholder)
+    document.getElementById("configureButton").addEventListener("click", function() {
+        const jobId = {{ job_id }};
+      window.location.href = `/data_per_config?id=${jobId}`;
+      // Implement your configuration logic here
+    });
+  </script>
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        // 监听按钮点击事件
+        $('#btnGenjob').on('click', function () {
+            var rows = $('#table').bootstrapTable('getSelections');
+            if (rows.length < 1) {
+                alert("请至少选择一条数据");
+            } else {
+                // 多选时获取case_id
+                var caseIds = [];
+                for (var i = 0; i < rows.length; i++) {
+                    caseIds.push(rows[i].case_id);
+                }
+
+                // caseIds 数组中存储了选中行的 case_id
+                {#alert(caseIds);#}
+                $.ajax({
+                    url: '/gen_api_batch_job',
+                    type: 'POST',
+                    data: JSON.stringify({caseIds: caseIds}),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        job_id = data.job_id
+                        window.location.href = '/batch_search_result?id=' + job_id;
+                        {#toastr.success('generate job successfully!');#}
+
+                    },
+                    error: function (error) {
+
+                        toastr.error('failed to generate job.');
+                    }
+                });
+
+
+            }
+
+        });
+    });
+
+
+</script>
+
+
+<script>
+
+    const $table = $('#table');
+
+
+    // Formatter for "action" column
+    function actionFormatter(value, row, index) {
+        return '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>'
+
+    }
+
+    {#function actionFormatter(value, row, index) {#}
+    {#    return '<button class="btn btn-sm btn-primary edit-row" onclick="window.location.href=(\'/data_edit_test_case_tanos?id=' + row.id + '\')"><i class="fa-regular fa-pen-to-square"></i></button> ' +#}
+    {#        '<button  class="btn btn-sm btn-danger delete-row" style="margin-left: 10px;"><i class="fa-regular fa-trash-can"></i></button>' +#}
+    {#        '<button class="btn btn-sm btn-success report-row" style="margin-left: 10px;" onclick="window.location.href=(\'/data_search_report?id=' + row.id + '\')"><i class="fa-sharp fa-regular fa-eye"></i></button> '#}
+    {##}
+    {#}#}
+
+
+    /////delete function
+    function deleteRow($tr) {
+        const id = $tr.find('td:eq(1)').text();
+        console.log({id: id})
+        $.ajax({
+            url: '/delete_api_batch_suite',
+            type: 'POST',
+            data: JSON.stringify({"id": id, "act": "del"}),
+            contentType: 'application/json',
+            success: function () {
+                toastr.success('delete successfully!');
+                $('#table').bootstrapTable('refresh');
+            },
+            error: function (error) {
+                console.log(error);
+                toastr.error('failed to delete the suite. Please try again.');
+            }
+        });
+    }
+
+
+    $table.on('click', '.delete-row', function () {
+        const $tr = $(this).closest('tr');
+
+        let dialog = bootbox.dialog({
+            title: 'Delete item!',
+            message: "<p>Please confirm if you want to delete? </p>",
+            centerVertical: true,
+            buttons:
+                {
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger',
+                        callback:
+                            function () {
+                                console.log('Custom cancel clicked');
+                            }
+                    },
+
+                    ok: {
+                        label: "Yes",
+                        className: 'btn-success',
+                        callback:
+                            function () {
+                                deleteRow($tr)
+                            }
+                    }
+                }
+        });
+
+    });
+
+
+</script>
+
+
+
+
+{% if message %}
+
+{% endif %}
+
+{% endblock %}
