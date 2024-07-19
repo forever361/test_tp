@@ -78,3 +78,12 @@ def data_per_config():
     # 获取请求参数中的id
     job_id = request.args.get('id')
     return render_template('performace/data_per_config.html', job_id=job_id)
+
+
+
+@app.route('/saveDataPerConfiguration',methods=['POST'])
+def saveDataPerConfiguration():
+    data = request.json
+    job_id = data['jobId']
+
+    return render_template('performace/data_per_config.html', job_id=job_id)
