@@ -1,14 +1,18 @@
 import configparser
 
 import json
+import re
 import subprocess
 import traceback
 from datetime import datetime
 from time import sleep
 
+import paramiko
+import psycopg2
 from flask import Blueprint, render_template, jsonify, request, get_flashed_messages, send_from_directory, session, redirect, url_for
 # from app import log
 from flask_socketio import emit
+from psycopg2 import sql
 
 from app.application import socketio
 from app.db import test_case_manage
@@ -85,5 +89,214 @@ def data_per_config():
 def saveDataPerConfiguration():
     data = request.json
     job_id = data['jobId']
+    job_config = json.dumps(data)
+    print(job_config)
+    tanos_manage().update_data_per_job_config(job_id,job_config)
+
 
     return render_template('performace/data_per_config.html', job_id=job_id)
+
+
+@app.route('/loadDataPerConfiguration', methods=['POST'])
+def load_data_per_configuration():
+    data = request.json
+    job_id = data['jobId']
+    print(1111,job_id)
+
+    result = tanos_manage().show_data_per_job_config(job_id)
+
+    if result:
+        return jsonify(result)
+    else:
+        return jsonify({'error': 'No configuration found for this job ID'}), 404
+
+
+@app.route('/fetchPhaseData', methods=['POST'])
+def fetch_phase_data():
+    # 示例数据，可以从数据库或其他数据源获取实际数据
+
+
+    data = request.json
+    job_id = data['jobId']
+
+    result = tanos_manage().show_data_per_job_config(job_id)
+
+
+    # 从 result 中提取各个 datapoint
+    fileServerDatapoint1 = result['fileServerDatapoint1']
+    fileServerDatapoint2 = result['fileServerDatapoint2']
+    odsDatapoint = result['odsDatapoint']
+    cdsDatapoint = result['cdsDatapoint']
+
+    # 函数用于获取连接信息
+    def get_connection_info(datapoint):
+        connect_id = tanos_manage().get_connectid_by_point_name(datapoint)
+        connect_info = tanos_manage().search_all_by_connect_id(connect_id)
+        keys = ('connect_id', 'connect_name', 'dbtype', 'connect_type', 'host', 'dblibrary', 'username', 'pwd', "port")
+        result_list = []
+        for row in connect_info:
+            values = [value.strip() if isinstance(value, str) else value for value in row]
+            result_dict = dict(zip(keys, values))
+            result_list.append(result_dict)
+        return dict(result_list[0])
+
+    # 获取连接信息
+    conn_fileServerDatapoint1 = get_connection_info(fileServerDatapoint1)
+    conn_fileServerDatapoint2 = get_connection_info(fileServerDatapoint2)
+    conn_odsDatapoint = get_connection_info(odsDatapoint)
+    conn_cdsDatapoint = get_connection_info(cdsDatapoint)
+
+    # 获取表名
+    fileServerDatapoint1_tablename = tanos_manage().get_tablename_by_point_name(fileServerDatapoint1)
+    fileServerDatapoint2_tablename = tanos_manage().get_tablename_by_point_name(fileServerDatapoint2)
+    odsDatapoint_tablename = tanos_manage().get_tablename_by_point_name(odsDatapoint)
+    cdsDatapoint_tablename = tanos_manage().get_tablename_by_point_name(cdsDatapoint)
+
+    # 整合所有连接信息到 connt 字典中
+    conn_info  = {
+        'fileServer_conn1': '{},{},{},{},{},{}'.format(
+            conn_fileServerDatapoint1['host'], conn_fileServerDatapoint1['port'],
+            conn_fileServerDatapoint1['dblibrary'], conn_fileServerDatapoint1['username'],
+            conn_fileServerDatapoint1['pwd'], fileServerDatapoint1_tablename),
+        'fileServer_conn2': '{},{},{},{},{},{}'.format(
+            conn_fileServerDatapoint2['host'], conn_fileServerDatapoint2['port'],
+            conn_fileServerDatapoint2['dblibrary'], conn_fileServerDatapoint2['username'],
+            conn_fileServerDatapoint2['pwd'], fileServerDatapoint2_tablename),
+        'ODS_conn': '{},{},{},{},{},{}'.format(
+            conn_odsDatapoint['host'], conn_odsDatapoint['port'],
+            conn_odsDatapoint['dblibrary'], conn_odsDatapoint['username'],
+            conn_odsDatapoint['pwd'], odsDatapoint_tablename),
+        'CDS_conn': '{},{},{},{},{},{}'.format(
+            conn_cdsDatapoint['host'], conn_cdsDatapoint['port'],
+            conn_cdsDatapoint['dblibrary'], conn_cdsDatapoint['username'],
+            conn_cdsDatapoint['pwd'], cdsDatapoint_tablename)
+    }
+
+    def get_log_times(server, port, username, password, file_path):
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(server, port=port, username=username, password=password)
+
+        sftp = ssh.open_sftp()
+        file = sftp.file(file_path)
+        lines = file.readlines()
+        file.close()
+        sftp.close()
+        ssh.close()
+
+        start_time_pattern = re.compile(r"TANOS_start_time:(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})")
+        end_time_pattern = re.compile(r"TANOS_end_time:(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})")
+
+        start_time = None
+        end_time = None
+
+        for line in lines:
+            start_time_match = start_time_pattern.search(line)
+            if start_time_match:
+                start_time = datetime.strptime(start_time_match.group(1), '%Y-%m-%d %H:%M:%S')
+
+            end_time_match = end_time_pattern.search(line)
+            if end_time_match:
+                end_time = datetime.strptime(end_time_match.group(1), '%Y-%m-%d %H:%M:%S')
+
+        return start_time, end_time
+
+    print(conn_info )
+
+    start_times = []
+    end_times = []
+
+    for key in ['fileServer_conn1', 'fileServer_conn2']:
+        server, _, _, username, password, file_path = conn_info[key].split(',')
+        start_time, end_time = get_log_times(server, 22, username, password, file_path)
+
+        if start_time and end_time:
+            start_times.append(start_time)
+            end_times.append(end_time)
+
+        earliest_start_time = min(start_times)
+        latest_end_time = max(end_times)
+        print(f"Earliest start time: {earliest_start_time}")
+        print(f"Latest end time: {latest_end_time}")
+
+    # 连接pg数据库
+    ods_conn_info = conn_info['ODS_conn'].split(',')
+    cds_conn_info = conn_info['CDS_conn'].split(',')
+
+    # 创建连接字符串
+    ods_conn_str = "host={} port={} dbname={} user={} password={}".format(
+        ods_conn_info[0], ods_conn_info[1], ods_conn_info[2], ods_conn_info[3], ods_conn_info[4]
+    )
+
+    cds_conn_str = "host={} port={} dbname={} user={} password={}".format(
+        cds_conn_info[0], cds_conn_info[1], cds_conn_info[2], cds_conn_info[3], cds_conn_info[4]
+    )
+
+    print(result['odsSystemCode'],result['odsSubSystemCode'],result['odsBatchData'])
+
+    def fetch_data(conn_str,tablename,aa,bb,cc):
+        try:
+            # 连接到 PostgreSQL 数据库
+            conn = psycopg2.connect(conn_str)
+            cur = conn.cursor()
+
+            print(111,tablename)
+
+            # 查询 datatest.datatest 表中的数据
+            # 分离模式名和表名
+            schema_name, table_name = tablename.split('.')
+
+            # 使用 sql.Identifier 格式化模式名和表名
+            query = sql.SQL("SELECT ods_start_time, ods_end_time FROM {}.{}").format(
+                sql.Identifier(schema_name),
+                sql.Identifier(table_name)
+            )
+            cur.execute(query)
+
+            # 获取查询结果
+            rows = cur.fetchall()
+            print(rows)
+            # 将 datetime 对象格式化为字符串
+            formatted_rows = [(row[0].strftime('%Y-%m-%d %H:%M:%S'), row[1].strftime('%Y-%m-%d %H:%M:%S')) for row in
+                              rows]
+            print("Formatted rows:", formatted_rows)
+
+            # 关闭游标和连接
+            cur.close()
+            conn.close()
+            return formatted_rows
+
+        except Exception as error:
+            print(f"Error: {error}")
+            return []
+
+    # 查询 ODS 数据库
+    ods_data = fetch_data(ods_conn_str,ods_conn_info[5],result['odsSystemCode'],result['odsSubSystemCode'],result['odsBatchData'])
+
+    # 查询 CDS 数据库
+    cds_data = fetch_data(cds_conn_str, cds_conn_info[5],result['cdsSystemCode'],result['cdsSubSystemCode'],result['cdsBatchData'])
+
+    # 如果查询到的行数不为0, 取第一行的时间数据
+    ods_start_time, ods_end_time = ods_data[0] if ods_data else (None, None)
+    cds_start_time, cds_end_time = cds_data[0] if cds_data else (None, None)
+
+    data = {
+        "serverData": {
+            "startTime": earliest_start_time,
+            "endTime": latest_end_time
+        },
+        "juniperData": {
+            "startTime": latest_end_time,
+            "endTime": ods_start_time
+        },
+        "odsData": {
+            "startTime": ods_start_time,
+            "endTime": ods_end_time
+        },
+        "cdsData": {
+            "startTime": cds_start_time,
+            "endTime": cds_end_time
+        }
+    }
+    print(data)
+    return jsonify(data)

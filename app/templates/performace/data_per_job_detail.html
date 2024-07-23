@@ -55,7 +55,7 @@
 {##}
     <ul class="nav nav-tabs">
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/data_per_search_case?id={{ job_id }}">Job Phases</a>
+        <a class="nav-link active" aria-current="page" href="/data_per_search_case?id={{ job_id }}">Job Parts</a>
       </li>
       <li class="nav-item">
         <a class="nav-link " href="/data_per_config?id={{ job_id }}">Job Configure</a>
@@ -68,7 +68,7 @@
 
 
 <div class="container mt-5">
-    <h2 class="mb-4">Job Phases</h2>
+    <h2 class="mb-4">Job Parts</h2>
     <div class="btn-container">
       <!-- Left aligned buttons -->
       <div>
@@ -88,7 +88,7 @@
             <p>End Time: <span id="serverEndTime">---</span></p>
             <hr>
             <!-- Display calculated Time -->
-            <p>Time: <span id="serverTimeDiff">---</span></p>
+            <p>Duration: <span id="serverTimeDiff">---</span></p>
           </div>
         </div>
       </div>
@@ -103,7 +103,7 @@
             <p>End Time: <span id="JuniperEndTime">---</span></p>
             <hr>
             <!-- Display calculated Time -->
-            <p>Time: <span id="db1TimeDiff">---</span></p>
+            <p>Duration: <span id="juniperTimeDiff">---</span></p>
           </div>
         </div>
       </div>
@@ -118,7 +118,7 @@
             <p>End Time: <span id="ODSEndTime">---</span></p>
             <hr>
             <!-- Display calculated Time -->
-            <p>Time: <span id="db2TimeDiff">---</span></p>
+            <p>Duration: <span id="db2TimeDiff">---</span></p>
           </div>
         </div>
       </div>
@@ -133,67 +133,124 @@
             <p>End Time: <span id="CDSEndTime">---</span></p>
             <hr>
             <!-- Display calculated Time -->
-            <p>Time: <span id="juniperTimeDiff">---</span></p>
+            <p>Duration: <span id="db1TimeDiff">---</span></p>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Input for expected time -->
+    <div class="form-group">
+        <label for="expectedTime">Expected Time (seconds):</label>
+        <input type="number" class="form-control" id="expectedTime">
+    </div>
+
+    <!-- Result display -->
+    <div class="alert" id="resultMessage" role="alert" style="display: none;"></div>
+
   </div>
 
   <script>
     // Function to fetch data from backend and update UI
-    function fetchDataAndUpdateUI() {
-      // Simulated AJAX request to backend (replace with actual fetch or AJAX call)
-      setTimeout(() => {
-        // Replace with actual fetched data
-        const serverData = {
-          startTime: "2024-07-15T08:00",
-          endTime: "2024-07-15T09:30"
-        };
-        const juniperData = {
-          startTime: "2024-07-15T09:00",
-          endTime: "2024-07-15T10:00"
-        };
-        const odsData = {
-          startTime: "2024-07-15T10:00",
-          endTime: "2024-07-15T11:00"
-        };
-        const cdsData = {
-          startTime: "2024-07-15T08:30",
-          endTime: "2024-07-15T09:45"
-        };
+function fetchDataAndUpdateUI() {
 
-        // Update Phase 1 card
-        document.getElementById("serverStartTime").textContent = serverData.startTime;
-        document.getElementById("serverEndTime").textContent = serverData.endTime;
-        document.getElementById("serverTimeDiff").textContent = calculateTimeDifference(serverData.startTime, serverData.endTime);
-
-        // Update Phase 2 card
-        document.getElementById("JuniperStartTime").textContent = juniperData.startTime;
-        document.getElementById("JuniperEndTime").textContent = juniperData.endTime;
-        document.getElementById("juniperTimeDiff").textContent = calculateTimeDifference(juniperData.startTime, juniperData.endTime);
-
-        // Update Phase 3 card
-        document.getElementById("ODSStartTime").textContent = odsData.startTime;
-        document.getElementById("ODSEndTime").textContent = odsData.endTime;
-        document.getElementById("db2TimeDiff").textContent = calculateTimeDifference(odsData.startTime, odsData.endTime);
-
-        // Update Phase 4 card
-        document.getElementById("CDSStartTime").textContent = cdsData.startTime;
-        document.getElementById("CDSEndTime").textContent = cdsData.endTime;
-        document.getElementById("db1TimeDiff").textContent = calculateTimeDifference(cdsData.startTime, cdsData.endTime);
-
-      }, 1000); // Simulated delay (1 second) for demonstration
+        // Function to get URL parameter
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
+    // Get the job ID from the URL
+    var jobId = getUrlParameter('id');
+
+    var config = {
+        jobId: jobId,
+    };
+
+
+
+    $.ajax({
+        url: "/fetchPhaseData",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(config),
+        success: function(response) {
+            // Replace with actual fetched data
+            const serverData = response.serverData;
+            const juniperData = response.juniperData;
+            const odsData = response.odsData;
+            const cdsData = response.cdsData;
+
+            // Update Phase 1 card
+            document.getElementById("serverStartTime").textContent = formatDate(serverData.startTime);
+            document.getElementById("serverEndTime").textContent = formatDate(serverData.endTime);
+            document.getElementById("serverTimeDiff").textContent = calculateTimeDifference(serverData.startTime, serverData.endTime);
+            const serverTimeDiff = calculateTimeDifference(serverData.startTime, serverData.endTime);
+
+            // Update Phase 2 card
+            document.getElementById("JuniperStartTime").textContent = formatDate(juniperData.startTime);
+            document.getElementById("JuniperEndTime").textContent = formatDate(juniperData.endTime);
+            document.getElementById("juniperTimeDiff").textContent = calculateTimeDifference(juniperData.startTime, juniperData.endTime);
+            const juniperTimeDiff = calculateTimeDifference(juniperData.startTime, juniperData.endTime);
+
+            // Update Phase 3 card
+            document.getElementById("ODSStartTime").textContent = formatDate(odsData.startTime);
+            document.getElementById("ODSEndTime").textContent = formatDate(odsData.endTime);
+            document.getElementById("db2TimeDiff").textContent = calculateTimeDifference(odsData.startTime, odsData.endTime);
+            const odsTimeDiff = calculateTimeDifference(odsData.startTime, odsData.endTime);
+
+            // Update Phase 4 card
+            document.getElementById("CDSStartTime").textContent = formatDate(cdsData.startTime);
+            document.getElementById("CDSEndTime").textContent = formatDate(cdsData.endTime);
+            document.getElementById("db1TimeDiff").textContent = calculateTimeDifference(cdsData.startTime, cdsData.endTime);
+            const cdsTimeDiff = calculateTimeDifference(cdsData.startTime, cdsData.endTime);
+
+
+            // Calculate total time in seconds
+                const totalTime = (serverTimeDiff + juniperTimeDiff + odsTimeDiff + cdsTimeDiff) * 60;
+                                console.log(serverTimeDiff, juniperTimeDiff, odsTimeDiff, cdsTimeDiff);
+
+                console.log(totalTime)
+                const expectedTime = parseInt(document.getElementById("expectedTime").value, 10);
+
+                // Display result
+                const resultMessage = document.getElementById("resultMessage");
+                if (totalTime > expectedTime) {
+                    resultMessage.className = "alert alert-danger";
+                    resultMessage.textContent = `Failure: Total time (${totalTime} seconds) exceeds expected time (${expectedTime} seconds).`;
+                } else {
+                    resultMessage.className = "alert alert-success";
+                    resultMessage.textContent = `Success: Total time (${totalTime} seconds) is within expected time (${expectedTime} seconds).`;
+                }
+                resultMessage.style.display = "block";
+        },
+        error: function(error) {
+            console.error("Error fetching data:", error);
+        }
+    });
+}
     // Function to calculate time difference (example)
     function calculateTimeDifference(startTime, endTime) {
-      startTime = new Date(startTime);
-      endTime = new Date(endTime);
-      const diffMs = endTime - startTime;
-      const diffMinutes = Math.round(diffMs / (1000 * 60));
-      return `${diffMinutes} minutes`;
+        startTime = new Date(startTime);
+        endTime = new Date(endTime);
+        const diffMs = endTime - startTime;
+        const diffMinutes = Math.round(diffMs / (1000 * 60));
+        return diffMinutes; // 返回纯数字
+    }
+
+    // Function to format date to "YYYY-MM-DD HH:MM:SS"
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const hours = String(date.getUTCHours()).padStart(2, '0');
+        const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+        const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
     // Event listener for "Run Now" button click

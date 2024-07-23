@@ -167,19 +167,34 @@
                         selectElements.forEach(function(selectElement) {
                             $(selectElement).empty().append(options);
                         });
+
+                         // 加载下拉框选项后再加载配置数据并设置值
+                        loadConfiguration();
                     },
                     error: function(error) {
-                        console.error('Error fetching datapoints:', error);
+                        toastr.error('Error fetching datapoints:', error);
                     }
                 });
             }
 
               // Function to load configuration from database
             function loadConfiguration() {
+
+                var config = {
+                    jobId: jobId,
+                };
+
+
                 $.ajax({
                     url: "/loadDataPerConfiguration",
-                    type: "GET",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(config),
                     success: function(data) {
+
+                        console.log(data)
+                        console.log(data.fileServerDatapoint1)
+
                         $('#fileServerDatapoint1').val(data.fileServerDatapoint1);
                         $('#fileServerDatapoint2').val(data.fileServerDatapoint2);
                         $('#odsDatapoint').val(data.odsDatapoint);
@@ -190,9 +205,10 @@
                         $('#cdsSystemCode').val(data.cdsSystemCode);
                         $('#cdsSubSystemCode').val(data.cdsSubSystemCode);
                         $('#cdsBatchData').val(data.cdsBatchData);
+
                     },
                     error: function(error) {
-                        console.error('Error loading configuration:', error);
+                        toastr.error('Error loading configuration:', error);
                     }
                 });
             }
@@ -219,10 +235,10 @@
                     contentType: "application/json",
                     data: JSON.stringify(config),
                     success: function(response) {
-                        alert('Configuration saved successfully!');
+                        toastr.success('Configuration saved successfully!');
                     },
                     error: function(error) {
-                        console.error('Error saving configuration:', error);
+                        toastr.error('Error saving configuration:', error);
                     }
                 });
             }

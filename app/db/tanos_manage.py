@@ -699,6 +699,26 @@ class tanos_manage():
             .format(user_id, job_name.strip(),create_date)
         useDB.useDB().executesql(sql)
 
+    def update_data_per_job_config(self,job_id,job_config):
+        sql = "UPDATE tanos.data_per_job SET job_config = %s WHERE job_id = %s;"
+        params = ( job_config,job_id)
+        useDB.useDB().executesqlP(sql, params)
+
+    def show_data_per_job_config(self,job_id):
+
+        sql = """SELECT job_config FROM tanos.data_per_job WHERE job_id='{}'  """ \
+            .format(job_id)
+        print(sql)
+        result = useDB.useDB().executesql_fetch(sql)
+        print(result[0][0])
+        print(type(result[0][0]))
+        if result:
+            job_config = result[0][0]
+            return json.loads(job_config)
+
+
+
+
 if __name__ == '__main__':
     testcase = tanos_manage()
     # a= testcase.search_by_connect_id(10002)
