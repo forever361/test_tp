@@ -1,3 +1,70 @@
+1. Requirements Analysis
+
+    Goal Setting: Define the project goals and functional requirements, such as displaying time data for different phases and calculating the total time versus the expected time.
+    Data Sources: Identify the sources of data, including extracting time from server log files and retrieving phase data from the database.
+
+2. System Design
+
+    Architecture Design:
+        Frontend: Design the user interface (UI) to display time data for different phases using HTML/CSS and JavaScript.
+        Backend: Design API endpoints to fetch data, handle log file processing, and perform database queries.
+
+    Database Design:
+        Table Structure: Design the database schema to store time data for different phases, such as the datatest.datatest table.
+
+3. Implementation Process
+
+    Backend Implementation:
+        Log File Processing:
+            Connect to the file server and access log files via SSH.
+            Parse the time data from the log files to extract the earliest start_time and latest end_time.
+        Database Queries:
+            Connect to the PostgreSQL database and query the table for time data.
+            Use SQL queries to retrieve data and format datetime objects as strings.
+
+    Frontend Implementation:
+        AJAX Requests: Use AJAX to send requests to the backend API and fetch data.
+        Data Processing:
+            Parse the JSON response and format time data into the desired date format.
+            Calculate time differences and update UI elements accordingly.
+        UI Updates:
+            Display the processed data on the webpage, including start times, end times, and time differences for different phases.
+            Show success or failure messages based on the comparison between total time and expected time.
+
+1. 需求分析
+
+    目标设定：明确项目的目标和功能需求，例如展示不同阶段的时间数据，并计算总时间与预期时间的对比。
+    数据来源：确定数据来源，包括从服务器日志文件提取时间、从数据库获取阶段数据等。
+
+2. 系统设计
+
+    架构设计：
+        前端：设计用户界面（UI）来显示不同阶段的时间数据，使用 HTML/CSS 和 JavaScript。
+        后端：设计 API 接口来获取数据，处理日志文件和数据库查询。
+
+    数据库设计：
+        表结构：设计数据库表结构来存储不同阶段的时间数据，例如 datatest.datatest 表。
+
+3. 实现过程
+
+    后端实现：
+        日志文件处理：
+            连接到文件服务器，通过 SSH 访问日志文件。
+            解析日志文件中的时间数据，提取最早的 start_time 和最晚的 end_time。
+        数据库查询：
+            连接到 PostgreSQL 数据库，查询表中的时间数据。
+            使用 SQL 查询语句获取数据，并将 datetime 对象格式化为字符串。
+
+    前端实现：
+        AJAX 请求：使用 AJAX 向后端 API 发送请求，获取数据。
+        数据处理：
+            解析 JSON 响应，将时间数据格式化为所需的日期格式。
+            计算时间差，并更新 UI 元素的内容。
+        UI 更新：
+            将处理后的数据展示在页面上，包括不同阶段的开始时间、结束时间和时间差。
+            根据总时间与预期时间的对比，显示成功或失败的消息
+
+
 CREATE TABLE IF NOT EXISTS tanos.admin_config
 (
     login_type character varying COLLATE pg_catalog."default"
