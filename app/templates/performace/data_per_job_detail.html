@@ -184,14 +184,14 @@ function fetchDataAndUpdateUI() {
             const cdsData = response.cdsData;
 
             // Update Phase 1 card
-            document.getElementById("serverStartTime").textContent = formatDate(serverData.startTime);
-            document.getElementById("serverEndTime").textContent = formatDate(serverData.endTime);
+            document.getElementById("serverStartTime").textContent = formatDatefile(serverData.startTime);
+            document.getElementById("serverEndTime").textContent = formatDatefile(serverData.endTime);
             document.getElementById("serverTimeDiff").textContent = calculateTimeDifference(serverData.startTime, serverData.endTime);
             const serverTimeDiff = calculateTimeDifference(serverData.startTime, serverData.endTime);
 
             // Update Phase 2 card
-            document.getElementById("JuniperStartTime").textContent = formatDate(juniperData.startTime);
-            document.getElementById("JuniperEndTime").textContent = formatDate(juniperData.endTime);
+            document.getElementById("JuniperStartTime").textContent = formatDatefile(juniperData.startTime);
+            document.getElementById("JuniperEndTime").textContent = formatDatefile(juniperData.endTime);
             document.getElementById("juniperTimeDiff").textContent = calculateTimeDifference(juniperData.startTime, juniperData.endTime);
             const juniperTimeDiff = calculateTimeDifference(juniperData.startTime, juniperData.endTime);
 
@@ -242,7 +242,7 @@ function fetchDataAndUpdateUI() {
 
     // Function to format date to "YYYY-MM-DD HH:MM:SS"
 
-    function formatDate(dateString) {
+    function formatDatefile (dateString) {
         const date = new Date(dateString);
         const year = date.getUTCFullYear();
         const month = String(date.getUTCMonth() + 1).padStart(2, '0');
@@ -250,6 +250,17 @@ function fetchDataAndUpdateUI() {
         const hours = String(date.getUTCHours()).padStart(2, '0');
         const minutes = String(date.getUTCMinutes()).padStart(2, '0');
         const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
