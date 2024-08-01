@@ -165,8 +165,11 @@ function fetchDataAndUpdateUI() {
     // Get the job ID from the URL
     var jobId = getUrlParameter('id');
 
+    const expectedTime = parseInt(document.getElementById("expectedTime").value, 10);
+
     var config = {
         jobId: jobId,
+        expectedTime:expectedTime
     };
 
 
@@ -182,12 +185,13 @@ function fetchDataAndUpdateUI() {
             const juniperData = response.juniperData;
             const odsData = response.odsData;
             const cdsData = response.cdsData;
+            const during = response.during;
 
             // Update Phase 1 card
-            document.getElementById("serverStartTime").textContent = formatDatefile(serverData.startTime);
-            document.getElementById("serverEndTime").textContent = formatDatefile(serverData.endTime);
+            document.getElementById("serverStartTime").textContent = serverData.startTime;
+            document.getElementById("serverEndTime").textContent = serverData.endTime;
             document.getElementById("serverTimeDiff").textContent = calculateTimeDifference(serverData.startTime, serverData.endTime);
-            const serverTimeDiff = calculateTimeDifference(serverData.startTime, serverData.endTime);
+
 
             // Update Phase 2 card
             document.getElementById("JuniperStartTime").textContent = formatDatefile(juniperData.startTime);
@@ -209,8 +213,7 @@ function fetchDataAndUpdateUI() {
 
 
             // Calculate total time in seconds
-                const totalTime = (serverTimeDiff + juniperTimeDiff + odsTimeDiff + cdsTimeDiff) * 60;
-                                console.log(serverTimeDiff, juniperTimeDiff, odsTimeDiff, cdsTimeDiff);
+                const totalTime = during
 
                 console.log(totalTime)
                 const expectedTime = parseInt(document.getElementById("expectedTime").value, 10);

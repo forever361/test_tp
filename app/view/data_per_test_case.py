@@ -64,10 +64,25 @@ def show_batch_job():
         result_list.append(result_dict)
     return jsonify(result_list)
 
-@web.route('/add_per_job', methods=['get'])
+@web.route('/add_per_job', methods=['post'])
 def add_per_job():
-    tanos_manage().add_data_per_job('test123')
-    return 'OK'
+    data = request.json
+    job_name = data['job_name']
+    try:
+        tanos_manage().add_data_per_job(job_name)
+        return jsonify(success=True,message="add successfully")
+    except:
+        return jsonify(success=False,message="Fail to add")
+
+
+@web.route('/delete_per_job', methods=['post'])
+def delete_per_job():
+    data = request.json
+    tanos_manage().delete_data_per_job(data["id"])
+    #这里文件最好也能删掉
+    logger_all.info('delete connection：{}'.format(data["id"]))
+    return jsonify(success=True, message='Job deleted successfully')
+
 
 
 @app.route('/data_per_search_case',methods=['GET'])
@@ -118,6 +133,9 @@ def fetch_phase_data():
 
     data = request.json
     job_id = data['jobId']
+
+    expectedTime = data['expectedTime']
+    print('expectedTime',expectedTime)
 
     result = tanos_manage().show_data_per_job_config(job_id)
 
@@ -280,6 +298,18 @@ def fetch_phase_data():
     ods_start_time, ods_end_time = ods_data[0] if ods_data else (None, None)
     cds_start_time, cds_end_time = cds_data[0] if cds_data else (None, None)
 
+    if isinstance(cds_end_time, str):
+        cds_end_time = datetime.strptime(cds_end_time, '%Y-%m-%d %H:%M:%S')
+    if isinstance(earliest_start_time, str):
+        earliest_start_time = datetime.strptime(earliest_start_time, '%Y-%m-%d %H:%M:%S')
+
+    # Calculate duration as a timedelta object
+    duration = cds_end_time - earliest_start_time
+    print(cds_end_time)
+    print(earliest_start_time)
+    duration_seconds = duration.total_seconds()
+
+
     data = {
         "serverData": {
             "startTime": earliest_start_time,
@@ -296,7 +326,48 @@ def fetch_phase_data():
         "cdsData": {
             "startTime": cds_start_time,
             "endTime": cds_end_time
-        }
+        },
+        "during":duration_seconds,
+        "expectedTime":expectedTime,
+        "test_result":""
     }
+
+    # 确保 during 和 expectedTime 都是有效数值
+    if isinstance(data['during'], (int, float)) and isinstance(data['expectedTime'], (int, float)):
+        # 判断 during 是否大于 expectedTime
+        if data['during'] > data['expectedTime']:
+            data['test_result'] = "fail"
+        else:
+            data['test_result'] = "pass"
+    else:
+        # 在这里处理无效值的情况
+        print("Error: during or expectedTime is not a valid number.")
+        data['test_result'] = "invalid"
+
     print(data)
+
+    # 格式化时间的函数
+    def format_datetime(value):
+        """
+        Format a datetime object or a string to 'YYYY-MM-DD HH:MM:SS'.
+        """
+        if isinstance(value, datetime):
+            return value.strftime('%Y-%m-%d %H:%M:%S')
+        elif isinstance(value, str):
+            # 这里假设字符串已经是正确的格式
+            # 如果不确定，可以使用 datetime.strptime 来解析和重组格式
+            try:
+                return datetime.strptime(value, '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+            except ValueError as e:
+                print(f"Error parsing date: {e}")
+                return value
+        return value
+
+    # 更新数据字典中所有时间字段为格式化字符串
+    for key in ['serverData', 'juniperData', 'odsData', 'cdsData']:
+        for time_key in ['startTime', 'endTime']:
+            data[key][time_key] = format_datetime(data[key][time_key])
+
+    print(data)
+
     return jsonify(data)

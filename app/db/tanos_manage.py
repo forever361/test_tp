@@ -699,6 +699,10 @@ class tanos_manage():
             .format(user_id, job_name.strip(),create_date)
         useDB.useDB().executesql(sql)
 
+    def delete_data_per_job(self, id):
+        sql = "DELETE FROM tanos.data_per_job WHERE job_id = '{}';".format(id)
+        useDB.useDB().executesql(sql)
+
     def update_data_per_job_config(self,job_id,job_config):
         sql = "UPDATE tanos.data_per_job SET job_config = %s WHERE job_id = %s;"
         params = ( job_config,job_id)
