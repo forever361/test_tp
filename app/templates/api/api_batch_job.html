@@ -57,6 +57,24 @@
 
 </style>
 
+<style>
+    .custom-table td {
+        max-width: 150px; /* 设置单元格的最大宽度 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; /* 不换行 */
+    }
+
+    /* 如果需要，悬停时显示完整内容 */
+    .custom-table td:hover {
+        overflow: visible;
+        white-space: normal; /* 允许换行 */
+        z-index: 1;
+        position: relative;
+        background-color: white;
+    }
+</style>
+
 
 {#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
 
@@ -87,7 +105,7 @@
 
 {#                <button class="btn btn-primary" id="btnImport" type="button" style="width: 120px; height:40px; margin-top:20px;display: flex; justify-content: center; align-items: center;" iconalignment="center">Import File</button>#}
 
-                <table class="table table-striped"
+                <table class="table table-striped custom-table"
                        id="table"
                        data-toggle="table"
 {#                       data-height="600"#}

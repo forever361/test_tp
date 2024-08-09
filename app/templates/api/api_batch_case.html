@@ -57,12 +57,23 @@
 
 </style>
 
-{#<style>#}
-{#  .custom-table tbody tr {#}
-{#    height: 500px; /* 设置每一行的高度，根据需要调整值 */#}
-{#  }#}
-{#</style>#}
+<style>
+    .custom-table td {
+        max-width: 150px; /* 设置单元格的最大宽度 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; /* 不换行 */
+    }
 
+    /* 如果需要，悬停时显示完整内容 */
+    .custom-table td:hover {
+        overflow: visible;
+        white-space: normal; /* 允许换行 */
+        z-index: 1;
+        position: relative;
+        background-color: white;
+    }
+</style>
 
 {#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
 
