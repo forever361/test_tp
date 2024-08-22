@@ -160,21 +160,21 @@
                                     <option selected>Default</option>
                                     <option>Check-table-header</option>
                                     <option>Check-count</option>
-                                    <option>Check-the-first-200-rows</option>
+                                    <option>Headerless</option>
                                     <option>Check-the-first-500-rows</option>
                                     <option>Check-the-first-1000-rows</option>
                                 </select>
                             </div>
 
 
-                            <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
-                                <div style="width:13.8%; display:flex; align-items:center; padding-left:40px">
-                                    <p>Custom rules</p>
-                                </div>
-                                <input style="width:85.5%; " type="text" class="form-control"
-                                       aria-describedby="basic-addon1"
-                                       id="new-customrules-name">
-                            </div>
+<!--                            <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">-->
+<!--                                <div style="width:13.8%; display:flex; align-items:center; padding-left:40px">-->
+<!--                                    <p>Custom rules</p>-->
+<!--                                </div>-->
+<!--                                <input style="width:85.5%; " type="text" class="form-control"-->
+<!--                                       aria-describedby="basic-addon1"-->
+<!--                                       id="new-customrules-name">-->
+<!--                            </div>-->
 
 
                             <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
@@ -184,6 +184,38 @@
                                        placeholder="the columns used as the checking basis"
                                        aria-describedby="basic-addon1" id="new-field-name">
                             </div>
+
+                            <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
+                                  <span>Remove column </span>
+                                </div>
+                                    <input style="width:85.5%; " type="text" class=" form-control "
+                                   placeholder="Remove columns"
+                                   aria-describedby="basic-addon1" id="remove-col-top">
+                            </div>
+
+                            <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
+                                  <span>Separator </span>
+                                </div>
+                                    <input style="width:85.5%; " type="text" class=" form-control "
+                                   placeholder="Separator type"
+                                   aria-describedby="basic-addon1" id="Separator-top">
+                            </div>
+
+
+                            <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                <div style="width:13.8%; display:flex; align-items:center; ">
+                                    <span>Include the header?</span>
+                                </div>
+                                <!-- 使用 select 替代 input -->
+                                <select style="width:85.5%;" class="form-control" id="includeHeaderFooter-top">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -206,6 +238,7 @@
 </div>
 
 <script>
+
 
     // 创建xterm.js终端对象
     const term = new Terminal({
@@ -261,6 +294,8 @@
 <script>
 
 
+
+
     ////Add row function
     $('#add-new-row').click(function () {
         $('#add-row-top-canvas').offcanvas('show');
@@ -275,13 +310,37 @@
                     const option = data[i];
                     options += `<option value="${option.value}" >${option.text}</option>`;
                 }
-                console.info(options)
+                // console.info(options)
                 $('#source_point_select_top_s').empty().append(options)
                 $('#source_point_select_top_t').empty().append(options)
             }
         })
 
     })
+
+      // 页面加载时调用函数，确保正确隐藏或显示控件
+    toggleSeparatorAndHeaderFooterTop();
+
+    // 监听 select_rule_top 的变化
+    $('#select_rule_top').on('change', function () {
+        toggleSeparatorAndHeaderFooterTop();
+    });
+
+    function toggleSeparatorAndHeaderFooterTop() {
+        const selectValue = $('#select_rule_top').val();
+        const separatorControl = $('#Separator-top').closest('div');
+        const includeHeaderFooterControl = $('#includeHeaderFooter-top').closest('div');
+
+        if (selectValue === "Headerless") {
+            separatorControl.show();
+            includeHeaderFooterControl.show();
+        } else {
+            separatorControl.hide();
+            includeHeaderFooterControl.hide();
+        }
+    }
+
+
 
     $('#save-new-row').click(function () {
         // Get the values of the new row from the form fields
@@ -293,6 +352,32 @@
         const select_rules = $('#select_rule_top').val();
         const custom_rules = $('#new-customrules-name').val();
         const fields = $('#new-field-name').val();
+        const remove_col = $('#remove-col-top').val();
+
+         // 创建要发送的数据对象
+        let data = {
+            'case_id': case_id,
+            'job_name': job_name,
+            'job': {
+                "source_point": source_point,
+                "target_point": target_point,
+                "source_condition": source_condition,
+                "target_condition": target_condition,
+                "select_rules": select_rules,
+                "custom_rules": custom_rules,
+                "fields": fields,
+                "remove_col":remove_col,
+            }
+        };
+
+        // 如果选择了 Headerless，则添加 separator 和 includeHeaderFooter 字段
+        if (select_rules === "Headerless") {
+            const separator = $('#Separator-top').val();
+            const includeHeaderFooter = $('#includeHeaderFooter-top').val();
+
+            data['job']['separator'] = separator;
+            data['job']['includeHeaderFooter'] = includeHeaderFooter;
+        }
 
 
         // Hide the modal dialog
@@ -302,20 +387,7 @@
         $.ajax({
             url: '/add_job',
             type: 'POST',
-            data: JSON.stringify({
-                'case_id': case_id,
-                'job_name': job_name,
-                'job': {
-                    "source_point": source_point,
-                    "target_point": target_point,
-                    "source_condition": source_condition,
-                    "target_condition": target_condition,
-                    "select_rules": select_rules,
-                    "custom_rules": custom_rules,
-                    "fields": fields,
-                }
-
-            }),
+            data: JSON.stringify(data),
             contentType: 'application/json',
             success: function () {
                 $('#add-row-top-canvas').modal('hide');
@@ -345,6 +417,7 @@
         let currentPage = 1;
         let totalPages = 0;
         let cardsData = [];
+
 
 
         $.ajax({
@@ -381,6 +454,8 @@
                                 }
 
                                 const selectRule = item.job.select_rules || "Default";
+
+                                const includeHeaderFooter = item.job.includeHeaderFooter || "Default";
 
 
                                 return `
@@ -463,46 +538,52 @@
 
                                                                                 <option ${selectRule === "Empty-check" ? "selected" : ""}>Empty-check</option>
 
+                                                                                 <option ${selectRule === "Headerless" ? "selected" : ""}>Headerless</option>
+
                                                                                 </select>
                                                                         </div>
-                                                                        <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
-                                                                            <div style="width:13.8%; display:flex; align-items:center; padding-left:40px">
-                                                                                <p>Custom rules</p>
-                                                                            </div>
 
-                                                                            <div style=" margin-top: 30px; " class="card">
-                                                                                    <div class="card-body"  ">
-
-                                                                                         <div class="row">
-                                                                                                            <div class="col-md-4">
-                                                                                                                <input type="text" class="form-control" placeholder="Source para">
-                                                                                                            </div>
-                                                                                                            <div class="col-md-4">
-                                                                                                                <select class="form-select">
-                                                                                                                    <option selected>Select an comparator</option>
-                                                                                                                    <option value="1">==</option>
-                                                                                                                    <option value="2">contain</option>
-                                                                                                                    <option value="3">notContain</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="col-md-4">
-                                                                                                                <input type="text" class="form-control" placeholder="Target para">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-
-
-
-                                                                            </div>
-
-
-                                                                        </div>
                                                                         <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
                                                                             <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
                                                                                 <span style="color:red; ">*&nbsp</span> <span>Order by </span></div>
                                                                                 <input name="field" style="width:85.5%; " type="text" class=" form-control fields" id="fields"
                                                                                      placeholder="the columns used as the checking basis" aria-describedby="basic-addon1" value=${item.job.fields}>
                                                                         </div>
+
+                                                                        <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                                                            <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
+                                                                              <span>Remove column </span>
+                                                                            </div>
+                                                                                <input style="width:85.5%; " type="text" class=" form-control remove-col "
+                                                                               placeholder="Remove columns"
+                                                                               aria-describedby="basic-addon1" id="remove-col" value=${item.job.remove_col}>
+                                                                        </div>
+
+                                                                        <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                                                            <div style="width:13.8%; display:flex; align-items:center; padding-left:30px">
+                                                                              <span>Separator </span>
+                                                                            </div>
+                                                                                <input style="width:85.5%; " type="text" class=" form-control  Separator"
+                                                                               placeholder="Separator type"
+                                                                               aria-describedby="basic-addon1" id="Separator" value=${item.job.separator}>
+                                                                        </div>
+
+
+                                                                        <div style="display:flex; width:100%; justify-content: start; align-items: center; padding-left:0px; padding-top:10px">
+                                                                            <div style="width:13.8%; display:flex; align-items:center; ">
+                                                                                <span>Include the header?</span>
+                                                                            </div>
+                                                                            <!-- 使用 select 替代 input -->
+                                                                            <select style="width:85.5%;" class="form-control includeHeaderFooter" id="includeHeaderFooter" >
+                                                                                 <option ${includeHeaderFooter === "Yes" ? "selected" : ""}>Yes</option>
+
+                                                                                <option ${includeHeaderFooter === "No" ? "selected" : ""}>No</option>
+
+                                                                            </select>
+                                                                        </div>
+
+
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -534,6 +615,31 @@
                             $(".no-job").html("There are no jobs under this case. Please click the button on the right to create a new job.");
                             console.log(1111111)
                         }
+
+
+                                // 初始化时隐藏或显示相关控件
+                            toggleSeparatorAndHeaderFooter();
+
+                            // 监听 select_rules 的变化
+                            $(document).on('change', '.select_rules', function () {
+                                toggleSeparatorAndHeaderFooter();
+                            });
+
+                            function toggleSeparatorAndHeaderFooter() {
+                                $('.select_rules').each(function () {
+                                    const selectValue = $(this).val();
+                                    const separatorControl = $(this).closest('.row').find('#Separator').closest('div');
+                                    const includeHeaderFooterControl = $(this).closest('.row').find('#includeHeaderFooter').closest('div');
+
+                                    if (selectValue === "Headerless") {
+                                        separatorControl.show();
+                                        includeHeaderFooterControl.show();
+                                    } else {
+                                        separatorControl.hide();
+                                        includeHeaderFooterControl.hide();
+                                    }
+                                });
+                            }
 
 
 
@@ -596,6 +702,7 @@
                             let selectRule = form.find('.select_rules').val();
                             let customRules = form.find('.custom_rules').val();
                             let fields = form.find('.fields').val();
+                            let remove_col = form.find('.remove-col').val();
 
 
                             // 3.将数据转换为JSON格式
@@ -610,8 +717,22 @@
                                     "select_rules": selectRule,
                                     "custom_rules": customRules,
                                     "fields": fields,
+                                    "remove_col":remove_col,
                                 }
                             };
+
+                            // 如果选择了 Headerless，则添加 separator 和 includeHeaderFooter 字段
+                            if (selectRule === "Headerless") {
+                                const separator = $('#Separator').val();
+                                const includeHeaderFooter = $('#includeHeaderFooter').val();
+
+                                formData['job']['separator'] = separator;
+                                formData['job']['includeHeaderFooter'] = includeHeaderFooter;
+                            }
+
+
+
+
                             let jsonData = JSON.stringify(formData);
                             $.ajax({
                                 url: "/saveJob",
@@ -653,6 +774,7 @@
                             let selectRule = form.find('.select_rules').val();
                             let customRules = form.find('.custom_rules').val();
                             let fields = form.find('.fields').val();
+                            let remove_col =  form.find('.remove-col').val();
 
                             // 3.将数据转换为JSON格式
                             let formData = {
@@ -667,6 +789,7 @@
                                     "select_rules": selectRule,
                                     "custom_rules": customRules,
                                     "fields": fields,
+                                    "remove_col":remove_col,
                                 }
                             };
                             let jsonData = JSON.stringify(formData);
