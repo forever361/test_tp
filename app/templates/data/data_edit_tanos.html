@@ -630,14 +630,24 @@
                                     const selectValue = $(this).val();
                                     const separatorControl = $(this).closest('.row').find('#Separator').closest('div');
                                     const includeHeaderFooterControl = $(this).closest('.row').find('#includeHeaderFooter').closest('div');
+                                    const targetPointControl = $(this).closest('.table').find('#target_point_select'); // 获取 target_point 控件
+                                    const sourcePointControl = $(this).closest('.table').find('#source_point_select'); // 获取 target_point 控件
 
-                                    if (selectValue === "Headerless") {
-                                        separatorControl.show();
-                                        includeHeaderFooterControl.show();
-                                    } else {
-                                        separatorControl.hide();
-                                        includeHeaderFooterControl.hide();
-                                    }
+                                            if (selectValue === "Headerless") {
+                                                separatorControl.show();
+                                                includeHeaderFooterControl.show();
+                                                targetPointControl.prop('disabled', false); // 确保 Headerless 时不禁用 target_point
+                                            } else if (selectValue === "Empty-check") {
+                                                separatorControl.hide();
+                                                includeHeaderFooterControl.hide();
+                                                targetPointControl.prop('disabled', true); // 当选择 Empty-check 时禁用 target_point
+                                                sourcePointControl.prop('disabled', true); // 当选择 Empty-check 时禁用 target_point
+                                                console.log($(this).closest('.table').html())
+                                            } else {
+                                                separatorControl.hide();
+                                                includeHeaderFooterControl.hide();
+                                                targetPointControl.prop('disabled', false); // 其他情况下启用 target_point
+                                            }
                                 });
                             }
 
