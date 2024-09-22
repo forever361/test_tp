@@ -248,7 +248,7 @@ class tanos_manage():
         return result
 
     def get_all_user(self):
-        sql = "SELECT username, staffid FROM tanos.user "
+        sql = "SELECT username, staffid, latest_login_date,user_id FROM tanos.user "
         result = useDB.useDB().executesql_fetch(sql)
         return result
 
@@ -719,6 +719,12 @@ class tanos_manage():
         if result:
             job_config = result[0][0]
             return json.loads(job_config)
+
+    def update_login_date(self,user_id):
+        login_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        sql = "UPDATE tanos.user set latest_login_date='{}' where user_id={};".format(login_date,user_id)
+        useDB.useDB().executesql(sql)
+
 
 
 

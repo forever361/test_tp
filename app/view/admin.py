@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, render_template, request, jsonify, session
 
 import os
@@ -17,6 +19,32 @@ web = Blueprint('admin', __name__)
 @web.route('/admin/7758521', methods=['GET'])
 def admin_page():
     return render_template('admin.html')
+
+@web.route('/admin/user_status', methods=['GET'])
+def user_status():
+    return render_template('/access/user_status.html')
+
+
+@web.route('/admin/getAllUsers.json', methods=['GET'])
+def getAllUsers():
+    userlist = tanos_manage().get_all_user()
+    all_users = []
+    for row in userlist:
+        staffid = row[1]
+        name = row[0].strip()
+
+        # 解析原始的 GMT 时间字符串
+        latest_login_date = row[2]
+        if latest_login_date != None:
+            # 转换为你想要的格式
+            latest_login_date = latest_login_date.strftime("%Y-%m-%d %H:%M:%S")
+
+        user_id=row[3]
+        user = {'staffid': staffid, 'username': name,'latest_login_date':latest_login_date,'user_id':user_id}
+        all_users.append(user)
+
+    return jsonify(all_users)
+
 
 @web.route('/admin/update_login_type', methods=['POST'])
 def update_login_type():

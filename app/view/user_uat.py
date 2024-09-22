@@ -1,7 +1,7 @@
 import re
 from functools import wraps
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 from shutil import copy
 from flask import Blueprint, render_template, request, redirect, make_response, session, url_for, jsonify
 import os
@@ -355,6 +355,9 @@ def login_callback():
         session['teams'] = current_team_list
 
         session['team'] = current_team_list[0]
+
+        # 将最后登录时间写入数据库
+        tanos_manage().update_login_date(id)
 
         # avatar = ConnectSQL().get_avatar(username)
         # session['avatar'] = avatar

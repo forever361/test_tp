@@ -7,7 +7,7 @@ from flask_socketio import SocketIO
 app = Flask(__name__)
 
 
-env = os.environ.get('APP_ENV', 'dev')
+env = os.environ.get('APP_ENV', 'uat')
 
 if env == 'uat':
     app.config.from_pyfile('config/config_uat.py')
