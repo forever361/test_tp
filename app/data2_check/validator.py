@@ -581,15 +581,42 @@ class PgValidator(Validator):
         rule = 'Default'
         # print(11111,pi)
         if verifydb == '':
-            return f"select {pi_str},'{self.pi_split}',{col_str} from {verify_tablename} {self.where_condition} order by {pi}  \n"
-        elif rule=="Check-the-first-200-rows":
-            return f"select {pi_str},'{self.pi_split}',{col_str} from {verifydb}.{verify_tablename}  order by {pi}  limit 200  \n"
-        elif rule=="Check-the-first-500-rows":
-            return f"select {pi_str},'{self.pi_split}',{col_str} from {verifydb}.{verify_tablename}  order by {pi}  limit 500 \n"
-        elif rule=="Check-the-first-1000-rows":
-            return f"select {pi_str},'{self.pi_split}',{col_str} from {verifydb}.{verify_tablename} order by {pi}   limit 1000  \n"
+            sql= f"""
+                WITH numbered_rows AS (
+                    SELECT
+                        {pi_str},'{self.pi_split}',{col_str},
+                        ROW_NUMBER() OVER (ORDER BY {pi}) AS row_num,
+                        COUNT(*) OVER () AS total_rows
+                    FROM {verify_tablename}
+                    {self.where_condition}
+                )
+                SELECT *
+                FROM numbered_rows
+                WHERE total_rows <= 5000
+                   OR (total_rows > 5000 AND row_num % (total_rows / 5000) = 0)
+                ORDER BY user_id
+            """
+            print(111,sql)
+            return sql
         else:
-            return f"select {pi_str},'{self.pi_split}',{col_str} from {verifydb}.{verify_tablename}  {self.where_condition} order by {pi}   \n"
+
+            sql = f"""
+                WITH numbered_rows AS (
+                    SELECT
+                        {pi_str},'{self.pi_split}',{col_str},
+                        ROW_NUMBER() OVER (ORDER BY {pi}) AS row_num,
+                        COUNT(*) OVER () AS total_rows
+                    FROM {verifydb}.{verify_tablename}
+                    {self.where_condition}
+                )
+                SELECT *
+                FROM numbered_rows
+                WHERE total_rows <= 50
+                   OR (total_rows > 50 AND row_num % (total_rows / 50) = 0)
+                ORDER BY user_id
+            """
+            print(222, sql)
+            return sql
 
     def get_batch_count_check_sql(self, verify_tablename, verifydb):
         # P_common = Parameter_common()

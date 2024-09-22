@@ -132,7 +132,7 @@ class BatchChecker(Checker):
 
         # Excel_write.get_check_count(count_check_flag)
 
-            v_detail_link = 'https://{}:{}/static/user_files/{}/csv/{}_{}.csv'.format(
+            v_detail_link = 'http://{}:{}/static/user_files/{}/csv/{}_{}.csv'.format(
                 Constant().ip, Constant().port, user_id, self.t_validator.table, caseid)
 
             if count_check_flag:
@@ -397,7 +397,10 @@ class BatchChecker1(BatchChecker):
             # self.s_validator.col_str = self.decorate_col_str(self.s_validator.col_str, 'trim(', ")")
             c_status,s_count,t_count,v_detail_link = self.count_check()
 
-            v_statuts = self.value_check()
+            if c_status=='success':   #count成功了再校验value,否则不校验
+                v_statuts = self.value_check()
+            else:
+                v_statuts = None
 
 
         return s_count_sql, t_count_sql, v_statuts, c_status,s_count,t_count,v_detail_link
