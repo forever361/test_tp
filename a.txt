@@ -1,3 +1,37 @@
+
+
+
+1.活动名称：
+“产品优化大挑战，赢取奖品”
+
+2.活动目的：
+通过用户反馈产品的使用建议或Bug，帮助产品优化，同时提升自己的使用体验。
+
+3.活动时间：
+2024年10月1日 - 2024年12月31日
+
+4.参与对象：
+CDP员工
+
+5.活动形式：
+用户通过填写表单或提交反馈的方式，提供对产品的改进建议或Bug报告。通过评选机制，前10名有效的反馈者将获得奖励。
+
+
+Event Name:
+"Product Optimization Challenge: Win Prizes"
+
+Event Objective:
+Encourage users to provide product improvement suggestions or bug reports to help optimize the product and enhance your own user experience.
+
+Event Duration:
+October 1, 2024 - December 31, 2024
+
+Participants:
+CDP employees
+
+Event Format:
+Participants can submit feedback through forms or reports, offering product improvement suggestions or bug reports. The top 10 most valuable feedback submissions will be rewarded based on an evaluation system.
+
 1. Requirements Analysis
 
     Goal Setting: Define the project goals and functional requirements, such as displaying time data for different phases and calculating the total time versus the expected time.
