@@ -159,10 +159,10 @@ class tanos_manage():
     def new_job(self, job_name, job, case_id):
         create_date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         user_id = session.get('userid', None)
-        sql = """INSERT INTO tanos.job_management (job_name,job,user_id,create_date,case_id)\
-          VALUES ('{}','{}','{}','{}',{})""" \
-            .format(job_name.strip(), job,user_id, create_date,case_id)
-        useDB.useDB().executesql(sql)
+        sql = """INSERT INTO tanos.job_management (job_name, job, user_id, create_date, case_id)
+                 VALUES (%s, %s, %s, %s, %s)"""
+        params = (job_name.strip(), job, user_id, create_date, case_id)
+        useDB.useDB().executesqlP(sql, params)
 
 
     def delete_job(self, id):
