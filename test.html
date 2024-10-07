@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      h2 {
+        color: #4CAF50;
+      }
+      .test-section {
+        margin-bottom: 20px;
+      }
+      .test-section a {
+        color: #1E90FF;
+        text-decoration: none;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Jenkins Build Test Results</h1>
+
+    <div class="test-section">
+      <h2>WebUI Test Results</h2>
+      <p>WebUI tests have been completed. Click the link below to view the detailed report:</p>
+      <a href="${WEBUI_REPORT_URL}">View WebUI Test Report</a>
+    </div>
+
+    <div class="test-section">
+      <h2>API Test Results</h2>
+      <p>API tests have been completed. Click the link below to view the detailed report:</p>
+      <a href="${API_REPORT_URL}">View API Test Report</a>
+    </div>
+
+    <div class="test-section">
+      <h2>Performance Test Results</h2>
+      <p>Performance tests have been completed. Click the link below to view the detailed report:</p>
+      <a href="${PERFORMANCE_REPORT_URL}">View Performance Test Report</a>
+    </div>
+
+    <hr>
+    <p>For more details, please check the Jenkins build log</p>
+  </body>
+</html>
