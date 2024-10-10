@@ -371,3 +371,91 @@ def fetch_phase_data():
     print(data)
 
     return jsonify(data)
+
+# Remote server configuration
+REMOTE_SERVER = {
+    'hostname': '8.134.189.98',  # Replace with the remote server IP or domain
+    'port': 22,
+    'username': 'realtime',  # Replace with your SSH username
+    'password': 'wesoftar1',  # Replace with your SSH password (or use private key auth)
+    'directory': '/home/realtime'  # Remote directory where files are stored
+}
+
+def extract_timestamp(filename):
+    """
+    Extract the timestamp part from the filename.
+    Example: s1_testa_testa_2024091706008.log -> 2024091706008
+    """
+    match = re.search(r'(\d{13})', filename)  # This will match the 13-digit timestamp
+    if match:
+        return match.group(1)
+    return None
+
+def ssh_list_files(code, sub_code, script_name):
+    try:
+        # Create an SSH client
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        # Connect to the remote server
+        ssh.connect(
+            hostname=REMOTE_SERVER['hostname'],
+            port=REMOTE_SERVER['port'],
+            username=REMOTE_SERVER['username'],
+            password=REMOTE_SERVER['password']  # Consider using a key file for better security
+        )
+
+        # Define the search pattern for the files
+        search_pattern = f"{script_name}_{code}_{sub_code}"
+
+        print(f"Search pattern: {search_pattern}")
+
+        # Construct the command to list files in the remote directory
+        command = f"ls {REMOTE_SERVER['directory']} | grep '{search_pattern}'"
+        print(f"Executing command: {command}")
+
+        # Execute the command on the remote server
+        stdin, stdout, stderr = ssh.exec_command(command)
+
+        # Capture the output (list of files)
+        files = stdout.read().decode().splitlines()
+        errors = stderr.read().decode()
+
+        # Close the SSH connection
+        ssh.close()
+
+        # Check for errors returned by stderr
+        if errors:
+            print(f"Error from SSH command: {errors}")
+            return [], errors
+
+        sorted_files = sorted(files, key=lambda f: extract_timestamp(f), reverse=True)
+
+        # Return the list of files and no error
+        return sorted_files, None
+
+    except Exception as e:
+        # If an error occurs, return an empty list and the error message
+        return [], str(e)
+
+
+
+@app.route('/search_log_files', methods=['POST'])
+def search_log_files():
+    data = request.get_json()
+    code = data.get('code')
+    sub_code = data.get('sub_code')
+    script_name = data.get('script_name')
+
+    print(data)
+
+    # Get the list of files from the remote server
+    files, error = ssh_list_files(code, sub_code, script_name)
+
+    if error:
+        return jsonify({"error": error}), 500
+
+    if files:
+        return jsonify({"files": files})
+    else:
+        return jsonify({"files": []}), 200

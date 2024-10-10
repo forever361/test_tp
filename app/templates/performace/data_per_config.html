@@ -11,8 +11,7 @@
 <script src="/static/tanos/toastr.min.js"></script>
 <link href="/static/tanos/toastr.min.css" rel="stylesheet"/>
 
-    <!-- Latest Sortable -->
-
+<!-- Latest Sortable -->
 
 
 <!-- Bootstrap Font Icon CSS -->
@@ -26,254 +25,518 @@
 {% block content %}
 
 <style>
-  .green-card {
-      background-color: #d4edda; /* Bootstrap success color */
+    .green-card {
+        background-color: #d4edda; /* Bootstrap success color */
     }
+
     .red-card {
-      background-color: #f5c6cb; /* Bootstrap danger color */
+        background-color: #f5c6cb; /* Bootstrap danger color */
     }
 
-     .btn-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
+    .btn-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
     }
 
 
-     .sticky-save {
-            position: -webkit-sticky;
-            position: sticky;
-            bottom: 0;
-            z-index: 1000;
-            background-color: white;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            border-top: 1px solid #dee2e6;
-        }
+    .sticky-save {
+        position: -webkit-sticky;
+        position: sticky;
+        bottom: 0;
+        z-index: 1000;
+        background-color: white;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-top: 1px solid #dee2e6;
+    }
 
 
 </style>
 
 
-{#<style>#}
-{#  .custom-table tbody tr {#}
-{#    height: 500px; /* 设置每一行的高度，根据需要调整值 */#}
-{#  }#}
-{#</style>#}
+{#
+<style>#
+}
+{
+#
+.custom-table tbody tr {
+    #
+}
+
+{
+    # height: 500px
+; /* 设置每一行的高度，根据需要调整值 */
+    #
+}
+{
+    #
+}
+#
+}
+{
+    #</style>#}
 
 
-{#<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
+{#
+<div style="background-color: #ef2f27;  width: 100%; display: flex; flex-direction: column; align-items: flex-start;">#}
 
-{##}
+    {##}
     <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" aria-current="page" href="/data_per_search_case?id={{ job_id }}">Job Phases</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link active" href="/data_per_config?id={{ job_id }}">Job Configure</a>
-      </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/data_per_search_case?id={{ job_id }}">Job Phases</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="/data_per_config?id={{ job_id }}">Job Configure</a>
+        </li>
     </ul>
 
     <div style=" margin: 20px; margin-bottom: 100px " class="card">
-         <div class="card-body" style="padding:10px;">
+        <div class="card-body" style="padding:10px;">
             <!-- Default panel contents -->
 
-   <div class="container mt-5">
+            <div class="container mt-5">
 
-        <!-- File Server Configuration -->
-       <h4>File Server</h4>
-        <div class="form-group">
-            <label for="fileServerDatapoint1">File Server log congig 1</label>
-            <select class="form-control" id="fileServerDatapoint1"></select>
-        </div>
-        <div class="form-group">
-            <label for="fileServerDatapoint2">File Server log congig 2</label>
-            <select class="form-control" id="fileServerDatapoint2"></select>
-        </div>
+                <!-- File Server Configuration -->
+                <h4>File Server</h4>
 
-        <!-- Juniper Configuration -->
-        <h4>Juniper</h4>
-        <p>No configuration needed.</p>
+                <div style="margin: 20px; margin-bottom: 20px" class="card">
+                    <div class="card-body" style="padding:10px;">
+                        <!-- Default panel contents -->
+                        <h5 class="card-title">Start time</h5>
+                        <div class="card-text">
 
-        <!-- ODS Configuration -->
-        <h4>ODS</h4>
-        <div class="form-group">
-            <label for="odsDatapoint">ODS Datapoint</label>
-            <select class="form-control" id="odsDatapoint"></select>
-        </div>
-        <div class="form-group">
-            <label for="odsSystemCode">System Code</label>
-            <input type="text" class="form-control" id="odsSystemCode">
-        </div>
-        <div class="form-group">
-            <label for="odsSubSystemCode">Sub System Code</label>
-            <input type="text" class="form-control" id="odsSubSystemCode">
-        </div>
-        <div class="form-group">
-            <label for="odsBatchData">Batch Data</label>
-            <input type="text" class="form-control" id="odsBatchData">
-        </div>
+                            <label for="autofileServerDatapoint1">Auto File Server log config 1</label>
+                            <div class="form-group" style="display: flex; gap: 10px">
+                                <input type="text" class="form-control" id="autofileServerDatapoint1">
+                                <button class="btn btn-primary" id="find1Button" style="width: 150px">Find</button>
+                            </div>
 
-        <!-- CDS Configuration -->
-        <h4>CDS</h4>
-        <div class="form-group">
-            <label for="cdsDatapoint">CDS Datapoint</label>
-            <select class="form-control" id="cdsDatapoint"></select>
-        </div>
-        <div class="form-group">
-            <label for="cdsSystemCode">System Code</label>
-            <input type="text" class="form-control" id="cdsSystemCode">
-        </div>
-        <div class="form-group">
-            <label for="cdsSubSystemCode">Sub System Code</label>
-            <input type="text" class="form-control" id="cdsSubSystemCode">
-        </div>
-        <div class="form-group">
-            <label for="cdsBatchData">Batch Data</label>
-            <input type="text" class="form-control" id="cdsBatchData">
-        </div>
+                            <div class="form-group">
+                                <label for="mfileServerDatapoint1">Manual File Server log config 1</label>
+                                <select class="form-control" id="mfileServerDatapoint1"></select>
+                            </div>
 
-        <div class="sticky-save">
-       <button class="btn btn-primary" id="saveButton" style="width: 150px">Save</button>
-           </div>
-    </div>
+                            <!-- Radio group for Start Time -->
+                            <div class="form-group">
+                                <label>Mode:</label><br>
+                                <input type="radio" id="startAuto" name="startMode" value="auto" checked>
+                                <label for="startAuto">Auto</label>
+                                <input type="radio" id="startManual" name="startMode" value="manual">
+                                <label for="startManual">Manual</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    <script>
-        $(document).ready(function() {
+                <div style="margin: 20px; margin-bottom: 20px" class="card">
+                    <div class="card-body" style="padding:10px;">
+                        <!-- Default panel contents -->
+                        <h5 class="card-title">End time</h5>
+                        <div class="card-text">
 
-            // Function to get URL parameter
-            function getUrlParameter(name) {
-                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-                var results = regex.exec(location.search);
-                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-            }
+                            <label for="autofileServerDatapoint2">Auto File Server log config 2</label>
+                            <div class="form-group" style="display: flex; gap: 10px">
+                                <input type="text" class="form-control" id="autofileServerDatapoint2">
+                                <button class="btn btn-primary" id="find2Button" style="width: 150px">Find</button>
+                            </div>
 
-            // Get the job ID from the URL
-            var jobId = getUrlParameter('id');
+                            <div class="form-group">
+                                <label for="mfileServerDatapoint2">Manual File Server log config 2</label>
+                                <select class="form-control" id="mfileServerDatapoint2"></select>
+                            </div>
 
-            // Function to load datapoints into select elements
-            function loadDatapoints(selectElements) {
-                $.ajax({
-                    url: "/getMyPoint",
-                    type: "GET",
-                    success: function (data) {
-                        var options = "";
-                        for (let i = 0; i < data.length; i++) {
-                            const option = data[i];
-                            options += `<option value="${option.value}">${option.text}</option>`;
-                        }
-                        selectElements.forEach(function(selectElement) {
-                            $(selectElement).empty().append(options);
+                            <!-- Radio group for End Time -->
+                            <div class="form-group">
+                                <label>Mode:</label><br>
+                                <input type="radio" id="endAuto" name="endMode" value="auto" checked>
+                                <label for="endAuto">Auto</label>
+                                <input type="radio" id="endManual" name="endMode" value="manual">
+                                <label for="endManual">Manual</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Juniper Configuration -->
+                <h4>Juniper</h4>
+                <p>No configuration needed.</p>
+
+                <!-- ODS Configuration -->
+                <h4>ODS</h4>
+                <div class="form-group">
+                    <label for="odsDatapoint">ODS Datapoint</label>
+                    <select class="form-control" id="odsDatapoint"></select>
+                </div>
+                <div class="form-group">
+                    <label for="odsSystemCode">System Code</label>
+                    <input type="text" class="form-control" id="odsSystemCode">
+                </div>
+                <div class="form-group">
+                    <label for="odsSubSystemCode">Sub System Code</label>
+                    <input type="text" class="form-control" id="odsSubSystemCode">
+                </div>
+                <div class="form-group">
+                    <label for="odsBatchData">Batch Data</label>
+                    <input type="text" class="form-control" id="odsBatchData">
+                </div>
+
+                <!-- CDS Configuration -->
+                <h4>CDS</h4>
+                <div class="form-group">
+                    <label for="cdsDatapoint">CDS Datapoint</label>
+                    <select class="form-control" id="cdsDatapoint"></select>
+                </div>
+                <div class="form-group">
+                    <label for="cdsSystemCode">System Code</label>
+                    <input type="text" class="form-control" id="cdsSystemCode">
+                </div>
+                <div class="form-group">
+                    <label for="cdsSubSystemCode">Sub System Code</label>
+                    <input type="text" class="form-control" id="cdsSubSystemCode">
+                </div>
+                <div class="form-group">
+                    <label for="cdsBatchData">Batch Data</label>
+                    <input type="text" class="form-control" id="cdsBatchData">
+                </div>
+
+                <div class="sticky-save">
+                    <button class="btn btn-primary" id="saveButton" style="width: 150px">Save</button>
+                </div>
+            </div>
+
+            <!-- Modal 1 -->
+            <div class="modal fade" id="Modal1" tabindex="-1" aria-labelledby="uploadModalLabel1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="uploadModalLabel1">Upload Excel File</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Inputs for the search -->
+                            <div class="form-group">
+                                <label for="code1">Code</label>
+                                <input type="text" class="form-control" id="code1" placeholder="Enter code">
+                            </div>
+                            <div class="form-group">
+                                <label for="subCode1">Sub Code</label>
+                                <input type="text" class="form-control" id="subCode1" placeholder="Enter sub code">
+                            </div>
+                            <div class="form-group">
+                                <label for="scriptName1">Script Name</label>
+                                <input type="text" class="form-control" id="scriptName1"
+                                       placeholder="Enter script name">
+                            </div>
+                            <button class="btn btn-primary" id="searchFilesButton1">Search Files</button>
+
+                            <!-- Dropdown to display fetched files -->
+                            <div class="form-group mt-3">
+                                <label for="fileDropdown1">Select a file</label>
+                                <select class="form-control" id="fileDropdown1">
+                                    <option value="">-- No files found yet --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal 2 -->
+            <div class="modal fade" id="Modal2" tabindex="-1" aria-labelledby="uploadModalLabel2" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="uploadModalLabel2">Upload Excel File</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Inputs for the search -->
+                            <div class="form-group">
+                                <label for="code2">Code</label>
+                                <input type="text" class="form-control" id="code2" placeholder="Enter code">
+                            </div>
+                            <div class="form-group">
+                                <label for="subCode2">Sub Code</label>
+                                <input type="text" class="form-control" id="subCode2" placeholder="Enter sub code">
+                            </div>
+                            <div class="form-group">
+                                <label for="scriptName2">Script Name</label>
+                                <input type="text" class="form-control" id="scriptName2"
+                                       placeholder="Enter script name">
+                            </div>
+                            <button class="btn btn-primary" id="searchFilesButton2">Search Files</button>
+
+                            <!-- Dropdown to display fetched files -->
+                            <div class="form-group mt-3">
+                                <label for="fileDropdown2">Select a file</label>
+                                <select class="form-control" id="fileDropdown2">
+                                    <option value="">-- No files found yet --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <script>
+                $(document).ready(function () {
+                    $(document).ready(function () {
+                        // Start time - Find button (Modal 1)
+                        $('#find1Button').on('click', function () {
+                            $('#Modal1').modal('show');
                         });
 
-                         // 加载下拉框选项后再加载配置数据并设置值
-                        loadConfiguration();
-                    },
-                    error: function(error) {
-                        toastr.error('Error fetching datapoints:', error);
-                    }
+                        // End time - Find button (Modal 2)
+                        $('#find2Button').on('click', function () {
+                            $('#Modal2').modal('show');
+                        });
+
+                        // Search for files (Modal 1)
+                        $('#searchFilesButton1').on('click', function () {
+                            const code = $('#code1').val();
+                            const sub_code = $('#subCode1').val();
+                            const script_name = $('#scriptName1').val();
+
+                            // Send data to Flask via AJAX
+                            $.ajax({
+                                url: '/search_log_files',  // Flask endpoint
+                                method: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify({code: code, sub_code: sub_code, script_name: script_name}),
+                                success: function (response) {
+                                    let fileDropdown = $('#fileDropdown1');
+                                    fileDropdown.empty(); // Clear previous options
+                                    if (response.files.length > 0) {
+                                        response.files.forEach(function (file) {
+                                            fileDropdown.append(new Option(file, file));
+                                        });
+                                    } else {
+                                        fileDropdown.append(new Option('-- No files found --', ''));
+                                    }
+                                },
+                                error: function (error) {
+                                    console.log('Error fetching files:', error);
+                                }
+                            });
+                        });
+
+                        // Search for files (Modal 2)
+                        $('#searchFilesButton2').on('click', function () {
+                            const code = $('#code2').val();
+                            const sub_code = $('#subCode2').val();
+                            const script_name = $('#scriptName2').val();
+
+                            // Send data to Flask via AJAX
+                            $.ajax({
+                                url: '/search_log_files',  // Flask endpoint
+                                method: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify({code: code, sub_code: sub_code, script_name: script_name}),
+                                success: function (response) {
+                                    let fileDropdown = $('#fileDropdown2');
+                                    fileDropdown.empty(); // Clear previous options
+                                    if (response.files.length > 0) {
+                                        response.files.forEach(function (file) {
+                                            fileDropdown.append(new Option(file, file));
+                                        });
+                                    } else {
+                                        fileDropdown.append(new Option('-- No files found --', ''));
+                                    }
+                                },
+                                error: function (error) {
+                                    console.log('Error fetching files:', error);
+                                }
+                            });
+                        });
+                    });
+
+                    // Search for files (Modal 2)
+                    $('#searchFilesButton2').on('click', function () {
+                        // Simulating file search (in real scenario, you'd use AJAX or fetch to get file data from server)
+                        const files = ['logA.txt', 'logB.txt', 'logC.txt']; // Example file list
+                        let fileDropdown = $('#fileDropdown2');
+                        fileDropdown.empty(); // Clear any previous options
+                        files.forEach(function (file) {
+                            fileDropdown.append(new Option(file, file));
+                        });
+                    });
+
+                    // Auto-fill selected file in input for Modal 1
+                    $('#fileDropdown1').on('change', function () {
+                        let selectedFile = $(this).val();
+                        if (selectedFile) {
+                            $('#autofileServerDatapoint1').val(selectedFile);
+                        }
+                    });
+
+                    // Auto-fill selected file in input for Modal 2
+                    $('#fileDropdown2').on('change', function () {
+                        let selectedFile = $(this).val();
+                        if (selectedFile) {
+                            $('#autofileServerDatapoint2').val(selectedFile);
+                        }
+                    });
                 });
-            }
+            </script>
+            <script>
+                $(document).ready(function () {
 
-              // Function to load configuration from database
-            function loadConfiguration() {
-
-                var config = {
-                    jobId: jobId,
-                };
-
-
-                $.ajax({
-                    url: "/loadDataPerConfiguration",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify(config),
-                    success: function(data) {
-
-                        console.log(data)
-                        console.log(data.fileServerDatapoint1)
-
-                        $('#fileServerDatapoint1').val(data.fileServerDatapoint1);
-                        $('#fileServerDatapoint2').val(data.fileServerDatapoint2);
-                        $('#odsDatapoint').val(data.odsDatapoint);
-                        $('#odsSystemCode').val(data.odsSystemCode);
-                        $('#odsSubSystemCode').val(data.odsSubSystemCode);
-                        $('#odsBatchData').val(data.odsBatchData);
-                        $('#cdsDatapoint').val(data.cdsDatapoint);
-                        $('#cdsSystemCode').val(data.cdsSystemCode);
-                        $('#cdsSubSystemCode').val(data.cdsSubSystemCode);
-                        $('#cdsBatchData').val(data.cdsBatchData);
-
-                    },
-                    error: function(error) {
-                        toastr.error('Error loading configuration:', error);
+                    // Function to get URL parameter
+                    function getUrlParameter(name) {
+                        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                        var results = regex.exec(location.search);
+                        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
                     }
-                });
-            }
 
-            // Function to save configuration to database
-            function saveConfiguration() {
-                var config = {
-                    jobId: jobId,
-                    fileServerDatapoint1: $('#fileServerDatapoint1').val(),
-                    fileServerDatapoint2: $('#fileServerDatapoint2').val(),
-                    odsDatapoint: $('#odsDatapoint').val(),
-                    odsSystemCode: $('#odsSystemCode').val(),
-                    odsSubSystemCode: $('#odsSubSystemCode').val(),
-                    odsBatchData: $('#odsBatchData').val(),
-                    cdsDatapoint: $('#cdsDatapoint').val(),
-                    cdsSystemCode: $('#cdsSystemCode').val(),
-                    cdsSubSystemCode: $('#cdsSubSystemCode').val(),
-                    cdsBatchData: $('#cdsBatchData').val()
-                };
+                    // Get the job ID from the URL
+                    var jobId = getUrlParameter('id');
 
-                $.ajax({
-                    url: "/saveDataPerConfiguration",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify(config),
-                    success: function(response) {
-                        toastr.success('Configuration saved successfully!');
-                    },
-                    error: function(error) {
-                        toastr.error('Error saving configuration:', error);
+                    // Function to load datapoints into select elements
+                    function loadDatapoints(selectElements) {
+                        $.ajax({
+                            url: "/getMyPoint",
+                            type: "GET",
+                            success: function (data) {
+                                var options = "";
+                                for (let i = 0; i < data.length; i++) {
+                                    const option = data[i];
+                                    options += `<option value="${option.value}">${option.text}</option>`;
+                                }
+                                selectElements.forEach(function (selectElement) {
+                                    $(selectElement).empty().append(options);
+                                });
+
+                                // 加载下拉框选项后再加载配置数据并设置值
+                                loadConfiguration();
+                            },
+                            error: function (error) {
+                                toastr.error('Error fetching datapoints:', error);
+                            }
+                        });
                     }
+
+                    // Function to load configuration from database
+                    function loadConfiguration() {
+
+                        var config = {
+                            jobId: jobId,
+                        };
+
+
+                        $.ajax({
+                            url: "/loadDataPerConfiguration",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify(config),
+                            success: function (data) {
+
+                                console.log(data)
+
+                                $('#mfileServerDatapoint1').val(data.mfileServerDatapoint1);
+                                $('#autofileServerDatapoint1').val(data.autofileServerDatapoint1);
+
+                                $('#mfileServerDatapoint2').val(data.mfileServerDatapoint2);
+                                $('#autofileServerDatapoint2').val(data.autofileServerDatapoint2);
+
+                                $('#odsDatapoint').val(data.odsDatapoint);
+                                $('#odsSystemCode').val(data.odsSystemCode);
+                                $('#odsSubSystemCode').val(data.odsSubSystemCode);
+                                $('#odsBatchData').val(data.odsBatchData);
+                                $('#cdsDatapoint').val(data.cdsDatapoint);
+                                $('#cdsSystemCode').val(data.cdsSystemCode);
+                                $('#cdsSubSystemCode').val(data.cdsSubSystemCode);
+                                $('#cdsBatchData').val(data.cdsBatchData);
+
+                                // Set radio button values based on the data for startMode and endMode
+                                if (data.startMode === 'auto') {
+                                    $('#startAuto').prop('checked', true);
+                                } else if (data.startMode === 'manual') {
+                                    $('#startManual').prop('checked', true);
+                                }
+
+                                if (data.endMode === 'auto') {
+                                    $('#endAuto').prop('checked', true);
+                                } else if (data.endMode === 'manual') {
+                                    $('#endManual').prop('checked', true);
+                                }
+
+                            },
+                            error: function (error) {
+                                toastr.error('Error loading configuration:', error);
+                            }
+                        });
+                    }
+
+                    // Function to save configuration to database
+                    function saveConfiguration() {
+                        var config = {
+                            jobId: jobId,
+                            mfileServerDatapoint1: $('#mfileServerDatapoint1').val(),
+                            autofileServerDatapoint1: $('#autofileServerDatapoint1').val(),
+                            mfileServerDatapoint2: $('#mfileServerDatapoint2').val(),
+                            autofileServerDatapoint2: $('#autofileServerDatapoint2').val(),
+                            odsDatapoint: $('#odsDatapoint').val(),
+                            odsSystemCode: $('#odsSystemCode').val(),
+                            odsSubSystemCode: $('#odsSubSystemCode').val(),
+                            odsBatchData: $('#odsBatchData').val(),
+                            cdsDatapoint: $('#cdsDatapoint').val(),
+                            cdsSystemCode: $('#cdsSystemCode').val(),
+                            cdsSubSystemCode: $('#cdsSubSystemCode').val(),
+                            cdsBatchData: $('#cdsBatchData').val(),
+                            // Add the radio button values to the config
+                            startMode: $('input[name="startMode"]:checked').val(),
+                            endMode: $('input[name="endMode"]:checked').val()
+                        };
+
+                        $.ajax({
+                            url: "/saveDataPerConfiguration",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify(config),
+                            success: function (response) {
+                                toastr.success('Configuration saved successfully!');
+                            },
+                            error: function (error) {
+                                toastr.error('Error saving configuration:', error);
+                            }
+                        });
+                    }
+
+                    // Select elements to be filled with datapoints
+                    var selectElements = [
+                        '#mfileServerDatapoint1',
+                        '#mfileServerDatapoint2',
+                        '#odsDatapoint',
+                        '#cdsDatapoint'
+                    ];
+
+                    // Load datapoints into select elements
+                    loadDatapoints(selectElements);
+
+                    // Load existing configuration from database when the page loads
+                    loadConfiguration();
+
+                    // Save configuration when the save button is clicked
+                    $('#saveButton').click(function () {
+                        saveConfiguration();
+                    });
                 });
-            }
-
-            // Select elements to be filled with datapoints
-            var selectElements = [
-                '#fileServerDatapoint1',
-                '#fileServerDatapoint2',
-                '#odsDatapoint',
-                '#cdsDatapoint'
-            ];
-
-            // Load datapoints into select elements
-            loadDatapoints(selectElements);
-
-            // Load existing configuration from database when the page loads
-            loadConfiguration();
-
-            // Save configuration when the save button is clicked
-            $('#saveButton').click(function() {
-                saveConfiguration();
-            });
-        });
-    </script>
+            </script>
 
 
+            {% if message %}
 
+            {% endif %}
 
-
-
-
-
-
-{% if message %}
-
-{% endif %}
-
-{% endblock %}
+            {% endblock %}
